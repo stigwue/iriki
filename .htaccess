@@ -1,0 +1,40 @@
+# -FrontPage-
+
+IndexIgnore .htaccess */.??* *~ *# */HEADER* */README* */_vti*
+
+<Limit GET POST>
+order deny,allow
+deny from all
+allow from all
+</Limit>
+<Limit PUT DELETE>
+order deny,allow
+deny from all
+</Limit>
+
+Options -MultiViews
+
+RewriteEngine on
+
+RewriteRule ^home index.php [L]
+
+#profile
+RewriteRule ^doctor/([^/.]+)/?$ index.php?obj=doctor&id=$1 [L]
+RewriteRule ^doctor doctor.php [L]
+
+#api
+#api/pulse/create/[hash]/[status]/[log]
+#RewriteRule ^api/pulse/create/([^/.]+)/([^/.]+)/([^/.]+)/?$ api.php?do=pulse&hash=$1&status=$2&log=$3 [L]
+#RewriteRule ^api/pulse/create/([^/.]+)/([^/.]+)/?$ api.php?do=pulse&hash=$1&status=$2 [L]
+
+#api/csv/[symbol]/[limit]
+RewriteRule ^api/csv/([^/.]+)/([^/.]+)/?$ api.php?do=csv&symbol=$1&limit=$2 [L]
+
+
+#message
+#RewriteRule ^message/thread/([^/.]+)/?$ message.php?thread=$1 [L]
+#http://myboard/message/thread/54d066220f6d2f130300423e/sent
+#RewriteRule ^message/thread/([^/.]+)/([^/.]+)/?$ message.php?thread=$1&tag=$2 [L]
+#RewriteRule ^message message.php [L]
+
+ErrorDocument 404 /home
