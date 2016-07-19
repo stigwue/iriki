@@ -27,6 +27,9 @@
 <body class="page-<?php echo BASE_PALETTE ?> avoid-fout">
     <?php //require_once('./admin/header.php') ?>
 
+	<header class="header">
+        <a class="header-logo" href="./index.php"><i class="fa fa-leaf"></i> MongoVC</a>
+	</header>
 
 	<script src="./assets/js/jquery.js"></script>
 
