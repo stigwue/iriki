@@ -1,0 +1,18 @@
+{
+	"mongovc":
+	{
+		"models" : {
+			"user" : {
+				"properties" : {
+                    "id" : ["unique"],
+                    "username" :  ["unique", "email"],
+                    "group" : ["number"]
+                },
+                "relationships" : {
+                    "belongsto" : ["app"],
+                    "hasmany" : ["authentication", "session", "setting"]
+                }
+			}
+		}
+	}
+}

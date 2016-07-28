@@ -15,26 +15,27 @@ deny from all
 Options -MultiViews
 
 RewriteEngine on
+RewriteBase /
 
-RewriteRule ^home index.php [L]
+#move http to https
+#enable this before you upload to server
+#RewriteCond %{HTTPS} !^on$
+#RewriteRule (.*) https://cashcrow.me/$1 [R,L]
 
-#profile
-RewriteRule ^doctor/([^/.]+)/?$ index.php?obj=doctor&id=$1 [L]
-RewriteRule ^doctor doctor.php [L]
+RewriteRule ^home index-cashcrow.php [L]
 
 #api
-#api/pulse/create/[hash]/[status]/[log]
+#api/[model]/[action]/[par1]/[par2]/[par3]
+
+#move all others to route.php so we can redirect
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteRule ^(.*)$ api.php/$1 [L]
+
 #RewriteRule ^api/pulse/create/([^/.]+)/([^/.]+)/([^/.]+)/?$ api.php?do=pulse&hash=$1&status=$2&log=$3 [L]
 #RewriteRule ^api/pulse/create/([^/.]+)/([^/.]+)/?$ api.php?do=pulse&hash=$1&status=$2 [L]
 
-#api/csv/[symbol]/[limit]
-RewriteRule ^api/csv/([^/.]+)/([^/.]+)/?$ api.php?do=csv&symbol=$1&limit=$2 [L]
+#RewriteRule (.*) https://olibe.nu/$1 [R,L]
 
-
-#message
-#RewriteRule ^message/thread/([^/.]+)/?$ message.php?thread=$1 [L]
-#http://myboard/message/thread/54d066220f6d2f130300423e/sent
-#RewriteRule ^message/thread/([^/.]+)/([^/.]+)/?$ message.php?thread=$1&tag=$2 [L]
-#RewriteRule ^message message.php [L]
-
+#url not found
 ErrorDocument 404 /home

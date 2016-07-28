@@ -1,0 +1,14 @@
+{
+	"mongovc":
+	{
+		"routes" : {
+			"default" : {
+                "init" : ["model"],
+                "add" : [],
+                "read" : ["id"],
+                "edit" : ["id", []],
+                "delete" : ["id"]
+            }
+		}
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"mongovc":
+	{
+		"app" : {
+			"title" : "CashCrow",
+			"base_url" : "\/\/cashcrow\/",
+			"database" : {
+				"db" : "cashcrow_db"
+			}
+		}
+	}
+}

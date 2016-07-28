@@ -1,0 +1,10 @@
+{
+	"mongovc":
+	{
+		"routes" : {
+			"user" : {
+                "auth" : ["auth"]
+            }
+		}
+	}
+}

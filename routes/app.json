@@ -1,0 +1,12 @@
+{
+	"mongovc":
+	{
+		"routes" : {
+			"app" : {
+				"about" : [],
+                "api" : [],
+                "test" : []
+			}
+		}
+	}
+}
