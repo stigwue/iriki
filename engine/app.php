@@ -1,14 +1,24 @@
 <?php
 
-/*public static function getFileJSONContents($filepath)
+namespace mongovc;
+
+public class config
 {
-    try {
-        $json = json_decode(file_get_contents($filepath), TRUE);
-    }
-    catch (Exception $e) {
-        $json = json_encode(PrintonObject::getSliderDescription());
+    private static function load_json_file($file_path)
+    {
+        try {
+            $json = json_decode(file_get_contents($filepath), TRUE);
+        }
+        catch (Exception $e) {
+            $json = json_encode(PrintonObject::getSliderDescription());
+        }
+
+        return $json;
     }
 
-    return $json;
-}*/
+    function __construct()
+    {
+        //load app.json, it should point to other valid models or routes
+    }
+}
 ?>

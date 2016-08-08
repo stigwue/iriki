@@ -4,6 +4,8 @@
 		"app" : {
 			"title" : "CashCrow",
 			"base_url" : "\/\/cashcrow\/",
+			"app_path" : "app",
+			"engine_path" : "engine"
 			"database" : {
 				"db" : "cashcrow_db"
 			}
