@@ -6,9 +6,12 @@
 	@import "colours";
 
 // font
-	@import url(https://fonts.googleapis.com/css?family=Montserrat:300,300italic,400,400italic,500,500italic);
+	//@import url(https://fonts.googleapis.com/css?family=Montserrat:300,300italic,400,400italic,500,500italic);
+	@import url(https://fonts.googleapis.com/css?family=PT+Sans:300,300italic,400,400italic,500,500italic);
 
-	$font-fam:           Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+	//$font-fam:           Montserrat, "Helvetica Neue", Helvetica, Arial, sans-serif;
+	$font-fam:           "PT Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	$font-fam-mono:      Monaco, Menlo, Consolas, "Courier New", monospace;
 	$font-fam-serif:     Georgia, serif;
 

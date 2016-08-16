@@ -3,7 +3,8 @@
 	{
 		"routes" : {
 			"user" : {
-                "auth" : ["auth"]
+                "auth" : ["auth"],
+				"signup" : []
             }
 		}
 	}

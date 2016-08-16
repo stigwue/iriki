@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="//cashcrow/" />
+    <base href="//cashcrow/ui/" />
     <title>Cash Crow</title>
 	<meta charset="UTF-8">
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
@@ -49,16 +49,16 @@
 		<div class="center-small">
             Escrow<sup>†</sup> service for Nigerian made-to-order clothing.
         </div>
-
+        <a class="btn btn-primary btn-lg btn-brand" href="https://twitter.com/cashcrowme" role="button">Follow us @cashcrowme</a>
     </div>
 
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-5">
-            <div class="text-center">
-                <i class="fa fa-user fa-2x"></i> To Buy
-            </div>
-            <div class="stpper-vert">
+            <!--div class="text-center">
+                <i class="fa fa-user fa-2x"></i> To Buy?
+            </div-->
+            <!--div class="stpper-vert">
                 <div class="stpper-vert-inner">
                     <div class="stepper active">
                         <div class="stepper-step">
@@ -121,13 +121,13 @@
                        Tailor gets paid after order is delivered.
                     </div>
                 </div>
-            </div>
+            </div-->
         </div>
         <div class="col-md-5">
-            <div class="text-center">
-                <i class="fa fa-scissors fa-2x"></i> To Sell
-            </div>
-            <div class="stpper-vert">
+            <!--div class="text-center">
+                <i class="fa fa-scissors fa-2x"></i> To Sell?
+            </div-->
+            <!--div class="stpper-vert">
                 <div class="stpper-vert-inner">
                     <div class="stepper active">
                         <div class="stepper-step">
@@ -180,11 +180,11 @@
                        Get paid directly to your account.
                     </div>
                 </div>
-            </div>
+            </div-->
         </div>
     </div>
 
-	<div class="fbtn-container">
+	<!--div class="fbtn-container">
 		<div class="fbtn-inner open">
 			<a class="fbtn fbtn-lg fbtn-brand-accent waves-attach waves-circle waves-light waves-effect" data-toggle="dropdown" aria-expanded="true">
                 <span class="fbtn-text fbtn-text-left">Links</span>
@@ -203,7 +203,7 @@
                 </a>
 			</div>
 		</div>
-	<div></div></div>
+	<div></div></div-->
 
 	<div class="center-banner">
 		<div class="center-small">
@@ -217,15 +217,15 @@
 		</div>
 	</footer>
 
-    <script src="./assets/js/jquery.timeago.js"></script>
+	<!-- js -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script src="./assets/js/base.min.js"></script>
+
+    <!--script src="./assets/js/jquery.timeago.js"></script>
     <script type="text/javascript">
         jQuery(document).ready(function() {
           jQuery("abbr.timeago").timeago();
         });
-    </script>
-
-	<!-- js -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-	<script src="./assets/js/base.min.js"></script>
+    </script-->
 </body>
 </html>

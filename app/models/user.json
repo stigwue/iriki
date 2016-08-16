@@ -10,7 +10,11 @@
                 },
                 "relationships" : {
                     "belongsto" : ["app"],
-                    "hasmany" : ["authentication", "session", "setting"]
+                    "hasmany" : [
+						"authentication",
+						"session",
+						"setting"
+					]
                 }
 			}
 		}

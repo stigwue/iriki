@@ -1,9 +1,26 @@
 <?php
 
+	namespace mongovc;
+	use mongovc;
+
+	require_once('engine/app.php');
+
 	//this is the API endpoint
 
-	//calls to this will be handled by the router
+	//read json to get app settings
+
+	//read all routes from /routes
+
+		//$files = glob("/path/to/directory/*.txt");
+
+	//read all models from /models
+
+	//parse the url
 	$requested = $_SERVER['REQUEST_URI'];
+
+	//do routing
+
+	//match models
 
 	// Formatting kungfu here
 	// You may want to strip preceding/trailing slashes
@@ -29,5 +46,7 @@
 	//route it!
 
 	//if test, route to test
+
+
 
 ?>

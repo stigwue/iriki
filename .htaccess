@@ -22,7 +22,7 @@ RewriteBase /
 #RewriteCond %{HTTPS} !^on$
 #RewriteRule (.*) https://cashcrow.me/$1 [R,L]
 
-RewriteRule ^home index-cashcrow.php [L]
+RewriteRule ^home ui/index-cashcrow.php [L]
 
 #api
 #api/[model]/[action]/[par1]/[par2]/[par3]
@@ -35,7 +35,5 @@ RewriteRule ^(.*)$ api.php/$1 [L]
 #RewriteRule ^api/pulse/create/([^/.]+)/([^/.]+)/([^/.]+)/?$ api.php?do=pulse&hash=$1&status=$2&log=$3 [L]
 #RewriteRule ^api/pulse/create/([^/.]+)/([^/.]+)/?$ api.php?do=pulse&hash=$1&status=$2 [L]
 
-#RewriteRule (.*) https://olibe.nu/$1 [R,L]
-
 #url not found
-ErrorDocument 404 /home
+#ErrorDocument 404 /home
