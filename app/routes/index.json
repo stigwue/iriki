@@ -2,11 +2,21 @@
 	"mongovc":
 	{
 		"routes" : {
-			"app" : {
-				"about" : [],
-                "api" : [],
-                "test" : []
-			}
+			"alias" : {
+				"about" : {
+					"route" : "page",
+					"action" : "about"
+				},
+                "api" : {
+					"route" : "",
+					"action" : ""
+				},
+                "test" : {
+					"route" : "",
+					"action" : ""
+				}
+			},
+			"user"
 		}
 	}
 }

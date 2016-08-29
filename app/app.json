@@ -6,8 +6,8 @@
 			"author" : "Stephen Igwue",
 			"base_url" : "\/\/cashcrow\/",
 			"engine_path" : "engine",
-			"models_path" : "models",
 			"routes_path" : "routes",
+			"models_path" : "models",
 			"database" : {
 				"db" : "cashcrow_db"
 			},

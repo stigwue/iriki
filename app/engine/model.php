@@ -1,6 +1,6 @@
 <?php
 
-namespace mongovc;
+namespace mongovc\engine;
 
 class mongodb
 {

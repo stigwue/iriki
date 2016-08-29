@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <base href="//cashcrow/ui/" />
+    <base href="//cashcrow.me/ui/" />
     <title>Cash Crow</title>
 	<meta charset="UTF-8">
 	<meta content="IE=edge" http-equiv="X-UA-Compatible">
@@ -43,13 +43,64 @@
 
 	</header>
 
-	<div class="center-banner">
-		<img src="./assets/img/cashcrow_quill.png" />
-		<div class="center-header">Cash Crow</div>
-		<div class="center-small">
-            Escrow<sup>†</sup> service for Nigerian made-to-order clothing.
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+        	<div class="center-banner">
+        		<img src="./assets/img/cashcrow_quill.png" />
+        		<div class="center-header">Cash Crow</div>
+        		<div class="center-small">
+                    Escrow<sup>†</sup> service for Nigerian made-to-order clothing.
+                </div>
+                <a class="btn btn-primary btn-lg btn-brand" href="https://twitter.com/cashcrowme" role="button">Follow us @cashcrowme</a>
+            </div>
         </div>
-        <a class="btn btn-primary btn-lg btn-brand" href="https://twitter.com/cashcrowme" role="button">Follow us @cashcrowme</a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="stpper-horiz stepper-horiz-alt">
+                <div class="stepper-horiz-inner">
+                    <div class="stepper done">
+                        <div class="stepper-step">
+                            <span class="stepper-step-icon"><i class="fa fa-check"></i></span>
+                            <span class="stepper-step-num">1</span>
+                        </div>
+                        <span class="stepper-text">Register cashcrow.me</span>
+                    </div>
+                    <div class="stepper done">
+                        <div class="stepper-step">
+                            <span class="stepper-step-icon"><i class="fa fa-check"></i></span>
+                            <span class="stepper-step-num">2</span>
+                        </div>
+                        <span class="stepper-text">Define features</span>
+                    </div>
+                    <div class="stepper active">
+                        <div class="stepper-step">
+                            <span class="stepper-step-icon"><i class="fa fa-check"></i></span>
+                            <span class="stepper-step-num">3</span>
+                        </div>
+                        <span class="stepper-text">Create API</span>
+                    </div>
+                    <div class="stepper">
+                        <div class="stepper-step">
+                            <span class="stepper-step-icon"><i class="fa fa-check"></i></span>
+                            <span class="stepper-step-num">4</span>
+                        </div>
+                        <span class="stepper-text">Acquire partners</span>
+                    </div>
+                    <div class="stepper">
+                        <div class="stepper-step">
+                            <span class="stepper-step-icon"><i class="fa fa-check"></i></span>
+                            <span class="stepper-step-num">5</span>
+                        </div>
+                        <span class="stepper-text">Launch beta</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row">
