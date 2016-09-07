@@ -4,15 +4,21 @@
 		"models" : {
 			"app" : {
 				"properties" : [
-                    "user",
-                    "authentication",
+                    "merchant",
                     "session",
                     "setting",
+                    "user",
+                    
+                    "*contract",
+                    "*category",
+                    "*unit",
                 ],
                 "relationships" : {
                     "belongsto" : [],
                     "hasmany" : [
-                        "user"
+                        "user",
+                        "category",
+                        "unit"
                     ]
                 }
 			}

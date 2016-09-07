@@ -1,19 +1,57 @@
 <?php
 
-	namespace mongovc;
-	use mongovc;
-
 	require_once('engine/app.php');
 
 	//this is the API endpoint
 
 	//read json to get app settings
+	try
+	{
+		$app_json = (new mongovc\engine\config('app.json'))->toObject();
+        $app_config = $app_json['mongovc']['app'];
+	}
+	catch (Exception $e)
+	{
+        
+	}
 
-	//read all routes from /routes
+	//get paths
+	global $config;
+	$config = array();
+	$config['title'] = $app_config['title'];
+	$config['author'] = $app_config['author'];
+	$config['base_url'] = $app_config['base_url'];
 
-		//$files = glob("/path/to/directory/*.txt");
+	//engine, already known from require
+	$config['engine'] = $app_config['engine'];
 
-	//read all models from /models
+
+	//routes
+	$config['route'] = array(
+        'path' => $app_config['routes'],
+        'routes' => array()
+    );
+    //get default, alias and valid routes
+	$route_json = (new mongovc\engine\config($config['route']['path'] . 'index.json'))->toObject();
+    $route_config = $route_json['mongovc']['routes'];
+    $config['route']['default'] = $route_config['default'];
+    $config['route']['alias'] = $route_config['alias'];
+    //get valid route details from json files
+	//$route_files = glob($config['route']['path'] . '*.json');
+    foreach ($route_config['routes'] as $valid_route)
+    {
+        $valid_route_json = (new mongovc\engine\config($config['route']['path'] . $valid_route . '.json'))->toObject();
+        $config['route']['routes'][$valid_route] = $valid_route_json['mongovc']['routes'][$valid_route];
+    }
+
+
+	//models
+	$config['model'] = array(
+        'path' => $app_config['models'],
+        'models' => array()
+    );
+
+	var_dump($config);
 
 	//parse the url
 	$requested = $_SERVER['REQUEST_URI'];

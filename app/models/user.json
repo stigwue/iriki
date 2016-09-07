@@ -6,17 +6,19 @@
 				"properties" : {
                     "id" : ["unique"],
                     "username" :  ["unique", "email"],
-                    "group" : ["number"]
+                    "salt" : ["string"],
+                    "auth" : ["string"]
                 },
                 "relationships" : {
                     "belongsto" : ["app"],
                     "hasmany" : [
-						"authentication",
+                        "merchant",
 						"session",
 						"setting"
 					]
                 }
-			}
+			},
+            
 		}
 	}
 }

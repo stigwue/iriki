@@ -2,6 +2,13 @@
 	"mongovc":
 	{
 		"routes" : {
+            "default" : {
+                "init" : ["model"],
+                "add" : [],
+                "read" : ["id"],
+                "edit" : ["id", []],
+                "delete" : ["id"]
+            },
 			"alias" : {
 				"about" : {
 					"route" : "page",
@@ -16,7 +23,7 @@
 					"action" : ""
 				}
 			},
-			"user"
+            "routes" : ["user"]
 		}
 	}
 }

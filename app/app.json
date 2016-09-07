@@ -4,11 +4,12 @@
 		"app" : {
 			"title" : "CashCrow",
 			"author" : "Stephen Igwue",
-			"base_url" : "\/\/cashcrow\/",
-			"engine_path" : "engine",
-			"routes_path" : "routes",
-			"models_path" : "models",
+			"base_url" : "//cashcrow/",
+			"engine" : "engine/",
+			"routes" : "routes/",
+			"models" : "models/",
 			"database" : {
+                "type" : "mongodb",
 				"db" : "cashcrow_db"
 			},
 			"version" : {
