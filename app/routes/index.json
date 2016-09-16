@@ -23,7 +23,10 @@
 					"action" : ""
 				}
 			},
-            "routes" : ["user"]
+            "routes" : [
+                "user",
+                "session"
+            ]
 		}
 	}
 }

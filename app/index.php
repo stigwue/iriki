@@ -28,14 +28,14 @@
 
 	//routes
 	$config['route'] = array(
-        'path' => $app_config['routes'],
-        'routes' => array()
+        'path' => $app_config['routes']
     );
     //get default, alias and valid routes
 	$route_json = (new mongovc\engine\config($config['route']['path'] . 'index.json'))->toObject();
     $route_config = $route_json['mongovc']['routes'];
     $config['route']['default'] = $route_config['default'];
     $config['route']['alias'] = $route_config['alias'];
+    $config['route']['routes'] = array();
     //get valid route details from json files
 	//$route_files = glob($config['route']['path'] . '*.json');
     foreach ($route_config['routes'] as $valid_route)
@@ -51,7 +51,8 @@
         'models' => array()
     );
 
-	var_dump($config);
+	//var_dump($config);
+    print_r($config);
 
 	//parse the url
 	$requested = $_SERVER['REQUEST_URI'];
