@@ -28,11 +28,11 @@ All requests to be handled by the MongoVC app will be POSTed to or GET from this
 
 There are three very key directories within app: engine, models and routes.
 
-### Models
-Models holds the JSON description of the database models/collections/tables. I would advice that the database should not be tempered with directly except through the model definitions. I hope to add a way to incorporating code-side changes to the database like Laravel does.
-
 ### Routes
-Routes contains the url routing: controllers, their actions and expected parameters. Wherein models hold all the apps models, for routes, there is an index.json which defines default route actions for every route, route aliases and the valid routes. Note that json files defining a route may exist but will be ignored if they are not specified in index.json. Yet to decide if this behavious is best and should be replicated for model jsons.
+Routes contains the url routing: controllers, their actions and expected parameters. There is an index.json file which defines default route actions for every route, route aliases and the valid routes. Note that json files defining a route may exist but will be ignored if they are not specified in index.json.
+
+### Models
+Models holds the JSON description of the database models/collections/tables. I would advice that the database should not be tempered with directly except through the model definitions. I hope to add a way to incorporating code-side changes to the database like Laravel does. Note that these model definitions are called when they are defined or needed from the route definitions.
 
 ### Engine
 
@@ -41,4 +41,5 @@ Engine contains MongoVC code and should be left untouched. There is app.php whic
 
 ## To Do
 Enable MySQL IO using RedBean PHP
+
 Port to Python? Is there a Python equivalent for RedBean?

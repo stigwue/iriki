@@ -36,28 +36,40 @@
     $config['route']['default'] = $route_config['default'];
     $config['route']['alias'] = $route_config['alias'];
     $config['route']['routes'] = array();
-    //get valid route details from json files
-	//$route_files = glob($config['route']['path'] . '*.json');
+    //get route details from json file
+	//if a route file can't be found? do not add it
     foreach ($route_config['routes'] as $valid_route)
     {
         $valid_route_json = (new mongovc\engine\config($config['route']['path'] . $valid_route . '.json'))->toObject();
         $config['route']['routes'][$valid_route] = $valid_route_json['mongovc']['routes'][$valid_route];
     }
 
-
 	//models
 	$config['model'] = array(
-        'path' => $app_config['models'],
-        'models' => array()
+        'path' => $app_config['models']
     );
+    //load model json files for already defined routes
+    //no route, no model
+    //$model_files = glob($config['model']['path'] . '*.json');
+    $config['model']['models'] = array();
+    foreach ($config['route']['routes'] as $route_title => $route_actions)
+    {
+        $model_json = (new mongovc\engine\config($config['model']['path'] . $route_title . '.json'))->toObject();
+        $model_config = $model_json['mongovc']['models'][$route_title];
+        $config['model']['models'][] = $model_config;
+    }
 
 	//var_dump($config);
     print_r($config);
+
+    $url = array();
 
 	//parse the url
 	$requested = $_SERVER['REQUEST_URI'];
 
 	//do routing
+	require_once('engine/route.php');
+    $route = new mongovc\engine\route(
 
 	//match models
 
@@ -76,7 +88,7 @@
 	  string(16) "/api/user/edit/1"
 	}*/
 
-	$requested = trim($requested, '/');
+	$requested = ltrim($requested, '/');
 
 	$parameters = explode("/", $requested);
 
