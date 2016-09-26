@@ -25,7 +25,8 @@
 			},
             "routes" : [
                 "user",
-                "session"
+                "session",
+                "merchant"
             ]
 		}
 	}

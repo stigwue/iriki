@@ -1,0 +1,21 @@
+{
+	"mongovc":
+	{
+		"models" : {
+			"merchant" : {
+				"properties" : {
+                    "id" : ["unique"],
+                    "user_id" :  ["string"],
+                    "title" : ["string"],
+                    "description" : ["string"],
+                    "created" : ["number"]
+                },
+                "relationships" : {
+                    "belongsto" : ["user", "sector"],
+                    "hasmany" : []
+                }
+			},
+            
+		}
+	}
+}

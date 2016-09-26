@@ -23,14 +23,17 @@ class model extends config
         
         $model_struct['models'] = array();
         
+        //load model json files for already defined routes
+        //no route, no model
+        
         foreach ($routes as $route_title => $route_actions)
         {
             $model_json = (new config($path . $route_title . '.json'))->toObject();
             $model_config = $model_json['mongovc']['models'][$route_title];
             $model_struct['models'][] = $model_config;
-            
-            var_dump($path . $route_title . '.json');
         }
+            
+        var_dump($model_struct);
         
         return $model_struct;
     }

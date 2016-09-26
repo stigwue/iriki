@@ -30,20 +30,18 @@
 	require_once('engine/route.php');
     $config['route'] = (new mongovc\engine\route())->loadFromJson($app_config['routes']);
 
+    /*$config['route']['routes'] = [
+        'user' => ['auth' => ['auth'], 'signup' => []],
+        'session' => ['validate'=>['id'], 'create'=>[], 'read'=>['id']],
+        'merchant' => []
+    ];*/
+
 	//models
 	require_once('engine/model.php');
     $config['model'] = (new mongovc\engine\model())->loadFromJson($app_config['models'], $config['route']['routes']);
 
-    //load model json files for already defined routes
-    //no route, no model
-    //$model_files = glob($config['model']['path'] . '*.json');
-    /*$config['model']['models'] = array();
-    foreach ($config['route']['routes'] as $route_title => $route_actions)
-    {
-        $model_json = (new mongovc\engine\config($config['model']['path'] . $route_title . '.json'))->toObject();
-        $model_config = $model_json['mongovc']['models'][$route_title];
-        $config['model']['models'][] = $model_config;
-    }*/
+
+    
 
 	//var_dump($config);
     //print_r($config);

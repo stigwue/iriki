@@ -1,0 +1,11 @@
+{
+	"mongovc":
+	{
+		"routes" : {
+			"merchant" : {
+				"create" : [],
+                "read" : ["id"]
+            }
+		}
+	}
+}
