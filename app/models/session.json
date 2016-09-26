@@ -1,0 +1,21 @@
+{
+	"mongovc":
+	{
+		"models" : {
+			"session" : {
+				"properties" : {
+                    "id" : ["unique"],
+                    "user_id" :  ["string"],
+                    "ip_address" : ["string"],
+                    "created" : ["number"],
+                    "expires" : ["number"]
+                },
+                "relationships" : {
+                    "belongsto" : ["user"],
+                    "hasmany" : []
+                }
+			},
+            
+		}
+	}
+}

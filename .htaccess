@@ -19,8 +19,8 @@ RewriteBase /
 
 #move http to https
 #enable this before you upload to server
-#RewriteCond %{HTTPS} !^on$
-#RewriteRule (.*) https://cashcrow.me/$1 [R,L]
+RewriteCond %{HTTPS} !^on$
+RewriteRule (.*) https://cashcrow.me/$1 [R,L]
 
 RewriteRule ^home ui/index-cashcrow.php [L]
 

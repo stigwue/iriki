@@ -1,0 +1,12 @@
+{
+	"mongovc":
+	{
+		"routes" : {
+			"session" : {
+                "validate" : ["id"],
+				"create" : [],
+                "read" : ["id"]
+            }
+		}
+	}
+}

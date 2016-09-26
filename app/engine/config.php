@@ -19,15 +19,15 @@ class config
         return $json;
     }
 
-    public function toObject()
-    {
-        return $this->_json;
-    }
-
     function __construct($json_path = '')
     {
         //load app.json, it should point to other valid models or routes
         $this->_json = Self::load_json_file($json_path);
+    }
+
+    public function toObject()
+    {
+        return $this->_json;
     }
 }
 ?>
