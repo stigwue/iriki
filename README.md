@@ -1,10 +1,10 @@
-# MongoVC
+# Iriki
 
 The Humongous View Controller.
 
-Source code can be found here: [stigwue/mongovc](https://github.com/stigwue/mongovc).
+Source code can be found here: [stigwue/iriki](https://github.com/stigwue/iriki).
 
-## Why MongoVC
+## Why Iriki
 
 Why did I write this? CakePHP 3 came out without MongoDB support. And some other Cake related stuff I hated doing was getting to me. For instance, this is how I begin my average Cake app.
 
@@ -24,7 +24,7 @@ So, a PHP (for now, maybe Python later) backend handling routing and DB operatio
 
 Everything is in a single important directory "app". A frontend developer will POST/GET to and from this drectory.
 
-All requests to be handled by the MongoVC app will be POSTed to or GET from this file. It works with the routes and the models.
+All requests to be handled by the Iriki app will be POSTed to or GET from this file. It works with the routes and the models.
 
 There are three very key directories within app: engine, models and routes.
 
@@ -36,7 +36,7 @@ Models holds the JSON description of the database models/collections/tables. I w
 
 ### Engine
 
-Engine contains MongoVC code and should be left untouched. There is app.php which contains code for general MongoVC utilities, model.php for model IO operations (MongoDB and MySQL via RedBeanPHP?), route.php for the routing of all requests: POSTs and GETs and test.php for tests.
+Engine contains Iriki code and should be left untouched. There is app.php which contains code for general Iriki utilities, model.php for model IO operations (MongoDB and MySQL via RedBeanPHP?), route.php for the routing of all requests: POSTs and GETs and test.php for tests.
 
 
 ## To Do
