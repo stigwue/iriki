@@ -1,4 +1,4 @@
 <?php
-header('Location: ./app');
+header('Location: ./app/index.php');
 
 ?>

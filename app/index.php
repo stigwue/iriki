@@ -7,7 +7,8 @@
 	//read json to get app settings
 	try
 	{
-		$app_json = (new mongovc\engine\config('app.json'))->toObject();
+		$obj_config = new mongovc\engine\config('app.json');
+		$app_json = $obj_config->toObject();
         $app_config = $app_json['mongovc']['app'];
 	}
 	catch (Exception $e)
@@ -24,11 +25,11 @@
 
 	//engine, already known from require
 	$config['engine'] = $app_config['engine'];
-
-
+	
 	//routes
 	require_once('engine/route.php');
-    $config['route'] = (new mongovc\engine\route())->loadFromJson($app_config['routes']);
+	$obj_route = new mongovc\engine\route();
+    $config['route'] = $obj_route->loadFromJson($app_config['routes']);
 
     /*$config['route']['routes'] = [
         'user' => ['auth' => ['auth'], 'signup' => []],
@@ -38,7 +39,8 @@
 
 	//models
 	require_once('engine/model.php');
-    $config['model'] = (new mongovc\engine\model())->loadFromJson($app_config['models'], $config['route']['routes']);
+	$obj_model = new mongovc\engine\model();
+    $config['model'] = $obj_model->loadFromJson($app_config['models'], $config['route']['routes']);
 
 
     

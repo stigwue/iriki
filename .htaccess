@@ -18,8 +18,8 @@ RewriteEngine on
 RewriteBase /
 
 #force https
-RewriteCond %{HTTPS} !^on$
-RewriteRule (.*) https://foobar/$1 [R,L]
+#RewriteCond %{HTTPS} !^on$
+#RewriteRule (.*) https://foobar/$1 [R,L]
 
 #api
 #api/[model]/[action]/[par1]/[par2]/[par3]

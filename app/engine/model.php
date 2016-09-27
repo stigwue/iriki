@@ -28,12 +28,16 @@ class model extends config
         
         foreach ($routes as $route_title => $route_actions)
         {
-            $model_json = (new config($path . $route_title . '.json'))->toObject();
+            $obj_config = new config($path . $route_title . '.json');
+            $model_json = $obj_config->toObject();
             $model_config = $model_json['mongovc']['models'][$route_title];
             $model_struct['models'][] = $model_config;
         }
             
-        var_dump($model_struct);
+        //var_dump($path . $route_title . '.json');
+        //var_dump($model_struct);
+        //var_dump($routes);
+        var_dump($obj_config);
         
         return $model_struct;
     }

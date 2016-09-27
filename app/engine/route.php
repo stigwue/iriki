@@ -6,12 +6,8 @@ require_once(__DIR__ . '/config.php');
 
 class route extends config
 {
+    //private $_json;
     private $_routes;
-
-    /*public function __contruct($json_path = '')
-    {
-        $json = $this->load_json_file($json_path);
-    }*/
     
     public function loadFromJson($path)
     {
@@ -21,6 +17,7 @@ class route extends config
         
         $route_json = (new config($path . 'index.json'))->toObject();
         $route_config = $route_json['mongovc']['routes'];
+        
         $route_struct['default'] = $route_config['default'];
         $route_struct['alias'] = $route_config['alias'];
         $route_struct['routes'] = array();
