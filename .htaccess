@@ -17,12 +17,9 @@ Options -MultiViews
 RewriteEngine on
 RewriteBase /
 
-#move http to https
-#enable this before you upload to server
+#force https
 RewriteCond %{HTTPS} !^on$
-RewriteRule (.*) https://cashcrow.me/$1 [R,L]
-
-RewriteRule ^home ui/index-cashcrow.php [L]
+RewriteRule (.*) https://foobar/$1 [R,L]
 
 #api
 #api/[model]/[action]/[par1]/[par2]/[par3]
@@ -36,4 +33,4 @@ RewriteRule ^(.*)$ api.php/$1 [L]
 #RewriteRule ^api/pulse/create/([^/.]+)/([^/.]+)/?$ api.php?do=pulse&hash=$1&status=$2 [L]
 
 #url not found
-#ErrorDocument 404 /home
+#ErrorDocument 404 /404

@@ -1,5 +1,4 @@
 <?php
-header('Location: /home');
+header('Location: ./app');
 
-//do all frontend stuff in ui
 ?>

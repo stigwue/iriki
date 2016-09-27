@@ -22,16 +22,16 @@ So, a PHP (for now, maybe Python later) backend handling routing and DB operatio
 
 ## How it works
 
-Everything is in a single important directory "app". A frontend developer will POST/GET to and from this drectory.
-
-All requests to be handled by the Iriki app will be POSTed to or GET from this file. It works with the routes and the models.
+Everything is in a single important directory "app". All requests to be handled by the Iriki app will be POSTed to or GET from this directory. It works with the routes and the models.
 
 There are three very key directories within app: engine, models and routes.
 
 ### Routes
+
 Routes contains the url routing: controllers, their actions and expected parameters. There is an index.json file which defines default route actions for every route, route aliases and the valid routes. Note that json files defining a route may exist but will be ignored if they are not specified in index.json.
 
 ### Models
+
 Models holds the JSON description of the database models/collections/tables. I would advice that the database should not be tempered with directly except through the model definitions. I hope to add a way to incorporating code-side changes to the database like Laravel does. Note that these model definitions are called when they are defined or needed from the route definitions.
 
 ### Engine
