@@ -14,8 +14,7 @@
                     "belongsto" : ["user", "sector"],
                     "hasmany" : []
                 }
-			},
-            
+			}
 		}
 	}
 }

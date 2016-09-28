@@ -16,12 +16,13 @@ class model extends config
         
         $model_struct['models'] = array();
         
-        
         foreach ($routes as $route_title => $route_actions)
         {
             $obj_model = new config($model_path . $route_title . '.json');
             $model_json = $obj_model->toObject();
             $model_struct['models'][$route_title] = $model_json['iriki']['models'][$route_title];
+        
+            //var_dump($route_actions);
         }
         
         return $model_struct;

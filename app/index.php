@@ -43,9 +43,9 @@
 	require_once('engine/model.php');
 	$obj_model = new iriki\engine\model();
     $config['model'] = $obj_model->loadFromJson($app_config['models'], $config['route']['routes']);
-    //print_r($config['model']['models']);
+    print_r($config['model']['models']);
 	
-	var_dump($config);
+	//var_dump($config);
 
     $url = array();
 
