@@ -1,5 +1,5 @@
 {
-	"mongovc":
+	"iriki":
 	{
 		"routes" : {
 			"session" : {

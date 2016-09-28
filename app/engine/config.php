@@ -1,6 +1,6 @@
 <?php
 
-namespace mongovc\engine;
+namespace iriki\engine;
 
 class config
 {
@@ -28,6 +28,11 @@ class config
             //load app.json, it should point to other valid models or routes
             $this->_json = Self::load_json_file($json_path);
         }
+    }
+    
+    public function doLoadJson($path)
+    {
+        $this->_json = Self::load_json_file($path);
     }
 
     public function toObject()

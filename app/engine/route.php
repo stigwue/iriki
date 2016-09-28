@@ -1,6 +1,6 @@
 <?php
 
-namespace mongovc\engine;
+namespace iriki\engine;
 
 require_once(__DIR__ . '/config.php');
 
@@ -16,7 +16,7 @@ class route extends config
         );
         
         $route_json = (new config($path . 'index.json'))->toObject();
-        $route_config = $route_json['mongovc']['routes'];
+        $route_config = $route_json['iriki']['routes'];
         
         $route_struct['default'] = $route_config['default'];
         $route_struct['alias'] = $route_config['alias'];
@@ -27,7 +27,7 @@ class route extends config
         foreach ($route_config['routes'] as $valid_route)
         {
             $valid_route_json = (new config($path . $valid_route . '.json'))->toObject();
-            $route_struct['routes'][$valid_route] = $valid_route_json['mongovc']['routes'][$valid_route];
+            $route_struct['routes'][$valid_route] = $valid_route_json['iriki']['routes'][$valid_route];
         }
         
         return $route_struct;

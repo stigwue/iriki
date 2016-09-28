@@ -7,9 +7,9 @@
 	//read json to get app settings
 	try
 	{
-		$obj_config = new mongovc\engine\config('app.json');
+		$obj_config = new iriki\engine\config('app.json');
 		$app_json = $obj_config->toObject();
-        $app_config = $app_json['mongovc']['app'];
+        $app_config = $app_json['iriki']['app'];
 	}
 	catch (Exception $e)
 	{
@@ -28,10 +28,12 @@
 	
 	//routes
 	require_once('engine/route.php');
-	$obj_route = new mongovc\engine\route();
+	$obj_route = new iriki\engine\route();
     $config['route'] = $obj_route->loadFromJson($app_config['routes']);
+    //print_r($config['route']['routes']);
 
-    /*$config['route']['routes'] = [
+	/*$config['route']['path'] = $app_config['routes'];
+    $config['route']['routes'] = [
         'user' => ['auth' => ['auth'], 'signup' => []],
         'session' => ['validate'=>['id'], 'create'=>[], 'read'=>['id']],
         'merchant' => []
@@ -39,14 +41,11 @@
 
 	//models
 	require_once('engine/model.php');
-	$obj_model = new mongovc\engine\model();
+	$obj_model = new iriki\engine\model();
     $config['model'] = $obj_model->loadFromJson($app_config['models'], $config['route']['routes']);
-
-
-    
-
-	//var_dump($config);
-    //print_r($config);
+    //print_r($config['model']['models']);
+	
+	var_dump($config);
 
     $url = array();
 
@@ -55,7 +54,7 @@
 
 	//do routing
 	//require_once('engine/route.php');
-    //$route = new mongovc\engine\route(
+    //$route = new iriki\engine\route(
 
 	//match models
 
