@@ -8,7 +8,7 @@
 	try
 	{
 		$obj_config = new iriki\engine\config('app.json');
-		$app_json = $obj_config->toObject();
+		$app_json = $obj_config->getJson();
         $app_config = $app_json['iriki']['app'];
 	}
 	catch (Exception $e)
@@ -32,52 +32,22 @@
     $config['route'] = $obj_route->loadFromJson($app_config['routes']);
     //print_r($config['route']['routes']);
 
-	/*$config['route']['path'] = $app_config['routes'];
-    $config['route']['routes'] = [
-        'user' => ['auth' => ['auth'], 'signup' => []],
-        'session' => ['validate'=>['id'], 'create'=>[], 'read'=>['id']],
-        'merchant' => []
-    ];*/
-
 	//models
 	require_once('engine/model.php');
 	$obj_model = new iriki\engine\model();
     $config['model'] = $obj_model->loadFromJson($app_config['models'], $config['route']['routes']);
-    print_r($config['model']['models']);
+    //print_r($config['model']['models']);
 	
-	//var_dump($config);
-
-    $url = array();
-
 	//parse the url
-	$requested = $_SERVER['REQUEST_URI'];
+	$url_requested = $_SERVER['REQUEST_URI'];
+	var_dump($url_requested);
 
 	//do routing
 	//require_once('engine/route.php');
-    //$route = new iriki\engine\route(
+    $selected_route = $obj_route->matchRoute($url_requested);
 
 	//match models
-
-	// Formatting kungfu here
-	// You may want to strip preceding/trailing slashes
-	// Remove queries in url, etc
-
-	/*parse_url('http://cashcrow.me/api/user/edit/1')
-
-	array(3) {
-	  ["scheme"]=>
-	  string(4) "http"
-	  ["host"]=>
-	  string(11) "cashcrow.me"
-	  ["path"]=>
-	  string(16) "/api/user/edit/1"
-	}*/
-
-	$requested = ltrim($requested, '/');
-
-	$parameters = explode("/", $requested);
-
-	$parameter_count = count($parameters);
+	var_dump($selected_route);
 
 	//route it!
 

@@ -15,19 +15,21 @@ deny from all
 Options -MultiViews
 
 RewriteEngine on
-RewriteBase /
+#RewriteBase /
 
 #force https
 #RewriteCond %{HTTPS} !^on$
 #RewriteRule (.*) https://foobar/$1 [R,L]
 
+RewriteRule ^api/(.*)$ app/?$1
+
 #api
 #api/[model]/[action]/[par1]/[par2]/[par3]
 
 #move all others to route.php so we can redirect
-RewriteCond %{SCRIPT_FILENAME} !-f
-RewriteCond %{SCRIPT_FILENAME} !-d
-RewriteRule ^(.*)$ api.php/$1 [L]
+#RewriteCond %{SCRIPT_FILENAME} !-f
+#RewriteCond %{SCRIPT_FILENAME} !-d
+#RewriteRule ^(.*)$ api.php/$1 [L]
 
 #RewriteRule ^api/pulse/create/([^/.]+)/([^/.]+)/([^/.]+)/?$ api.php?do=pulse&hash=$1&status=$2&log=$3 [L]
 #RewriteRule ^api/pulse/create/([^/.]+)/([^/.]+)/?$ api.php?do=pulse&hash=$1&status=$2 [L]

@@ -10,22 +10,24 @@ class model extends config
     
     public function loadFromJson($model_path, $routes)
     {
-        $model_struct = array(
+        $_models = array(
             'path' => $model_path
         );
         
-        $model_struct['models'] = array();
+        $_models['models'] = array();
         
         foreach ($routes as $route_title => $route_actions)
         {
-            $obj_model = new config($model_path . $route_title . '.json');
-            $model_json = $obj_model->toObject();
-            $model_struct['models'][$route_title] = $model_json['iriki']['models'][$route_title];
-        
-            //var_dump($route_actions);
+            $model_json = (new config($model_path . $route_title . '.json'))->getJson();
+            $_models['models'][$route_title] = $model_json['iriki']['models'][$route_title];
         }
         
-        return $model_struct;
+        return $_models;
+    }
+
+    public function getModels()
+    {
+        return $this->_models;
     }
 }
 

@@ -16,8 +16,6 @@ class config
             $json = '{}';
         }
         
-        //$json = json_decode(file_get_contents($json_path), TRUE);
-
         return $json;
     }
 
@@ -25,8 +23,7 @@ class config
     {
         if (strlen($json_path) != 0)
         {
-            //load app.json, it should point to other valid models or routes
-            $this->_json = Self::load_json_file($json_path);
+             $this->_json = Self::load_json_file($json_path);
         }
     }
     
@@ -35,7 +32,7 @@ class config
         $this->_json = Self::load_json_file($path);
     }
 
-    public function toObject()
+    public function getJson()
     {
         return $this->_json;
     }
