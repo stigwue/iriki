@@ -7,6 +7,7 @@ require_once(__DIR__ . '/config.php');
 class route extends config
 {
     private $_config;
+    private $_route; //['model', 'action', 'parameters']
     private $_routes;
     private $_path_parts;
     
@@ -41,29 +42,38 @@ class route extends config
     }
     
     //takes in a request url
-    //gets matching route with expected commands
-    public function matchRoute($requested_url)
+    //returns matching route
+    //a match is 3 part process
+    //a specific model or alias
+    //a specific action for said model
+    //a specific set of parameters for said action
+    private function matchRoute($url_params)
     {
-        $url_parts = parse_url($requested_url);
-        //into scheme, host and path e.g
-        /*
-          ["scheme"] => "http"
-          ["host"] => "cashcrow.me"
-          ["path"] => "/api/user/edit/1"
-          ["query"] =>
-          ["fragment"] =>
-        */
-        $path = $url_parts['path'];
         
-        //convert /api/... to api/...
-        $path_trim = ltrim($path, '/');
+    }
+    
+    public function matchRouteUrl($path, $trim_left)
+    {
+        $url_parsed = Self::parseUrl($path, $trim_left);
+        return $this->matchRoute($url_parsed);
+    }
+    
+    private static function parseUrl($path, $trim_left = '/')
+    {
+        //trim
+        $trimmed = ltrim($path, $trim_left);
         
-        //explode path
-        $this->_path_parts = explode("/", $path_trim);
+        //split path
+        $parts = explode("/", $trimmed);
         
-        $path_count = count($path_parts);
+        $count = count($parts);
         
-        return $url_parts; //$this->_path_parts;
+        return compact('path', 'trimmed', 'parts', 'count');
+    }
+    
+    public function matchModel()
+    {
+        
     }
 }
 

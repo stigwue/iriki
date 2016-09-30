@@ -1,0 +1,9 @@
+require 'rb.php';
+R::setup();
+R::setAutoResolve( TRUE );        //Recommended as of version 4.2
+$post = R::dispense( 'post' );
+$post->text = 'Hello World';
+
+$id = R::store( $post );          //Create or Update
+$post = R::load( 'post', $id );   //Retrieve
+R::trash( $post );                //Delete

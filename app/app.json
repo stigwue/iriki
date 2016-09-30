@@ -11,14 +11,25 @@
 				"build" : "1"
 			},
             
-			"base_url" : "//cashcrow/",
+			"base_url" : "//iriki/app/",
 			"engine" : "engine/",
 			"routes" : "routes/",
 			"models" : "models/",
+			"application" : "application/",
             
 			"database" : {
-                "type" : "mongodb",
-				"db" : "cashcrow_db"
+				"test" : {
+	                "type" : "mysql",
+					"db" : "cashcrow_test"
+				},
+				"development" : {
+	                "type" : "mysql",
+					"db" : "cashcrow_dev"
+				},
+				"production" : {
+	                "type" : "mongodb",
+					"db" : "cashcrow_prod"
+				}
 			}
 		}
 	}

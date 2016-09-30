@@ -4,10 +4,23 @@
 		"models" : {
 			"user" : {
 				"properties" : {
-                    "id" : ["unique"],
-                    "username" :  ["unique", "email"],
-                    "salt" : ["string"],
-                    "auth" : ["string"]
+                    "id" : {
+                        "description" : "User's unique ID.",
+                        "type" : "string",
+                        "unique" : true
+                    },
+                    "username" :  {
+                        "description" : "Username, dependent on some service (email, or this one)",
+                        "type" : "string"
+                    },
+                    "salt" :  {
+                        "description" : "Salt, input to some hashing algorithm",
+                        "type" : "string"
+                    },
+                    "auth" :   {
+                        "description" : "Hashed password. Irreversible.",
+                        "type" : "string"
+                    }
                 },
                 "relationships" : {
                     "belongsto" : ["app"],

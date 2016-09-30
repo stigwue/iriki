@@ -37,17 +37,18 @@
 	$obj_model = new iriki\engine\model();
     $config['model'] = $obj_model->loadFromJson($app_config['models'], $config['route']['routes']);
     //print_r($config['model']['models']);
-	
+    
+    //do routing
 	//parse the url
 	$url_requested = $_SERVER['REQUEST_URI'];
-	var_dump($url_requested);
+	//$url_parsed = iriki\engine\route::parseUrl($url_requested, '/iriki/api');
+	//var_dump($url_parsed);
 
-	//do routing
-	//require_once('engine/route.php');
+	//match a route
     $selected_route = $obj_route->matchRoute($url_requested);
 
 	//match models
-	var_dump($selected_route);
+	//var_dump($selected_route);
 
 	//route it!
 
