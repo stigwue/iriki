@@ -45,10 +45,10 @@
 	//var_dump($url_parsed);
 
 	//match a route
-    $selected_route = $obj_route->matchRoute($url_requested);
-
+    $selected_route = $obj_route->matchRouteUrl($url_requested, '/iriki/api');
+	
 	//match models
-	//var_dump($selected_route);
+	var_dump($selected_route);
 
 	//route it!
 

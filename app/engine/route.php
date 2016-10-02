@@ -49,16 +49,33 @@ class route extends config
     //a specific set of parameters for said action
     private function matchRoute($url_params)
     {
+        $model = null;
+        $action = null;
+        $params = null;
         
+        $count = count($url_params['parts']);
+        
+        //routes already in $_routes;
+        if ($count != 0)
+        {
+            $model = $url_params['parts'][0];
+            if ($count >= 2) $action = $url_params['parts'][1];
+        }
+        else
+        {
+            
+        }
+        return compact('model', 'action', 'params');
     }
     
     public function matchRouteUrl($path, $trim_left)
     {
         $url_parsed = Self::parseUrl($path, $trim_left);
+        var_dump($url_parsed);
         return $this->matchRoute($url_parsed);
     }
     
-    private static function parseUrl($path, $trim_left = '/')
+    private static function parseUrl($path, $trim_left)
     {
         //trim
         $trimmed = ltrim($path, $trim_left);
