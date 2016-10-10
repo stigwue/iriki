@@ -2,7 +2,7 @@
 	"iriki":
 	{
 		"app" : {
-			"title" : "CashCrow",
+			"title" : "Iriki App",
 			"author" : "Stephen Igwue",
             
 			"version" : {
@@ -30,7 +30,10 @@
 	                "type" : "mongodb",
 					"db" : "cashcrow_prod"
 				}
-			}
+			},
+
+			"mode" : "strict",
+			"logs" : "all"
 		}
 	}
 }

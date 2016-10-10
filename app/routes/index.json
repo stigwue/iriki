@@ -3,11 +3,30 @@
 	{
 		"routes" : {
             "default" : {
-                "init" : ["model"],
-                "add" : [],
-                "read" : ["id"],
-                "edit" : ["id", []],
-                "delete" : ["id"]
+            	"info" : {
+                    "description" : "Describe a model and lists its properties.",
+                    "parameters" : []
+            	},
+                "init" : {
+                    "description" : "Initialise a model's storage.",
+                    "parameters" : []
+                },
+                "add" : {
+                    "description" : "",
+                    "parameters" : []
+                },
+                "read" : {
+                    "description" : "Returns the properties of the matching model.",
+                    "parameters" : ["id"]
+                },
+                "edit" : {
+                    "description" : "Edits a model instance by supplying new properties and the id of the model to edit.",
+                    "parameters" : ["id", []]
+                },
+                "delete" : {
+                    "description" : "Deletes a model instance by supplying an id of the mode.",
+                    "parameters" : ["id"]
+                }
             },
 			"alias" : {
 				"about" : {

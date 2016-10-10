@@ -1,11 +1,13 @@
 <?php
 
 	require_once('engine/config.php');
+	require_once('engine/route.php');
+	require_once('engine/model.php');
 
 	//this is the API endpoint
 
 	//read json to get app settings
-	try
+	/*try
 	{
 		$obj_config = new iriki\engine\config('app.json');
 		$app_json = $obj_config->getJson();
@@ -53,6 +55,21 @@
 	//route it!
 
 	//if test, route to test
+
+	*/
+
+	$app_config = new iriki\engine\config();
+	$app_config->doInitialise('app.json');
+		
+	$app_values = $app_config->getStatus();
+
+	$app_routes = new iriki\engine\route();
+	$routes = $app_routes->doInitialise($app_values);
+	//var_dump($routes);
+
+	$app_models = new iriki\engine\model();
+	$models = $app_models->doInitialise($app_values, $routes);
+	var_dump($models); 
 
 
 

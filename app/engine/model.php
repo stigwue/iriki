@@ -10,39 +10,31 @@ class model extends config
     
     public function loadFromJson($model_path, $routes)
     {
-        $_models = array(
+        $this->_models = array(
             'path' => $model_path
         );
         
-        $_models['models'] = array();
+        $this->_models['models'] = array();
         
         foreach ($routes as $route_title => $route_actions)
         {
             $model_json = (new config($model_path . $route_title . '.json'))->getJson();
-            $_models['models'][$route_title] = $model_json['iriki']['models'][$route_title];
+            $this->_models['models'][$route_title] = $model_json['iriki']['models'][$route_title];
         }
         
-        return $_models;
+        return $this->_models;
+    }
+
+    public function doInitialise($app_values, $routes)
+    {
+        $model_path = $app_values['iriki']['app']['models'];
+
+        return $this->loadFromJson($model_path, $routes['routes']);
     }
 
     public function getModels()
     {
         return $this->_models;
-    }
-}
-
-class mongodb
-{
-    private static $database = null;
-
-    public static function doconnect($db_name, $reconnect = false)
-    {
-		if ($reconnect)
-		{
-	        $connection = new MongoClient();
-	        //Self::database = $connection->$$db_name; //$conn->myboard;
-	        return $database;
-		}
     }
 }
 

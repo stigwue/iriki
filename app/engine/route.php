@@ -13,16 +13,16 @@ class route extends config
     
     public function loadFromJson($path)
     {
-        $_routes = array(
+        $this->_routes = array(
             'path' => $path
         );
         
-        $_config = new config($path . 'index.json');
-        $route_json = $_config->getJson();
+        $this->_config = new config($path . 'index.json');
+        $route_json = $this->_config->getJson();
         
-        $_routes['default'] = $route_json['iriki']['routes']['default'];
-        $_routes['alias'] = $route_json['iriki']['routes']['alias'];
-        $_routes['routes'] = array();
+        $this->_routes['default'] = $route_json['iriki']['routes']['default'];
+        $this->_routes['alias'] = $route_json['iriki']['routes']['alias'];
+        $this->_routes['routes'] = array();
         
         /*get route details from json file
         if a route file can't be found, it'll have no actions and default
@@ -30,10 +30,18 @@ class route extends config
         foreach ($route_json['iriki']['routes']['routes'] as $valid_route)
         {
             $valid_route_json = (new config($path . $valid_route . '.json'))->getJson();
-            $_routes['routes'][$valid_route] = $valid_route_json['iriki']['routes'][$valid_route];
+            $this->_routes['routes'][$valid_route] = $valid_route_json['iriki']['routes'][$valid_route];
         }
         
-        return $_routes;
+        return $this->_routes;
+    }
+
+    public function doInitialise($config_values)
+    {
+
+        $this->_route = $this->loadFromJson($config_values['routes']);
+
+        return $this->_routes;
     }
 
     public function getRoutes()

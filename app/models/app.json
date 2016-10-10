@@ -3,16 +3,14 @@
 	{
 		"models" : {
 			"app" : {
-				"properties" : [
-                    "merchant",
-                    "session",
-                    "setting",
-                    "user",
-                    
-                    "*contract",
-                    "*category",
-                    "*unit",
-                ],
+                "info" : "App. Holds app wide (or specific) properties.",
+				"properties" : {
+                    "private_key" : {
+                        "description" : "Holds string used for hashing and the like.",
+                        "type" : "string",
+                        "unique" : true
+                    }
+                },
                 "relationships" : {
                     "belongsto" : [],
                     "hasmany" : [
