@@ -6,40 +6,29 @@
 
 	//this is the API endpoint
 
-	//read json to get app settings
-	/*try
-	{
-		$obj_config = new iriki\engine\config('app.json');
-		$app_json = $obj_config->getJson();
-        $app_config = $app_json['iriki']['app'];
-	}
-	catch (Exception $e)
-	{
-        
-	}
+	$app = array(
+		'config' => null,
+		'routes' => null,
+		'models' => null
+	);
 
-	//get paths
-	global $config;
-	$config = array();
-	$config['title'] = $app_config['title'];
-	$config['author'] = $app_config['author'];
-	$config['base_url'] = $app_config['base_url'];
+	$app_config = new iriki\engine\config();
+	$app_config->doInitialise('app.json');
+		
+	$app['config'] = $app_config->getKeyValues();
 
-	//engine, already known from require
-	$config['engine'] = $app_config['engine'];
-	
-	//routes
-	require_once('engine/route.php');
-	$obj_route = new iriki\engine\route();
-    $config['route'] = $obj_route->loadFromJson($app_config['routes']);
-    //print_r($config['route']['routes']);
+	$app_routes = new iriki\engine\route();
+	$app['routes'] = $app_routes->doInitialise($app['config']);
 
-	//models
-	require_once('engine/model.php');
-	$obj_model = new iriki\engine\model();
-    $config['model'] = $obj_model->loadFromJson($app_config['models'], $config['route']['routes']);
-    //print_r($config['model']['models']);
-    
+	$app_models = new iriki\engine\model();
+	$app['models'] = $app_models->loadModels($app['config'], $app['routes']);
+
+	echo $app_config->getStatus();
+	echo $app_routes->getStatus();
+
+	//var_dump($app);
+
+	/*
     //do routing
 	//parse the url
 	$url_requested = $_SERVER['REQUEST_URI'];
@@ -58,18 +47,7 @@
 
 	*/
 
-	$app_config = new iriki\engine\config();
-	$app_config->doInitialise('app.json');
-		
-	$app_values = $app_config->getStatus();
-
-	$app_routes = new iriki\engine\route();
-	$routes = $app_routes->doInitialise($app_values);
-	//var_dump($routes);
-
-	$app_models = new iriki\engine\model();
-	$models = $app_models->doInitialise($app_values, $routes);
-	var_dump($models); 
+	 
 
 
 

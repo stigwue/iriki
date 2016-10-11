@@ -38,7 +38,6 @@ class route extends config
 
     public function doInitialise($config_values)
     {
-
         $this->_route = $this->loadFromJson($config_values['routes']);
 
         return $this->_routes;
@@ -47,6 +46,20 @@ class route extends config
     public function getRoutes()
     {
         return $this->_routes;
+    }
+
+    public function getStatus()
+    {
+        $status = "Routes: ";
+        foreach ($this->_routes['routes'] as $model => $actions)
+        {
+            $status .= $model . ', ';
+        }
+        
+        $status = substr($status, 0, -strlen(', '));
+        //Default: actions";
+
+        return $status;
     }
     
     //takes in a request url

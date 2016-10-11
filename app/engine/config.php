@@ -27,15 +27,16 @@ class config
              $this->_json = Self::load_json_file($json_path);
         }
     }
-    
-    public function doLoadJson($path)
-    {
-        $this->_json = Self::load_json_file($path);
-    }
 
     public function getJson()
     {
         return $this->_json;
+    }
+
+    public function getKeyValues()
+    {
+        //return key-value pairs
+        return $this->_key_values;
     }
 
     public function doInitialise($json_path)
@@ -47,25 +48,15 @@ class config
 
     public function getStatus()
     {
-        //return key-value pairs
-        /*
-        title: Iriki App
-        author: Stephen Igwue
-        version: major.minor.build
-
-        url: //iriki/app/
-        routes:
-
-        default: actions*/ 
-
         //unset some private ones
 
-        return $this->_key_values;
-    }
+        $status = "Title: " . $this->_key_values['title'] . "
+Author: " . $this->_key_values['author'] . "
+Version: " . $this->_key_values['version']['major'] . '.' . $this->_key_values['version']['minor'] . '.' . $this->_key_values['version']['build'] . "
+Base URL: " . $this->_key_values['base_url'] . "
+";
 
-    public static function Status($obj_config)
-    {
-        return $obj_config->getStatus();
+        return $status;
     }
 }
 ?>

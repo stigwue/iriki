@@ -25,9 +25,10 @@ class model extends config
         return $this->_models;
     }
 
-    public function doInitialise($app_values, $routes)
+    //essentially its doInitialise
+    public function loadModels($app_values, $routes)
     {
-        $model_path = $app_values['iriki']['app']['models'];
+        $model_path = $app_values['models'];
 
         return $this->loadFromJson($model_path, $routes['routes']);
     }
@@ -35,6 +36,14 @@ class model extends config
     public function getModels()
     {
         return $this->_models;
+    }
+
+    public function getStatus()
+    {
+        //show model routes and pull model info definitions
+        $status = "";
+
+        return $status;
     }
 }
 

@@ -3,10 +3,11 @@
 	{
 		"models" : {
 			"user" : {
-				"properties" : {
+				"info" : "The model for most actions. It can be built upon using other models.",
+                "properties" : {
                     "id" : {
                         "description" : "User's unique ID.",
-                        "type" : "string",
+                        "type" : "number",
                         "unique" : true
                     },
                     "username" :  {

@@ -3,12 +3,30 @@
 	{
 		"models" : {
 			"merchant" : {
-				"properties" : {
-                    "id" : ["unique"],
-                    "user_id" :  ["string"],
-                    "title" : ["string"],
-                    "description" : ["string"],
-                    "created" : ["number"]
+				"info" : "Business or other entities providing a service. They are user owned and belong to a sector.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Merchant unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    },
+                    "merchant_id" : {
+                        "description" : "Unique and more human friendly ID, can be used for handles.",
+                        "type" : "string",
+                        "unique" : true
+                    },
+                    "title" : {
+                        "description" : "Merchant title or long name.",
+                        "type" : "string"
+                    },
+                    "description" : {
+                        "description" : "Merchant description, mostly service focused.",
+                        "type" : "string"
+                    },
+                    "created" : {
+                        "description" : "Date merchant was created",
+                        "type" : "date"
+                    }
                 },
                 "relationships" : {
                     "belongsto" : ["user", "sector"],

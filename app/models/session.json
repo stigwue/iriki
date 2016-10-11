@@ -4,11 +4,23 @@
 		"models" : {
 			"session" : {
 				"properties" : {
-                    "id" : ["unique"],
-                    "user_id" :  ["string"],
-                    "ip_address" : ["string"],
-                    "created" : ["number"],
-                    "expires" : ["number"]
+                    "id" : {
+                        "description" : "Session's unique ID.",
+                        "type" : "string",
+                        "unique" : true
+                    },
+                    "ip_address" :  {
+                        "description" : "Origin IP address.",
+                        "type" : "string"
+                    },
+                    "created" :  {
+                        "description" : "Time session began",
+                        "type" : "date"
+                    },
+                    "expires" :  {
+                        "description" : "Time session expires, will be checked to determine validity.",
+                        "type" : "date"
+                    }
                 },
                 "relationships" : {
                     "belongsto" : ["user"],
