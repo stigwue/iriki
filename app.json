@@ -11,11 +11,15 @@
 				"build" : "1"
 			},
             
-			"base_url" : "//iriki/app/",
-			"engine" : "engine/",
-			"routes" : "routes/",
-			"models" : "models/",
-			"application" : "application/",
+			"base_url" : "//iriki/",
+			"engine" : {
+				"name" : "iriki",
+				"path" : "engine/"
+			},
+			"application" : {
+				"name" : "cashcrow",
+				"path" : "app/"
+			},
             
 			"database" : {
 				"test" : {

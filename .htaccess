@@ -22,12 +22,12 @@ RewriteEngine on
 #RewriteRule (.*) https://foobar/$1 [R,L]
 
 #move all requests to the app folder
-RewriteRule ^api/(.*)$ app/?$1 [L]
+RewriteRule ^api/(.*)$ index.php?$1 [L]
 
 #move all others to route.php so we can redirect
 #RewriteCond %{SCRIPT_FILENAME} !-f
 #RewriteCond %{SCRIPT_FILENAME} !-d
-#RewriteRule ^(.*)$ api/?$1 [L]
+#RewriteRule ^(.*)$ index.php?$1 [L]
 
 #url not found
 #this isn't necessary for now

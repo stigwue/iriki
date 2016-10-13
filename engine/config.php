@@ -39,7 +39,7 @@ class config
         return $this->_key_values;
     }
 
-    public function doInitialise($json_path)
+    public function doInitialise($json_path, $app = 'iriki')
     {
         $this->_json = Self::load_json_file($json_path);
 
@@ -55,6 +55,9 @@ Author: " . $this->_key_values['author'] . "
 Version: " . $this->_key_values['version']['major'] . '.' . $this->_key_values['version']['minor'] . '.' . $this->_key_values['version']['build'] . "
 Base URL: " . $this->_key_values['base_url'] . "
 ";
+/*"Engine: " . $this->_key_values['engine']['name'] . "
+Application: " . $this->_key_values['application']['name'] ."
+";*/
 
         return $status;
     }
