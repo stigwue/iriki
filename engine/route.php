@@ -98,24 +98,32 @@ class route extends config
     public function getStatus()
     {
         //engine's routes
-        $status = "Engine: " . $this->_engine['app']['name'] . " (";
+        $status = "Engine: " . $this->_engine['app']['name'];
+        $status .= " (";
         foreach ($this->_engine['routes']['routes'] as $model => $actions)
         {
             $status .= $model . ', ';
         }
         
-        $status = substr($status, 0, -strlen(', '));
+        if (substr($status, -strlen(', ')) == ', ')
+        {
+            $status = substr($status, 0, -strlen(', '));
+        }
         $status .= ")
 ";
         
         //app's routes
-        $status .= "Application: " . $this->_app['app']['name'] . " (";
+        $status .= "Application: " . $this->_app['app']['name'];
+        $status .= " (";
         foreach ($this->_app['routes']['routes'] as $model => $actions)
         {
             $status .= $model . ', ';
         }
-        
-        $status = substr($status, 0, -strlen(', '));
+
+        if (substr($status, -strlen(', ')) == ', ')
+        {
+            $status = substr($status, 0, -strlen(', '));
+        }
         $status .= ")
 ";
         
