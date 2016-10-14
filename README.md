@@ -48,18 +48,12 @@ Application is non-Iriki code. It can reside anywhere as long as it is pointed t
 
 
 ## To Do
+Rethink DB?
+
+IO with another API
+
 Enable MySQL IO using RedBean PHP
 
 Add changes to the database like Laravel does outside runtime. 
 
-Port to other languages? Hack? Python?
-
-
-"merchant",
-"session",
-"setting",
-"user",
-
-"*contract",
-"*category",
-"*unit",
+Port to other languages? Hack? Python? Java?

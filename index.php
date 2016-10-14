@@ -35,7 +35,7 @@
 	$app['app_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes('cashcrow'), 'cashcrow');
 
 
-	/*
+	
     //do routing
 	//parse the url
 	$url_requested = $_SERVER['REQUEST_URI'];
@@ -43,7 +43,7 @@
 	//var_dump($url_parsed);
 
 	//match a route
-    $selected_route = $obj_route->matchRouteUrl($url_requested, '/iriki/api');
+    $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/api');
 	
 	//match models
 	var_dump($selected_route);
@@ -51,11 +51,6 @@
 	//route it!
 
 	//if test, route to test
-
-	*/
-
-	 
-
 
 
 ?>
