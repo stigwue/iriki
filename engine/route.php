@@ -167,13 +167,25 @@ class route extends config
     
     private static function parseUrl($path, $trim_left)
     {
+        //try php's parse_url
+        $parsed = parse_url($path);
+
+        $to_parse = $parsed['path'];
+
         //trim
-        $trimmed = ltrim($path, $trim_left);
+        //$trimmed = ltrim($path, $trim_left);
+        $trimmed = $path;
+        if (substr($path, 0, strlen($trim_left)) == $trim_left)
+        {
+            $trimmed = substr($path, strlen($trim_left));
+        }
         
         //split path
         $parts = explode("/", $trimmed);
         
         $count = count($parts);
+
+        var_dump($parsed);
         
         return compact('path', 'trimmed', 'parts', 'count');
     }

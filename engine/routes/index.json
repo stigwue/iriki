@@ -12,7 +12,7 @@
                     "parameters" : []
                 },
                 "add" : {
-                    "description" : "",
+                    "description" : "Add a new instance of the model to storage.",
                     "parameters" : []
                 },
                 "read" : {

@@ -43,7 +43,7 @@
 	//var_dump($url_parsed);
 
 	//match a route
-    $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/api');
+    $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/');
 	
 	//match models
 	var_dump($selected_route);
