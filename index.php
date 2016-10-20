@@ -1,8 +1,6 @@
 <?php
 
-	require_once('engine/config.php');
-	require_once('engine/route.php');
-	require_once('engine/model.php');
+	require_once('engine/autoload.php');
 
 	//this is the API endpoint
 
@@ -43,7 +41,7 @@
 	//var_dump($url_parsed);
 
 	//match a route
-    $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/');
+    $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/api/');
 	
 	//match models
 	var_dump($selected_route);

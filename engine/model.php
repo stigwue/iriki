@@ -4,6 +4,9 @@ namespace iriki\engine;
 
 require_once(__DIR__ . '/config.php');
 
+class generic_model
+{}
+
 class model extends config
 {
     //engine models

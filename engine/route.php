@@ -141,27 +141,54 @@ class route extends config
     {
         $model = null;
         $action = null;
+        $get_params = null; //$url_params['query'];
         $params = null;
         
         $count = count($url_params['parts']);
         
-        //routes already in $_routes;
         if ($count != 0)
         {
+            //get the model
             $model = $url_params['parts'][0];
             if ($count >= 2) $action = $url_params['parts'][1];
+
+            $model_instance = new generic_model();
+
+            $model_exists = class_exists($model);
+
+            if ($model_exists)
+            {
+                class_alias($model, 'generic_model');
+            }
+
+            /*php > class Test {public function runTest($msg) { echo 'Testing ' . $msg . '...';}};
+php > class Model {};
+php > class_alias('Test', 'Model');
+PHP Warning:  Cannot redeclare class Model in php shell code on line 1
+
+Warning: Cannot redeclare class Model in php shell code on line 1
+php > class_alias('Test', 'Test_Alias');
+php > $x = new Test_Alias();
+php > $x->runTest('Birth');
+Testing Birth...
+php > */
+
+            $action_status = method_exists($model_instance, $action);
         }
         else
         {
-            
+            //no model found, default to routes info?
         }
-        return compact('model', 'action', 'params');
+
+        $get_params = Self::parseGetParams($url_params['query']);
+
+        return compact('model', 'action', 'get_params', 'params');
     }
     
     public function matchRouteUrl($path, $trim_left)
     {
         $url_parsed = Self::parseUrl($path, $trim_left);
-        var_dump($url_parsed);
+
         return $this->matchRoute($url_parsed);
     }
     
@@ -172,25 +199,41 @@ class route extends config
 
         $to_parse = $parsed['path'];
 
+        $query = $parsed['query'];
+
         //trim
-        //$trimmed = ltrim($path, $trim_left);
-        $trimmed = $path;
-        if (substr($path, 0, strlen($trim_left)) == $trim_left)
+        $trimmed = $to_parse;
+        if (substr($to_parse, 0, strlen($trim_left)) == $trim_left)
         {
-            $trimmed = substr($path, strlen($trim_left));
+            $trimmed = substr($to_parse, strlen($trim_left));
         }
         
         //split path
         $parts = explode("/", $trimmed);
         
-        $count = count($parts);
+        return compact('path', 'trimmed', 'parts', 'query');
+    }
 
-        var_dump($parsed);
-        
-        return compact('path', 'trimmed', 'parts', 'count');
+    private static function parseGetParams($query)
+    {
+        $get_params = array();
+        $key_values = explode("&", $query);
+        foreach ($key_values as $key_value)
+        {
+            $pair = explode('=', $key_value);
+            if (count($pair) == 2)
+            {
+                $get_params[$pair[0]] = $pair[1];
+            }
+            else
+            {
+                $get_params[$key_value] = '';
+            }
+        }
+        return $get_params;
     }
     
-    public function matchModel()
+    public function matchModel($model, $action, $get_params, $params)
     {
         
     }
