@@ -1,6 +1,7 @@
 <?php
 
 	require_once('engine/autoload.php');
+	require_once('app/autoload.php');
 
 	//this is the API endpoint
 
@@ -45,6 +46,8 @@
 	
 	//match models
 	var_dump($selected_route);
+
+	var_dump($_REQUEST);
 
 	//route it!
 

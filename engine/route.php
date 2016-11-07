@@ -2,7 +2,9 @@
 
 namespace iriki\engine;
 
-require_once(__DIR__ . '/config.php');
+//require_once(__DIR__ . '/autoload.php');
+//require_once(__DIR__ . '/../app/autoload.php');
+//require_once(realpath(__DIR__ . '/..') . '/app/autoload.php');
 
 class route extends config
 {
@@ -133,7 +135,7 @@ class route extends config
     
     //takes in a request url
     //returns matching route
-    //a match is 3 part process
+    //a match is 3 part process, depends on iriki mode
     //a specific model or alias
     //a specific action for said model
     //a specific set of parameters for said action
@@ -141,8 +143,9 @@ class route extends config
     {
         $model = null;
         $action = null;
-        $get_params = null; //$url_params['query'];
-        $params = null;
+
+        $model_exists = false;
+        $action_exists = false;
         
         $count = count($url_params['parts']);
         
@@ -152,42 +155,62 @@ class route extends config
             $model = $url_params['parts'][0];
             if ($count >= 2) $action = $url_params['parts'][1];
 
+            //note that namespace is important
             $model_instance = new generic_model();
 
-            $model_exists = class_exists($model);
+            //test for model existence in app
+            $app_namespace = $this->_app['app']['name'];
+            $model_full = '\\' . $app_namespace . '\\' . $model;
+            $model_exists = class_exists($model_full);
+
+            //$model_exists = class_exists('\iriki\session');
 
             if ($model_exists)
             {
-                class_alias($model, 'generic_model');
+                class_alias($model_full, 'generic_model');
+            }
+            else
+            {
+                //test for model existence in engine
+                $engine_namespace = $this->_app['engine']['name'];
+                $model_full = '\\' . $engine_namespace . '\\' . $model;
+                $model_exists = class_exists($model_full);
             }
 
-            /*php > class Test {public function runTest($msg) { echo 'Testing ' . $msg . '...';}};
-php > class Model {};
-php > class_alias('Test', 'Model');
-PHP Warning:  Cannot redeclare class Model in php shell code on line 1
+            if ($model_exists)
+            {
+                $action_exists = method_exists($model_instance, $action);
 
-Warning: Cannot redeclare class Model in php shell code on line 1
-php > class_alias('Test', 'Test_Alias');
-php > $x = new Test_Alias();
-php > $x->runTest('Birth');
-Testing Birth...
-php > */
+                if ($action_exists)
+                {
 
-            $action_status = method_exists($model_instance, $action);
+                }
+                else
+                {
+
+                }
+            }
+            else
+            {
+
+            }
         }
         else
         {
             //no model found, default to routes info?
         }
 
-        $get_params = Self::parseGetParams($url_params['query']);
+        //$get_params = $_GET;//Self::parseGetParams($url_params['query']);
+        //$post_params = $_POST;
 
-        return compact('model', 'action', 'get_params', 'params');
+        return compact('model', 'action', 'model_exists', 'action_exists');
     }
     
-    public function matchRouteUrl($path, $trim_left)
+    public function matchRouteUrl($path, $trim_left = '', $post_params = null, $get_params = null, $cookie_params = null)
     {
         $url_parsed = Self::parseUrl($path, $trim_left);
+
+        //check models?
 
         return $this->matchRoute($url_parsed);
     }
@@ -199,13 +222,16 @@ php > */
 
         $to_parse = $parsed['path'];
 
-        $query = $parsed['query'];
+        isset($parsed['query']) ? $query = $parsed['query'] : $query = null;
 
         //trim
         $trimmed = $to_parse;
-        if (substr($to_parse, 0, strlen($trim_left)) == $trim_left)
+        if (strlen($trim_left) != 0 )
         {
-            $trimmed = substr($to_parse, strlen($trim_left));
+            if (substr($to_parse, 0, strlen($trim_left)) == $trim_left)
+            {
+                $trimmed = substr($to_parse, strlen($trim_left));
+            }
         }
         
         //split path
@@ -214,7 +240,7 @@ php > */
         return compact('path', 'trimmed', 'parts', 'query');
     }
 
-    private static function parseGetParams($query)
+    /*private static function parseGetParams($query)
     {
         $get_params = array();
         $key_values = explode("&", $query);
@@ -231,7 +257,7 @@ php > */
             }
         }
         return $get_params;
-    }
+    }*/
     
     public function matchModel($model, $action, $get_params, $params)
     {
