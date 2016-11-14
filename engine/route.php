@@ -156,7 +156,7 @@ class route extends config
             if ($count >= 2) $action = $url_params['parts'][1];
 
             //note that namespace is important
-            $model_instance = new generic_model();
+            $model_instance = null; //new generic_model();
 
             //test for model existence in app
             $app_namespace = $this->_app['app']['name'];
@@ -175,7 +175,8 @@ class route extends config
 
             if ($model_exists)
             {
-                class_alias($model_full, 'generic_model');
+                //class_alias($model_full, 'generic_model');
+                $model_instance = new $model_full();
             }
 
             if ($model_exists)
@@ -186,8 +187,14 @@ class route extends config
 
                 if ($action_exists)
                 {
-                    $x = new generic_model();
-                    var_dump($x);
+                    /*$str = "One";
+                    $class = "Class".$str;
+                    $object = new $class();*/
+                    
+                    /*$model_class = $model_full;
+
+                    $x = new $model_class();
+                    var_dump($x);*/
                     var_dump($model_instance);
                 }
                 else
