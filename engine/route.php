@@ -165,11 +165,7 @@ class route extends config
 
             //$model_exists = class_exists('\iriki\session');
 
-            if ($model_exists)
-            {
-                class_alias($model_full, 'generic_model');
-            }
-            else
+            if (!$model_exists)
             {
                 //test for model existence in engine
                 $engine_namespace = $this->_app['engine']['name'];
@@ -179,11 +175,20 @@ class route extends config
 
             if ($model_exists)
             {
-                $action_exists = method_exists($model_instance, $action);
+                class_alias($model_full, 'generic_model');
+            }
+
+            if ($model_exists)
+            {
+                //$action_exists = method_exists($model_instance, $action);
+
+                $action_exists = method_exists($model_full, $action);
 
                 if ($action_exists)
                 {
-
+                    $x = new generic_model();
+                    var_dump($x);
+                    var_dump($model_instance);
                 }
                 else
                 {
