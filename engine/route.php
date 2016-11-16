@@ -97,26 +97,30 @@ class route extends config
         return $store['routes'];
     }
 
-    public function getStatus()
+    public function getStatus($status = null, $json = false)
     {
         //engine's routes
-        $status = "Engine: " . $this->_engine['app']['name'];
-        $status .= " (";
-        foreach ($this->_engine['routes']['routes'] as $model => $actions)
+        if (is_null($status))
         {
-            $status .= $model . ', ';
+            $status = array('data' => array());
         }
+
+        $status['data']['engine'] = $this->_engine['app']['name'];
+            $status['data']['engine'] .= " (";
+            foreach ($this->_engine['routes']['routes'] as $model => $actions)
+            {
+                $status['data']['engine'] .= $model . ', ';
+            }
         
-        if (substr($status, -strlen(', ')) == ', ')
-        {
-            $status = substr($status, 0, -strlen(', '));
-        }
-        $status .= ")
-";
+            if (substr($status['data']['engine'], -strlen(', ')) == ', ')
+            {
+                $status['data']['engine'] = substr($status['data']['engine'], 0, -strlen(', '));
+            }
+            $status['data']['engine'] .= ")";
         
         //app's routes
-        $status .= "Application: " . $this->_app['app']['name'];
-        $status .= " (";
+        $status['data']['application'] = $this->_app['app']['name'];
+            $status['data']['application'] .= " (";
         foreach ($this->_app['routes']['routes'] as $model => $actions)
         {
             $status .= $model . ', ';

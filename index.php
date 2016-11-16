@@ -13,18 +13,19 @@
 		//'models' => null
 	);
 
+	$status = array();
+
 	$app_config = new iriki\engine\config();
 	$app_config->doInitialise('app.json');
 		
 	$app['config'] = $app_config->getKeyValues();
-	echo $app_config->getStatus();
-
+	$status = $app_config->getStatus();
 
 	$app_routes = new iriki\engine\route();
 	$app_routes->doInitialise($app['config']);
 	$app_routes->doInitialise($app['config'], 'cashcrow');
 	
-	echo $app_routes->getStatus();
+	//echo $app_routes->getStatus();
 
 	$app_models = new iriki\engine\model();
 	$app['iriki_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes());
@@ -34,6 +35,7 @@
 	$app['app_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes('cashcrow'), 'cashcrow');
 
 
+	echo json_encode($status);
 	
     //do routing
 	//parse the url

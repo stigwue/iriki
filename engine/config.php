@@ -46,20 +46,31 @@ class config
         $this->_key_values = $this->_json['iriki']['app'];
     }
 
-    public function getStatus()
+    public function getStatus($status = null, $json = false)
     {
-        //unset some private ones
+        //unset some private ones?
+        if (is_null($status))
+        {
+            $status = array('data' => array());
+        }
+            
+        $status['data']['title'] = $this->_key_values['title'];
+        $status['data']['author'] = $this->_key_values['author'];
+        $status['data']['version'] = array(
+            'major' => $this->_key_values['version']['major'],
+            'minor' => $this->_key_values['version']['minor'],
+            'build' => $this->_key_values['version']['build']
+        );
+        $status['data']['base_url'] = $this->_key_values['base_url'];
 
-        $status = "Title: " . $this->_key_values['title'] . "
-Author: " . $this->_key_values['author'] . "
-Version: " . $this->_key_values['version']['major'] . '.' . $this->_key_values['version']['minor'] . '.' . $this->_key_values['version']['build'] . "
-Base URL: " . $this->_key_values['base_url'] . "
-";
-/*"Engine: " . $this->_key_values['engine']['name'] . "
-Application: " . $this->_key_values['application']['name'] ."
-";*/
-
-        return $status;
+        if ($json)
+        {
+            return json_encode($status);
+        }
+        else
+        {
+            return $status;
+        }
     }
 }
 ?>

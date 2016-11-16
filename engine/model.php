@@ -59,7 +59,7 @@ class model extends config
         return $store['models'];
     }
 
-    public function getStatus()
+    public function getStatus($status = null, $json = false)
     {
         //show model routes and pull model info definitions
         $status = "";
