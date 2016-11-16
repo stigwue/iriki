@@ -25,7 +25,7 @@
 	$app_routes->doInitialise($app['config']);
 	$app_routes->doInitialise($app['config'], 'cashcrow');
 	
-	//echo $app_routes->getStatus();
+	$status = $app_routes->getStatus($status);
 
 	$app_models = new iriki\engine\model();
 	$app['iriki_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes());
@@ -47,9 +47,9 @@
     $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/api/');
 	
 	//match models
-	var_dump($selected_route);
+	//var_dump($selected_route);
 
-	var_dump($_REQUEST);
+	//var_dump($_REQUEST);
 
 	//route it!
 

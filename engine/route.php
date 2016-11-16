@@ -105,33 +105,27 @@ class route extends config
             $status = array('data' => array());
         }
 
-        $status['data']['engine'] = $this->_engine['app']['name'];
-            $status['data']['engine'] .= " (";
-            foreach ($this->_engine['routes']['routes'] as $model => $actions)
-            {
-                $status['data']['engine'] .= $model . ', ';
-            }
+        $status['data']['engine'] = array();
+        $status['data']['engine']['name'] = $this->_engine['app']['name'];
+        $status['data']['engine']['path'] = $this->_engine['app']['path'];
+
         
-            if (substr($status['data']['engine'], -strlen(', ')) == ', ')
-            {
-                $status['data']['engine'] = substr($status['data']['engine'], 0, -strlen(', '));
-            }
-            $status['data']['engine'] .= ")";
+        foreach ($this->_engine['routes']['routes'] as $model => $actions)
+        {
+            $status['data']['engine']['routes'][] = $model;
+        }
         
         //app's routes
-        $status['data']['application'] = $this->_app['app']['name'];
-            $status['data']['application'] .= " (";
+        $status['data']['application'] = array();
+
+        $status['data']['application']['name'] = $this->_app['app']['name'];
+        $status['data']['application']['path'] = $this->_app['app']['path'];
+        
         foreach ($this->_app['routes']['routes'] as $model => $actions)
         {
-            $status .= $model . ', ';
+            $status['data']['application']['routes'][] = $model;
         }
 
-        if (substr($status, -strlen(', ')) == ', ')
-        {
-            $status = substr($status, 0, -strlen(', '));
-        }
-        $status .= ")
-";
         
 
         return $status;
@@ -199,7 +193,7 @@ class route extends config
 
                     $x = new $model_class();
                     var_dump($x);*/
-                    var_dump($model_instance);
+                    //var_dump($model_instance);
                 }
                 else
                 {
