@@ -62,9 +62,19 @@ class model extends config
     public function getStatus($status = null, $json = false)
     {
         //show model routes and pull model info definitions
-        $status = "";
+        if (is_null($status))
+        {
+            $status = array('data' => array());
+        }
 
-        return $status;
+        if ($json)
+        {
+            return json_encode($status);
+        }
+        else
+        {
+            return $status;
+        }
     }
 }
 

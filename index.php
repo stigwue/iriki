@@ -28,11 +28,11 @@
 	$status = $app_routes->getStatus($status);
 
 	$app_models = new iriki\engine\model();
-	$app['iriki_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes());
-	
-	//var_dump($app['iriki_models']);
+	$app['engine_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes());
 	
 	$app['app_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes('cashcrow'), 'cashcrow');
+
+	//var_dump($app);
 
 
 	echo json_encode($status);
@@ -44,7 +44,7 @@
 	//var_dump($url_parsed);
 
 	//match a route
-    $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/api/');
+    $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/api/', $app['engine_models'], $app['app_models']);
 	
 	//match models
 	//var_dump($selected_route);

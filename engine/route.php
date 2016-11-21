@@ -126,9 +126,14 @@ class route extends config
             $status['data']['application']['routes'][] = $model;
         }
 
-        
-
-        return $status;
+        if ($json)
+        {
+            return json_encode($status);
+        }
+        else
+        {
+            return $status;
+        }
     }
     
     //takes in a request url
@@ -137,7 +142,7 @@ class route extends config
     //a specific model or alias
     //a specific action for said model
     //a specific set of parameters for said action
-    private function matchRoute($url_params)
+    private function matchRoute($url_params, $engine_models, $app_models, $params)
     {
         $model = null;
         $action = null;
@@ -154,14 +159,12 @@ class route extends config
             if ($count >= 2) $action = $url_params['parts'][1];
 
             //note that namespace is important
-            $model_instance = null; //new generic_model();
+            $model_instance = null;
 
             //test for model existence in app
             $app_namespace = $this->_app['app']['name'];
             $model_full = '\\' . $app_namespace . '\\' . $model;
             $model_exists = class_exists($model_full);
-
-            //$model_exists = class_exists('\iriki\session');
 
             if (!$model_exists)
             {
@@ -216,13 +219,13 @@ class route extends config
         return compact('model', 'action', 'model_exists', 'action_exists');
     }
     
-    public function matchRouteUrl($path, $trim_left = '', $post_params = null, $get_params = null, $cookie_params = null)
+    public function matchRouteUrl($path, $trim_left = '', $engine_models = null, $app_models = null, $params = null)
     {
         $url_parsed = Self::parseUrl($path, $trim_left);
 
         //check models?
 
-        return $this->matchRoute($url_parsed);
+        return $this->matchRoute($url_parsed, $engine_models, $app_models, $params);
     }
     
     private static function parseUrl($path, $trim_left)
