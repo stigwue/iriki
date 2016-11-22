@@ -33,9 +33,9 @@
 	$app['app_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes('cashcrow'), 'cashcrow');
 
 	//var_dump($app);
+	//var_dump($app_routes);
 
-
-	echo json_encode($status);
+	//echo json_encode($status);
 	
     //do routing
 	//parse the url
@@ -45,6 +45,8 @@
 
 	//match a route
     $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/api/', $app['engine_models'], $app['app_models']);
+
+    echo json_encode($selected_route);
 	
 	//match models
 	//var_dump($selected_route);

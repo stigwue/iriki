@@ -151,6 +151,8 @@ class route extends config
         $action_exists = false;
         
         $count = count($url_params['parts']);
+
+        $status = array();
         
         if ($count != 0)
         {
@@ -169,7 +171,7 @@ class route extends config
             if (!$model_exists)
             {
                 //test for model existence in engine
-                $engine_namespace = $this->_app['engine']['name'];
+                $engine_namespace = $this->_app['app']['name'];
                 $model_full = '\\' . $engine_namespace . '\\' . $model;
                 $model_exists = class_exists($model_full);
             }
@@ -197,26 +199,39 @@ class route extends config
                     $x = new $model_class();
                     var_dump($x);*/
                     //var_dump($model_instance);
+
+                    //if (is_null($params))
                 }
                 else
                 {
-
+                    //no action specified, display the possible actions
+                    $status['error'] = array(
+                        'code' => 404,
+                        'message' => 'No action specified'
+                    );
                 }
             }
             else
             {
-
+                $status['error'] = array(
+                    'code' => 404,
+                    'message' => 'Model not found'
+                );
             }
         }
         else
         {
             //no model found, default to routes info?
+            $status['error'] = array(
+                'code' => 404,
+                'message' => 'Url could not be parsed'
+            );
         }
 
         //$get_params = $_GET;//Self::parseGetParams($url_params['query']);
         //$post_params = $_POST;
 
-        return compact('model', 'action', 'model_exists', 'action_exists');
+        return $status; //compact('model', 'action', 'model_exists', 'action_exists');
     }
     
     public function matchRouteUrl($path, $trim_left = '', $engine_models = null, $app_models = null, $params = null)
