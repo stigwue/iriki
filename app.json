@@ -16,9 +16,26 @@
 				"name" : "iriki",
 				"path" : "engine/"
 			},
+			
 			"application" : {
 				"name" : "cashcrow",
-				"path" : "app/"
+				"path" : "app/cashcrow/"
+			},
+			"cashcrow" : {
+				"name" : "cashcrow",
+				"path" : "app/cashcrow"
+			},
+			"hr_log" : {
+				"name" : "hr_log",
+				"path" : "app/hr_log"
+			},
+			"myboard" : {
+				"name" : "myboard",
+				"path" : "app/myboard"
+			},
+			"decoding" : {
+				"name" : "decoding",
+				"path" : "app/decoding"
 			},
             
 			"database" : {

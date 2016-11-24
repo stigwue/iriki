@@ -148,6 +148,7 @@ class route extends config
         $action = null;
 
         $model_exists = false;
+        $model_is_app_defined = true;
         $action_exists = false;
         
         $count = count($url_params['parts']);
@@ -171,9 +172,11 @@ class route extends config
             if (!$model_exists)
             {
                 //test for model existence in engine
-                $engine_namespace = $this->_app['app']['name'];
+                $engine_namespace = $this->_engine['app']['name'];
                 $model_full = '\\' . $engine_namespace . '\\' . $model;
                 $model_exists = class_exists($model_full);
+
+                $model_is_app_defined = false;
             }
 
             if ($model_exists)
@@ -194,17 +197,23 @@ class route extends config
                     $class = "Class".$str;
                     $object = new $class();*/
                     
-                    /*$model_class = $model_full;
+                    $model_instance =  new $model_full();
 
-                    $x = new $model_class();
-                    var_dump($x);*/
                     //var_dump($model_instance);
 
-                    //if (is_null($params))
+                    //$status = $model_instance ->
                 }
                 else
                 {
                     //no action specified, display the possible actions
+                    if ($model_is_app_defined)
+                    {
+                        //find model among the app models
+                        foreach ($app_models as $app_model) 
+                        {
+                            //if (isset($app_model[]))
+                        }
+                    }
                     $status['error'] = array(
                         'code' => 404,
                         'message' => 'No action specified'
@@ -221,7 +230,7 @@ class route extends config
         }
         else
         {
-            //no model found, default to routes info?
+            //no model found, show possible routes?
             $status['error'] = array(
                 'code' => 404,
                 'message' => 'Url could not be parsed'
