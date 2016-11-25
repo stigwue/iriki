@@ -76,6 +76,41 @@ class model extends config
             return $status;
         }
     }
+
+    public function info($model, $action = null, $params = null, $json = false)
+    {
+        //params would contain
+        //var_dump($params);
+
+
+
+        $status = array();
+
+        foreach ($params as $_model => $_action)
+        {
+            //var_dump($action);
+            if ($_model == $model)
+            {
+                //var_dump($_action);
+                if ((is_null($action) OR $action == 'info') AND isset($_action['info']))
+                {
+                    $status['data'] = array(
+                        'model' => $_model,
+                        'info' => $_action['info']
+                    );
+                }
+            }
+        }
+
+        if ($json)
+        {
+            return json_encode($status);
+        }
+        else
+        {
+            return $status;
+        }
+    }
 }
 
 ?>

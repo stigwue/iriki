@@ -187,37 +187,30 @@ class route extends config
 
             if ($model_exists)
             {
-                //$action_exists = method_exists($model_instance, $action);
+                $model_instance =  new $model_full();
+
 
                 $action_exists = method_exists($model_full, $action);
 
+                if ($action == 'info') $action_exists = false;
+
                 if ($action_exists)
                 {
-                    /*$str = "One";
-                    $class = "Class".$str;
-                    $object = new $class();*/
-                    
-                    $model_instance =  new $model_full();
-
-                    //var_dump($model_instance);
-
-                    //$status = $model_instance ->
+                    $status = $model_instance->$action($params);
                 }
                 else
                 {
-                    //no action specified, display the possible actions
+                    //no action specified, display the possible actions, using info
+                    $action = 'info';
                     if ($model_is_app_defined)
                     {
                         //find model among the app models
-                        foreach ($app_models as $app_model) 
-                        {
-                            //if (isset($app_model[]))
-                        }
+                        $status = $model_instance->$action($model, $action, $app_models);
                     }
-                    $status['error'] = array(
-                        'code' => 404,
-                        'message' => 'No action specified'
-                    );
+                    else
+                    {
+                        $status = $model_instance->$action($model, $action, $engine_models);
+                    }
                 }
             }
             else

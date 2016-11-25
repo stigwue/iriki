@@ -32,24 +32,13 @@
 	
 	$app['app_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes('cashcrow'), 'cashcrow');
 
-	//var_dump($app);
-	//var_dump($app_routes);
-
-	//echo json_encode($status);
-	
-    //do routing
-	//parse the url
+	//do routing
 	$url_requested = $_SERVER['REQUEST_URI'];
-	//$url_parsed = iriki\engine\route::parseUrl($url_requested, '/iriki/api');
-	//var_dump($url_parsed);
 
-	//match a route
-    $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/api/', $app['engine_models'], $app['app_models']);
+	//parse the url and match a route to a model and its action
+    $selected_route = $app_routes->matchRouteUrl($url_requested, '/iriki/api/', $app['engine_models'], $app['app_models'], $_REQUEST);
 
     echo json_encode($selected_route);
-	
-	//match models
-	//var_dump($selected_route);
 
 	//var_dump($_REQUEST);
 
