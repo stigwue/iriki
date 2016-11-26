@@ -28,7 +28,7 @@ class model extends config
         if ($app != 'iriki')
         {
             $var = '_app';
-            $path = $config_values['application']['path'];
+            $path = $config_values[$app]['path'];
         }
         $store = &$this->$var;
         
@@ -77,12 +77,10 @@ class model extends config
         }
     }
 
-    public function info($model, $action = null, $params = null, $json = false)
+    public function description($model, $action = null, $params = null, $json = false)
     {
         //params would contain
         //var_dump($params);
-
-
 
         $status = array();
 
@@ -91,13 +89,14 @@ class model extends config
             //var_dump($action);
             if ($_model == $model)
             {
-                //var_dump($_action);
-                if ((is_null($action) OR $action == 'info') AND isset($_action['info']))
+                if ((is_null($action) OR $action == 'description') AND isset($_action['description']))
                 {
                     $status['data'] = array(
                         'model' => $_model,
-                        'info' => $_action['info']
+                        'description' => $_action['description']
                     );
+
+                    break;
                 }
             }
         }

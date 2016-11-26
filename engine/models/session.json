@@ -3,6 +3,7 @@
 	{
 		"models" : {
 			"session" : {
+                "description" : "Session manages our current user and authentication state.",
 				"properties" : {
                     "id" : {
                         "description" : "Session's unique ID.",

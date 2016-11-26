@@ -2,10 +2,6 @@
 
 namespace iriki\engine;
 
-//require_once(__DIR__ . '/autoload.php');
-//require_once(__DIR__ . '/../app/autoload.php');
-//require_once(realpath(__DIR__ . '/..') . '/app/autoload.php');
-
 class route extends config
 {
     //engine routes
@@ -32,7 +28,7 @@ class route extends config
         if ($app != 'iriki')
         {
             $var = '_app';
-            $path = $config_values['application']['path'];
+            $path = $config_values[$app]['path'];
         }
         $store = &$this->$var;
 
@@ -62,7 +58,7 @@ class route extends config
         if ($app != 'iriki')
         {
             $var = '_app';
-            $path = $config_values['application']['path'];
+            $path = $config_values[$app]['path'];
         }
         $store = &$this->$var;
         
@@ -192,7 +188,7 @@ class route extends config
 
                 $action_exists = method_exists($model_full, $action);
 
-                if ($action == 'info') $action_exists = false;
+                if ($action == 'description') $action_exists = false;
 
                 if ($action_exists)
                 {
@@ -201,7 +197,7 @@ class route extends config
                 else
                 {
                     //no action specified, display the possible actions, using info
-                    $action = 'info';
+                    $action = 'description';
                     if ($model_is_app_defined)
                     {
                         //find model among the app models

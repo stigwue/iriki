@@ -2,7 +2,9 @@
 
 namespace iriki;
 
-class session
-{}
+class session extends engine\model
+{
+	
+}
 
 ?>

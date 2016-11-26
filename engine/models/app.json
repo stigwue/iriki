@@ -3,7 +3,7 @@
 	{
 		"models" : {
 			"app" : {
-                "info" : "Holds app wide (or specific) properties.",
+                "description" : "Holds app wide (or specific) properties.",
 				"properties" : {
                     "private_key" : {
                         "description" : "Holds string used for hashing and the like.",

@@ -3,7 +3,7 @@
 	{
 		"models" : {
 			"user" : {
-				"info" : "The model for most actions. It can be built upon using other models.",
+				"description" : "The model for most actions. It can be built upon using other models.",
                 "properties" : {
                     "id" : {
                         "description" : "User's unique ID.",

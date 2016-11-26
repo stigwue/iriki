@@ -16,26 +16,29 @@
 				"name" : "iriki",
 				"path" : "engine/"
 			},
-			
-			"application" : {
+
+			"myboard" : {
+				"name" : "myboard",
+				"path" : "app/myboard/"
+			},
+
+			"cashcrow" : {
 				"name" : "cashcrow",
 				"path" : "app/cashcrow/"
 			},
-			"cashcrow" : {
-				"name" : "cashcrow",
-				"path" : "app/cashcrow"
+			"decoding" : {
+				"name" : "decoding",
+				"path" : "app/decoding/"
+			},
+
+
+			"elims" : {
+				"name" : "elims",
+				"path" : "app/elims/"
 			},
 			"hr_log" : {
 				"name" : "hr_log",
-				"path" : "app/hr_log"
-			},
-			"myboard" : {
-				"name" : "myboard",
-				"path" : "app/myboard"
-			},
-			"decoding" : {
-				"name" : "decoding",
-				"path" : "app/decoding"
+				"path" : "app/hr_log/"
 			},
             
 			"database" : {

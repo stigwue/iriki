@@ -3,7 +3,7 @@
 	{
 		"models" : {
 			"merchant" : {
-				"info" : "Business or other entities providing a service. They are user owned and belong to a sector.",
+				"description" : "Business or other entities providing a service. They are user owned and belong to a sector.",
                 "properties" : {
                     "id" : {
                         "description" : "Merchant unique ID.",

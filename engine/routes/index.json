@@ -3,7 +3,7 @@
 	{
 		"routes" : {
             "default" : {
-            	"info" : {
+            	"description" : {
                     "description" : "Describe a model and lists its properties.",
                     "parameters" : []
             	},
