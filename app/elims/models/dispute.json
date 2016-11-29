@@ -1,0 +1,21 @@
+{
+	"elims":
+	{
+		"models" : {
+			"dispute" : {
+				"description" : "A special type of application.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

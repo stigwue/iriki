@@ -12,6 +12,7 @@
 			},
             
 			"base_url" : "//iriki/",
+			
 			"engine" : {
 				"name" : "iriki",
 				"path" : "engine/"
@@ -40,6 +41,10 @@
 				"name" : "hr_log",
 				"path" : "app/hr_log/"
 			},
+
+
+			"mode" : "strict",
+			"logs" : "all",
             
 			"database" : {
 				"test" : {
@@ -48,16 +53,14 @@
 				},
 				"development" : {
 	                "type" : "mysql",
+	                "server" : "localhost",
 					"db" : "cashcrow_dev"
 				},
 				"production" : {
 	                "type" : "mongodb",
 					"db" : "cashcrow_prod"
 				}
-			},
-
-			"mode" : "strict",
-			"logs" : "all"
+			}
 		}
 	}
 }

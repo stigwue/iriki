@@ -6,9 +6,9 @@ require_once(__DIR__ . '/default.php');
 
 class mysql extends database
 {
-    private static $database = null;
+    /*private static $database = null;
 
-    public static function doconnect($db_name, $reconnect = false)
+    public static function doConnect(&$instance, $params)
     {
 		if ($reconnect)
 		{
@@ -16,6 +16,6 @@ class mysql extends database
 	        //Self::database = $connection->$$db_name; //$conn->myboard;
 	        return $database;
 		}
-    }
+    }*/
 }
 ?>

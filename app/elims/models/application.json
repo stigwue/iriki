@@ -1,0 +1,21 @@
+{
+	"elims":
+	{
+		"models" : {
+			"application" : {
+				"description" : "A process a user initiates and processed by staff.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

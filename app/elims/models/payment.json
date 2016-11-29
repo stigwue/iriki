@@ -1,0 +1,21 @@
+{
+	"elims":
+	{
+		"models" : {
+			"payment" : {
+				"description" : "A payment made from one party to another.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

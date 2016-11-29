@@ -1,0 +1,21 @@
+{
+	"elims":
+	{
+		"models" : {
+			"ticket" : {
+				"description" : "A support request and its accompanying thread.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

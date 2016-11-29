@@ -6,17 +6,25 @@ require_once(__DIR__ . '/default.php');
 
 class mongodb extends database
 {
-    private static $database = null;
+	public static function getInstance()
+	{
+		$instance = new \MongoClient();
+        return $instance;
+	}
 
-    public static function doconnect($db_name, $reconnect = false)
+    public static function doConnect(&$instance, $params)
     {
-		if ($reconnect)
-		{
-	        $connection = new MongoClient();
-	        //Self::database = $connection->$$db_name; //$conn->myboard;
-	        return $database;
+    	if (isset($params['db']))
+    	{
+    		$db_name = $params['db'];
+			
+			return $instance->$db_name;
 		}
-    }
+		else
+		{
+			return null; //or some test/random db
+		}
+	}
 }
 
 ?>

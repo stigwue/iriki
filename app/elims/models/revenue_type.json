@@ -1,0 +1,21 @@
+{
+	"elims":
+	{
+		"models" : {
+			"revenue_type" : {
+				"description" : "The revenue types available.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

@@ -1,0 +1,13 @@
+{
+	"hr_log":
+	{
+		"routes" : {
+            "default" : {},
+			"alias" : {},
+            "routes" : [
+                "staff",
+                "activity"
+            ]
+		}
+	}
+}

@@ -14,6 +14,7 @@ class request
         $result = file_get_contents($url);
         return $result;
     }
+    
     public static function doPost($url, $parameters)
     {
         // use key 'http' even if you send the request to https://...

@@ -1,0 +1,11 @@
+{
+	"elims":
+	{
+		"routes" : {
+			"property" : {
+				"create" : [],
+                "read" : ["id"]
+            }
+		}
+	}
+}

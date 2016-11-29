@@ -1,0 +1,21 @@
+{
+	"elims":
+	{
+		"models" : {
+			"property" : {
+				"description" : "The basic model, a real estate unit.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

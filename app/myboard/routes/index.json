@@ -1,0 +1,12 @@
+{
+	"myboard":
+	{
+		"routes" : {
+            "default" : {},
+			"alias" : {},
+            "routes" : [
+                "message"
+            ]
+		}
+	}
+}

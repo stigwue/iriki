@@ -1,0 +1,21 @@
+{
+	"elims":
+	{
+		"models" : {
+			"document" : {
+				"description" : "A document, usually the last step of an application.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

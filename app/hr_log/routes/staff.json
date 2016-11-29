@@ -1,0 +1,10 @@
+{
+	"hr_log":
+	{
+		"routes" : {
+			"staff" : {
+				"create" : []
+            }
+		}
+	}
+}

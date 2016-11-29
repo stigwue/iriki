@@ -30,15 +30,15 @@
             },
 			"alias" : {
 				"about" : {
-					"route" : "page",
+					"model" : "page",
 					"action" : "about"
 				},
                 "api" : {
-					"route" : "",
+					"model" : "",
 					"action" : ""
 				},
                 "test" : {
-					"route" : "",
+					"model" : "",
 					"action" : ""
 				}
 			},

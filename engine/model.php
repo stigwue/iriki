@@ -20,6 +20,9 @@ class model extends config
         'config' => null,
         'models' => null
     );
+
+    //persistence
+    private $_db = array();
     
     public function loadFromJson($config_values, $routes, $app = 'iriki')
     {
@@ -57,6 +60,78 @@ class model extends config
         $store = &$this->$var;
 
         return $store['models'];
+    }
+
+
+    //returns a 3 level match
+    //a specific model or alias
+    //a specific action for said model
+    //a specific set of parameters for said action
+    public static function doMatch($model_status, $models = null)
+    {
+        $model = (isset($model_status['str']) ? $model_status['str'] : null);
+
+        if (is_null($model))
+        {
+            
+        }
+        else
+        {
+            foreach ($models as $_model => $_action)
+            {
+                //var_dump($action);
+                if ($_model == $model)
+                {
+                    if ((is_null($action) OR $action == 'description') AND isset($_action['description']))
+                    {
+                        $status['data'] = array(
+                            'model' => $_model,
+                            'description' => $_action['description']
+                        );
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        /*if ($model_exists)
+        {
+            $model_instance =  new $model_full();
+
+
+            $action_exists = method_exists($model_full, $action);
+
+            if ($action == 'description') $action_exists = false;
+
+            if ($action_exists)
+            {
+                $status = $model_instance->$action($params);
+            }
+            else
+            {
+                //no action specified, display the possible actions, using info
+                $action = 'description';
+                if ($model_is_app_defined)
+                {
+                    //find model among the app models
+                    $status = $model_instance->$action($model, $action, $app_models);
+                }
+                else
+                {
+                    $status = $model_instance->$action($model, $action, $engine_models);
+                }
+            }
+        }
+        else
+        {
+            //first, is it found in config?
+
+            $status['error'] = array(
+                'code' => 404,
+                'message' => 'Model not found'
+            );
+        }*/
     }
 
     public function getStatus($status = null, $json = false)

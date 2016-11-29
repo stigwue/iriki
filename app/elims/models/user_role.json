@@ -1,0 +1,21 @@
+{
+	"elims":
+	{
+		"models" : {
+			"user_role" : {
+				"description" : "A various roles available to a user.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

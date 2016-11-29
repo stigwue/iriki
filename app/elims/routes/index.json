@@ -1,0 +1,23 @@
+{
+	"elims":
+	{
+		"routes" : {
+            "default" : {},
+			"alias" : {},
+            "routes" : [
+                "user",
+				"user_role",
+				"staff",
+                "payment",
+                "revenue_type",
+                "document",
+                "document_type",
+                "application",
+
+                "property",
+                "dispute",
+                "ticket"
+            ]
+		}
+	}
+}

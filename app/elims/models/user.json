@@ -1,0 +1,21 @@
+{
+	"elims":
+	{
+		"models" : {
+			"user" : {
+				"description" : "A (non-staff) user.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

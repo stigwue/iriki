@@ -1,0 +1,33 @@
+{
+	"myboard":
+	{
+		"models" : {
+			"message" : {
+				"description" : "User to user message within the service.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Message unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    },
+                    "user_id" : {},
+                    "reply_to" :{},
+                    "title" : {
+                        "description" : "Message title.",
+                        "type" : "string"
+                    },
+                    "recipients" : {},
+                    "thread" :{},
+                    "timestamp" : {
+                        "description" : "Date message was created",
+                        "type" : "date"
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : ["user"],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

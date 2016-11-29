@@ -1,0 +1,21 @@
+{
+	"elims":
+	{
+		"models" : {
+			"document_type" : {
+				"description" : "A document type, such as C of O.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

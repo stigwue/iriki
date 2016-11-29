@@ -132,13 +132,11 @@ class route extends config
         }
     }
     
-    //takes in a request url
-    //returns matching route
-    //a match is 3 part process, depends on iriki mode
-    //a specific model or alias
-    //a specific action for said model
-    //a specific set of parameters for said action
-    private function matchRoute($url_params, $engine_models, $app_models, $params)
+    //matches route with supplied url
+    //a match is 2 part process
+    //1. a route/alias is matched to a specific model
+    //2. we go into said model to further the match
+    private function doMatch($url_params, $engine_models, $app_models, $params)
     {
         $model = null;
         $action = null;
@@ -175,13 +173,19 @@ class route extends config
                 $model_is_app_defined = false;
             }
 
-            if ($model_exists)
-            {
-                //class_alias($model_full, 'generic_model');
-                $model_instance = new $model_full();
-            }
+            $model_status = array(
+                'str' => $model,
+                'str_full' => $model_full,
+                'exists' => $model_exists,
+                'app_defined' => $model_is_app_defined,
+                'action'=> $action
+            );
 
-            if ($model_exists)
+            $status = model::doMatch($model_status,
+                ($model_is_app_defined ? $app_models : $engine_models)
+            );
+
+            /*if ($model_exists)
             {
                 $model_instance =  new $model_full();
 
@@ -211,11 +215,13 @@ class route extends config
             }
             else
             {
+                //first, is it found in config?
+
                 $status['error'] = array(
                     'code' => 404,
                     'message' => 'Model not found'
                 );
-            }
+            }*/
         }
         else
         {
@@ -226,19 +232,16 @@ class route extends config
             );
         }
 
-        //$get_params = $_GET;//Self::parseGetParams($url_params['query']);
-        //$post_params = $_POST;
-
-        return $status; //compact('model', 'action', 'model_exists', 'action_exists');
+        return $status;
     }
     
-    public function matchRouteUrl($path, $trim_left = '', $engine_models = null, $app_models = null, $params = null)
+    public function matchUrl($path, $trim_left = '', $engine_models = null, $app_models = null, $params = null)
     {
         $url_parsed = Self::parseUrl($path, $trim_left);
 
         //check models?
 
-        return $this->matchRoute($url_parsed, $engine_models, $app_models, $params);
+        return $this->doMatch($url_parsed, $engine_models, $app_models, $params);
     }
     
     private static function parseUrl($path, $trim_left)
@@ -285,10 +288,6 @@ class route extends config
         return $get_params;
     }*/
     
-    public function matchModel($model, $action, $get_params, $params)
-    {
-        
-    }
 }
 
 ?>

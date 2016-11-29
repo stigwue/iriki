@@ -1,0 +1,11 @@
+{
+	"myboard":
+	{
+		"routes" : {
+			"message" : {
+				"create" : [],
+                "read" : ["id"]
+            }
+		}
+	}
+}
