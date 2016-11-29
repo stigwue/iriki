@@ -17,9 +17,6 @@ class route extends config
         'config' => null,
         'routes' => null
     );
-
-    //url matching
-    private $_path_parts;
     
     private function loadFromJsonIndex($config_values, $app = 'iriki')
     {
@@ -136,8 +133,33 @@ class route extends config
     //a match is 2 part process
     //1. a route/alias is matched to a specific model
     //2. we go into said model to further the match
-    private function doMatch($url_params, $engine_models, $app_models, $params)
+    public function matchUrl($path,
+        $trim_left = '',
+        $models = null,
+        $routes = null,
+        $params = null
+    )
     {
+        $url_params = Self::parseUrl($path, $trim_left);
+
+        //models
+        $app_models = null;
+        $engine_models = null;
+        if (!is_null($models))
+        {
+            $app_models = $models['app'];
+            $engine_models = $models['engine'];
+        }
+
+        //routes
+        $app_routes = null;
+        $engine_routes = null;
+        if (!is_null($routes))
+        {
+            $app_routes = $routes['app'];
+            $engine_routes = $routes['engine'];
+        }
+
         $model = null;
         $action = null;
 
@@ -177,18 +199,23 @@ class route extends config
                 'str' => $model,
                 'str_full' => $model_full,
                 'exists' => $model_exists,
+                'details' => null,
                 'app_defined' => $model_is_app_defined,
-                'action'=> $action
+                'action'=> $action,
+                'action_exists' => false,
+                'action_details' => null
             );
 
             $status = model::doMatch($model_status,
-                ($model_is_app_defined ? $app_models : $engine_models)
+                ($model_is_app_defined ? $app_models : $engine_models),
+                ($model_is_app_defined ? $app_routes : $engine_routes)
             );
 
+            var_dump($status);
+            
             /*if ($model_exists)
             {
                 $model_instance =  new $model_full();
-
 
                 $action_exists = method_exists($model_full, $action);
 
@@ -233,15 +260,6 @@ class route extends config
         }
 
         return $status;
-    }
-    
-    public function matchUrl($path, $trim_left = '', $engine_models = null, $app_models = null, $params = null)
-    {
-        $url_parsed = Self::parseUrl($path, $trim_left);
-
-        //check models?
-
-        return $this->doMatch($url_parsed, $engine_models, $app_models, $params);
     }
     
     private static function parseUrl($path, $trim_left)

@@ -1,8 +1,8 @@
 <?php
 	
 	//application switch
-	//define('IRIKI_APP', 'cashcrow');
-	define('IRIKI_APP', 'elims');
+	define('IRIKI_APP', 'cashcrow');
+	//define('IRIKI_APP', 'elims');
 
 	//app switch
 	define('IRIKI_MODE', 'test');
@@ -30,8 +30,8 @@
 	$status = $app_config->getStatus();
 
 	$app_routes = new iriki\engine\route();
-	$app_routes->doInitialise($app['config']);
-	$app_routes->doInitialise($app['config'], IRIKI_APP);
+	$app['engine_routes'] = $app_routes->doInitialise($app['config']);
+	$app['app_routes'] = $app_routes->doInitialise($app['config'], IRIKI_APP);
 	
 	$status = $app_routes->getStatus($status);
 
@@ -45,13 +45,27 @@
 	$params = $_REQUEST;
 
 	//parse the url and match a route to a model and its action
-    $selected_route = $app_routes->matchUrl($url_requested, '/iriki/api/', $app['engine_models'], $app['app_models'], $params);
-
-    //var_dump($app['app_models']);
+    $selected_route = $app_routes->matchUrl(
+    	//path
+    	$url_requested,
+    	//trim this from path's left
+    	'/iriki/api/',
+    	//models
+    	array(
+    		'engine' => $app['engine_models'],
+    		'app' => $app['app_models']
+		),
+		//routes
+    	array(
+    		'engine' => $app['engine_routes'],
+    		'app' => $app['app_routes']
+		),
+		//parameters
+		$params
+	);
 
     echo json_encode($selected_route);
 
 	//if test, route to test
-
 
 ?>

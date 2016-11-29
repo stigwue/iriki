@@ -67,32 +67,103 @@ class model extends config
     //a specific model or alias
     //a specific action for said model
     //a specific set of parameters for said action
-    public static function doMatch($model_status, $models = null)
+    public static function doMatch($model_status, $models = null, $routes = null)
     {
+        /*$model_status = array(
+            'str' => $model,
+            'str_full' => $model_full,
+            'exists' => $model_exists,
+            'details' => null,
+            'app_defined' => $model_is_app_defined,
+            'action'=> $action,
+            'action_exists' => false,
+            'action_details' => null
+        );*/
+
         $model = (isset($model_status['str']) ? $model_status['str'] : null);
 
-        if (is_null($model))
+        if ($model_status['exists'])
         {
-            
-        }
-        else
-        {
+            //$model_instance =  new $model_full();
+            $model_status['action_exists'] = method_exists($model_status['str_full'], $model_status['action']);
+
+            //find model details
             foreach ($models as $_model => $_action)
             {
-                //var_dump($action);
-                if ($_model == $model)
+                if ($_model == $model_status['str'])
                 {
-                    if ((is_null($action) OR $action == 'description') AND isset($_action['description']))
+                    //we are in the model
+                    $action = $model_status['action'];
+
+                    $model_status['details'] = array(
+                        'description' => $_action['description'],
+                        'properties' => $_action['properties'],
+                        'relationships' => $_action['relationships']
+                    );
+
+
+                    //loop for action
+
+                    //var_dump($routes['routes']);
+                    //route alias
+
+                    //route actions
+                    foreach ($routes['routes'] as $_route => $_route_action)
                     {
-                        $status['data'] = array(
+                        //var_dump($model_status['action']);
+                        //var_dump($_route_action[$model_status['action']]);
+                        if ($_route == $model_status['str'])
+                        {
+                            if (isset($_route_action[$model_status['action']]))
+                            {
+                                $model_status['action_details'] = array(
+                                    'description' => (isset($_route_action[$model_status['action']]['description']) ? $_route_action[$model_status['action']]['description'] : ''),
+                                    'parameters' => $_route_action[$model_status['action']]['parameters']
+                                );
+
+                                //action could be description?
+
+                                break;
+                            }
+                            else
+                            {
+                                //default to description of model since action does not exist
+
+                                $model_status['action_details'] = array(
+                                    'description' => $_action['description']
+                                );
+
+                                break;
+                            }
+                            //var_dump($_route_action[$model_status['action']]);
+
+                            //var_dump($model_status);
+                        }
+                    }
+
+                    //route default actions
+
+                    /*if ((is_null($action) OR $action == 'description') AND isset($_action['description']))
+                    {
+                        /*$status['data'] = array(
                             'model' => $_model,
                             'description' => $_action['description']
+                        );*
+
+                        $model_status['details'] = array(
+                            'description' => $_action['description'],
+                            'properties' => $_action['properties'],
+                            'relationships' => $_action['relationships']
                         );
 
+
                         break;
-                    }
+                    }*/
                 }
             }
+
+            //action exists
+            //action does not exist, is it defined in
         }
 
         /*if ($model_exists)
@@ -132,6 +203,8 @@ class model extends config
                 'message' => 'Model not found'
             );
         }*/
+
+        return $model_status;
     }
 
     public function getStatus($status = null, $json = false)
