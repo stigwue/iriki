@@ -82,8 +82,7 @@ class model extends config
 
         $model = (isset($model_status['str']) ? $model_status['str'] : null);
 
-        //$model_instance =  new $model_full();
-        $model_status['action_exists'] = method_exists($model_status['str_full'], $model_status['action']);
+        //$model_status['action_exists'] = method_exists($model_status['str_full'], $model_status['action']);
 
         //find model details
         foreach ($models as $_model => $_action)

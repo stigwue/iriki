@@ -4,7 +4,7 @@
 		"routes" : {
 			"property" : {
 				"create" : {
-					"description" : "",
+					"description" : "Create a new property via enumeration, GIS or some other means.",
 					"parameters" : []
 				},
                 "read" : {

@@ -198,6 +198,7 @@ class route extends config
             $model_full = '\\' . $app_namespace . '\\' . $model;
             
             $model_exists = class_exists($model_full);
+            $action_exists = method_exists($model_full, $action);
 
             $model_status = array(
                 'str' => $model,
@@ -206,7 +207,7 @@ class route extends config
                 'details' => null,
                 'app_defined' => $model_is_app_defined,
                 'action'=> $action,
-                'action_exists' => false,
+                'action_exists' => $action_exists,
                 'action_details' => null
             );
 
@@ -215,44 +216,7 @@ class route extends config
                 ($model_is_app_defined ? $app_routes : $engine_routes)
             );
 
-            var_dump($model_status);
-
-            /*if ($model_exists)
-            {
-                $model_instance =  new $model_full();
-
-                $action_exists = method_exists($model_full, $action);
-
-                if ($action == 'description') $action_exists = false;
-
-                if ($action_exists)
-                {
-                    $status = $model_instance->$action($params);
-                }
-                else
-                {
-                    //no action specified, display the possible actions, using info
-                    $action = 'description';
-                    if ($model_is_app_defined)
-                    {
-                        //find model among the app models
-                        $status = $model_instance->$action($model, $action, $app_models);
-                    }
-                    else
-                    {
-                        $status = $model_instance->$action($model, $action, $engine_models);
-                    }
-                }
-            }
-            else
-            {
-                //first, is it found in config?
-
-                $status['error'] = array(
-                    'code' => 404,
-                    'message' => 'Model not found'
-                );
-            }*/
+            //var_dump($model_status);
 
             if ($model_status['exists'] AND $model_status['action_exists'])
             {
