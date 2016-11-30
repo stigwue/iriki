@@ -211,8 +211,8 @@ class route extends config
                 ($model_is_app_defined ? $app_routes : $engine_routes)
             );
 
-            var_dump($status);
-            
+            //var_dump($status);
+
             /*if ($model_exists)
             {
                 $model_instance =  new $model_full();

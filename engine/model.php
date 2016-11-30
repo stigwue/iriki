@@ -101,17 +101,13 @@ class model extends config
                         'relationships' => $_action['relationships']
                     );
 
-
                     //loop for action
 
-                    //var_dump($routes['routes']);
                     //route alias
 
                     //route actions
                     foreach ($routes['routes'] as $_route => $_route_action)
                     {
-                        //var_dump($model_status['action']);
-                        //var_dump($_route_action[$model_status['action']]);
                         if ($_route == $model_status['str'])
                         {
                             if (isset($_route_action[$model_status['action']]))

@@ -3,8 +3,14 @@
 	{
 		"routes" : {
 			"message" : {
-				"create" : [],
-                "read" : ["id"]
+				"create" : {
+					"description" : "",
+					"parameters" : []
+				},
+                "read" : {
+					"description" : "",
+					"parameters" : ["id"]
+				}
             }
 		}
 	}

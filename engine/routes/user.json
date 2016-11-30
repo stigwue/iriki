@@ -3,8 +3,14 @@
 	{
 		"routes" : {
 			"user" : {
-                "auth" : ["auth"],
-				"signup" : []
+                "auth" : {
+                	"description" : "",
+                	"parameters" : ["auth"]
+                },
+				"signup" : {
+                	"description" : "",
+                	"parameters" : []
+                }
             }
 		}
 	}

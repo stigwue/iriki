@@ -3,7 +3,10 @@
 	{
 		"routes" : {
 			"staff" : {
-				"create" : []
+				"create" : {
+					"description" : "",
+					"parameters" : []
+				}
             }
 		}
 	}

@@ -3,7 +3,10 @@
 	{
 		"routes" : {
 			"activity" : {
-				"create" : []
+				"create" : {
+					"description" : "",
+					"parameters" : []
+				}
             }
 		}
 	}
