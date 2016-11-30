@@ -2,7 +2,7 @@
 	"elims":
 	{
 		"routes" : {
-			"property" : {
+			"document" : {
 				"create" : {
 					"description" : "",
 					"parameters" : []

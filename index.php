@@ -1,8 +1,8 @@
 <?php
 	
 	//application switch
-	define('IRIKI_APP', 'cashcrow');
-	//define('IRIKI_APP', 'elims');
+	//define('IRIKI_APP', 'cashcrow');
+	define('IRIKI_APP', 'elims');
 
 	//app switch
 	define('IRIKI_MODE', 'test');

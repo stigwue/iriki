@@ -180,20 +180,24 @@ class route extends config
             //note that namespace is important
             $model_instance = null;
 
-            //test for model existence in app
-            $app_namespace = $this->_app['app']['name'];
-            $model_full = '\\' . $app_namespace . '\\' . $model;
-            $model_exists = class_exists($model_full);
+            //test for model existence is a configuration search in app then engine
+            $model_is_app_defined = isset($models['app'][$model]);
+            //confirm using route
+            $route_is_app_defined = isset($routes['app']['routes'][$model]);
 
-            if (!$model_exists)
+            if ($model_is_app_defined != $route_is_app_defined)
             {
-                //test for model existence in engine
-                $engine_namespace = $this->_engine['app']['name'];
-                $model_full = '\\' . $engine_namespace . '\\' . $model;
-                $model_exists = class_exists($model_full);
-
-                $model_is_app_defined = false;
+                //something's wrong
             }
+            
+            //class exist test
+            $app_namespace = ($model_is_app_defined ?
+                $this->_app['app']['name'] :
+                $this->_engine['app']['name']
+            );
+            $model_full = '\\' . $app_namespace . '\\' . $model;
+            
+            $model_exists = class_exists($model_full);
 
             $model_status = array(
                 'str' => $model,
@@ -206,12 +210,12 @@ class route extends config
                 'action_details' => null
             );
 
-            $status = model::doMatch($model_status,
+            $model_status = model::doMatch($model_status,
                 ($model_is_app_defined ? $app_models : $engine_models),
                 ($model_is_app_defined ? $app_routes : $engine_routes)
             );
 
-            //var_dump($status);
+            var_dump($model_status);
 
             /*if ($model_exists)
             {
@@ -249,6 +253,35 @@ class route extends config
                     'message' => 'Model not found'
                 );
             }*/
+
+            if ($model_status['exists'] AND $model_status['action_exists'])
+            {
+                $model_instance =  new $model_status['str_full']();
+
+                $status = $model_instance->$action($params);
+            }
+            else if (!$model_status['exists'])
+            {
+                if (isset($model_status['details']['description']))
+                {
+                    $status['error'] = array(
+                        'code' => 404,
+                        'message' => $model_status['details']['description']
+                    );
+                }
+                //$status = 
+            }
+            else if (!$model_status['action_exists'])
+            {
+                if (isset($model_status['action_details']['description']))
+                {
+                    $status['error'] = array(
+                        'code' => 404,
+                        'message' => $model_status['action_details']['description']
+                    );
+                }
+            }
+
         }
         else
         {
