@@ -5,7 +5,7 @@
 	define('IRIKI_APP', 'elims');
 
 	//app switch
-	define('IRIKI_MODE', 'test');
+	define('IRIKI_MODE', 'development');
 
 
 	require_once('engine/autoload.php');
@@ -16,9 +16,11 @@
 	$app = array(
 		'config' => null,
 
-		//'routes' => null,
+		'routes' => null,
 
-		//'models' => null
+		'models' => null,
+
+		'database' => null
 	);
 
 	$status = array();
@@ -29,16 +31,18 @@
 	$app['config'] = $app_config->getKeyValues();
 	$status = $app_config->getStatus();
 
+	$app['database'] = $app['config']['database'][IRIKI_MODE];
+
 	$app_routes = new iriki\engine\route();
-	$app['engine_routes'] = $app_routes->doInitialise($app['config']);
-	$app['app_routes'] = $app_routes->doInitialise($app['config'], IRIKI_APP);
+	$app['routes']['engine'] = $app_routes->doInitialise($app['config']);
+	$app['routes']['app'] = $app_routes->doInitialise($app['config'], IRIKI_APP);
 	
 	$status = $app_routes->getStatus($status);
 
 	$app_models = new iriki\engine\model();
-	$app['engine_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes());
+	$app['models']['engine'] = $app_models->loadModels($app['config'], $app_routes->getRoutes());
 	
-	$app['app_models'] = $app_models->loadModels($app['config'], $app_routes->getRoutes(IRIKI_APP), IRIKI_APP);
+	$app['models']['app'] = $app_models->loadModels($app['config'], $app_routes->getRoutes(IRIKI_APP), IRIKI_APP);
 
 	//do routing
 	$url_requested = $_SERVER['REQUEST_URI'];
@@ -52,13 +56,13 @@
     	'/iriki/api/',
     	//models
     	array(
-    		'engine' => $app['engine_models'],
-    		'app' => $app['app_models']
+    		'engine' => $app['models']['engine'],
+    		'app' => $app['models']['app']
 		),
 		//routes
     	array(
-    		'engine' => $app['engine_routes'],
-    		'app' => $app['app_routes']
+    		'engine' => $app['routes']['engine'],
+    		'app' => $app['routes']['app']
 		),
 		//parameters
 		$params

@@ -8,11 +8,13 @@ class mongodb extends database
 {
 	public static function getInstance()
 	{
+		//parse key values
+		if (is_null(Self::$_key_values))
 		$instance = new \MongoClient();
         return $instance;
 	}
 
-    public static function doConnect(&$instance, $params)
+    /*public static function doConnect(&$instance, $params)
     {
     	if (isset($params['db']))
     	{
@@ -24,7 +26,7 @@ class mongodb extends database
 		{
 			return null; //or some test/random db
 		}
-	}
+	}*/
 }
 
 ?>

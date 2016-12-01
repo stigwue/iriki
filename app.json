@@ -52,13 +52,13 @@
 					"db" : "cashcrow_test"
 				},
 				"development" : {
+	                "type" : "mongodb",
+					"db" : "cashcrow_prod"
+				},
+				"production" : {
 	                "type" : "mysql",
 	                "server" : "localhost",
 					"db" : "cashcrow_dev"
-				},
-				"production" : {
-	                "type" : "mongodb",
-					"db" : "cashcrow_prod"
 				}
 			}
 		}

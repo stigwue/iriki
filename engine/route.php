@@ -222,6 +222,8 @@ class route extends config
             {
                 $model_instance =  new $model_status['str_full']();
 
+                //instance?
+                //var_dump()
                 $status = $model_instance->$action($params);
             }
             else if (!$model_status['exists'])

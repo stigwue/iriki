@@ -5,7 +5,22 @@
             "default" : {},
 			"alias" : {},
             "routes" : [
-                "message"
+                "call",
+                "collaboration",
+                "contact",
+                "email",
+                "file",
+                "message",
+                "model",
+				"page",
+				"payment",
+				"plan",
+				"post",
+				"setting",
+				"stat",
+				"user",
+				"variable",
+				"voicemail"
             ]
 		}
 	}

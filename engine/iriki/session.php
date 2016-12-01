@@ -8,9 +8,10 @@ class session extends engine\model
 	{
 		$db_instance = engine\database\mongodb::getInstance();
 
-		$test = engine\database\mongodb::doConnect($db_instance, ['db' => "hr_log"]);
+		return engine\database\mongodb::doCreate($db_instance, $params);
+		//$test = engine\database\mongodb::doConnect($db_instance, ['db' => "hr_log"]);
 
-		var_dump($test);
+		//var_dump($test);
 	}
 }
 
