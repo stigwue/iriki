@@ -1,14 +1,31 @@
 <?php
 
-namespace iriki\engine\database;
+namespace iriki\engine;
 
 class database
 {
 	private static $_key_values;
+	private static $_type;
 
 	public static function doInitialise($config_values = null)
 	{
         Self::$_key_values = $config_values;
+        
+	}
+
+	private static function setType($app, $engine = 'iriki')
+	{
+		if (isset(Self::$_key_values['type']))
+		{
+			Self::$_type = Self::$_key_values['type'];
+		}
+		else
+		{
+			//a db wasn't specified. no persistence then?
+			Self::$_type = '';
+		}
+
+		//class_exists($model_full)
 	}
 
 	public static function getInstance()

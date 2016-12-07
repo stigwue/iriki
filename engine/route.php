@@ -137,6 +137,7 @@ class route extends config
         $trim_left = '',
         $models = null,
         $routes = null,
+        $database = null,
         $params = null
     )
     {
@@ -222,8 +223,12 @@ class route extends config
             {
                 $model_instance =  new $model_status['str_full']();
 
-                //instance?
-                //var_dump()
+                //bring in database
+                //defined in \iriki\engine\database
+                //or \app_name\database
+                //$db_type
+
+                //instance action
                 $status = $model_instance->$action($params);
             }
             else if (!$model_status['exists'])
@@ -235,7 +240,10 @@ class route extends config
                         'message' => $model_status['details']['description']
                     );
                 }
-                //$status = 
+                else
+                {
+
+                }
             }
             else if (!$model_status['action_exists'])
             {
@@ -246,6 +254,7 @@ class route extends config
                         'message' => $model_status['action_details']['description']
                     );
                 }
+                else{}
             }
 
         }

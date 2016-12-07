@@ -64,6 +64,8 @@
     		'engine' => $app['routes']['engine'],
     		'app' => $app['routes']['app']
 		),
+		//database
+		$app['database'],
 		//parameters
 		$params
 	);

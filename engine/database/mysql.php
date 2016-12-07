@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki\engine\database;
+namespace iriki\engine;
 
 require_once(__DIR__ . '/default.php');
 
