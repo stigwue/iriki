@@ -52,13 +52,14 @@
 					"db" : "cashcrow_test"
 				},
 				"development" : {
-	                "type" : "mongodb",
-					"db" : "cashcrow_prod"
+	                "type" : "mysql",
+					"db" : "bizzdesk_elims",
+					"user" : "stephen.igwue"
 				},
 				"production" : {
 	                "type" : "mysql",
 	                "server" : "localhost",
-					"db" : "cashcrow_dev"
+					"db" : "cashcrow_prod"
 				}
 			}
 		}

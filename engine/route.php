@@ -219,17 +219,25 @@ class route extends config
 
             //var_dump($model_status);
 
+            //var_dump($database);
+
             if ($model_status['exists'] AND $model_status['action_exists'])
             {
                 $model_instance =  new $model_status['str_full']();
 
                 //bring in database
-                //defined in \iriki\engine\database
-                //or \app_name\database
-                //$db_type
+                //$this->_app['app']['name'] :
+                //$this->_engine['app']['name']
+                //$db_type = isset($database[])
+
+                database::getOfType(
+                    $this->_app['app']['name'],
+                    $this->_engine['app']['name'],
+                    $database
+                );
 
                 //instance action
-                $status = $model_instance->$action($params);
+                $status = $model_instance->$action(database::getInstanceOfType(), $params);
             }
             else if (!$model_status['exists'])
             {

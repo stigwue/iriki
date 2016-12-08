@@ -8,8 +8,12 @@
 	define('IRIKI_MODE', 'development');
 
 
+	//engine
 	require_once('engine/autoload.php');
+	//application
 	require_once('app/' . IRIKI_APP . '/autoload.php');
+	//vendors
+	require_once('vendors/autoload.php');
 
 	//this is the API endpoint
 

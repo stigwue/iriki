@@ -1,5 +1,7 @@
 require 'rb.php';
 R::setup();
+R::setup( 'mysql:host=localhost;dbname=mydatabase', 'myusername', 'mypassword' );
+
 R::setAutoResolve( TRUE );        //Recommended as of version 4.2
 $post = R::dispense( 'post' );
 $post->text = 'Hello World';

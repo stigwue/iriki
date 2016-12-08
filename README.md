@@ -18,7 +18,7 @@ Wishing that frequently used models be shared:
 
 The idea of a new framework which would:
 
-allow definition of models language agnostic (json),
+allow definition of language agnostic models (json),
 
 replace traditional framework views with an independent UI, which REQUESTs URLs birthed from preconfigured routing
 
@@ -26,9 +26,9 @@ was born featuring a PHP (for now, perhaps Python later) backend handling routin
 
 ## How it works
 
-Everything is in a single important directory "app". All requests to be handled by the Iriki app will be POST/GET to or from this directory.
+Everything is in a single directory. All requests to be handled by the Iriki framework will be POST/GET to or from this directory.
 
-These are the key directories within app: engine, application and vendors.
+These are the key directories within: engine, application and vendors.
 
 ### Engine
 
@@ -44,16 +44,14 @@ Models holds the JSON description of the database models/collections/tables. I w
 
 ### Application
 
-Application is non-Iriki code. It can reside anywhere as long as it is pointed to in the application configuration. When a request is made, a matching model is first looked for in engine-space. If not found, then the application folder will then be used. There will pe provision to override Iriki models.
+Application is non-Iriki code. It can reside anywhere as long as it is pointed to in the application configuration. When a request is made, a matching model is first looked for in application space. If not found, then the engine folder will be searched. There will be provision to override selected Iriki model actions.
 
 
 ## To Do
 Rethink DB?
 
-IO with another API
-
-Enable MySQL IO using RedBean PHP
+Persist with another API
 
 Add changes to the database like Laravel does outside runtime. 
 
-Port to other languages? Hack? Python? Java?
+Port to other languages/frameworks? Hack? Python? NodeJS?

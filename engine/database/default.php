@@ -4,17 +4,18 @@ namespace iriki\engine;
 
 class database
 {
-	private static $_key_values;
-	private static $_type;
+	protected static $_key_values;
+	protected static $_type;
+	protected static $_namespace;
+	protected static $_db_class;
+	protected static $_db_class_exists;
+	protected static $_instance;
 
-	public static function doInitialise($config_values = null)
+	public static function getOfType($app, $engine = 'iriki', $config_values = null)
 	{
         Self::$_key_values = $config_values;
-        
-	}
 
-	private static function setType($app, $engine = 'iriki')
-	{
+
 		if (isset(Self::$_key_values['type']))
 		{
 			Self::$_type = Self::$_key_values['type'];
@@ -23,37 +24,71 @@ class database
 		{
 			//a db wasn't specified. no persistence then?
 			Self::$_type = '';
+			Self::$_instance = null;
+			Self::$_db_class_exists = false;
 		}
 
-		//class_exists($model_full)
+		//defined in \iriki\engine
+        //or \app\database
+		Self::$_namespace = '\\' . $engine . '\\engine\\';
+		Self::$_db_class = Self::$_namespace . Self::$_type;
+		if (class_exists(Self::$_db_class))
+		{
+			Self::$_instance = new Self::$_db_class();
+			Self::$_db_class_exists = true;
+		}
+		else
+		{
+			//try application
+			Self::$_namespace = '\\' . $app . '\\engine\\';
+			Self::$_db_class = Self::$_namespace . Self::$_type;
+			if (class_exists(Self::$_db_class))
+			{
+				Self::$_instance = new Self::$_db_class();
+				Self::$_db_class_exists = true;
+			}
+		}
+		return Self::$_db_class_exists;
 	}
 
-	public static function getInstance()
+	public static function getInstanceOfType()
 	{
-		//parse key values and return an instance
-        return null;
+		if (Self::$_db_class_exists)
+		{
+			Self::$_instance = new Self::$_db_class();
+			return Self::$_instance;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public function getInstance()
+	{
+		return null;
 	}
 
 	//create
-	public static function doCreate($instance, $params)
+	public function doCreate($instance, $params)
 	{
 		return null;
 	}
 
 	//read/retrieve
-	public static function doRead($instance, $params)
+	public function doRead($instance, $params)
 	{
 		return null;
 	}
 
 	//update
-	public static function doUpdate($instance, $params)
+	public function doUpdate($instance, $params)
 	{
 		return null;
 	}
 
 	//delete
-	public static function doDelete($instance, $params)
+	public function doDelete($instance, $params)
 	{
 		return null;
 	}
