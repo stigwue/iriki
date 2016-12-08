@@ -10,8 +10,9 @@ require_once(__DIR__ . '/default.php');
 class mysql extends database
 {
 	const TYPE = 'mysql';
+	private static $__instance;
 
-	public function getInstance()
+	private static function initInstance()
 	{
 		//parse key values
 		if (!is_null(Self::$_key_values))
@@ -31,16 +32,16 @@ class mysql extends database
 
 				\R::setup("mysql:host=$server;dbname=$database", $key_values['user'], $password);
 
-				return $this;
+				return true;
 			}
 			else
 			{
-				return null;
+				return false;
 			}
 	    }
 		else
 		{
-			return null;
+			return false;
 		}
 	}
 }

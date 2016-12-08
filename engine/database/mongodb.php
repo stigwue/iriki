@@ -7,8 +7,9 @@ require_once(__DIR__ . '/default.php');
 class mongodb extends database
 {
 	const TYPE = 'mongodb';
+	private static $__instance;
 
-	public function getInstance()
+	private static function initInstance()
 	{
 		//parse key values
 		if (!is_null(Self::$_key_values))
@@ -19,17 +20,17 @@ class mongodb extends database
 				isset($key_values['db'])
 			)
 			{
-				$instance = new \MongoClient();
-		        return $instance->$key_values['db'];
+				Self::$__instance = new \MongoClient();
+		        return true;
 			}
 			else
 			{
-				return null;
+				return false;
 			}
 	    }
 		else
 		{
-			return null;
+			return false;
 		}
 	}
 }

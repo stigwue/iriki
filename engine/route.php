@@ -217,10 +217,6 @@ class route extends config
                 ($model_is_app_defined ? $app_routes : $engine_routes)
             );
 
-            //var_dump($model_status);
-
-            //var_dump($database);
-
             if ($model_status['exists'] AND $model_status['action_exists'])
             {
                 $model_instance =  new $model_status['str_full']();
@@ -230,14 +226,14 @@ class route extends config
                 //$this->_engine['app']['name']
                 //$db_type = isset($database[])
 
-                database::getOfType(
+                database::doInitialise(
                     $this->_app['app']['name'],
                     $this->_engine['app']['name'],
                     $database
                 );
 
                 //instance action
-                $status = $model_instance->$action(database::getInstanceOfType(), $params);
+                $status = $model_instance->$action(database::getClass(), $params);
             }
             else if (!$model_status['exists'])
             {

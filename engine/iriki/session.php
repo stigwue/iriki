@@ -4,11 +4,11 @@ namespace iriki;
 
 class session extends engine\model
 {
-	public function create($db, $params = null)
+	public function create($db_type, $params = null)
 	{
-		$instance = $db->getInstance();
+		$instance = new $db_type();
 
-		return $instance->doCreate($db, $params);
+		return $instance::doCreate($params);
 	}
 }
 

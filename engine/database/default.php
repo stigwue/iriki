@@ -5,13 +5,13 @@ namespace iriki\engine;
 class database
 {
 	protected static $_key_values;
-	protected static $_type;
+	protected static $_type = 'default';
 	protected static $_namespace;
 	protected static $_db_class;
 	protected static $_db_class_exists;
 	protected static $_instance;
 
-	public static function getOfType($app, $engine = 'iriki', $config_values = null)
+	public static function doInitialise($app, $engine = 'iriki', $config_values = null)
 	{
         Self::$_key_values = $config_values;
 
@@ -51,7 +51,7 @@ class database
 		return Self::$_db_class_exists;
 	}
 
-	public static function getInstanceOfType()
+	/*public static function getInstanceOfType()
 	{
 		if (Self::$_db_class_exists)
 		{
@@ -62,33 +62,38 @@ class database
 		{
 			return null;
 		}
+	}*/
+
+	public static function getType()
+	{
+		return Self::$_type;
 	}
 
-	public function getInstance()
+	public static function getClass()
 	{
-		return null;
+		return Self::$_db_class;
 	}
 
 	//create
-	public function doCreate($instance, $params)
+	public static function doCreate($params)
 	{
 		return null;
 	}
 
 	//read/retrieve
-	public function doRead($instance, $params)
+	public static function doRead($params)
 	{
 		return null;
 	}
 
 	//update
-	public function doUpdate($instance, $params)
+	public static function doUpdate($params)
 	{
 		return null;
 	}
 
 	//delete
-	public function doDelete($instance, $params)
+	public static function doDelete($params)
 	{
 		return null;
 	}

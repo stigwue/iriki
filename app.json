@@ -52,7 +52,7 @@
 					"db" : "cashcrow_test"
 				},
 				"development" : {
-	                "type" : "mysql",
+	                "type" : "mongodb",
 					"db" : "bizzdesk_elims",
 					"user" : "stephen.igwue"
 				},
