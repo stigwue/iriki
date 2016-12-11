@@ -2,7 +2,7 @@
     "elims":
     {
         "routes" : {
-            "document" : {
+            "revenue_type" : {
                 "create" : {
                     "description" : "",
                     "parameters" : []

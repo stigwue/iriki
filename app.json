@@ -53,13 +53,13 @@
 				},
 				"development" : {
 	                "type" : "mongodb",
-					"db" : "bizzdesk_elims",
-					"user" : "stephen.igwue"
+					"db" : "bizzdesk_elims"
 				},
 				"production" : {
 	                "type" : "mysql",
 	                "server" : "localhost",
-					"db" : "cashcrow_prod"
+					"db" : "cashcrow_prod",
+					"user" : "stephen.igwue"
 				}
 			}
 		}

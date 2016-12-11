@@ -50,6 +50,7 @@
 
 	//do routing
 	$url_requested = $_SERVER['REQUEST_URI'];
+	array_shift($_REQUEST);
 	$params = $_REQUEST;
 
 	//parse the url and match a route to a model and its action

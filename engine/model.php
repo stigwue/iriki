@@ -67,7 +67,7 @@ class model extends config
     //a specific model or alias
     //a specific action for said model
     //a specific set of parameters for said action
-    public static function doMatch($model_status, $models = null, $routes = null)
+    public static function doMatch($model_status, $models = null, $routes = null /*,engine_route_index, app_route_index for alias and defaults*/)
     {
         /*$model_status = array(
             'str' => $model,

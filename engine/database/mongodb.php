@@ -9,7 +9,7 @@ class mongodb extends database
 	const TYPE = 'mongodb';
 	private static $__instance;
 
-	private static function initInstance()
+	public static function initInstance()
 	{
 		//parse key values
 		if (!is_null(Self::$_key_values))
@@ -21,6 +21,8 @@ class mongodb extends database
 			)
 			{
 				Self::$__instance = new \MongoClient();
+
+				Self::$__instance = Self::$__instance->$key_values['db'];
 		        return true;
 			}
 			else
@@ -31,6 +33,23 @@ class mongodb extends database
 		else
 		{
 			return false;
+		}
+	}
+	public static function doCreate($params)
+	{
+		//params is table/collection and data to insert
+
+		if (is_null(Self::$__instance))
+		{
+			return null;
+		}
+		else
+		{
+			$persist = Self::$__instance->$params['__persist'];
+
+			unset($params['__persist']);
+
+			return $persist->insert($params);
 		}
 	}
 }

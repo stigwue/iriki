@@ -2,16 +2,30 @@
 	"iriki":
 	{
 		"routes" : {
+            "alias" : {
+                "about" : {
+                    "model" : "page",
+                    "action" : "about"
+                },
+                "api" : {
+                    "model" : "",
+                    "action" : ""
+                },
+                "test" : {
+                    "model" : "",
+                    "action" : ""
+                }
+            },
             "default" : {
             	"description" : {
-                    "description" : "Describe a model and lists its properties.",
+                    "description" : "Describe a model, listing its properties.",
                     "parameters" : []
             	},
                 "init" : {
                     "description" : "Initialise a model's storage.",
                     "parameters" : []
                 },
-                "add" : {
+                "create" : {
                     "description" : "Add a new instance of the model to storage.",
                     "parameters" : []
                 },
@@ -19,8 +33,8 @@
                     "description" : "Returns the properties of the matching model.",
                     "parameters" : ["id"]
                 },
-                "edit" : {
-                    "description" : "Edits a model instance by supplying new properties and the id of the model to edit.",
+                "update" : {
+                    "description" : "Updates a model instance by supplying new properties and the id of the model to update.",
                     "parameters" : ["id", []]
                 },
                 "delete" : {
@@ -28,20 +42,6 @@
                     "parameters" : ["id"]
                 }
             },
-			"alias" : {
-				"about" : {
-					"model" : "page",
-					"action" : "about"
-				},
-                "api" : {
-					"model" : "",
-					"action" : ""
-				},
-                "test" : {
-					"model" : "",
-					"action" : ""
-				}
-			},
             "routes" : [
                 "session",
                 "user"
