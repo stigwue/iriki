@@ -58,8 +58,9 @@
 				"production" : {
 	                "type" : "mysql",
 	                "server" : "localhost",
-					"db" : "cashcrow_prod",
-					"user" : "stephen.igwue"
+					"db" : "bizzdesk_elims",
+					"user" : "bizzdesk",
+					"password" : "password"
 				}
 			}
 		}

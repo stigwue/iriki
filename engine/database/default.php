@@ -51,19 +51,6 @@ class database
 		return Self::$_db_class_exists;
 	}
 
-	/*public static function getInstanceOfType()
-	{
-		if (Self::$_db_class_exists)
-		{
-			Self::$_instance = new Self::$_db_class();
-			return Self::$_instance;
-		}
-		else
-		{
-			return null;
-		}
-	}*/
-
 	public static function getType()
 	{
 		return Self::$_type;
@@ -97,8 +84,6 @@ class database
 	{
 		return null;
 	}
-
-	//close?
 }
 
 ?>

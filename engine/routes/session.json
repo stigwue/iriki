@@ -6,14 +6,6 @@
                 "validate" : {
                 	"description" : "Validate a session, returns expired or not.",
                 	"parameters" : ["id"]
-                },
-				"create" : {
-                	"description" : "Create a new session.",
-                	"parameters" : []
-                },
-                "read" :  {
-                	"description" : "Read a session.",
-                	"parameters" : ["id"]
                 }
             }
 		}

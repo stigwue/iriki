@@ -3,13 +3,13 @@
 	{
 		"routes" : {
             "alias" : {
-                "about" : {
-                    "model" : "page",
-                    "action" : "about"
+                "authenticate" : {
+                    "model" : "session",
+                    "action" : "validate"
                 },
-                "api" : {
-                    "model" : "",
-                    "action" : ""
+                "stats" : {
+                    "model" : "app",
+                    "action" : "statistics"
                 },
                 "test" : {
                     "model" : "",
@@ -21,10 +21,6 @@
                     "description" : "Describe a model, listing its properties.",
                     "parameters" : []
             	},
-                "init" : {
-                    "description" : "Initialise a model's storage.",
-                    "parameters" : []
-                },
                 "create" : {
                     "description" : "Add a new instance of the model to storage.",
                     "parameters" : []

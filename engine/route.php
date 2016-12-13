@@ -258,7 +258,10 @@ class route extends config
                         'message' => $model_status['action_details']['description']
                     );
                 }
-                else{}
+                else
+                {
+
+                }
             }
 
         }
@@ -298,25 +301,6 @@ class route extends config
         
         return compact('path', 'trimmed', 'parts', 'query');
     }
-
-    /*private static function parseGetParams($query)
-    {
-        $get_params = array();
-        $key_values = explode("&", $query);
-        foreach ($key_values as $key_value)
-        {
-            $pair = explode('=', $key_value);
-            if (count($pair) == 2)
-            {
-                $get_params[$pair[0]] = $pair[1];
-            }
-            else
-            {
-                $get_params[$key_value] = '';
-            }
-        }
-        return $get_params;
-    }*/
     
 }
 

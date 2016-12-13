@@ -5,7 +5,8 @@
 	define('IRIKI_APP', 'elims');
 
 	//app switch
-	define('IRIKI_MODE', 'development');
+	//define('IRIKI_MODE', 'development');
+	define('IRIKI_MODE', 'production');
 
 
 	//engine

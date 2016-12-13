@@ -118,6 +118,9 @@ class model extends config
                         }
                         else
                         {
+                            //default to description of model action if defined in default
+
+
                             //default to description of model since action does not exist
 
                             $model_status['action_details'] = array(
