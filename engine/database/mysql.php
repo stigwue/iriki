@@ -144,7 +144,31 @@ class mysql extends database
 
 	public static function doDelete($params)
 	{
-		//$status = \R::trash($persist);
+		if (is_null(Self::$__instance))
+		{
+			return null;
+		}
+		else
+		{
+			\R::setAutoResolve(TRUE);
+
+			$cursor = \R::find($params_persist['persist'], $params_persist['data']);
+
+			$status = array();
+
+			if (count($cursor) == 0)
+			{
+				$status['data'] = array();
+
+				//huh?
+			}
+			else
+			{
+				$status = \R::trash($cursor);
+			}
+
+			return $status;
+		}
 	}
 }
 ?>

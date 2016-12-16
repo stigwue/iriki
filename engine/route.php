@@ -133,16 +133,12 @@ class route extends config
     //a match is 2 part process
     //1. a route/alias is matched to a specific model
     //2. we go into said model to further the match
-    public function matchUrl($path,
-        $trim_left = '',
+    public function matchUrl($request_details,
         $models = null,
         $routes = null,
-        $database = null,
-        $params = null
+        $database = null
     )
     {
-        $url_params = Self::parseUrl($path, $trim_left);
-
         //models
         $app_models = null;
         $engine_models = null;
@@ -167,17 +163,27 @@ class route extends config
         $model_exists = false;
         $model_is_app_defined = true;
         $action_exists = false;
+
+        $params = (isset($request_details['params'])) ? $request_details['params'] : null;
+        $url_parts = (isset($request_details['url']['parts'])) ? $request_details['url']['parts'] : null;
         
-        $count = count($url_params['parts']);
+        $count = count($url_parts);
 
         $status = array();
         
-        if ($count != 0)
+        if ($count >= 1)
         {
             //get the model
-            $model = $url_params['parts'][0];
-            if ($count >= 2) $action = $url_params['parts'][1];
-
+            if ($count >= 2)
+            {
+                $model = $url_parts[$count - 2];
+                $action = $url_parts[$count - 1];
+            }
+            else
+            {
+                $model = $url_parts[$count - 1];
+            }
+            
             //note that namespace is important
             $model_instance = null;
 
@@ -263,7 +269,6 @@ class route extends config
 
                 }
             }
-
         }
         else
         {
@@ -277,29 +282,102 @@ class route extends config
         return $status;
     }
     
-    private static function parseUrl($path, $trim_left)
+    private static function parseUrl($path)
     {
         //try php's parse_url
         $parsed = parse_url($path);
 
         $to_parse = $parsed['path'];
 
-        isset($parsed['query']) ? $query = $parsed['query'] : $query = null;
+        $query = '';
 
-        //trim
-        $trimmed = $to_parse;
-        if (strlen($trim_left) != 0 )
+        if (isset($parsed['query']))
         {
-            if (substr($to_parse, 0, strlen($trim_left)) == $trim_left)
-            {
-                $trimmed = substr($to_parse, strlen($trim_left));
-            }
+            $query = $parsed['query'];
         }
         
         //split path
-        $parts = explode("/", $trimmed);
+        $parts = explode("/", $to_parse);
+        //clear empties
+        $parts = array_filter($parts);
+        //reset index
+        $model_action = array();
+
+        foreach ($parts as $part)
+        {
+            $model_action[] = $part;
+        }
+
+        $parts = $model_action;
+
         
-        return compact('path', 'trimmed', 'parts', 'query');
+        return compact('path', 'parts', 'query');
+    }
+
+    public static function getRequestDetails()
+    {
+        $uri =$_SERVER['REQUEST_URI'];
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        $status = array(
+            'url' => Self::parseUrl($uri),
+            'method' => $method,
+            'params' => null
+        );
+
+        switch ($method) {
+          /*case 'PUT':
+            do_something_with_put($request);  
+            break;*/
+          /*case 'HEAD':
+            break;
+          case 'DELETE':
+            break;
+          case 'OPTIONS':   
+            break;*/
+          
+            case 'GET':
+                $status['method'] = 'GET'; 
+                //$params = $_GET;
+                //array_shift($params);
+                $status['params'] = (isset($status['url']['query'])) ? Self::parseGetParams($status['url']['query']) : null;
+            break;
+          
+            case 'POST':
+                $status['method'] = 'POST'; 
+                $params = $_POST;
+                //array_shift($params);
+                $status['params'] = $params;
+            break;
+
+            default: //case 'POST':
+                //$status['method'] = 'POST';
+                $params = $_REQUEST;
+                //array_shift($params);
+                $status['params'] = $params;
+            break;
+        }
+
+        return $status;
+    }
+
+    private static function parseGetParams($query)
+    {
+        $get_params = array();
+        $key_values = explode("&", $query);
+        foreach ($key_values as $key_value)
+        {
+            $pair = explode('=', $key_value);
+            if (count($pair) == 2)
+            {
+                $get_params[$pair[0]] = $pair[1];
+            }
+            else
+            {
+                $get_params[$key_value] = '';
+            }
+        }
+        return $get_params;
     }
     
 }

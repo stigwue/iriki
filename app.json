@@ -49,7 +49,10 @@
 			"database" : {
 				"test" : {
 	                "type" : "mysql",
-					"db" : "cashcrow_test"
+	                "server" : "localhost",
+					"db" : "bizzdesk_elims",
+					"user" : "bizzdesk",
+					"password" : "password"
 				},
 				"development" : {
 	                "type" : "mongodb",
@@ -57,10 +60,10 @@
 				},
 				"production" : {
 	                "type" : "mysql",
-	                "server" : "localhost",
-					"db" : "bizzdesk_elims",
-					"user" : "bizzdesk",
-					"password" : "password"
+	                "server" : "109.203.117.155",
+					"db" : "elims_demo",
+					"user" : "elim_demo",
+					"password" : "81zz645K"
 				}
 			}
 		}

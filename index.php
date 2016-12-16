@@ -49,17 +49,13 @@
 	
 	$app['models']['app'] = $app_models->loadModels($app['config'], $app_routes->getRoutes(IRIKI_APP), IRIKI_APP);
 
-	//do routing
-	$url_requested = $_SERVER['REQUEST_URI'];
-	array_shift($_REQUEST);
-	$params = $_REQUEST;
+	$request_details = iriki\engine\route::getRequestDetails();
+
+	//var_dump($request_details);
 
 	//parse the url and match a route to a model and its action
-    $selected_route = $app_routes->matchUrl(
-    	//path
-    	$url_requested,
-    	//trim this from path's left
-    	'/iriki/api/',
+    $status = $app_routes->matchUrl(
+    	$request_details,
     	//models
     	array(
     		'engine' => $app['models']['engine'],
@@ -71,12 +67,10 @@
     		'app' => $app['routes']['app']
 		),
 		//database
-		$app['database'],
-		//parameters
-		$params
+		$app['database']
 	);
 
-    echo json_encode($selected_route);
+    echo json_encode($status);
 
 	//if test, route to test
 
