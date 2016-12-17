@@ -117,7 +117,7 @@ class mysql extends database
 		}
 	}
 
-	public static function doUpdate($params)
+	public static function doUpdate($params_persist)
 	{
 		if (is_null(Self::$__instance))
 		{
@@ -142,7 +142,7 @@ class mysql extends database
 		}
 	}
 
-	public static function doDelete($params)
+	public static function doDelete($params_persist)
 	{
 		if (is_null(Self::$__instance))
 		{

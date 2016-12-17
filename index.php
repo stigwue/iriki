@@ -5,8 +5,9 @@
 	define('IRIKI_APP', 'elims');
 
 	//app switch
-	//define('IRIKI_MODE', 'development');
-	define('IRIKI_MODE', 'production');
+	define('IRIKI_MODE', 'test');  //local mysql
+	//define('IRIKI_MODE', 'development'); //mongodb
+	//define('IRIKI_MODE', 'production'); //remote mysql
 
 
 	//engine
@@ -50,8 +51,6 @@
 	$app['models']['app'] = $app_models->loadModels($app['config'], $app_routes->getRoutes(IRIKI_APP), IRIKI_APP);
 
 	$request_details = iriki\engine\route::getRequestDetails();
-
-	//var_dump($request_details);
 
 	//parse the url and match a route to a model and its action
     $status = $app_routes->matchUrl(

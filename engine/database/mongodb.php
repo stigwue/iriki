@@ -94,7 +94,7 @@ class mongodb extends database
 		}
 	}
 
-	public static function doUpdate($params)
+	public static function doUpdate($params_persist)
 	{
 		if (is_null(Self::$__instance))
 		{
@@ -102,16 +102,35 @@ class mongodb extends database
 		}
 		else
 		{
+			$persist = Self::$__instance->$params_persist['persist'];
 
 			//build query (key => value array)
-			//$cmd is params
+			$query = $params_persist['data'];
 
-			//$pages->update($query, array('$set' => $params));
+			$status = $persist->update($query, array('$set' => $param_persist['data']));
+
+			return $status;
 		}
 	}
 
-	public static function doDelete($params)
-	{}
+	public static function doDelete($params_persist)
+	{
+		if (is_null(Self::$__instance))
+		{
+			return null;
+		}
+		else
+		{
+			$persist = Self::$__instance->$params_persist['persist'];
+
+			//build query (key => value array)
+			$query = $params_persist['data'];
+
+			$status = $persist->remove($query);
+
+			return $status;
+		}
+	}
 }
 
 ?>

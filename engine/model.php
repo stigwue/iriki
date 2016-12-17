@@ -169,15 +169,15 @@ class model extends config
         //do validation of params (count check and isset?)
         //if mode is strict and this check fails, do not call create
 
-        $params_persist = array();
-
+        
         if (!is_null($params))
         {
+            $params_persist = array();
             $params_persist['data'] = $params;
             $params_persist['persist'] = 'session';
+            return $instance::doCreate($params_persist);
         }
 
-        return $instance::doCreate($params_persist);
     }
 
     public function read($db_type, $params = null)
@@ -185,15 +185,14 @@ class model extends config
         $instance = new $db_type();
         $instance::initInstance();
 
-        $params_persist = array();
-
         if (!is_null($params))
         {
+            $params_persist = array();
             $params_persist['data'] = $params;
             $params_persist['persist'] = 'session';
+            return $instance::doRead($params_persist);
         }
 
-        return $instance::doRead($params_persist);
     }
 
     public function update($db_type, $params = null)
@@ -201,18 +200,35 @@ class model extends config
         $instance = new $db_type();
         $instance::initInstance();
 
-        $params_persist = array();
-
         if (!is_null($params))
         {
+            $params_persist = array();
             $params_persist['data'] = $params;
             $params_persist['persist'] = 'session';
+            return $instance::doUpdate($params_persist);
+        }
+        else
+        {
+
         }
 
-        return $instance::doRead($params_persist);
     }
 
-    //delete
+    public function delete($db_type, $params = null)
+    {
+        $instance = new $db_type();
+        $instance::initInstance();
+
+        
+        if (!is_null($params))
+        {
+            $params_persist = array();
+            $params_persist['data'] = $params;
+            $params_persist['persist'] = 'session';
+            return $instance::doDelete($params_persist);
+        }
+
+    }
 }
 
 ?>
