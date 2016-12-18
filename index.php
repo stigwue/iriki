@@ -1,13 +1,16 @@
 <?php
 	
 	//application switch
-	//define('IRIKI_APP', 'cashcrow');
-	define('IRIKI_APP', 'elims');
+	define('IRIKI_APP', 'cashcrow');
+	//define('IRIKI_APP', 'elims');
 
 	//app switch
-	define('IRIKI_MODE', 'test');  //local mysql
+	//define('IRIKI_MODE', 'test');  //local mysql
 	//define('IRIKI_MODE', 'development'); //mongodb
 	//define('IRIKI_MODE', 'production'); //remote mysql
+
+
+	define('IRIKI_MODE', 'cashcrow');
 
 
 	//engine

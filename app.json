@@ -64,6 +64,10 @@
 					"db" : "elims_demo",
 					"user" : "elim_demo",
 					"password" : "81zz645K"
+				},
+				"cashcrow" : {
+	                "type" : "mongodb",
+					"db" : "cashcrow"
 				}
 			}
 		}

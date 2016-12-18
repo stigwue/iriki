@@ -161,50 +161,40 @@ class model extends config
     }
 
     //persistence
-    public function create($db_type, $params = null)
+    public function create($db_type, $params_persist = null)
     {
         $instance = new $db_type();
         $instance::initInstance();
 
         //do validation of params (count check and isset?)
         //if mode is strict and this check fails, do not call create
-
         
-        if (!is_null($params))
+        if (!is_null($params_persist))
         {
-            $params_persist = array();
-            $params_persist['data'] = $params;
-            $params_persist['persist'] = 'session';
             return $instance::doCreate($params_persist);
         }
 
     }
 
-    public function read($db_type, $params = null)
+    public function read($db_type, $params_persist = null)
     {
         $instance = new $db_type();
         $instance::initInstance();
 
-        if (!is_null($params))
+        if (!is_null($params_persist))
         {
-            $params_persist = array();
-            $params_persist['data'] = $params;
-            $params_persist['persist'] = 'session';
             return $instance::doRead($params_persist);
         }
 
     }
 
-    public function update($db_type, $params = null)
+    public function update($db_type, $params_persist = null)
     {
         $instance = new $db_type();
         $instance::initInstance();
 
-        if (!is_null($params))
+        if (!is_null($params_persist))
         {
-            $params_persist = array();
-            $params_persist['data'] = $params;
-            $params_persist['persist'] = 'session';
             return $instance::doUpdate($params_persist);
         }
         else
@@ -214,17 +204,14 @@ class model extends config
 
     }
 
-    public function delete($db_type, $params = null)
+    public function delete($db_type, $params_persist = null)
     {
         $instance = new $db_type();
         $instance::initInstance();
 
         
-        if (!is_null($params))
+        if (!is_null($params_persist))
         {
-            $params_persist = array();
-            $params_persist['data'] = $params;
-            $params_persist['persist'] = 'session';
             return $instance::doDelete($params_persist);
         }
 

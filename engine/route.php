@@ -239,7 +239,13 @@ class route extends config
                 );
 
                 //instance action
-                $status = $model_instance->$action(database::getClass(), $params);
+                $status = $model_instance->$action(
+                    database::getClass(),
+                    array(
+                        'data' => $params,
+                        'persist' => $model
+                    )
+                );
             }
             else if (!$model_status['exists'])
             {

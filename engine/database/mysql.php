@@ -156,16 +156,7 @@ class mysql extends database
 
 			$status = array();
 
-			if (count($cursor) == 0)
-			{
-				$status['data'] = array();
-
-				//huh?
-			}
-			else
-			{
-				$status = \R::trash($cursor);
-			}
+			foreach ($cursor as $object) $status = \R::trash($object);
 
 			return $status;
 		}
