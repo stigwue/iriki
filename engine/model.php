@@ -4,9 +4,6 @@ namespace iriki\engine;
 
 require_once(__DIR__ . '/config.php');
 
-class generic_model
-{}
-
 class model extends config
 {
     //engine models
@@ -23,7 +20,7 @@ class model extends config
 
     //persistence
     private $_db = array();
-    
+
     public function loadFromJson($config_values, $routes, $app = 'iriki')
     {
         $var = '_engine';
@@ -34,13 +31,13 @@ class model extends config
             $path = $config_values[$app]['path'];
         }
         $store = &$this->$var;
-        
+
         foreach ($routes as $route_title => $route_actions)
         {
             $model_json = (new config($path . 'models/' . $route_title . '.json'))->getJson();
             $store['models'][$route_title] = $model_json[$app]['models'][$route_title];
         }
-        
+
         return $store['models'];
     }
 
@@ -168,7 +165,7 @@ class model extends config
 
         //do validation of params (count check and isset?)
         //if mode is strict and this check fails, do not call create
-        
+
         if (!is_null($params_persist))
         {
             return $instance::doCreate($params_persist);
@@ -209,7 +206,7 @@ class model extends config
         $instance = new $db_type();
         $instance::initInstance();
 
-        
+
         if (!is_null($params_persist))
         {
             return $instance::doDelete($params_persist);

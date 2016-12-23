@@ -4,39 +4,20 @@
 		"app" : {
 			"title" : "Iriki App",
 			"author" : "Stephen Igwue",
-            
+
 			"version" : {
 				"major" : "0",
 				"minor" : "0",
 				"build" : "1"
 			},
-            
+
 			"base_url" : "//iriki/",
-			
+
 			"engine" : {
 				"name" : "iriki",
 				"path" : "engine/"
 			},
-
-			"myboard" : {
-				"name" : "myboard",
-				"path" : "app/myboard/"
-			},
-
-			"cashcrow" : {
-				"name" : "cashcrow",
-				"path" : "app/cashcrow/"
-			},
-			"decoding" : {
-				"name" : "decoding",
-				"path" : "app/decoding/"
-			},
-
-
-			"elims" : {
-				"name" : "elims",
-				"path" : "app/elims/"
-			},
+			
 			"hr_log" : {
 				"name" : "hr_log",
 				"path" : "app/hr_log/"
@@ -45,7 +26,7 @@
 
 			"mode" : "strict",
 			"logs" : "all",
-            
+
 			"database" : {
 				"test" : {
 	                "type" : "mysql",
@@ -56,7 +37,7 @@
 				},
 				"development" : {
 	                "type" : "mongodb",
-					"db" : "bizzdesk_elims"
+					"db" : "hr_log"
 				},
 				"production" : {
 	                "type" : "mysql",
@@ -64,10 +45,6 @@
 					"db" : "elims_demo",
 					"user" : "elim_demo",
 					"password" : "81zz645K"
-				},
-				"cashcrow" : {
-	                "type" : "mongodb",
-					"db" : "cashcrow"
 				}
 			}
 		}

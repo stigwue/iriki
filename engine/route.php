@@ -17,7 +17,7 @@ class route extends config
         'config' => null,
         'routes' => null
     );
-    
+
     private function loadFromJsonIndex($config_values, $app = 'iriki')
     {
         $var = '_engine';
@@ -36,7 +36,7 @@ class route extends config
 
         $store['config'] = new config($path . 'routes/index.json');
         $route_json = $store['config']->getJson();
-        
+
         $store['routes']['default'] = (isset($route_json[$app]['routes']['default']) ? $route_json[$app]['routes']['default'] : array());
 
         $store['routes']['alias'] = (isset($route_json[$app]['routes']['alias']) ? $route_json[$app]['routes']['alias'] : array());
@@ -47,7 +47,7 @@ class route extends config
 
         return $store['routes'];
     }
-    
+
     private function loadFromJson($config_values, $routes, $app = 'iriki')
     {
         $var = '_engine';
@@ -58,7 +58,7 @@ class route extends config
             $path = $config_values[$app]['path'];
         }
         $store = &$this->$var;
-        
+
         /*get route details from json file
         if a route file can't be found, it'll have no actions and default
         properties too won't be defined*/
@@ -67,14 +67,14 @@ class route extends config
             $valid_route_json = (new config($path . 'routes/' . $valid_route . '.json'))->getJson();
             $store['routes']['routes'][$valid_route] = $valid_route_json[$app]['routes'][$valid_route];
         }
-        
+
         return $store['routes'];
     }
 
     public function doInitialise($config_values, $app = 'iriki')
     {
         $routes = $this->loadFromJsonIndex($config_values, $app);
-        
+
         return $this->loadFromJson($config_values, $routes, $app);
     }
 
@@ -102,18 +102,18 @@ class route extends config
         $status['data']['engine']['name'] = $this->_engine['app']['name'];
         $status['data']['engine']['path'] = $this->_engine['app']['path'];
 
-        
+
         foreach ($this->_engine['routes']['routes'] as $model => $actions)
         {
             $status['data']['engine']['routes'][] = $model;
         }
-        
+
         //app's routes
         $status['data']['application'] = array();
 
         $status['data']['application']['name'] = $this->_app['app']['name'];
         $status['data']['application']['path'] = $this->_app['app']['path'];
-        
+
         foreach ($this->_app['routes']['routes'] as $model => $actions)
         {
             $status['data']['application']['routes'][] = $model;
@@ -128,7 +128,7 @@ class route extends config
             return $status;
         }
     }
-    
+
     //matches route with supplied url
     //a match is 2 part process
     //1. a route/alias is matched to a specific model
@@ -166,11 +166,16 @@ class route extends config
 
         $params = (isset($request_details['params'])) ? $request_details['params'] : null;
         $url_parts = (isset($request_details['url']['parts'])) ? $request_details['url']['parts'] : null;
-        
+
         $count = count($url_parts);
 
-        $status = array();
-        
+        $status = array(
+            "error" => array(
+                "code" => 404,
+                "message" => "Url could not be matched with a route."
+            )
+        );
+
         if ($count >= 1)
         {
             //get the model
@@ -183,7 +188,7 @@ class route extends config
             {
                 $model = $url_parts[$count - 1];
             }
-            
+
             //note that namespace is important
             $model_instance = null;
 
@@ -196,14 +201,14 @@ class route extends config
             {
                 //something's wrong
             }
-            
+
             //class exist test
             $app_namespace = ($model_is_app_defined ?
                 $this->_app['app']['name'] :
                 $this->_engine['app']['name']
             );
             $model_full = '\\' . $app_namespace . '\\' . $model;
-            
+
             $model_exists = class_exists($model_full);
             $action_exists = method_exists($model_full, $action);
 
@@ -227,10 +232,9 @@ class route extends config
             {
                 $model_instance =  new $model_status['str_full']();
 
-                //bring in database
+                //bring in database, defined in one of these two locations
                 //$this->_app['app']['name'] :
                 //$this->_engine['app']['name']
-                //$db_type = isset($database[])
 
                 database::doInitialise(
                     $this->_app['app']['name'],
@@ -251,43 +255,29 @@ class route extends config
             {
                 if (isset($model_status['details']['description']))
                 {
-                    $status['error'] = array(
-                        'code' => 404,
+                    $status = array();
+                    $status['info'] = array(
+                        'code' => 200,
                         'message' => $model_status['details']['description']
                     );
-                }
-                else
-                {
-
                 }
             }
             else if (!$model_status['action_exists'])
             {
                 if (isset($model_status['action_details']['description']))
                 {
-                    $status['error'] = array(
-                        'code' => 404,
+                    $status = array();
+                    $status['info'] = array(
+                        'code' => 200,
                         'message' => $model_status['action_details']['description']
                     );
                 }
-                else
-                {
-
-                }
             }
-        }
-        else
-        {
-            //no model found, show possible routes?
-            $status['error'] = array(
-                'code' => 404,
-                'message' => 'Url could not be parsed'
-            );
         }
 
         return $status;
     }
-    
+
     private static function parseUrl($path)
     {
         //try php's parse_url
@@ -301,7 +291,7 @@ class route extends config
         {
             $query = $parsed['query'];
         }
-        
+
         //split path
         $parts = explode("/", $to_parse);
         //clear empties
@@ -316,14 +306,21 @@ class route extends config
 
         $parts = $model_action;
 
-        
+
         return compact('path', 'parts', 'query');
     }
 
-    public static function getRequestDetails()
+    public static function getRequestDetails($uri = null, $method = null)
     {
-        $uri =$_SERVER['REQUEST_URI'];
-        $method = $_SERVER['REQUEST_METHOD'];
+        if (is_null($uri))
+        {
+            $uri = $_SERVER['REQUEST_URI'];
+        }
+
+        if (is_null($method))
+        {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
 
         $status = array(
             'url' => Self::parseUrl($uri),
@@ -333,24 +330,24 @@ class route extends config
 
         switch ($method) {
           /*case 'PUT':
-            do_something_with_put($request);  
+            do_something_with_put($request);
             break;*/
           /*case 'HEAD':
             break;
           case 'DELETE':
             break;
-          case 'OPTIONS':   
+          case 'OPTIONS':
             break;*/
-          
+
             case 'GET':
-                $status['method'] = 'GET'; 
+                $status['method'] = 'GET';
                 //$params = $_GET;
                 //array_shift($params);
                 $status['params'] = (isset($status['url']['query'])) ? Self::parseGetParams($status['url']['query']) : null;
             break;
-          
+
             case 'POST':
-                $status['method'] = 'POST'; 
+                $status['method'] = 'POST';
                 $params = $_POST;
                 //array_shift($params);
                 $status['params'] = $params;
@@ -385,7 +382,7 @@ class route extends config
         }
         return $get_params;
     }
-    
+
 }
 
 ?>

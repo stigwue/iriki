@@ -1,0 +1,21 @@
+{
+	"hr_log":
+	{
+		"models" : {
+			"activity" : {
+				"description" : "A staff action.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

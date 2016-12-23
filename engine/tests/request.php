@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki\engine;
+namespace iriki\test;
 
 class request
 {
@@ -14,7 +14,7 @@ class request
         $result = file_get_contents($url);
         return $result;
     }
-    
+
     public static function doPost($url, $parameters)
     {
         // use key 'http' even if you send the request to https://...

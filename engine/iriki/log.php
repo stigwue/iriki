@@ -1,10 +1,8 @@
 <?php
 
-namespace iriki\engine;
+namespace iriki;
 
-require_once(__DIR__ . '/config.php');
-
-class log extends config
+class log extends engine\model
 {
 
 }
