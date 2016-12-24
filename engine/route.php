@@ -189,18 +189,40 @@ class route extends config
                 $model = $url_parts[$count - 1];
             }
 
+
             //note that namespace is important
             $model_instance = null;
 
-            //test for model existence is a configuration search in app then engine
-            $model_is_app_defined = isset($models['app'][$model]);
-            //confirm using route
-            $route_is_app_defined = isset($routes['app']['routes'][$model]);
-
-            if ($model_is_app_defined != $route_is_app_defined)
+            //test for alias
+            if ($model == 'alias')
             {
-                //something's wrong
+                //set model and action
+
+                //test for model existence is a configuration search in app then engine
+                $model_is_app_defined = isset($routes['app']['alias'][$action]);
+                $model_is_engine_defined = isset($routes['engine']['alias'][$action]);
+
+                $define_switch = 'engine';
+                if ($model_is_app_defined)
+                {
+                    $define_switch = 'app';
+                }
+                $model = $routes[$define_switch]['alias'][$action]['model'];
+                $action = $routes[$define_switch]['alias'][$action]['action'];
             }
+            else
+            {
+                //test for model existence is a configuration search in app then engine
+                $model_is_app_defined = isset($models['app'][$model]);
+                //confirm using route
+                $route_is_app_defined = isset($routes['app']['routes'][$model]);
+
+                if ($model_is_app_defined != $route_is_app_defined)
+                {
+                    //something's wrong
+                }
+            }
+
 
             //class exist test
             $app_namespace = ($model_is_app_defined ?
