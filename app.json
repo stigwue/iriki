@@ -17,15 +17,15 @@
 				"name" : "iriki",
 				"path" : "engine/"
 			},
-			
+
 			"hr_log" : {
 				"name" : "hr_log",
 				"path" : "app/hr_log/"
 			},
 
-
-			"mode" : "strict",
-			"logs" : "all",
+			"log" : {
+				"path" : "app/log/"
+			},
 
 			"database" : {
 				"test" : {

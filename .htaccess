@@ -12,7 +12,7 @@ order deny,allow
 deny from all
 </Limit>
 
-Options -MultiViews
+Options -MultiViews -Indexes
 
 RewriteEngine on
 #RewriteBase /

@@ -1,7 +1,10 @@
 <?php
-require_once(__DIR__ . '/default.php');
 
-require_once(__DIR__ . '/mongodb.php');
-require_once(__DIR__ . '/mysql.php');
+foreach (glob(__DIR__ . "/*.php") as $filepath)
+{
+    //skip this very file
+    if ($filepath == __FILE__) continue;
+    require_once($filepath);
+}
 
 ?>

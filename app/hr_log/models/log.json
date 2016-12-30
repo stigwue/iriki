@@ -1,0 +1,21 @@
+{
+	"hr_log":
+	{
+		"models" : {
+			"log" : {
+				"description" : "A log.",
+                "properties" : {
+                    "id" : {
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    }
+                },
+                "relationships" : {
+                    "belongsto" : [],
+                    "hasmany" : []
+                }
+			}
+		}
+	}
+}

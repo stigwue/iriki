@@ -160,6 +160,7 @@ class route extends config
         $model = null;
         $action = null;
 
+        $model_defined = false;
         $model_exists = false;
         $model_is_app_defined = true;
         $action_exists = false;
@@ -189,7 +190,6 @@ class route extends config
                 $model = $url_parts[$count - 1];
             }
 
-
             //note that namespace is important
             $model_instance = null;
 
@@ -212,6 +212,18 @@ class route extends config
             }
             else
             {
+                $model_defined = isset($models['app'][$model]) OR isset($models['engine'][$model]);
+                if (!$model_defined)
+                {
+                    $status = array();
+                    $status['error'] = array(
+                        'code' => 404,
+                        'message' => 'Model is not defined'
+                    );
+
+                    return $status;
+                }
+
                 //test for model existence is a configuration search in app then engine
                 $model_is_app_defined = isset($models['app'][$model]);
                 //confirm using route
@@ -220,9 +232,16 @@ class route extends config
                 if ($model_is_app_defined != $route_is_app_defined)
                 {
                     //something's wrong
+                    //model and route definitions are across app/engine boundary
+                    //might have to explain further
+
+                    $status = array();
+                    $status['error'] = array(
+                        'code' => 404,
+                        'message' => 'Model and route not defined in the same location'
+                    );
                 }
             }
-
 
             //class exist test
             $app_namespace = ($model_is_app_defined ?
@@ -235,14 +254,17 @@ class route extends config
             $action_exists = method_exists($model_full, $action);
 
             $model_status = array(
-                'str' => $model,
-                'str_full' => $model_full,
-                'exists' => $model_exists,
-                'details' => null,
-                'app_defined' => $model_is_app_defined,
-                'action'=> $action,
-                'action_exists' => $action_exists,
-                'action_details' => null
+                'str' => $model, //model e.g session
+                'str_full' => $model_full, //full model string including namespace
+                'defined' => $model_defined, //model defined in app or engine config
+                'exists' => $model_exists, //model class exists
+                'details' => null, //array of description, properties and relationships
+                'app_defined' => $model_is_app_defined, //model defined in app or engine?
+                'action'=> $action, //action e.g create
+                'action_defined' => false, //action defined?
+                'action_default' => false, //action is default defined?
+                'action_exists' => $action_exists, //action exists in class
+                'action_details' => null //array of action description and parameters
             );
 
             $model_status = model::doMatch($model_status,
@@ -250,7 +272,51 @@ class route extends config
                 ($model_is_app_defined ? $app_routes : $engine_routes)
             );
 
-            if ($model_status['exists'] AND $model_status['action_exists'])
+            /*
+            perform action based on $model_status
+            order of priority is this:
+            0. model/action must be configured in config space
+            1. model/action must be defined in code space
+            */
+
+            //model definition already determined
+
+            //model class does not exist
+            if ($model_status['exists'] == false)
+            {
+                $status = array();
+                $status['error'] = array(
+                    'code' => 404,
+                    'message' => $model_status['str_full'] . ' does not exist'
+                );
+            }
+            else
+            {
+                //action defined?
+                if ($model_status['action_defined'])
+                {
+                    //action exists
+                    $status = array();
+                    $status['error'] = array(
+                        'code' => 404,
+                        'message' => $model_status['str_full'] . ' does not exist'
+                    );
+                }
+                else
+                {
+                    //provide description?
+                    if (isset($model_status['details']['description']))
+                    {
+                        $status = array();
+                        $status['info'] = array(
+                            'code' => 200,
+                            'message' => $model_status['details']['description']
+                        );
+                    }
+                }
+            }
+
+            /*if ($model_status['exists'] AND $model_status['action_exists'])
             {
                 $model_instance =  new $model_status['str_full']();
 
@@ -294,7 +360,7 @@ class route extends config
                         'message' => $model_status['action_details']['description']
                     );
                 }
-            }
+            }*/
         }
 
         return $status;

@@ -66,16 +66,7 @@ class model extends config
     //a specific set of parameters for said action
     public static function doMatch($model_status, $models = null, $routes = null /*,engine_route_index, app_route_index for alias and defaults*/)
     {
-        /*$model_status = array(
-            'str' => $model,
-            'str_full' => $model_full,
-            'exists' => $model_exists,
-            'details' => null,
-            'app_defined' => $model_is_app_defined,
-            'action'=> $action,
-            'action_exists' => false,
-            'action_details' => null
-        );*/
+        //see $model_status structure in in route->matchUrl
 
         $model = (isset($model_status['str']) ? $model_status['str'] : null);
 
@@ -93,11 +84,7 @@ class model extends config
                     'relationships' => $_action['relationships']
                 );
 
-                //loop for action
-
-                //route alias
-
-                //route actions
+                //loop for route actions
                 foreach ($routes['routes'] as $_route => $_route_action)
                 {
                     if ($_route == $model_status['str'])
@@ -109,14 +96,17 @@ class model extends config
                                 'parameters' => $_route_action[$model_status['action']]['parameters']
                             );
 
-                            //action could be description?
+                            $model_status['action_defined'] = true;
 
                             break;
                         }
                         else
                         {
                             //default to description of model action if defined in default
+                            $model_status['action_defined'] = false;
 
+                            //check default for action
+                            $model_status['action_default'] = isset($routes['default'][$model_status['action']]);
 
                             //default to description of model since action does not exist
 
