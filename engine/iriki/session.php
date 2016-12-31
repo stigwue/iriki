@@ -2,7 +2,7 @@
 
 namespace iriki;
 
-class session extends engine\model
+class session extends model
 {
 }
 

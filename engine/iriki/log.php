@@ -2,7 +2,7 @@
 
 namespace iriki;
 
-class log extends engine\model
+class log
 {
 
 }

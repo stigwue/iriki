@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki\engine;
+namespace iriki;
 
 class config
 {
@@ -9,14 +9,17 @@ class config
 
     private static function load_json_file($json_path)
     {
+        $json = '{}';
         try {
-            $json = json_decode(file_get_contents($json_path), TRUE);
+            $contents = file_get_contents($json_path);
+            $json = json_decode($contents, TRUE);
         }
         catch (Exception $e) {
             //load default json
-            $json = '{}';
         }
-        
+
+        //test for null, result of malformed json
+        if (is_null($json)) $json = '{}';
         return $json;
     }
 
@@ -53,7 +56,7 @@ class config
         {
             $status = array('data' => array());
         }
-            
+
         $status['data']['title'] = $this->_key_values['title'];
         $status['data']['author'] = $this->_key_values['author'];
         $status['data']['version'] = array(

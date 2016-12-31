@@ -2,7 +2,7 @@
 
 namespace hr_log;
 
-class log //extends \iriki\engine\model
+class log //extends \iriki\model
 {
 }
 

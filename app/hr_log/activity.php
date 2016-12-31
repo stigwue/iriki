@@ -2,7 +2,7 @@
 
 namespace hr_log;
 
-class activiy extends \iriki\engine\model
+class activiy extends \iriki\model
 {
 }
 

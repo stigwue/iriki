@@ -11,7 +11,7 @@
 				"build" : "1"
 			},
 
-			"base_url" : "//iriki/",
+			"base_url" : "/iriki/",
 
 			"engine" : {
 				"name" : "iriki",
@@ -21,10 +21,6 @@
 			"hr_log" : {
 				"name" : "hr_log",
 				"path" : "app/hr_log/"
-			},
-
-			"log" : {
-				"path" : "app/log/"
 			},
 
 			"database" : {
@@ -46,6 +42,10 @@
 					"user" : "elim_demo",
 					"password" : "81zz645K"
 				}
+			},
+
+			"log" : {
+				"path" : "app/log/"
 			}
 		}
 	}

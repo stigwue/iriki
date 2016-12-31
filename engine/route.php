@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki\engine;
+namespace iriki;
 
 class route extends config
 {
@@ -212,16 +212,15 @@ class route extends config
             }
             else
             {
-                $model_defined = isset($models['app'][$model]) OR isset($models['engine'][$model]);
+                $model_defined = (
+                    (isset($models['app'][$model]))
+                        OR
+                    (isset($models['engine'][$model]))
+                );
+
                 if (!$model_defined)
                 {
-                    $status = array();
-                    $status['error'] = array(
-                        'code' => 404,
-                        'message' => 'Model is not defined'
-                    );
-
-                    return $status;
+                    return response::error('Model is not defined.');
                 }
 
                 //test for model existence is a configuration search in app then engine
@@ -235,11 +234,7 @@ class route extends config
                     //model and route definitions are across app/engine boundary
                     //might have to explain further
 
-                    $status = array();
-                    $status['error'] = array(
-                        'code' => 404,
-                        'message' => 'Model and route not defined in the same location'
-                    );
+                    return response::error('Model and route not defined in the same space.');
                 }
             }
 
@@ -284,11 +279,7 @@ class route extends config
             //model class does not exist
             if ($model_status['exists'] == false)
             {
-                $status = array();
-                $status['error'] = array(
-                    'code' => 404,
-                    'message' => $model_status['str_full'] . ' does not exist'
-                );
+                return response::error($model_status['str_full'] . ' does not exist.');
             }
             else
             {
@@ -398,11 +389,23 @@ class route extends config
         return compact('path', 'parts', 'query');
     }
 
-    public static function getRequestDetails($uri = null, $method = null)
+    public static function getRequestDetails($uri = null, $method = null, $base_url = '')
     {
         if (is_null($uri))
         {
             $uri = $_SERVER['REQUEST_URI'];
+        }
+
+        if ($base_url != '')
+        {
+            //trim uri by base
+
+        	//optional step
+        	//if you are running this framework from
+        	//foobar.com/*iriki* then ignore
+        	//or else, if running from foobar.com/some/weird/path/*iriki* then
+        	//shorten url by /some/weird/path
+        	$uri = substr($uri, strlen($base_url));
         }
 
         if (is_null($method))

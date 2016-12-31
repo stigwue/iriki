@@ -2,7 +2,7 @@
 
 namespace hr_log;
 
-class staff extends \iriki\engine\model
+class staff extends \iriki\model
 {
 }
 

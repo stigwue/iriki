@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki\engine;
+namespace iriki;
 
 require_once(__DIR__ . '/config.php');
 

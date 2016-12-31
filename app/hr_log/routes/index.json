@@ -27,8 +27,7 @@
 			"alias" : {},
             "routes" : [
                 "staff",
-                "activity",
-				"log"
+                "activity"
             ]
 		}
 	}
