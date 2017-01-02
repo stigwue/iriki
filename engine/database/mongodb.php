@@ -35,7 +35,7 @@ class mongodb extends database
 			}
 	    }
 	}
-	
+
 	public static function doCreate($params_persist)
 	{
 		//params is table/collection and data to insert
@@ -43,10 +43,6 @@ class mongodb extends database
 		if (is_null(Self::$__instance))
 		{
 			return null;
-			/*$status['error'] = array(
-                'code' => 404,
-                'message' => $model_status['details']['description']
-            );*/
 		}
 		else
 		{

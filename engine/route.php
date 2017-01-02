@@ -274,6 +274,7 @@ class route extends config
             1. model/action must be defined in code space
             */
 
+
             //model definition already determined
 
             //model class does not exist
@@ -286,75 +287,61 @@ class route extends config
                 //action defined?
                 if ($model_status['action_defined'])
                 {
-                    //action exists
-                    $status = array();
-                    $status['error'] = array(
-                        'code' => 404,
-                        'message' => $model_status['str_full'] . ' does not exist'
+                    //action exists?
+                    if ($model_status['action_exists'])
+                    {
+                        //paramter check
+                        //on fail, describe action
+                    }
+                    else
+                    {
+                        return response::error('Action \'' . $model_status['action'] . '\' of ' . $model_status['str_full'] . ' does not exist.');
+                    }
+                }
+                else if ($model_status['action_default'])
+                {
+                    //a default action, so treated as if defined in configs
+
+                    //careful about these, user may not have written this code so surprise is possible
+
+                    $model_instance =  new $model_status['str_full']();
+
+                    //bring in database, defined in one of these two locations
+                    //$this->_app['app']['name'] :
+                    //$this->_engine['app']['name']
+
+                    engine\database::doInitialise(
+                        $this->_app['app']['name'],
+                        $this->_engine['app']['name'],
+                        $database
+                    );
+
+                    //instance action
+                    return response::data(
+                        $model_instance->$action(
+                            engine\database::getClass(),
+                            array(
+                                'data' => $params,
+                                'persist' => $model
+                            )
+                        )
                     );
                 }
                 else
                 {
-                    //provide description?
+                    //provide model description and possible actions
                     if (isset($model_status['details']['description']))
                     {
-                        $status = array();
-                        $status['info'] = array(
-                            'code' => 200,
-                            'message' => $model_status['details']['description']
+                        return response::information(
+                            $model_status['details']['description'] .
+                            ' Possible actions include: '
                         );
                     }
                 }
             }
-
-            /*if ($model_status['exists'] AND $model_status['action_exists'])
-            {
-                $model_instance =  new $model_status['str_full']();
-
-                //bring in database, defined in one of these two locations
-                //$this->_app['app']['name'] :
-                //$this->_engine['app']['name']
-
-                database::doInitialise(
-                    $this->_app['app']['name'],
-                    $this->_engine['app']['name'],
-                    $database
-                );
-
-                //instance action
-                $status = $model_instance->$action(
-                    database::getClass(),
-                    array(
-                        'data' => $params,
-                        'persist' => $model
-                    )
-                );
-            }
-            else if (!$model_status['exists'])
-            {
-                if (isset($model_status['details']['description']))
-                {
-                    $status = array();
-                    $status['info'] = array(
-                        'code' => 200,
-                        'message' => $model_status['details']['description']
-                    );
-                }
-            }
-            else if (!$model_status['action_exists'])
-            {
-                if (isset($model_status['action_details']['description']))
-                {
-                    $status = array();
-                    $status['info'] = array(
-                        'code' => 200,
-                        'message' => $model_status['action_details']['description']
-                    );
-                }
-            }*/
         }
 
-        return $status;
+        return response::error('Well, this is odd. We areally don\'t know what has happened');
     }
 
     private static function parseUrl($path)

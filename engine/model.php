@@ -148,7 +148,7 @@ class model extends config
     }
 
     //persistence
-    public function create($db_type, $params_persist = null)
+    public function create($db_type, $params_persist = null, $session = null)
     {
         $instance = new $db_type();
         $instance::initInstance();
