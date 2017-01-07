@@ -5,7 +5,7 @@
 			"ticket" : {
 				"description" : "A support request and its accompanying thread.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true

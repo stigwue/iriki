@@ -17,25 +17,26 @@
                 }
             },
             "default" : {
-            	"description" : {
+                "description" : {
                     "description" : "Describe a model, listing its properties.",
                     "parameters" : []
-            	},
+                },
                 "create" : {
                     "description" : "Add a new instance of the model to storage.",
-                    "parameters" : []
+                    "parameters" : [],
+                    "exempt" : ["_id"]
                 },
                 "read" : {
                     "description" : "Returns the properties of the matching model.",
-                    "parameters" : ["id"]
+                    "parameters" : ["_id"]
                 },
                 "update" : {
                     "description" : "Updates a model instance by supplying new properties and the id of the model to update.",
-                    "parameters" : ["id", []]
+                    "parameters" : []
                 },
                 "delete" : {
                     "description" : "Deletes a model instance by supplying an id of the mode.",
-                    "parameters" : ["id"]
+                    "parameters" : ["_id"]
                 }
             },
             "routes" : [

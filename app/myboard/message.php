@@ -2,12 +2,8 @@
 
 namespace myboard;
 
-class message extends \iriki\engine\model
+class message extends \iriki\model
 {
-    public function create($args)
-    {
-    	
-    }
 }
 
 ?>

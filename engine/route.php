@@ -25,7 +25,7 @@ class route extends config
         if ($app != 'iriki')
         {
             $var = '_app';
-            $path = $config_values[$app]['path'];
+            $path = $config_values['application']['path'];
         }
         $store = &$this->$var;
 
@@ -55,7 +55,7 @@ class route extends config
         if ($app != 'iriki')
         {
             $var = '_app';
-            $path = $config_values[$app]['path'];
+            $path = $config_values['application']['path'];
         }
         $store = &$this->$var;
 
@@ -102,7 +102,7 @@ class route extends config
         $status['data']['engine']['name'] = $this->_engine['app']['name'];
         $status['data']['engine']['path'] = $this->_engine['app']['path'];
 
-
+        $status['data']['engine']['routes'] = array();
         foreach ($this->_engine['routes']['routes'] as $model => $actions)
         {
             $status['data']['engine']['routes'][] = $model;
@@ -114,6 +114,7 @@ class route extends config
         $status['data']['application']['name'] = $this->_app['app']['name'];
         $status['data']['application']['path'] = $this->_app['app']['path'];
 
+        $status['data']['application']['routes'] = array();
         foreach ($this->_app['routes']['routes'] as $model => $actions)
         {
             $status['data']['application']['routes'][] = $model;
@@ -159,6 +160,7 @@ class route extends config
 
         $model = null;
         $action = null;
+        $defaults = null;
 
         $model_defined = false;
         $model_exists = false;
@@ -169,13 +171,6 @@ class route extends config
         $url_parts = (isset($request_details['url']['parts'])) ? $request_details['url']['parts'] : null;
 
         $count = count($url_parts);
-
-        $status = array(
-            "error" => array(
-                "code" => 404,
-                "message" => "Url could not be matched with a route."
-            )
-        );
 
         if ($count >= 1)
         {
@@ -220,7 +215,7 @@ class route extends config
 
                 if (!$model_defined)
                 {
-                    return response::error('Model is not defined.');
+                    return response::error('Model \'' . $model . '\' is not defined.');
                 }
 
                 //test for model existence is a configuration search in app then engine
@@ -247,6 +242,11 @@ class route extends config
 
             $model_exists = class_exists($model_full);
             $action_exists = method_exists($model_full, $action);
+            $defaults = $routes['engine']['default'];
+            if ($model_is_app_defined)
+            {
+                $defaults = $routes['app']['default'];
+            }
 
             $model_status = array(
                 'str' => $model, //model e.g session
@@ -255,7 +255,8 @@ class route extends config
                 'exists' => $model_exists, //model class exists
                 'details' => null, //array of description, properties and relationships
                 'app_defined' => $model_is_app_defined, //model defined in app or engine?
-                'action'=> $action, //action e.g create
+                'action'=> $action, //action e.g create,
+                'default' => $defaults, //default actions
                 'action_defined' => false, //action defined?
                 'action_default' => false, //action is default defined?
                 'action_exists' => $action_exists, //action exists in class
@@ -270,8 +271,9 @@ class route extends config
             /*
             perform action based on $model_status
             order of priority is this:
-            0. model/action must be configured in config space
-            1. model/action must be defined in code space
+            0. model/action must be in config space (defined)
+            1. model/action must be in code space (exists)
+            2. action can be default or custom
             */
 
 
@@ -284,48 +286,82 @@ class route extends config
             }
             else
             {
-                //action defined?
-                if ($model_status['action_defined'])
+                //action defined? plus exception made for default defined action
+                if ($model_status['action_defined'] OR $model_status['action_default'])
                 {
                     //action exists?
                     if ($model_status['action_exists'])
                     {
                         //paramter check
                         //on fail, describe action
+
+                        $parameter_status = model::doPropertyMatch($model_status['details'], $params, $model_status['action_details']);
+
+                        $missing_parameters = count($parameter_status['missing']);
+                        $extra_parameters = $parameter_status['extra'];
+                        if ($missing_parameters == 0 AND $extra_parameters == 0)
+                        {
+                            //parameter check ok
+
+                            //session or auth check
+
+                            //persistence
+                            //defined in one of these two locations
+                            //$this->_app['app']['name'] :
+                            //$this->_engine['app']['name']
+
+                            engine\database::doInitialise(
+                                $this->_app['app']['name'],
+                                $this->_engine['app']['name'],
+                                $database
+                            );
+
+                            //default?
+                            if ($model_status['action_default'])
+                            {
+                                //a default action, so treated as if defined in configs
+
+                                //careful about these, user may not have written this code so surprise is possible
+                            }
+                            //custom
+                            else
+                            {
+                                
+                            }
+
+                            $model_instance =  new $model_status['str_full']();
+
+                            //instance action
+                            return response::data(
+                                $model_instance->$action(
+                                    array(
+                                        'db_type' => engine\database::getClass(),
+                                        'persist' => $model,
+                                        'data' => $params,
+                                        'session' => null
+                                    )
+                                )
+                            );
+                        }
+                        else
+                        {
+                            if ($missing_parameters != 0)
+                            {
+                                if ($missing_parameters == 1)
+                                return response::error('1 parameter \'' . $parameter_status['missing'][0] . '\' is missing.');
+                                else return response::error('\'' . $parameter_status['missing'][0] . '\' and ' . ($missing_parameters - 1) . ' other parameter(s) missing.');
+                            }
+                            if ($extra_parameters != 0)
+                                return response::error($extra_parameters . ' extra parameter(s).');
+
+                            //authorisation or other error
+                            return response::error(' Authorisation missing.');
+                        }
                     }
                     else
-                    {
+                    { 
                         return response::error('Action \'' . $model_status['action'] . '\' of ' . $model_status['str_full'] . ' does not exist.');
                     }
-                }
-                else if ($model_status['action_default'])
-                {
-                    //a default action, so treated as if defined in configs
-
-                    //careful about these, user may not have written this code so surprise is possible
-
-                    $model_instance =  new $model_status['str_full']();
-
-                    //bring in database, defined in one of these two locations
-                    //$this->_app['app']['name'] :
-                    //$this->_engine['app']['name']
-
-                    engine\database::doInitialise(
-                        $this->_app['app']['name'],
-                        $this->_engine['app']['name'],
-                        $database
-                    );
-
-                    //instance action
-                    return response::data(
-                        $model_instance->$action(
-                            engine\database::getClass(),
-                            array(
-                                'data' => $params,
-                                'persist' => $model
-                            )
-                        )
-                    );
                 }
                 else
                 {
@@ -333,15 +369,14 @@ class route extends config
                     if (isset($model_status['details']['description']))
                     {
                         return response::information(
-                            $model_status['details']['description'] .
-                            ' Possible actions include: '
+                            $model_status['details']['description']
                         );
                     }
                 }
             }
         }
 
-        return response::error('Well, this is odd. We areally don\'t know what has happened');
+        return response::error('Please specify a route.');
     }
 
     private static function parseUrl($path)

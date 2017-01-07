@@ -2,7 +2,7 @@
 
 namespace elims;
 
-class payment extends \iriki\engine\model
+class payment extends \iriki\model
 {
 }
 

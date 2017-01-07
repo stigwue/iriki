@@ -5,7 +5,7 @@
 			"session" : {
                 "description" : "Session manages the current user and authentication state.",
 				"properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Session's unique ID.",
                         "type" : "string",
                         "unique" : true

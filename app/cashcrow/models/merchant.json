@@ -5,7 +5,7 @@
 			"merchant" : {
 				"description" : "Business or other entities providing a service. They are user owned and belong to a sector.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Merchant unique ID.",
                         "type" : "number",
                         "unique" : true

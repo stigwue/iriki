@@ -5,7 +5,7 @@
 			"staff" : {
 				"description" : "A staff user. Usually has some administrative role assigned.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true

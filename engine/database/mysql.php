@@ -52,10 +52,6 @@ class mysql extends database
 		if (is_null(Self::$__instance))
 		{
 			return null;
-			/*$status['error'] = array(
-                'code' => 404,
-                'message' => $model_status['details']['description']
-            );*/
 		}
 		else
 		{
@@ -69,10 +65,11 @@ class mysql extends database
 			{
 				$persist->$property = $value;
 			}
+			$persist->created = time(NULL);
 
 			$status = \R::store($persist);
 
-			return $status; //or some condition test
+			return $status;
 		}
 	}
 
@@ -100,7 +97,7 @@ class mysql extends database
 
 			if (count($cursor) == 0)
 			{
-				$status['data'] = array();
+				$status = array();
 			}
 			else
 			{
@@ -110,7 +107,7 @@ class mysql extends database
 				{
 					$list[] = $object;
 				}
-				$status['data'] = $list;
+				$status = $list;
 			}
 
 			return $status;
@@ -135,10 +132,11 @@ class mysql extends database
 			{
 				$persist->$property = $value;
 			}
+			$persist->modified = time(NULL);
 
 			$status = \R::store($persist);
 
-			return $status; //or some condition test
+			return $status;
 		}
 	}
 

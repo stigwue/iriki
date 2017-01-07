@@ -2,7 +2,7 @@
 
 namespace cashcrow;
 
-class merchant extends \iriki\engine\model
+class merchant extends \iriki\model
 {
 }
 

@@ -13,15 +13,15 @@
                 },
                 "read" : {
                     "description" : "Returns the properties of the matching model.",
-                    "parameters" : ["id"]
+                    "parameters" : ["_id"]
                 },
                 "update" : {
                     "description" : "Updates a model instance by supplying new properties and the id of the model to update.",
-                    "parameters" : ["id", []]
+                    "parameters" : []
                 },
                 "delete" : {
                     "description" : "Deletes a model instance by supplying an id of the mode.",
-                    "parameters" : ["id"]
+                    "parameters" : ["_id"]
                 }
 			},
 			"alias" : {},

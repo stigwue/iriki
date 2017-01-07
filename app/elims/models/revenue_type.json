@@ -5,7 +5,7 @@
 			"revenue_type" : {
 				"description" : "The revenue types available.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true

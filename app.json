@@ -11,19 +11,26 @@
 				"build" : "1"
 			},
 
-			"base_url" : "/iriki/",
+			"base_url" : "/iriki",
 
 			"engine" : {
 				"name" : "iriki",
+				"description" : "The Humongous View Controller",
 				"path" : "engine/"
 			},
 
-			"hr_log" : {
-				"name" : "hr_log",
-				"path" : "app/hr_log/"
+			"application" : {
+				"name" : "elims",
+				"description" : "eLIMS Land Information Mgt",
+				"path" : "app/elims/"
 			},
 
 			"database" : {
+				"local" : {
+	                "type" : "mongodb",
+	                "server" : "mongodb://localhost:27017",
+					"db" : "elims"
+				},
 				"test" : {
 	                "type" : "mysql",
 	                "server" : "localhost",
@@ -33,7 +40,8 @@
 				},
 				"development" : {
 	                "type" : "mongodb",
-					"db" : "hr_log"
+	                "server" : "mongodb://0.0.0.0:27017",
+					"db" : "elims"
 				},
 				"production" : {
 	                "type" : "mysql",

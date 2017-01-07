@@ -5,7 +5,7 @@
 			"property" : {
 				"description" : "The basic model, a real estate unit.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true

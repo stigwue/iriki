@@ -2,7 +2,7 @@
 
 namespace elims;
 
-class ticket extends \iriki\engine\model
+class ticket extends \iriki\model
 {
 }
 

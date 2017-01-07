@@ -3,13 +3,10 @@
     {
         "routes" : {
             "document_type" : {
-                "create" : {
-                    "description" : "",
-                    "parameters" : []
-                },
-                "read" : {
-                    "description" : "",
-                    "parameters" : ["id"]
+                "read_all" : {
+                    "description" : "Read all enabled document type.",
+                    "parameters" : ["state"],
+                    "exempt" : []
                 }
             }
         }

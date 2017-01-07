@@ -5,7 +5,7 @@
 			"user" : {
 				"description" : "The model for most actions. It can be built upon using other models.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "User's unique ID.",
                         "type" : "number",
                         "unique" : true

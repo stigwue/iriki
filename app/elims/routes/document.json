@@ -3,13 +3,9 @@
     {
         "routes" : {
             "document" : {
-                "create" : {
-                    "description" : "",
-                    "parameters" : []
-                },
                 "read" : {
                     "description" : "",
-                    "parameters" : ["id"]
+                    "parameters" : ["_id"]
                 }
             }
         }

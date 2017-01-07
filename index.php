@@ -1,58 +1,64 @@
 <?php
 
-	//application switch
-	define('IRIKI_APP', 'hr_log');
-
-	//app switch
-	//define('IRIKI_MODE', 'test');  //local mysql
-	define('IRIKI_MODE', 'development'); //mongodb
-	//define('IRIKI_MODE', 'production'); //remote mysql
-
-
-	//engine
-	require_once('engine/autoload.php');
-	//application
-	require_once('app/' . IRIKI_APP . '/autoload.php');
-	//vendors
-	require_once('vendors/autoload.php');
-
-	//this is the API endpoint
+	//app persistence switch
+	define('IRIKI_MODE', 'local');
+	//define('IRIKI_MODE', 'test');
+	//define('IRIKI_MODE', 'development');
+	//define('IRIKI_MODE', 'production');
 
 	$app = array(
 		'config' => null,
 
+		'engine' => NULL,
+
+		'application' => NULL,
+
+		'database' => null,
+
 		'routes' => null,
 
-		'models' => null,
-
-		'database' => null
+		'models' => null
 	);
 
-	$status = array();
+
+	//engine
+	require_once('engine/autoload.php');
+
+
+	//$status = array();
 
 	$app_config = new iriki\config();
 	$app_config->doInitialise('app.json');
 
+	//load up configurations
 	$app['config'] = $app_config->getKeyValues();
-	$status = $app_config->getStatus();
+	$app['engine'] = $app['config']['engine']['name'];
+	$app['application'] = $app['config']['application']['name'];
 	$app['database'] = $app['config']['database'][IRIKI_MODE];
+	//$status = $app_config->getStatus();
 
+	//load up routes
 	$app_routes = new iriki\route();
-	$app['routes']['engine'] = $app_routes->doInitialise($app['config']);
-	$app['routes']['app'] = $app_routes->doInitialise($app['config'], IRIKI_APP);
+	$app['routes']['engine'] = $app_routes->doInitialise($app['config'], $app['engine']);
+	$app['routes']['app'] = $app_routes->doInitialise($app['config'], $app['application']);
+	//$status = $app_routes->getStatus($status);
 
-
-
-	$status = $app_routes->getStatus($status);
-
+	//load up models
 	$app_models = new iriki\model();
 	$app['models']['engine'] = $app_models->loadModels($app['config'], $app_routes->getRoutes());
+	$app['models']['app'] = $app_models->loadModels($app['config'], $app_routes->getRoutes($app['application']), $app['application']);
+	//$status = $app_models->getStatus($status);
 
-	$app['models']['app'] = $app_models->loadModels($app['config'], $app_routes->getRoutes(IRIKI_APP), IRIKI_APP);
-
+	//interprete request
 	$request_details = iriki\route::getRequestDetails(null, null, $app['config']['base_url']);
 
-	//parse the url and match a route to a model and its action
+	//load up application's class files
+	require_once($app['config']['application']['path'] . 'autoload.php');
+
+	//vendors
+	require_once('vendors/autoload.php');
+
+	//handle the request: match a route to a model and its action
     $status = $app_routes->matchUrl(
     	$request_details,
     	//models

@@ -9,11 +9,11 @@
                 },
                 "read" : {
                     "description" : "Read a single property specified by ID",
-                    "parameters" : ["id"]
+                    "parameters" : ["_id"]
                 },
                 "search" : {
                     "description" : "Search for a property specified by ID",
-                    "parameters" : ["id"]
+                    "parameters" : ["_id"]
                 }
             }
         }

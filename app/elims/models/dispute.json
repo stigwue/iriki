@@ -5,7 +5,7 @@
 			"dispute" : {
 				"description" : "A special type of application.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true

@@ -5,7 +5,7 @@
 			"application" : {
 				"description" : "A process a user initiates and processed by staff.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true

@@ -5,15 +5,27 @@
 			"document_type" : {
 				"description" : "A document type, such as C of O.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true
+                    },
+                    "title" : {
+                        "description" : "Document type descriptive title.",
+                        "type" : "string"
+                    },
+                    "short" : {
+                        "description" : "Document type short description.",
+                        "type" : "string"
+                    },
+                    "state" : {
+                        "description" : "Document type state. Includes enabled, disabled etc",
+                        "type" : "integer"
                     }
                 },
                 "relationships" : {
                     "belongsto" : [],
-                    "hasmany" : []
+                    "hasmany" : ["document"]
                 }
 			}
 		}

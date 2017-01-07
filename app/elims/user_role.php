@@ -2,7 +2,7 @@
 
 namespace elims;
 
-class user_role extends \iriki\engine\model
+class user_role extends \iriki\model
 {
 }
 

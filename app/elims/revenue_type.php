@@ -2,7 +2,7 @@
 
 namespace elims;
 
-class revenue_type extends \iriki\engine\model
+class revenue_type extends \iriki\model
 {
 }
 

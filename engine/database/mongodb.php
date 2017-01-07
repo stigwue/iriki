@@ -9,6 +9,20 @@ class mongodb extends database
 	const TYPE = 'mongodb';
 	private static $__instance;
 
+	public static function strToId($query)
+	{
+		//convert mongo id from string into the object
+		foreach ($query as $key => $value)
+		{
+			if ($key == '_id')
+			{
+				$query[$key] = new \MongoId($value);
+			}
+		}
+
+		return $query;
+	}
+
 	public static function initInstance()
 	{
 		if (is_null(Self::$_key_values))
@@ -21,10 +35,11 @@ class mongodb extends database
 			$key_values = Self::$_key_values;
 			if (
 				$key_values['type'] == Self::TYPE AND
+				isset($key_values['server']) AND
 				isset($key_values['db'])
 			)
 			{
-				Self::$__instance = new \MongoClient();
+				Self::$__instance = new \MongoClient($key_values['server']);
 
 				Self::$__instance = Self::$__instance->$key_values['db'];
 		        return true;
@@ -48,9 +63,11 @@ class mongodb extends database
 		{
 			$persist = Self::$__instance->$params_persist['persist'];
 
+			$params_persist['data']['created'] = time(NULL);
+
 			$status = $persist->insert($params_persist['data']);
 
-			return $status; //or some condition test
+			return $status;
 		}
 	}
 
@@ -67,13 +84,15 @@ class mongodb extends database
 			//build query (key => value array)
 			$query = $params_persist['data'];
 
+			$query = Self::strToId($query);
+
 			$cursor = $persist->find($query);
 
 			$status = array();
 
 			if (count($cursor) == 0)
 			{
-				$status['data'] = array();
+				$status = array();
 			}
 			else
 			{
@@ -83,7 +102,7 @@ class mongodb extends database
 				{
 					$list[] = $object;
 				}
-				$status['data'] = $list;
+				$status = $list;
 			}
 
 			return $status;
@@ -101,9 +120,14 @@ class mongodb extends database
 			$persist = Self::$__instance->$params_persist['persist'];
 
 			//build query (key => value array)
-			$query = $params_persist['data'];
+			$query = array(
+				'_id' => new \MongoId($params_persist['data']['_id'])
+			);
+			unset($params_persist['data']['_id']);
 
-			$status = $persist->update($query, array('$set' => $param_persist['data']));
+			$params_persist['data']['modified'] = time(NULL);
+
+			$status = $persist->update($query, array('$set' => $params_persist['data']));
 
 			return $status;
 		}
@@ -121,6 +145,8 @@ class mongodb extends database
 
 			//build query (key => value array)
 			$query = $params_persist['data'];
+
+			$query = Self::strToId($query);
 
 			$status = $persist->remove($query);
 

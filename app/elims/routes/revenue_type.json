@@ -9,7 +9,7 @@
                 },
                 "read" : {
                     "description" : "",
-                    "parameters" : ["id"]
+                    "parameters" : ["_id"]
                 }
             }
         }

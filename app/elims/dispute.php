@@ -2,7 +2,7 @@
 
 namespace elims;
 
-class dispute extends \iriki\engine\model
+class dispute extends \iriki\model
 {
 }
 

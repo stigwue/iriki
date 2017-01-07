@@ -5,7 +5,7 @@
 			"message" : {
 				"description" : "User to user message within the service.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Message unique ID.",
                         "type" : "number",
                         "unique" : true

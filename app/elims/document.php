@@ -2,7 +2,7 @@
 
 namespace elims;
 
-class document extends \iriki\engine\model
+class document extends \iriki\model
 {
 }
 

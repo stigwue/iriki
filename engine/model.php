@@ -28,7 +28,7 @@ class model extends config
         if ($app != 'iriki')
         {
             $var = '_app';
-            $path = $config_values[$app]['path'];
+            $path = $config_values['application']['path'];
         }
         $store = &$this->$var;
 
@@ -64,9 +64,9 @@ class model extends config
     //a specific model or alias
     //a specific action for said model
     //a specific set of parameters for said action
-    public static function doMatch($model_status, $models = null, $routes = null /*,engine_route_index, app_route_index for alias and defaults*/)
+    public static function doMatch($model_status, $models = null, $routes = null)
     {
-        //see $model_status structure in in route->matchUrl
+        //see $model_status structure in route->matchUrl
 
         $model = (isset($model_status['str']) ? $model_status['str'] : null);
 
@@ -75,7 +75,7 @@ class model extends config
         {
             if ($_model == $model_status['str'])
             {
-                //we are in the model
+                //we have found the model
                 $action = $model_status['action'];
 
                 $model_status['details'] = array(
@@ -84,29 +84,44 @@ class model extends config
                     'relationships' => $_action['relationships']
                 );
 
-                //loop for route actions
+                //now, to find the model's route
                 foreach ($routes['routes'] as $_route => $_route_action)
                 {
                     if ($_route == $model_status['str'])
                     {
+                        //model's route found, look up action
                         if (isset($_route_action[$model_status['action']]))
                         {
                             $model_status['action_details'] = array(
                                 'description' => (isset($_route_action[$model_status['action']]['description']) ? $_route_action[$model_status['action']]['description'] : ''),
-                                'parameters' => $_route_action[$model_status['action']]['parameters']
+                                'parameters' => $_route_action[$model_status['action']]['parameters'],
+                                'exempt' => (isset($_route_action[$model_status['action']]['exempt']) ? $_route_action[$model_status['action']]['exempt'] : array())
                             );
 
                             $model_status['action_defined'] = true;
+                            $model_status['action_default'] = false;
+
+                            break;
+                        }
+                        //test for action in default
+                        else if (isset($model_status['default'][$model_status['action']]))
+                        {
+                            $model_status['action_details'] = array(
+                                'description' => (isset($model_status['default'][$model_status['action']]['description']) ? $model_status['default'][$model_status['action']]['description'] : ''),
+                                'parameters' => $model_status['default'][$model_status['action']]['parameters'],
+                                'exempt' => (isset($model_status['default'][$model_status['action']]['exempt']) ? $model_status['default'][$model_status['action']]['exempt'] : array())
+                            );
+
+                            $model_status['action_defined'] = true;
+                            $model_status['action_default'] = true;
 
                             break;
                         }
                         else
                         {
-                            //default to description of model action if defined in default
+                            //action not found
                             $model_status['action_defined'] = false;
-
-                            //check default for action
-                            $model_status['action_default'] = isset($routes['default'][$model_status['action']]);
+                            $model_status['action_default'] = false;
 
                             //default to description of model since action does not exist
 
@@ -118,23 +133,101 @@ class model extends config
                         }
                     }
                 }
-
-                //route default actions
             }
         }
-
-        //action exists
-        //action does not exist, is it defined in
 
         return $model_status;
     }
 
+
+    //parameter property match: exist and type?
+    public static function doPropertyMatch($details, $sent, $filter)
+    {
+        //parameters work thus:
+        //empty valid => all paramters valid except 'exempt'
+        //non-empty valid => listed parameters except 'exempt'
+
+        $all_properties = $details['properties'];
+
+        $valid_properties = $filter['parameters'];
+        $exempt_properties = (isset($filter['exempt']) ? $filter['exempt'] : null);
+
+
+        //build valid properties
+        if (count($valid_properties) == 0)
+        {
+            //all properties are valid
+            foreach ($all_properties as $property => $property_details) $valid_properties[] = $property;
+        }
+
+        //check exempt properties
+        if (count($exempt_properties) == 0)
+        {
+            //there's no except list, carry on
+        }
+        else
+        {
+            for ($i = count($valid_properties) - 1; $i >= 0; $i--)
+            {
+                if (in_array($valid_properties[$i], $exempt_properties))
+                {
+                    unset($valid_properties[$i]);
+                }
+            }
+        }
+
+        //check for sent properties
+        $properties_missing = array();
+        $final_properties = array();
+        foreach ($valid_properties as $property)
+        {
+            if (isset($sent[$property]))
+            {
+                //property was sent
+                //check type?
+                $final_properties[] = $property;
+            }
+            else
+            {
+                $properties_missing[] = $property;
+            }
+        }
+
+        return array(
+            //properties supplied
+            'final' => $final_properties,
+            //missing properties that should have been supplied
+            'missing' => $properties_missing,
+            'extra' => count($sent) - count($final_properties)
+        );
+    }
+
+
+    //relationship?
+    public static function doRelationMatch($details, $params)
+    {
+
+    }
+
     public function getStatus($status = null, $json = false)
     {
-        //show model routes and pull model info definitions
         if (is_null($status))
         {
             $status = array('data' => array());
+        }
+
+        //engine's models
+        $status['data']['engine']['models'] = array();
+        foreach ($this->_engine['models'] as $model => $details)
+        {
+            $status['data']['engine']['models'][] = $model;
+        }
+
+        //app's models
+        $status['data']['application']['models'] = array();
+        foreach ($this->_app['models'] as $model => $details)
+        {
+            $status['data']['application']['models'][] = $model;
         }
 
         if ($json)
@@ -148,24 +241,32 @@ class model extends config
     }
 
     //persistence
-    public function create($db_type, $params_persist = null, $session = null)
+
+    //note that all (most?) actions have a single parameter $params_persist containing
+    //db_type -> string full namespace of db class
+    //persist -> string table/collection to persist in
+    //data -> data to persist
+    //session ->
+
+    public function create($params_persist = null)
     {
-        $instance = new $db_type();
+        $instance = new $params_persist['db_type']();
         $instance::initInstance();
 
         //do validation of params (count check and isset?)
         //if mode is strict and this check fails, do not call create
 
+        //add created and modified timestamps?
+
         if (!is_null($params_persist))
         {
             return $instance::doCreate($params_persist);
         }
-
     }
 
-    public function read($db_type, $params_persist = null)
+    public function read($params_persist = null)
     {
-        $instance = new $db_type();
+        $instance = new $params_persist['db_type']();
         $instance::initInstance();
 
         if (!is_null($params_persist))
@@ -175,9 +276,9 @@ class model extends config
 
     }
 
-    public function update($db_type, $params_persist = null)
+    public function update($params_persist = null)
     {
-        $instance = new $db_type();
+        $instance = new $params_persist['db_type']();
         $instance::initInstance();
 
         if (!is_null($params_persist))
@@ -191,9 +292,9 @@ class model extends config
 
     }
 
-    public function delete($db_type, $params_persist = null)
+    public function delete($params_persist = null)
     {
-        $instance = new $db_type();
+        $instance = new $params_persist['db_type']();
         $instance::initInstance();
 
 

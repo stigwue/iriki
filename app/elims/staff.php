@@ -2,7 +2,7 @@
 
 namespace elims;
 
-class staff extends \iriki\engine\model
+class staff extends \iriki\model
 {
 }
 

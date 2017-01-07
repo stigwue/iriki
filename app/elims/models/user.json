@@ -5,7 +5,7 @@
 			"user" : {
 				"description" : "A (non-staff) user.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true
