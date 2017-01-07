@@ -298,7 +298,7 @@ class route extends config
                         $parameter_status = model::doPropertyMatch($model_status['details'], $params, $model_status['action_details']);
 
                         $missing_parameters = count($parameter_status['missing']);
-                        $extra_parameters = $parameter_status['extra'];
+                        $extra_parameters = count($parameter_status['extra']);
                         if ($missing_parameters == 0 AND $extra_parameters == 0)
                         {
                             //parameter check ok
@@ -347,12 +347,10 @@ class route extends config
                         {
                             if ($missing_parameters != 0)
                             {
-                                if ($missing_parameters == 1)
-                                return response::error('1 parameter \'' . $parameter_status['missing'][0] . '\' is missing.');
-                                else return response::error('\'' . $parameter_status['missing'][0] . '\' and ' . ($missing_parameters - 1) . ' other parameter(s) missing.');
+                                return response::error(response::showMissing($parameter_status['missing'], 'parameter', 'missing'));
                             }
                             if ($extra_parameters != 0)
-                                return response::error($extra_parameters . ' extra parameter(s).');
+                                return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'));
 
                             //authorisation or other error
                             return response::error(' Authorisation missing.');

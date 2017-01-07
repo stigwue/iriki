@@ -152,12 +152,15 @@ class model extends config
         $valid_properties = $filter['parameters'];
         $exempt_properties = (isset($filter['exempt']) ? $filter['exempt'] : null);
 
+        //build sent properties
+        $sent_properties = array_keys($sent);
+
 
         //build valid properties
         if (count($valid_properties) == 0)
         {
             //all properties are valid
-            foreach ($all_properties as $property => $property_details) $valid_properties[] = $property;
+            $valid_properties = array_keys($all_properties);
         }
 
         //check exempt properties
@@ -176,20 +179,37 @@ class model extends config
             }
         }
 
-        //check for sent properties
+
+        //check for valid sent properties
         $properties_missing = array();
         $final_properties = array();
         foreach ($valid_properties as $property)
         {
             if (isset($sent[$property]))
             {
-                //property was sent
+                //property is valid and was sent
                 //check type?
                 $final_properties[] = $property;
+
+                //unset($extra_properties[$property]);
             }
             else
             {
                 $properties_missing[] = $property;
+            }
+        }
+
+        //check for invalid sent properties
+        $extra_properties = array(); 
+        foreach ($sent_properties as $index => $property)
+        {
+            if (FALSE !== array_search($property, $valid_properties))
+            {
+                //property sent is valid
+            }
+            else
+            {
+                $extra_properties[] = $property;
             }
         }
 
@@ -198,7 +218,8 @@ class model extends config
             'final' => $final_properties,
             //missing properties that should have been supplied
             'missing' => $properties_missing,
-            'extra' => count($sent) - count($final_properties)
+            //extra properties that should not have been supplied
+            'extra' => $extra_properties
         );
     }
 
