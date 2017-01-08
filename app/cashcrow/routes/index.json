@@ -2,10 +2,16 @@
 	"cashcrow":
 	{
 		"routes" : {
-            "default" : {},
+            "default" : {
+
+            },
 			"alias" : {},
             "routes" : [
-                "merchant"
+                "merchant",
+                "customer",
+                "sector",
+                "contract",
+                "payment"
             ]
 		}
 	}

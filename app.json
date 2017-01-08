@@ -2,27 +2,32 @@
 	"iriki":
 	{
 		"app" : {
-			"title" : "Iriki App",
-			"author" : "Stephen Igwue",
-
-			"version" : {
-				"major" : "0",
-				"minor" : "0",
-				"build" : "1"
-			},
-
+			"base" : "",
 			"base_url" : "/iriki",
 
 			"engine" : {
 				"name" : "iriki",
 				"description" : "The Humongous View Controller",
-				"path" : "engine/"
+				"path" : "engine/",
+				"author" : "Stephen Igwue",
+				"email" : "stigwue@olibe.nu",
+				"version" : {
+					"major" : "0",
+					"minor" : "0",
+					"build" : "1"
+				}
 			},
 
 			"application" : {
 				"name" : "elims",
 				"description" : "eLIMS Land Information Mgt",
-				"path" : "app/elims/"
+				"path" : "app/elims/",
+				"author" : "stephen.igwue@bizzdeskgroup.com",
+				"version" : {
+					"major" : "0",
+					"minor" : "0",
+					"build" : "1"
+				}
 			},
 
 			"database" : {

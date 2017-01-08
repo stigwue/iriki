@@ -374,7 +374,8 @@ class route extends config
             }
         }
 
-        return response::error('Please specify a route.');
+        //all other parsing failed
+        return null; //response::error('Please specify a route.');
     }
 
     private static function parseUrl($path)

@@ -57,14 +57,18 @@ class config
             $status = array('data' => array());
         }
 
-        $status['data']['title'] = $this->_key_values['title'];
-        $status['data']['author'] = $this->_key_values['author'];
-        $status['data']['version'] = array(
-            'major' => $this->_key_values['version']['major'],
-            'minor' => $this->_key_values['version']['minor'],
-            'build' => $this->_key_values['version']['build']
-        );
         $status['data']['base_url'] = $this->_key_values['base_url'];
+
+        //application
+        $context = "application";
+        $status['data']['description'] = $this->_key_values[$context]['description'];
+        $status['data']['author'] = $this->_key_values[$context]['author'];
+        $status['data']['version'] = array(
+            'major' => $this->_key_values[$context]['version']['major'],
+            'minor' => $this->_key_values[$context]['version']['minor'],
+            'build' => $this->_key_values[$context]['version']['build']
+        );
+        //engine
 
         if ($json)
         {

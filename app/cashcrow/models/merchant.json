@@ -22,10 +22,6 @@
                     "description" : {
                         "description" : "Merchant description, mostly service focused.",
                         "type" : "string"
-                    },
-                    "created" : {
-                        "description" : "Date merchant was created",
-                        "type" : "date"
                     }
                 },
                 "relationships" : {
