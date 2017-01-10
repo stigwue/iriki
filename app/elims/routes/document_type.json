@@ -4,7 +4,7 @@
         "routes" : {
             "document_type" : {
                 "read_all" : {
-                    "description" : "Read all enabled document type.",
+                    "description" : "Read all document types of in a specified state.",
                     "parameters" : ["state"],
                     "exempt" : []
                 }

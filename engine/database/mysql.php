@@ -10,6 +10,7 @@ require_once(__DIR__ . '/default.php');
 class mysql extends database
 {
 	const TYPE = 'mysql';
+	const ID_FIELD = 'id';
 	private static $__instance;
 
 	public static function initInstance()

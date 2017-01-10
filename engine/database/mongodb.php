@@ -7,6 +7,7 @@ require_once(__DIR__ . '/default.php');
 class mongodb extends database
 {
 	const TYPE = 'mongodb';
+	const ID_FIELD = '_id';
 	private static $__instance;
 
 	public static function strToId($query)

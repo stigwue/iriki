@@ -11,15 +11,15 @@
                         "unique" : true
                     },
                     "title" : {
-                        "description" : "Document type descriptive title.",
+                        "description" : "Descriptive title.",
                         "type" : "string"
                     },
                     "short" : {
-                        "description" : "Document type short description.",
+                        "description" : "Short description/acronym.",
                         "type" : "string"
                     },
                     "state" : {
-                        "description" : "Document type state. Includes enabled, disabled etc",
+                        "description" : "State or status.",
                         "type" : "integer"
                     }
                 },

@@ -11,7 +11,7 @@
                         "unique" : true
                     },
                     "title" : {
-                        "description" : "Document descriptive title.",
+                        "description" : "Descriptive title.",
                         "type" : "string"
                     }
                 },

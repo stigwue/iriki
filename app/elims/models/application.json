@@ -9,11 +9,19 @@
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true
+                    },
+                    "title" : {
+                        "description" : "Descriptive title.",
+                        "type" : "string"
+                    },
+                    "state" : {
+                        "description" : "Current state/status",
+                        "type" : "integer"
                     }
                 },
                 "relationships" : {
-                    "belongsto" : [],
-                    "hasmany" : []
+                    "belongsto" : ["user"],
+                    "hasmany" : ["document"]
                 }
 			}
 		}
