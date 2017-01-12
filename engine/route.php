@@ -4,20 +4,40 @@ namespace iriki;
 
 class route extends config
 {
-    //engine routes
+    /**
+    * Engine's routes.
+    *
+    * @var array
+    */
     private $_engine = array(
+        //app details
         'app' => null,
+        //config object
         'config' => null,
-        'routes' => null //default, alias, list and routes
+        //routes: default, alias, list and routes
+        'routes' => null
     );
 
-    //app routes
-    private $_app  = array(
+    /**
+    * Application's routes.
+    *
+    * @var array
+    */
+    private $_app = array(
         'app' => null,
         'config' => null,
         'routes' => null
     );
 
+    /**
+    * Load route index details from supplied app configuration.
+    *
+    *
+    * @params array
+    * @param string
+    * @return
+    * @throw
+    */
     private function loadFromJsonIndex($config_values, $app = 'iriki')
     {
         $var = '_engine';

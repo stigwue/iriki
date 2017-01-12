@@ -3,7 +3,7 @@
 	{
 		"routes" : {
 			"staff" : {
-				"readx" : {
+				"login" : {
 					"description" : "whatever",
 					"parameters" : []
 				}

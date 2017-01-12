@@ -5,15 +5,31 @@
 			"staff" : {
 				"description" : "A staff.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true
+                    },
+                    "title" : {
+                        "description" : "Title such as Mr, Miss.",
+                        "type" : "string"
+                    },
+                    "firstname" : {
+                        "description" : "Firstname.",
+                        "type" : "string"
+                    },
+                    "surname" : {
+                        "description" : "Surname.",
+                        "type" : "string"
+                    },
+                    "email" : {
+                        "description" : "Email.",
+                        "type" : "email"
                     }
                 },
                 "relationships" : {
                     "belongsto" : [],
-                    "hasmany" : ["activity"]
+                    "hasmany" : ["log"]
                 }
 			}
 		}

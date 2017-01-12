@@ -7,7 +7,7 @@
 
 			"engine" : {
 				"name" : "iriki",
-				"description" : "The Humongous View Controller",
+				"description" : "The Iriki Framework",
 				"path" : "engine/",
 				"author" : "Stephen Igwue",
 				"email" : "stigwue@olibe.nu",

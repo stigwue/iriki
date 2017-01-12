@@ -6,7 +6,8 @@
                 "validate" : {
                 	"description" : "Validate a session, returns expired or not.",
                 	"parameters" : ["_id"]
-                }
+                },
+                "deactivate" : {}
             }
 		}
 	}

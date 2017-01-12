@@ -4,8 +4,9 @@ namespace iriki;
 
 class response
 {
+    //see https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
     const INFO = 200;
-    const ERROR = 404;
+    const ERROR = 400;
 
     public static function showMissing($list, $description, $action)
     {

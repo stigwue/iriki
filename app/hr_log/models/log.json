@@ -3,17 +3,25 @@
 	{
 		"models" : {
 			"log" : {
-				"description" : "A log.",
+				"description" : "A log is a collection of activities. It has a descriptive title such as daily or weekly log.",
                 "properties" : {
-                    "id" : {
+                    "_id" : {
                         "description" : "Unique ID.",
                         "type" : "number",
                         "unique" : true
+                    },
+                    "datestamp" : {
+                        "description" : "Date/day stamp.",
+                        "type" : "number"
+                    },
+                    "title" : {
+                        "description" : "Descriptive title.",
+                        "type" : "string"
                     }
                 },
                 "relationships" : {
-                    "belongsto" : [],
-                    "hasmany" : []
+                    "belongsto" : ["staff"],
+                    "hasmany" : ["activity"]
                 }
 			}
 		}
