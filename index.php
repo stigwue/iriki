@@ -40,7 +40,7 @@
 	$app_routes = new iriki\route();
 	$app_models = new iriki\model();
 
-	if ($app['initialised'] == false)
+	//if ($app['initialised'] == false)
 	{
 		//initialise app config values
 		$app_config->doInitialise('app.json');
@@ -66,9 +66,9 @@
 		$_SESSION['iriki_session'] = true;
 		$_SESSION['iriki_app'] = $app;
 	}
-	else
+	//else
 	{
-		$app = $_SESSION['iriki_app'];
+		//$app = $_SESSION['iriki_app'];
 	}
 
 
