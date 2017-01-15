@@ -9,7 +9,7 @@ class route extends config
     *
     * @var array
     */
-    private $_engine = array(
+    private static $_engine = array(
         //app details
         'app' => null,
         //config object
@@ -23,7 +23,7 @@ class route extends config
     *
     * @var array
     */
-    private $_app = array(
+    private static $_app = array(
         'app' => null,
         'config' => null,
         'routes' => null
@@ -40,14 +40,13 @@ class route extends config
     */
     private function loadFromJsonIndex($config_values, $app = 'iriki')
     {
-        $var = '_engine';
+        $store = &Self::$_engine;
         $path = $config_values['engine']['path'];
         if ($app != 'iriki')
         {
-            $var = '_app';
+            $store = &Self::$_app;
             $path = $config_values['application']['path'];
         }
-        $store = &$this->$var;
 
         $store['app'] = array(
             'name' => $app,
@@ -70,14 +69,14 @@ class route extends config
 
     private function loadFromJson($config_values, $routes, $app = 'iriki')
     {
-        $var = '_engine';
+        $store = &Self::$_engine;
         $path = $config_values['engine']['path'];
         if ($app != 'iriki')
         {
-            $var = '_app';
+            $store = &Self::$_app;
             $path = $config_values['application']['path'];
         }
-        $store = &$this->$var;
+
 
         /*get route details from json file
         if a route file can't be found, it'll have no actions and default
@@ -100,12 +99,11 @@ class route extends config
 
     public function getRoutes($app = 'iriki')
     {
-        $var = '_engine';
+        $store = &Self::$_engine;
         if ($app != 'iriki')
         {
-            $var = '_app';
+            $store = &Self::$_app;
         }
-        $store = &$this->$var;
 
         return $store['routes'];
     }
@@ -154,29 +152,20 @@ class route extends config
     //a match is 2 part process
     //1. a route/alias is matched to a specific model
     //2. we go into said model to further the match
-    public function matchUrl($request_details,
-        $models = null,
-        $routes = null,
-        $database = null
+    public static function matchUrl($request_details,
+        $app = null
     )
     {
+        //app must be initialised
+        if (is_null($app)) return null;
+
         //models
-        $app_models = null;
-        $engine_models = null;
-        if (!is_null($models))
-        {
-            $app_models = $models['app'];
-            $engine_models = $models['engine'];
-        }
+        $engine_models = $app['models']['engine'];
+        $app_models = $app['models']['app'];
 
         //routes
-        $app_routes = null;
-        $engine_routes = null;
-        if (!is_null($routes))
-        {
-            $app_routes = $routes['app'];
-            $engine_routes = $routes['engine'];
-        }
+        $engine_routes = $app['routes']['engine'];
+        $app_routes = $app['routes']['app'];
 
         $model = null;
         $action = null;
@@ -214,23 +203,30 @@ class route extends config
                 //set model and action
 
                 //test for model existence is a configuration search in app then engine
-                $model_is_app_defined = isset($routes['app']['alias'][$action]);
-                $model_is_engine_defined = isset($routes['engine']['alias'][$action]);
+                $model_is_engine_defined = isset($engine_routes['alias'][$action]);
+                $model_is_app_defined = isset($app_routes['alias'][$action]);
 
-                $define_switch = 'engine';
-                if ($model_is_app_defined)
+                if ($model_is_engine_defined)
                 {
-                    $define_switch = 'app';
+                    $model = $engine_routes['alias'][$action]['model'];
+                    $action = $engine_routes['alias'][$action]['action'];
                 }
-                $model = $routes[$define_switch]['alias'][$action]['model'];
-                $action = $routes[$define_switch]['alias'][$action]['action'];
+                else if ($model_is_app_defined)
+                {
+                    $model = $app_routes['alias'][$action]['model'];
+                    $action = $app_routes['alias'][$action]['action'];
+                }
+                else
+                {
+                    //?
+                }
             }
             else
             {
                 $model_defined = (
-                    (isset($models['app'][$model]))
+                    (isset($app_models[$model]))
                         OR
-                    (isset($models['engine'][$model]))
+                    (isset($engine_models[$model]))
                 );
 
                 if (!$model_defined)
@@ -239,9 +235,9 @@ class route extends config
                 }
 
                 //test for model existence is a configuration search in app then engine
-                $model_is_app_defined = isset($models['app'][$model]);
+                $model_is_app_defined = isset($app_models[$model]);
                 //confirm using route
-                $route_is_app_defined = isset($routes['app']['routes'][$model]);
+                $route_is_app_defined = isset($app_routes['routes'][$model]);
 
                 if ($model_is_app_defined != $route_is_app_defined)
                 {
@@ -255,17 +251,18 @@ class route extends config
 
             //class exist test
             $app_namespace = ($model_is_app_defined ?
-                $this->_app['app']['name'] :
-                $this->_engine['app']['name']
+                $app['application'] :
+                $app['engine']
             );
             $model_full = '\\' . $app_namespace . '\\' . $model;
 
             $model_exists = class_exists($model_full);
             $action_exists = method_exists($model_full, $action);
-            $defaults = $routes['engine']['default'];
+
+            $defaults = $engine_routes['default'];
             if ($model_is_app_defined)
             {
-                $defaults = $routes['app']['default'];
+                $defaults = $app_routes['default'];
             }
 
             $model_status = array(
@@ -326,14 +323,12 @@ class route extends config
                             //session or auth check
 
                             //persistence
-                            //defined in one of these two locations
-                            //$this->_app['app']['name'] :
-                            //$this->_engine['app']['name']
+                            //defined in one of two locations
 
                             engine\database::doInitialise(
-                                $this->_app['app']['name'],
-                                $this->_engine['app']['name'],
-                                $database
+                                $app['application'],
+                                $app['engine'],
+                                $app['database']
                             );
 
                             //default?

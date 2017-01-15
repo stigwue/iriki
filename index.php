@@ -40,7 +40,7 @@
 	$app_routes = new iriki\route();
 	$app_models = new iriki\model();
 
-	//if ($app['initialised'] == false)
+	if ($app['initialised'] == false)
 	{
 		//initialise app config values
 		$app_config->doInitialise('app.json');
@@ -66,11 +66,10 @@
 		$_SESSION['iriki_session'] = true;
 		$_SESSION['iriki_app'] = $app;
 	}
-	//else
+	else
 	{
-		//$app = $_SESSION['iriki_app'];
+		$app = $_SESSION['iriki_app'];
 	}
-
 
 	//load up application's class files
 	require_once($app['config']['application']['path'] . 'autoload.php');
@@ -83,20 +82,10 @@
 	$request_details = iriki\route::getRequestDetails(null, null, $app['config']['base_url']);
 
 	//handle the request: match a route to a model and its action
-	$status = $app_routes->matchUrl(
+	$status = iriki\route::matchUrl(
     	$request_details,
-    	//models
-    	array(
-    		'engine' => $app['models']['engine'],
-    		'app' => $app['models']['app']
-		),
-		//routes
-    	array(
-    		'engine' => $app['routes']['engine'],
-    		'app' => $app['routes']['app']
-		),
-		//database
-		$app['database']
+    	//app
+    	$app
 	);
 
 	
