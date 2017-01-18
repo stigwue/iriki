@@ -1,0 +1,13 @@
+{
+	"hr_log":
+	{
+		"routes" : {
+			"log" : {
+				"create" : {
+					"description" : "",
+					"parameters" : []
+				}
+            }
+		}
+	}
+}

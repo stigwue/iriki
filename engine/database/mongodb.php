@@ -15,7 +15,7 @@ class mongodb extends database
 		//convert mongo id from string into the object
 		foreach ($query as $key => $value)
 		{
-			if ($key == '_id')
+			if ($key == Self::ID_FIELD)
 			{
 				$query[$key] = new \MongoId($value);
 			}
@@ -63,6 +63,8 @@ class mongodb extends database
 		else
 		{
 			$persist = Self::$__instance->$params_persist['persist'];
+
+			$params_persist[Self::ID_FIELD] = new \MongoId();
 
 			$params_persist['data']['created'] = time(NULL);
 
@@ -122,7 +124,7 @@ class mongodb extends database
 
 			//build query (key => value array)
 			$query = array(
-				'_id' => new \MongoId($params_persist['data']['_id'])
+				Self::ID_FIELD => new \MongoId($params_persist['data'][Self::ID_FIELD])
 			);
 			unset($params_persist['data']['_id']);
 

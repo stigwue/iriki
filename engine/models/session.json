@@ -6,21 +6,30 @@
                 "description" : "Session manages the current user and authentication state.",
 				"properties" : {
                     "_id" : {
-                        "description" : "Session's unique ID.",
+                        "description" : "Unique ID.",
+                        "type" : "number",
+                        "unique" : true
+                    },
+                    "token" : {
+                        "description" : "Unique token to track sessions with.",
                         "type" : "string",
                         "unique" : true
                     },
-                    "ip_address" :  {
+                    "ip" :  {
                         "description" : "Origin IP address.",
                         "type" : "string"
                     },
-                    "created" :  {
+                    "started" :  {
                         "description" : "Time session began",
                         "type" : "date"
                     },
                     "expires" :  {
                         "description" : "Time session expires, will be checked to determine validity.",
                         "type" : "date"
+                    },
+                    "authenticated" : {
+                        "description" : "True or false, determines if a user with this token is signed in.",
+                        "type" : "integer"
                     }
                 },
                 "relationships" : {

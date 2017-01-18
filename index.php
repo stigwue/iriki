@@ -8,6 +8,9 @@
 	//define('IRIKI_MODE', 'development');
 	//define('IRIKI_MODE', 'production');
 
+	//refresh time in seconds
+	define('IRIKI_REFRESH', 120);
+
 	//engine
 	require_once('engine/autoload.php');
 
@@ -31,7 +34,8 @@
 		'config' => null,
 
 		//app initialised status? set to false to re-initialise
-		'initialised' => isset($_SESSION['iriki_session'])
+		//or specify expiry stamp so it auto updates
+		'expires' => (isset($_SESSION['iriki_expires']) ? $_SESSION['iriki_expires'] : 0)
 	);
 
 
@@ -40,7 +44,7 @@
 	$app_routes = new iriki\route();
 	$app_models = new iriki\model();
 
-	if ($app['initialised'] == false)
+	if ($app['expires'] == 0)
 	{
 		//initialise app config values
 		$app_config->doInitialise('app.json');
@@ -62,9 +66,8 @@
 		$app['models']['app'] = $app_models->loadModels($app['config'], $app_routes->getRoutes($app['application']), $app['application']);
 		//$status = $app_models->getStatus($status);
 
-		$app['initialised'] = true;
-		$_SESSION['iriki_session'] = true;
-		$_SESSION['iriki_app'] = $app;
+		$app['expires'] = time(NULL) + IRIKI_REFRESH;
+		$_SESSION['iriki_expires'] = $app['expires'];
 	}
 	else
 	{

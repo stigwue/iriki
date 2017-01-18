@@ -6,27 +6,31 @@
 				"description" : "The model for most actions. It can be built upon using other models.",
                 "properties" : {
                     "_id" : {
-                        "description" : "User's unique ID.",
+                        "description" : "User internal unique ID.",
                         "type" : "number",
                         "unique" : true
                     },
                     "username" :  {
-                        "description" : "Username, dependent on some service (email, or this one)",
+                        "description" : "Username, dependent on some service (email, or this one).",
+                        "type" : "string",
+                        "unique" : true
+                    },
+                    "private_key" :  {
+                        "description" : "Key only known to user, for asymmetric encryption.",
                         "type" : "string"
                     },
-                    "salt" :  {
-                        "description" : "Salt, input to some hashing algorithm",
+                    "public_key" : {
+                        "description" : "Key known to user and another party, for encryption.",
                         "type" : "string"
                     },
-                    "auth" :   {
-                        "description" : "Hashed password. Irreversible.",
+                    "tag" : {
+                        "description" : "Go crazy, store registration status, email, whatever.",
                         "type" : "string"
                     }
                 },
                 "relationships" : {
                     "belongsto" : ["app"],
                     "hasmany" : [
-                        "merchant",
 						"session",
 						"setting"
 					]

@@ -3,17 +3,13 @@
 	{
 		"routes" : {
             "alias" : {
+                "tokenize" : {
+                    "model" : "session",
+                    "action" : "gettoken"
+                },
                 "authenticate" : {
                     "model" : "session",
-                    "action" : "validate"
-                },
-                "stats" : {
-                    "model" : "app",
-                    "action" : "statistics"
-                },
-                "test" : {
-                    "model" : "",
-                    "action" : ""
+                    "action" : "authtoken"
                 }
             },
             "default" : {

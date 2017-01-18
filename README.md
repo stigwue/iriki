@@ -1,6 +1,6 @@
 # Iriki
 
-The Humongous View Controller.
+The Iriki Model Controller.
 
 Source code can be found here: [stigwue/iriki](https://github.com/stigwue/iriki).
 

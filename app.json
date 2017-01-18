@@ -7,7 +7,7 @@
 
 			"engine" : {
 				"name" : "iriki",
-				"description" : "The Iriki Framework",
+				"description" : "The Iriki MC",
 				"path" : "engine/",
 				"author" : "Stephen Igwue",
 				"email" : "stigwue@olibe.nu",
@@ -19,10 +19,10 @@
 			},
 
 			"application" : {
-				"name" : "elims",
-				"description" : "eLIMS Land Information Mgt",
-				"path" : "app/elims/",
-				"author" : "stephen.igwue@bizzdeskgroup.com",
+				"name" : "hr_log",
+				"description" : "Human Resource Log",
+				"path" : "app/hr_log/",
+				"author" : "olibenu@yahoo.com",
 				"version" : {
 					"major" : "0",
 					"minor" : "0",
