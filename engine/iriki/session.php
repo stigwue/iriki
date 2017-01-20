@@ -2,8 +2,12 @@
 
 namespace iriki;
 
-class session extends model
+class session
 {
+	public function initiate($params_persist = null)
+	{
+		
+	}
 }
 
 ?>

@@ -3,9 +3,14 @@
 	{
 		"routes" : {
 			"session" : {
+				"initiate" : {
+                	"description" : "Initiate (create) a session, returns a token.",
+                	"parameters" : [],
+                	"exempt" : ["_id", "authenticated"]
+				},
                 "validate" : {
                 	"description" : "Validate a session, returns expired or not.",
-                	"parameters" : ["_id"]
+                	"parameters" : ["token"]
                 },
                 "deactivate" : {}
             }

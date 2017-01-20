@@ -316,6 +316,7 @@ class route extends config
 
                         $missing_parameters = count($parameter_status['missing']);
                         $extra_parameters = count($parameter_status['extra']);
+
                         if ($missing_parameters == 0 AND $extra_parameters == 0)
                         {
                             //parameter check ok

@@ -1,6 +1,14 @@
 <?php
 	session_start();
-	//var_dump($_SESSION);
+
+	/*var_dump(
+		isset($_SESSION['iriki_expires']) ?
+		time(NULL) - $_SESSION['iriki_expires'] :
+		'no session set'
+	);
+	exit();*/
+
+	//$_SESSION['iriki_expires'] = 0;
 
 	//app persistence switch
 	define('IRIKI_MODE', 'local');
@@ -16,25 +24,26 @@
 
 	//this are the components of an iriki app
 	$app = array(
-		//the iriki engine, which is also an iriki app ala mysql
+		//string, the engine, which is also an iriki app ala mysql
 		'engine' => NULL,
-		//your application
+		//string, your application
 		'application' => NULL,
-		//a persistence structure
+		//array, a persistence structure
 		'database' => null,
 
 
-		//the routes
+		//array, the routes
 		'routes' => null,
-		//the models the routes point to
+		//array, the models the routes point to
 		'models' => null,
 		
 
-		//the config files parsed on initialisation
+		//array, the config files parsed on initialisation
 		'config' => null,
 
-		//app initialised status? set to false to re-initialise
-		//or specify expiry stamp so it auto updates
+		//app expiry stamp so it auto updates
+		//if changes are made to config files, set this to zero
+		//or old ones will be used until expiry
 		'expires' => (isset($_SESSION['iriki_expires']) ? $_SESSION['iriki_expires'] : 0)
 	);
 
@@ -44,7 +53,7 @@
 	$app_routes = new iriki\route();
 	$app_models = new iriki\model();
 
-	if ($app['expires'] == 0)
+	if ($app['expires'] == 0 OR $app['expires'] <= time(NULL))
 	{
 		//initialise app config values
 		$app_config->doInitialise('app.json');
@@ -68,6 +77,7 @@
 
 		$app['expires'] = time(NULL) + IRIKI_REFRESH;
 		$_SESSION['iriki_expires'] = $app['expires'];
+		$_SESSION['iriki_app'] = $app;
 	}
 	else
 	{
