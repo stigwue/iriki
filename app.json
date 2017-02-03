@@ -19,10 +19,10 @@
 			},
 
 			"application" : {
-				"name" : "hr_log",
-				"description" : "Human Resource Log",
-				"path" : "app/hr_log/",
-				"author" : "olibenu@yahoo.com",
+				"name" : "myboard",
+				"description" : "MyBoard",
+				"path" : "app/myboard/",
+				"author" : "admin@myboard.xyz",
 				"version" : {
 					"major" : "0",
 					"minor" : "0",
@@ -34,26 +34,7 @@
 				"local" : {
 	                "type" : "mongodb",
 	                "server" : "mongodb://localhost:27017",
-					"db" : "elims"
-				},
-				"test" : {
-	                "type" : "mysql",
-	                "server" : "localhost",
-					"db" : "bizzdesk_elims",
-					"user" : "bizzdesk",
-					"password" : "password"
-				},
-				"development" : {
-	                "type" : "mongodb",
-	                "server" : "mongodb://0.0.0.0:27017",
-					"db" : "elims"
-				},
-				"production" : {
-	                "type" : "mysql",
-	                "server" : "109.203.117.155",
-					"db" : "elims_demo",
-					"user" : "elim_demo",
-					"password" : "81zz645K"
+					"db" : "myboard_iriki"
 				}
 			},
 
