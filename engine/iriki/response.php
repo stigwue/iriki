@@ -8,6 +8,12 @@ class response
     const INFO = 200;
     const ERROR = 400;
 
+    //build
+
+    //log
+
+    //execute
+
     public static function showMissing($list, $description, $action)
     {
         $count_less_one = count($list) - 1;
@@ -32,7 +38,7 @@ class response
             $message = "";
         }
         else
-        { 
+        {
             $first = $list[0];
             if ($count_less_one == 0)
             {
@@ -43,13 +49,13 @@ class response
             else if ($count_less_one == 1)
             {
                 //e.g 'id' and 1 other parameter missing
-                //or 'user' and 1 other model available 
+                //or 'user' and 1 other model available
                 $message = "'$first' and $count_less_one other $singular $action.";
             }
             else
             {
                 //e.g 'id' and x other parameters missing
-                //or 'user' and x other models available 
+                //or 'user' and x other models available
                 $message = "'$first' and $count_less_one other $plural $action.";
             }
         }
@@ -79,7 +85,6 @@ class response
 
         return $response;
     }
-
 
     public static function error($message)
     {
