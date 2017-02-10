@@ -3,11 +3,39 @@
 	{
 		"routes" : {
 			"staff" : {
-				"login" : {
-					"description" : "whatever",
-					"parameters" : []
+
+				"authenticate" : {
+					"description" : "Log in a staff using email and password.",
+					"parameters" : ["email", "auth"],
+					"exempt" : []
+				},
+
+				"create" : {
+					"description" : "Create a new staff.",
+					"parameters" : ["firstname", "lastname", "email"],
+					"exempt" : []
+				},
+
+				"read_by_id" : {
+					"description" : "Read a staff by its id",
+					"parameters" : ["_id"],
+					"exempt" : []
+				},
+
+				"read_by_email" : {
+					"description" : "Read a staff by its email",
+					"parameters" : ["email"],
+					"exempt" : []
+				},
+
+				"read_all" : {
+					"description" : "Log in a staff using email and password.",
+					"parameters" : ["auth"],
+					"exempt" : ["firstname", "lastname", "email", "private_key"]
 				}
-            }
+
+
+			}
 		}
 	}
 }

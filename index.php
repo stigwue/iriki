@@ -36,7 +36,7 @@
 		'routes' => null,
 		//array, the models the routes point to
 		'models' => null,
-		
+
 
 		//array, the config files parsed on initialisation
 		'config' => null,
@@ -101,7 +101,7 @@
     	$app
 	);
 
-	
+
 	//return status
 	if (is_null($status))
     {

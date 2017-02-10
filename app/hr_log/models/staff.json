@@ -10,10 +10,6 @@
                         "type" : "number",
                         "unique" : true
                     },
-                    "title" : {
-                        "description" : "Title such as Mr, Miss.",
-                        "type" : "string"
-                    },
                     "firstname" : {
                         "description" : "Firstname.",
                         "type" : "string"
@@ -25,6 +21,14 @@
                     "email" : {
                         "description" : "Email.",
                         "type" : "email"
+                    },
+										"private_key" : {
+                        "description" : "Private key.",
+                        "type" : "string"
+                    },
+										"auth" : {
+                        "description" : "Hashed / encrypted password.",
+                        "type" : "string"
                     }
                 },
                 "relationships" : {

@@ -83,7 +83,9 @@ class route extends config
         properties too won't be defined*/
         foreach ($routes['list'] as $valid_route)
         {
+            //var_dump($path . 'routes/' . $valid_route . '.json');
             $valid_route_json = (new config($path . 'routes/' . $valid_route . '.json'))->getJson();
+            //var_dump($valid_route_json[$app]['routes']);
             $store['routes']['routes'][$valid_route] = $valid_route_json[$app]['routes'][$valid_route];
         }
 
@@ -342,7 +344,7 @@ class route extends config
                             //custom
                             else
                             {
-                                
+
                             }
 
                             $model_instance =  new $model_status['str_full']();
@@ -373,7 +375,7 @@ class route extends config
                         }
                     }
                     else
-                    { 
+                    {
                         return response::error('Action \'' . $model_status['action'] . '\' of ' . $model_status['str_full'] . ' does not exist.');
                     }
                 }

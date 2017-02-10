@@ -200,7 +200,7 @@ class model extends config
         }
 
         //check for invalid sent properties
-        $extra_properties = array(); 
+        $extra_properties = array();
         foreach ($sent_properties as $index => $property)
         {
             if (FALSE !== array_search($property, $valid_properties))
@@ -271,58 +271,58 @@ class model extends config
 
     public function create($params_persist = null)
     {
-        $instance = new $params_persist['db_type']();
-        $instance::initInstance();
+      $instance = new $params_persist['db_type']();
+      $instance::initInstance();
 
-        //do validation of params (count check and isset?)
-        //if mode is strict and this check fails, do not call create
+      //do validation of params (count check and isset?)
+      //if mode is strict and this check fails, do not call create
 
-        //add created and modified timestamps?
+      //add created and modified timestamps?
 
-        if (!is_null($params_persist))
-        {
-            return $instance::doCreate($params_persist);
-        }
+      if (!is_null($params_persist))
+      {
+        return $instance::doCreate($params_persist);
+      }
     }
 
     public function read($params_persist = null)
     {
-        $instance = new $params_persist['db_type']();
-        $instance::initInstance();
+      $instance = new $params_persist['db_type']();
+      $instance::initInstance();
 
-        if (!is_null($params_persist))
-        {
-            return $instance::doRead($params_persist);
-        }
+      if (!is_null($params_persist))
+      {
+        return $instance::doRead($params_persist);
+      }
 
     }
 
     public function update($params_persist = null)
     {
-        $instance = new $params_persist['db_type']();
-        $instance::initInstance();
+      $instance = new $params_persist['db_type']();
+      $instance::initInstance();
 
-        if (!is_null($params_persist))
-        {
-            return $instance::doUpdate($params_persist);
-        }
-        else
-        {
+      if (!is_null($params_persist))
+      {
+        return $instance::doUpdate($params_persist);
+      }
+      else
+      {
 
-        }
+      }
 
     }
 
     public function delete($params_persist = null)
     {
-        $instance = new $params_persist['db_type']();
-        $instance::initInstance();
+      $instance = new $params_persist['db_type']();
+      $instance::initInstance();
 
 
-        if (!is_null($params_persist))
-        {
-            return $instance::doDelete($params_persist);
-        }
+      if (!is_null($params_persist))
+      {
+        return $instance::doDelete($params_persist);
+      }
 
     }
 }

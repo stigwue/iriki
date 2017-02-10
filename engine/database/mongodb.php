@@ -64,13 +64,21 @@ class mongodb extends database
 		{
 			$persist = Self::$__instance->$params_persist['persist'];
 
-			$params_persist[Self::ID_FIELD] = new \MongoId();
+			$params_persist['data'][Self::ID_FIELD] = new \MongoId();
 
 			$params_persist['data']['created'] = time(NULL);
 
 			$status = $persist->insert($params_persist['data']);
 
-			return $status;
+			//unset all data properties except id
+			$id_field = $params_persist['data'][Self::ID_FIELD];
+			$params_persist['data'] = array(Self::ID_FIELD => $id_field);
+
+
+			//return $params_persist['data'][Self::ID_FIELD];
+
+			//re-read it to return properties
+			return Self::doRead($params_persist);
 		}
 	}
 
