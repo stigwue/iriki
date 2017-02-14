@@ -32,6 +32,13 @@
 					"description" : "Log in a staff using email and password.",
 					"parameters" : ["auth"],
 					"exempt" : ["firstname", "lastname", "email", "private_key"]
+				},
+
+
+				"update" : {
+					"description" : "Log in a staff using email and password.",
+					"parameters" : [],
+					"exempt" : ["private_key", "auth"]
 				}
 
 

@@ -74,9 +74,6 @@ class mongodb extends database
 			$id_field = $params_persist['data'][Self::ID_FIELD];
 			$params_persist['data'] = array(Self::ID_FIELD => $id_field);
 
-
-			//return $params_persist['data'][Self::ID_FIELD];
-
 			//re-read it to return properties
 			return Self::doRead($params_persist);
 		}
@@ -134,13 +131,19 @@ class mongodb extends database
 			$query = array(
 				Self::ID_FIELD => new \MongoId($params_persist['data'][Self::ID_FIELD])
 			);
-			unset($params_persist['data']['_id']);
+
+			$id_field = $params_persist['data'][Self::ID_FIELD];
+			unset($params_persist['data'][Self::ID_FIELD]);
 
 			$params_persist['data']['modified'] = time(NULL);
 
 			$status = $persist->update($query, array('$set' => $params_persist['data']));
 
-			return $status;
+			//unset all data properties except id
+			$params_persist['data'] = array(Self::ID_FIELD => $id_field);
+
+			//re-read it to return properties
+			return Self::doRead($params_persist);
 		}
 	}
 

@@ -14,8 +14,8 @@
                         "description" : "Firstname.",
                         "type" : "string"
                     },
-                    "surname" : {
-                        "description" : "Surname.",
+                    "lastname" : {
+                        "description" : "Lastname.",
                         "type" : "string"
                     },
                     "email" : {
