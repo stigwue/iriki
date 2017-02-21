@@ -2,56 +2,63 @@
 
 namespace hr_log;
 
-class staff extends \iriki\model
+class staff extends \iriki\request
 {
-  public function read_by_id($params_persist = null)
+  public function create_one($request)
   {
-    $instance = new $params_persist['db_type']();
-    $instance::initInstance();
-
-    if (!is_null($params_persist))
+    if (!is_null($request))
     {
-      return $instance::doRead($params_persist);
+      $request->initializedb();
+      return $request->create();
     }
-
+    else
+    {
+      //fail gracefully some way?
+    }
   }
 
-  public function read_by_email($params_persist = null)
+  public function read_by_id($request)
   {
-    $instance = new $params_persist['db_type']();
-    $instance::initInstance();
-
-    if (!is_null($params_persist))
+    if (!is_null($request))
     {
-      return $instance::doRead($params_persist);
+      $request->initializedb();
+      return $request->read();
     }
-
+    else
+    {
+      //fail gracefully some way?
+    }
   }
 
-  public function read_all($params_persist = null)
+  public function read_by_email($request)
   {
-    $instance = new $params_persist['db_type']();
-    $instance::initInstance();
-
-    $params_persist['data'] = array();
-
-    if (!is_null($params_persist))
+    if (!is_null($request))
     {
-      return $instance::doRead($params_persist);
-    }
+      $request->initializedb();
 
+      return $request->read();
+    }
   }
 
-  public function update($params_persist = null)
+  public function read_all($request)
   {
-    $instance = new $params_persist['db_type']();
-    $instance::initInstance();
-
-    if (!is_null($params_persist))
+    if (!is_null($request))
     {
-      return $instance::doUpdate($params_persist);
-    }
+      $request->initializedb();
 
+      $request->setData(array());
+
+      return $request->read();
+    }
+  }
+
+  public function update_one($request)
+  {
+    if (!is_null($request))
+    {
+      $request->initializedb();
+      return $request->update();
+    }
   }
 
 }

@@ -32,8 +32,8 @@
 
 			"database" : {
 				"local" : {
-	                "type" : "mongodb",
-	                "server" : "mongodb://localhost:27017",
+					"type" : "mongodb",
+					"server" : "mongodb://localhost:27017",
 					"db" : "myboard_iriki"
 				}
 			},

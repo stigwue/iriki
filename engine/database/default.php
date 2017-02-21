@@ -62,27 +62,59 @@ class database
 	}
 
 	//create
-	public static function doCreate($params)
+	public static function doCreate($request_obj)
 	{
-		return null;
+			$response = array();
+			$response['error'] = array(
+					'code' => response::ERROR,
+					'message' => 'Action not yet configured'
+			);
+
+			//do logging?
+
+			return $response;
 	}
 
 	//read/retrieve
-	public static function doRead($params)
+	public static function doRead($request_obj)
 	{
-		return null;
+			$response = array();
+			$response['error'] = array(
+					'code' => response::ERROR,
+					'message' => 'Action not yet configured'
+			);
+
+			//do logging?
+
+			return $response;
 	}
 
 	//update
-	public static function doUpdate($params)
+	public static function doUpdate($request_obj)
 	{
-		return null;
+			$response = array();
+			$response['error'] = array(
+					'code' => response::ERROR,
+					'message' => 'Action not yet configured'
+			);
+
+			//do logging?
+
+			return $response;
 	}
 
 	//delete
-	public static function doDelete($params)
+	public static function doDelete($request_obj)
 	{
-		return null;
+			$response = array();
+			$response['error'] = array(
+					'code' => response::ERROR,
+					'message' => 'Action not yet configured'
+			);
+
+			//do logging?
+
+			return $response;
 	}
 }
 

@@ -33,8 +33,8 @@ class route extends config
     * Load route index details from supplied app configuration.
     *
     *
-    * @params array
-    * @param string
+    * @param array Configuration key value pairs
+    * @param string Application name
     * @return
     * @throw
     */
@@ -349,17 +349,16 @@ class route extends config
 
                             $model_instance =  new $model_status['str_full']();
 
-                            //instance action
-                            return response::data(
-                                $model_instance->$action(
-                                    array(
-                                        'db_type' => engine\database::getClass(),
-                                        'persist' => $model,
-                                        'data' => $params,
-                                        'session' => null
-                                    )
-                                )
+                            //build request
+                            $request = request::initialize(
+                              engine\database::getClass(), //db_type
+                              $model,
+                              $action,
+                              $params //data
+                              //session
                             );
+                            //instance action
+                            return $model_instance->$action($request);
                         }
                         else
                         {
@@ -371,7 +370,7 @@ class route extends config
                                 return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'));
 
                             //authorisation or other error
-                            return response::error(' Authorisation missing.');
+                            return response::error('Authorisation missing.');
                         }
                     }
                     else

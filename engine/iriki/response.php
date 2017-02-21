@@ -8,12 +8,6 @@ class response
     const INFO = 200;
     const ERROR = 400;
 
-    //build
-
-    //log
-
-    //execute
-
     public static function showMissing($list, $description, $action)
     {
         $count_less_one = count($list) - 1;
@@ -63,6 +57,7 @@ class response
         return $message;
     }
 
+    //build
     public static function data($data)
     {
         $response = array();
@@ -98,6 +93,8 @@ class response
 
         return $response;
     }
+
+    //log
 }
 
 ?>

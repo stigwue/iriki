@@ -8,7 +8,8 @@ class mongodb extends database
 {
 	const TYPE = 'mongodb';
 	const ID_FIELD = '_id';
-	private static $__instance;
+
+	private static $__instance = null;
 
 	public static function strToId($query)
 	{
@@ -17,69 +18,53 @@ class mongodb extends database
 		{
 			if ($key == Self::ID_FIELD)
 			{
-				$query[$key] = new \MongoId($value);
+				try
+				{
+					$query[$key] = new \MongoId($value);
+				}
+				catch (Exception $e)
+				{
+					//value isn't a valid MongoId
+					continue;
+				}
 			}
 		}
 
 		return $query;
 	}
 
-	public static function initInstance()
+	public static function initialize()
 	{
-		if (is_null(Self::$_key_values))
+		if (is_null(Self::$__instance))
 		{
-			return false;
-		}
-		else
-		{
-			//parse key values
-			$key_values = Self::$_key_values;
-			if (
-				$key_values['type'] == Self::TYPE AND
-				isset($key_values['server']) AND
-				isset($key_values['db'])
-			)
-			{
-				Self::$__instance = new \MongoClient($key_values['server']);
-
-				Self::$__instance = Self::$__instance->$key_values['db'];
-		        return true;
-			}
-			else
+			if (is_null(Self::$_key_values))
 			{
 				return false;
 			}
-	    }
-	}
+			else
+			{
+				//parse key values
+				$key_values = Self::$_key_values;
+				if (
+					$key_values['type'] == Self::TYPE AND
+					isset($key_values['server']) AND
+					isset($key_values['db'])
+				)
+				{
+					Self::$__instance = new \MongoClient($key_values['server']);
 
-	public static function doCreate($params_persist)
-	{
-		//params is table/collection and data to insert
-
-		if (is_null(Self::$__instance))
-		{
-			return null;
-		}
-		else
-		{
-			$persist = Self::$__instance->$params_persist['persist'];
-
-			$params_persist['data'][Self::ID_FIELD] = new \MongoId();
-
-			$params_persist['data']['created'] = time(NULL);
-
-			$status = $persist->insert($params_persist['data']);
-
-			//unset all data properties except id
-			$id_field = $params_persist['data'][Self::ID_FIELD];
-			$params_persist['data'] = array(Self::ID_FIELD => $id_field);
-
-			//re-read it to return properties
-			return Self::doRead($params_persist);
+					Self::$__instance = Self::$__instance->$key_values['db'];
+			        return true;
+				}
+				else
+				{
+					return false;
+				}
+		  }
 		}
 	}
 
-	public static function doRead($params_persist)
+	public static function doCreate($request)
 	{
 		if (is_null(Self::$__instance))
 		{
@@ -87,10 +72,40 @@ class mongodb extends database
 		}
 		else
 		{
-			$persist = Self::$__instance->$params_persist['persist'];
+			$collection = $request->getModel();
+			$persist = Self::$__instance->$collection;
 
 			//build query (key => value array)
-			$query = $params_persist['data'];
+			$query = $request->getData();
+
+			$query[Self::ID_FIELD] = new \MongoId();
+
+			$query['created'] = time(NULL);
+
+			$status = $persist->insert($query);
+
+			//unset all data properties except id
+			$id_field = $query[Self::ID_FIELD];
+			$request->setData(array(Self::ID_FIELD => $id_field));
+
+			//re-read it to return properties
+			return Self::doRead($request);
+		}
+	}
+
+	public static function doRead($request)
+	{
+		if (is_null(Self::$__instance))
+		{
+			return null;
+		}
+		else
+		{
+			$collection = $request->getModel();
+			$persist = Self::$__instance->$collection;
+
+			//build query (key => value array)
+			$query = $request->getData();
 
 			$query = Self::strToId($query);
 
@@ -117,7 +132,7 @@ class mongodb extends database
 		}
 	}
 
-	public static function doUpdate($params_persist)
+	public static function doUpdate($request)
 	{
 		if (is_null(Self::$__instance))
 		{
@@ -125,25 +140,29 @@ class mongodb extends database
 		}
 		else
 		{
-			$persist = Self::$__instance->$params_persist['persist'];
+			$collection = $request->getModel();
+			$persist = Self::$__instance->$collection;
 
-			//build query (key => value array)
+			$data = $request->getData();
+
+			//pick only the id field to be used to filter update
 			$query = array(
-				Self::ID_FIELD => new \MongoId($params_persist['data'][Self::ID_FIELD])
+				Self::ID_FIELD => new \MongoId($data[Self::ID_FIELD])
 			);
 
-			$id_field = $params_persist['data'][Self::ID_FIELD];
-			unset($params_persist['data'][Self::ID_FIELD]);
+			//remove the id field to prevent it from being edited
+			$id_field = $data[Self::ID_FIELD];
+			unset($data[Self::ID_FIELD]);
 
-			$params_persist['data']['modified'] = time(NULL);
+			$data['modified'] = time(NULL);
 
-			$status = $persist->update($query, array('$set' => $params_persist['data']));
+			$status = $persist->update($query, array('$set' => $data));
 
 			//unset all data properties except id
-			$params_persist['data'] = array(Self::ID_FIELD => $id_field);
+			$request->setData(array(Self::ID_FIELD => $id_field));
 
 			//re-read it to return properties
-			return Self::doRead($params_persist);
+			return Self::doRead($request);
 		}
 	}
 
