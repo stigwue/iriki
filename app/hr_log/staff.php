@@ -22,6 +22,7 @@ class staff extends \iriki\request
     if (!is_null($request))
     {
       $request->initializedb();
+      
       return $request->read();
     }
     else

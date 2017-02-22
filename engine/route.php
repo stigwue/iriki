@@ -321,7 +321,14 @@ class route extends config
 
                         if ($missing_parameters == 0 AND $extra_parameters == 0)
                         {
-                            //parameter check ok
+                            //parameter type check
+                            $param_type_status = model::doParameterTypeCheck($model_status, $parameter_status['final'], $params);
+
+                            if (count($param_type_status) != 0)
+                            {
+                                return response::error(response::showMissing($param_type_status, 'parameter', 'mismatched'));
+                            }
+                            //check for parameter values - uniques especially
 
                             //session or auth check
 

@@ -7122,7 +7122,7 @@ abstract class Repository
 			if ( isset( $sql[1] ) ) {
 				$bindings = $sql[1];
 			}
-			$sql = $sql[0];
+			$sql = @$sql[0];
 		}
 		try {
 			$beans = $this->convertToBeans( $type, $this->writer->queryRecord( $type, $conditions, $sql, $bindings ) );
@@ -12488,7 +12488,7 @@ use RedBeanPHP\RedException as RedException;
  *
  * This is a helper or service class containing frequently used
  * array functions for dealing with SQL queries.
- * 
+ *
  * @file    RedBeanPHP/Util/ArrayTool.php
  * @author  Gabor de Mooij and the RedBeanPHP Community
  * @license BSD/GPLv2
@@ -12522,7 +12522,7 @@ class ArrayTool
 	 * @return array
 	 */
 	public static function flat( $array, $result = array() )
-	{		
+	{
 		foreach( $array as $value ) {
 			if ( is_array( $value ) ) $result = self::flat( $value, $result );
 			else $result[] = $value;
@@ -12541,7 +12541,7 @@ use RedBeanPHP\RedException as RedException;
  * Dispense Helper
  *
  * A helper class containing a dispense utility.
- * 
+ *
  * @file    RedBeanPHP/Util/DispenseHelper.php
  * @author  Gabor de Mooij and the RedBeanPHP Community
  * @license BSD/GPLv2
@@ -12571,8 +12571,8 @@ class DispenseHelper
 			if ( !isset( $typeOrBeanArray['_type'] ) ) {
 				$list = array();
 				foreach( $typeOrBeanArray as $beanArray ) {
-					if ( 
-						!( is_array( $beanArray ) 
+					if (
+						!( is_array( $beanArray )
 						&& isset( $beanArray['_type'] ) ) ) {
 						throw new RedException( 'Invalid Array Bean' );
 					}
@@ -12600,8 +12600,8 @@ class DispenseHelper
 
 		return $beanOrBeans;
 	}
-	
-	
+
+
 	/**
 	 * Takes a comma separated list of bean types
 	 * and dispenses these beans. For each type in the list
@@ -12665,7 +12665,7 @@ use RedBeanPHP\OODBBean as OODBBean;
  *
  * Dumps the contents of a bean in an array for
  * debugging purposes.
- * 
+ *
  * @file    RedBeanPHP/Util/Dump.php
  * @author  Gabor de Mooij and the RedBeanPHP Community
  * @license BSD/GPLv2
@@ -12888,7 +12888,7 @@ interface Plugin
 		class R extends \RedBeanPHP\Facade{};
 	}
 
-	
+
 
 /**
  * Support functions for RedBeanPHP.
@@ -12969,4 +12969,3 @@ if ( !function_exists( 'array_flatten' ) ) {
 
 
 	}
-	

@@ -224,6 +224,43 @@ class model extends config
     }
 
 
+    //parameter check
+    public static function doParameterTypeCheck(&$model_status, $final_properties, $final_values)
+    {
+      $mismatched = array();
+
+      $properties = null;
+      if ($model_status['action_defined'])
+      {
+        $properties = $model_status['details']['properties'];
+      }
+      else if ($model_status['action_default'])
+      {
+        $properties = $model_status['default']['properties'];
+      }
+
+      foreach ($final_properties as $index => $property)
+      {
+        if (isset($properties[$property]))
+        {
+          $property_details = $properties[$property];
+
+          //check type
+          $type = $property_details['type']; //might be absent
+          $type_matched = type::is_type($final_values[$property], $type);
+
+          if (!$type_matched) $mismatched[] = $property;
+
+          //some other check? unique?
+        }
+        else
+        {
+          //this would not be called because of pre-checks before this point
+        }
+      }
+      return $mismatched;
+    }
+
     //relationship?
     public static function doRelationMatch($details, $params)
     {

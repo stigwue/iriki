@@ -10,7 +10,7 @@
 					"exempt" : []
 				},
 
-				"create" : {
+				"create_one" : {
 					"description" : "Create a new staff.",
 					"parameters" : ["firstname", "lastname", "email"],
 					"exempt" : []
@@ -35,7 +35,7 @@
 				},
 
 
-				"update" : {
+				"update_one" : {
 					"description" : "Log in a staff using email and password.",
 					"parameters" : [],
 					"exempt" : ["private_key", "auth"]

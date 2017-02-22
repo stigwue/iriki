@@ -68,28 +68,36 @@ class request
     {
       $instance = $this->initializedb();
 
-      return $instance::doCreate($this);
+      $result = $instance::doCreate($this);
+
+      return \iriki\response::data($result);
     }
 
     public function read()
     {
       $instance = $this->initializedb();
 
-      return $instance::doRead($this);
+      $result = $instance::doRead($this);
+
+      return \iriki\response::data($result);
     }
 
     public function update()
     {
       $instance = $this->initializedb();
 
-      return $instance::doUpdate($this);
+      $result = $instance::doUpdate($this);
+
+      return \iriki\response::information($result);
     }
 
     public function delete()
     {
       $instance = $this->initializedb();
 
-      return $instance::doDelete($this);
+      $result = $instance::doDelete($this);
+
+      return \iriki\response::information($result);
     }
 
     public function other()

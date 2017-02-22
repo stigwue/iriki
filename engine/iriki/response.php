@@ -65,7 +65,7 @@ class response
 
         //do logging?
 
-        return $response;
+        return array('response' => $response);
     }
 
     public static function information($message)
@@ -78,7 +78,7 @@ class response
 
         //do logging?
 
-        return $response;
+        return array('response' => $response);
     }
 
     public static function error($message)
@@ -91,7 +91,7 @@ class response
 
         //do logging?
 
-        return $response;
+        return array('response' => $response);
     }
 
     //log

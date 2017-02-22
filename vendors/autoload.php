@@ -1,5 +1,6 @@
 <?php
 
+require_once(__DIR__ . '/mail/mail.php');
 require_once(__DIR__ . '/naija_pikin/naija_pikin.php');
 require_once(__DIR__ . '/pseudocrypt/pseudocrypt.php');
 require_once(__DIR__ . '/redbean/rb.php');

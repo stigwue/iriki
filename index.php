@@ -1,14 +1,8 @@
 <?php
 	session_start();
 
-	/*var_dump(
-		isset($_SESSION['iriki_expires']) ?
-		time(NULL) - $_SESSION['iriki_expires'] :
-		'no session set'
-	);
-	exit();*/
-
-	//$_SESSION['iriki_expires'] = 0;
+	//set time zone, no where like home
+	date_default_timezone_set('Africa/Lagos');
 
 	//app persistence switch
 	define('IRIKI_MODE', 'local');
@@ -16,6 +10,7 @@
 	//define('IRIKI_MODE', 'development');
 	//define('IRIKI_MODE', 'production');
 
+	define('IRIKI_SESSION', false);
 	//refresh time in seconds
 	define('IRIKI_REFRESH', 120);
 
@@ -44,7 +39,11 @@
 		//app expiry stamp so it auto updates
 		//if changes are made to config files, set this to zero
 		//or old ones will be used until expiry
-		'expires' => (isset($_SESSION['iriki_expires']) ? $_SESSION['iriki_expires'] : 0)
+		'expires' => (IRIKI_SESSION ?
+			(isset($_SESSION['iriki_expires']) ? $_SESSION['iriki_expires'] : 0)
+			:
+			0
+		)
 	);
 
 
