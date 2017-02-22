@@ -12,7 +12,7 @@ class request
     private $_data;//data
 
     //others
-    private static $_db_instance;
+    private static $_db_instance = null;
     private $_session; //session
 
     //build
@@ -36,11 +36,14 @@ class request
 
     public function initializedb()
     {
-      Self::$_db_instance = new $this->_db_type();
+      if (is_null(Self::$_db_instance))
+      {
+        Self::$_db_instance = new $this->_db_type();
 
-      $db_instance = &Self::$_db_instance;
+        $db_instance = &Self::$_db_instance;
 
-      $db_instance::initialize();
+        $db_instance::initialize();
+      }
 
       return request::$_db_instance;
     }
@@ -49,6 +52,12 @@ class request
     public function getModel()
     {
       return $this->_model;
+    }
+
+    public function setModel($model)
+    {
+      $this->_model = $model;
+      return null;
     }
 
     public function setData($data)
@@ -73,11 +82,11 @@ class request
       return \iriki\response::data($result);
     }
 
-    public function read()
+    public function read($request)
     {
-      $instance = $this->initializedb();
+      $instance = $request->initializedb();
 
-      $result = $instance::doRead($this);
+      $result = $instance::doRead($request);
 
       return \iriki\response::data($result);
     }
