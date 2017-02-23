@@ -73,40 +73,44 @@ class request
 
     //log
 
-    public function create()
+    public function create($request, $wrap = true)
     {
       $instance = $this->initializedb();
 
-      $result = $instance::doCreate($this);
+      $result = $instance::doCreate($request);
 
-      return \iriki\response::data($result);
+      if (!$wrap) return $result;
+      else return \iriki\response::data($result);
     }
 
-    public function read($request)
+    public function read($request, $wrap = true)
     {
       $instance = $request->initializedb();
 
       $result = $instance::doRead($request);
 
-      return \iriki\response::data($result);
+      if (!$wrap) return $result;
+      else return \iriki\response::data($result);
     }
 
-    public function update()
+    public function update($request, $wrap = true)
     {
       $instance = $this->initializedb();
 
-      $result = $instance::doUpdate($this);
+      $result = $instance::doUpdate($request);
 
-      return \iriki\response::information($result);
+      if (!$wrap) return $result;
+      else return \iriki\response::information($result);
     }
 
-    public function delete()
+    public function delete($request, $wrap = true)
     {
       $instance = $this->initializedb();
 
-      $result = $instance::doDelete($this);
+      $result = $instance::doDelete($request);
 
-      return \iriki\response::information($result);
+      if (!$wrap) return $result;
+      else return \iriki\response::information($result);
     }
 
     public function other()

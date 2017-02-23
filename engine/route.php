@@ -321,17 +321,6 @@ class route extends config
 
                         if ($missing_parameters == 0 AND $extra_parameters == 0)
                         {
-                            //parameter type check
-                            $param_type_status = model::doParameterTypeCheck($model_status, $parameter_status['final'], $params);
-
-                            if (count($param_type_status) != 0)
-                            {
-                                return response::error(response::showMissing($param_type_status, 'parameter', 'mismatched'));
-                            }
-                            //check for parameter values - uniques especially
-
-                            //session or auth check
-
                             //persistence
                             //defined in one of two locations
 
@@ -340,19 +329,6 @@ class route extends config
                                 $app['engine'],
                                 $app['database']
                             );
-
-                            //default?
-                            if ($model_status['action_default'])
-                            {
-                                //a default action, so treated as if defined in configs
-
-                                //careful about these, user may not have written this code so surprise is possible
-                            }
-                            //custom
-                            else
-                            {
-
-                            }
 
                             $model_instance =  new $model_status['str_full']();
 
@@ -364,6 +340,19 @@ class route extends config
                               $params //data
                               //session
                             );
+
+                            //parameter type check
+                            $param_type_status = model::doParameterTypeCheck($model_status, $parameter_status['final'], $params, $request);
+
+                            if (count($param_type_status) != 0)
+                            {
+                                return response::error(response::showMissing($param_type_status, 'parameter', 'mismatched'));
+                            }
+                            //check for parameter values - uniques especially
+
+                            //session or auth check
+
+
                             //instance action
                             return $model_instance->$action($request);
                         }

@@ -33,9 +33,7 @@ class staff extends \iriki\request
   {
     if (!is_null($request))
     {
-      $request->initializedb();
-
-      return $request->read();
+      return $request->read($request);
     }
   }
 
@@ -43,11 +41,9 @@ class staff extends \iriki\request
   {
     if (!is_null($request))
     {
-      $request->initializedb();
-
       $request->setData(array());
 
-      return $request->read();
+      return $request->read($request);
     }
   }
 
@@ -55,8 +51,7 @@ class staff extends \iriki\request
   {
     if (!is_null($request))
     {
-      $request->initializedb();
-      return $request->update();
+      return $request->update($request);
     }
   }
 
