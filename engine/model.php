@@ -225,7 +225,7 @@ class model extends config
 
 
     //parameter check
-    public static function doParameterTypeCheck(&$model_status, $final_properties, $final_values, $request)
+    public static function doParameterTypeCheck(&$model_status, $final_properties, $final_values, $request, $skip_unique = true)
     {
       $mismatched = array();
 
@@ -251,16 +251,18 @@ class model extends config
 
           if ($type_matched)
           {
-            //some other check? unique?
-            //handle this request carefully, it shouldn't be changed permanently
-            $request->setData(array($property => $final_values[$property]));
-            $found = $request->read($request, false);
-            if (count($found) != 0) $mismatched[] = $property;
+            //unique check?
+            if (!$skip_unique)
+            {
+              //handle $request carefully, it shouldn't be changed permanently
+              $request->setData(array($property => $final_values[$property]));
+              $found = $request->read($request, false);
+              if (count($found) != 0) $mismatched[] = $property;
+            }
           }
           else {
             $mismatched[] = $property;
           }
-
         }
         else
         {

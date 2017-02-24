@@ -49,6 +49,17 @@ class request
     }
 
     //properties
+    public function getDBType()
+    {
+      return $this->_db_type;
+    }
+
+    public function setDBType($db_type)
+    {
+      $this->_db_type = $db_type;
+      return null;
+    }
+
     public function getModel()
     {
       return $this->_model;
@@ -60,15 +71,15 @@ class request
       return null;
     }
 
+    public function getData()
+    {
+      return $this->_data;
+    }
+
     public function setData($data)
     {
       $this->_data = $data;
       return null;
-    }
-
-    public function getData()
-    {
-      return $this->_data;
     }
 
     //log
@@ -76,6 +87,8 @@ class request
     public function create($request, $wrap = true)
     {
       $instance = $this->initializedb();
+
+      //also manages "belongsto" using model+id_field up to x recursivity
 
       $result = $instance::doCreate($request);
 
@@ -87,6 +100,7 @@ class request
     {
       $instance = $request->initializedb();
 
+      //read should also pick up any "hasmany" models up to x recursivity
       $result = $instance::doRead($request);
 
       if (!$wrap) return $result;
