@@ -1,0 +1,14 @@
+{
+	"emis":
+	{
+		"routes" : {
+			"term" : {
+				"create_one" : {
+					"description" : "Create a new term.",
+					"parameters" : [],
+					"exempt" : ["_id"]
+				}
+			}
+		}
+	}
+}

@@ -21,7 +21,7 @@
 			"application" : {
 				"name" : "hr_log",
 				"description" : "Human Resource Log",
-				"path" : "app/hr_log/",
+				"path" : "apps/hr_log/app/",
 				"author" : "olibenu@yahoo.com",
 				"version" : {
 					"major" : "0",
@@ -51,7 +51,7 @@
 			},
 
 			"log" : {
-				"path" : "app/log/"
+				"path" : "apps/hr_log/log/"
 			}
 		}
 	}

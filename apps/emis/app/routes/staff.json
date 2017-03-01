@@ -1,0 +1,14 @@
+{
+	"emis":
+	{
+		"routes" : {
+			"staff" : {
+				"create_one" : {
+					"description" : "Create a new staff.",
+					"parameters" : [],
+					"exempt" : ["_id"]
+				}
+			}
+		}
+	}
+}

@@ -2,12 +2,12 @@
 	"hr_log":
 	{
 		"routes" : {
-			"log" : {
+			"activity" : {
 				"create" : {
 					"description" : "",
 					"parameters" : []
 				}
-            }
+			}
 		}
 	}
 }

@@ -21,7 +21,7 @@
       "application" : {
         "name" : "elims",
         "description" : "Electornic Land Information Management System",
-        "path" : "app/elims/",
+        "path" : "apps/elims/app/",
         "author" : "stephen.igwue@bizzdeskgroup.com",
         "version" : {
           "major" : "0",
@@ -46,7 +46,7 @@
       },
 
       "log" : {
-        "path" : "app/log/"
+        "path" : "apps/elims/log/"
       }
     }
   }

@@ -7,27 +7,31 @@ class request
     //see https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
 
     private $_db_type;//db_type
-    private $_model; //model
-    private $_action;
-    private $_data;//data
+
+    //model_status, see array definition in route
+    private $_model_status;
+
+    /*private $_model;
+    private $_action;*/
+
+    private $_data; //data
 
     //others
     private static $_db_instance = null;
+    //relationships
     private $_session; //session
 
     //build
     public static function initialize(
       $db_type,
-      $model,
-      $action,
+      $model_status,
       $data = null,
       $session = null
     )
     {
       $obj = new request;
       $obj->_db_type = $db_type;
-      $obj->_model = $model;
-      $obj->_action = $action;
+      $obj->_model_status = $model_status;
       $obj->_data = $data;
       $obj->_session = $session;
 
@@ -62,12 +66,12 @@ class request
 
     public function getModel()
     {
-      return $this->_model;
+      return $this->_model_status['str'];
     }
 
     public function setModel($model)
     {
-      $this->_model = $model;
+      $this->_model_status['str'] = $model;
       return null;
     }
 
@@ -84,11 +88,28 @@ class request
 
     //log
 
+    //for each of the CRUD actions, do (if available) pre and post actions
+    //relationship | C | R | U | D
+    //belongsto    | v | x | / | x
+    //hasmany      | x | v | / | v
+
+    //note that there's a recursivity variable to limit this relationship checks
+
     public function create($request, $wrap = true)
     {
       $instance = $this->initializedb();
 
-      //also manages "belongsto" using model+id_field up to x recursivity
+      //check unique params
+      /*model::doParameterUniqueCheck(
+        &$model_status,
+        $final_properties,
+        $request->getData(), //$final_values,
+        $request
+      );*/
+
+      //check belongs to
+      //each model we belong to must have a 'model+id_field' or
+      //'model' field (with id_field) in request data
 
       $result = $instance::doCreate($request);
 
@@ -99,6 +120,19 @@ class request
     public function read($request, $wrap = true)
     {
       $instance = $request->initializedb();
+
+      //read should also pick up any "hasmany" models up to x recursivity
+      $result = $instance::doRead($request);
+
+      if (!$wrap) return $result;
+      else return \iriki\response::data($result);
+    }
+
+    public function read_all($request, $wrap = true)
+    {
+      $instance = $request->initializedb();
+
+      $request->setData(array());
 
       //read should also pick up any "hasmany" models up to x recursivity
       $result = $instance::doRead($request);

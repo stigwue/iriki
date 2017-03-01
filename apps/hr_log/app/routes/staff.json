@@ -31,7 +31,7 @@
 				"read_all" : {
 					"description" : "Log in a staff using email and password.",
 					"parameters" : ["auth"],
-					"exempt" : ["firstname", "lastname", "email", "private_key"]
+					"exempt" : []
 				},
 
 

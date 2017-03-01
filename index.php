@@ -10,6 +10,7 @@
 	//define('IRIKI_MODE', 'development');
 	//define('IRIKI_MODE', 'production');
 
+	//use iriki to manage sessions?
 	define('IRIKI_SESSION', false);
 	//refresh time in seconds
 	define('IRIKI_REFRESH', 120);
@@ -55,7 +56,7 @@
 	if ($app['expires'] == 0 OR $app['expires'] <= time(NULL))
 	{
 		//initialise app config values
-		$app_config->doInitialise('app.json');
+		$app_config->doInitialise('apps/emis/app.json');
 		$app['config'] = $app_config->getKeyValues();
 
 		//load up configurations
@@ -88,6 +89,8 @@
 
 	//vendors
 	require_once('vendors/autoload.php');
+
+	//iriki\stat_request::moveHead(time(NULL));
 
 
 	//interprete request

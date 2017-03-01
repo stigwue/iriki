@@ -43,13 +43,13 @@ class stat_request
   public static function moveHead($timestamp)
   {
     $request = request::initialize(
-      '\iriki\engine\mongodb',//db_type
+      '\iriki\engine\mongodb', //engine\database::getClass(), //db_type
       'iriki_stat_request', //model
       'create', //action
       Self::initialize($timestamp) //data
     );
 
-    $request->create($request, false);
+    return $request->create($request, false);
   }
 }
 

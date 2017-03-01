@@ -54,7 +54,8 @@ class mongodb extends database
 					Self::$__instance = new \MongoClient($key_values['server']);
 
 					Self::$__instance = Self::$__instance->$key_values['db'];
-			        return true;
+
+					return true;
 				}
 				else
 				{
@@ -166,7 +167,7 @@ class mongodb extends database
 		}
 	}
 
-	public static function doDelete($params_persist)
+	public static function doDelete($request)
 	{
 		if (is_null(Self::$__instance))
 		{
@@ -174,10 +175,11 @@ class mongodb extends database
 		}
 		else
 		{
-			$persist = Self::$__instance->$params_persist['persist'];
+			$collection = $request->getModel();
+			$persist = Self::$__instance->$collection;
 
 			//build query (key => value array)
-			$query = $params_persist['data'];
+			$query = $request->getData();
 
 			$query = Self::strToId($query);
 

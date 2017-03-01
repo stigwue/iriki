@@ -13,7 +13,7 @@ class database
 
 	public static function doInitialise($app, $engine = 'iriki', $config_values = null)
 	{
-        Self::$_key_values = $config_values;
+		Self::$_key_values = $config_values;
 
 
 		if (isset(Self::$_key_values['type']))
@@ -29,7 +29,7 @@ class database
 		}
 
 		//defined in \iriki\engine
-        //or \app\database
+		//or \app\database
 		Self::$_namespace = '\\' . $engine . '\\engine\\';
 		Self::$_db_class = Self::$_namespace . Self::$_type;
 		if (class_exists(Self::$_db_class))
@@ -64,57 +64,57 @@ class database
 	//create
 	public static function doCreate($request_obj)
 	{
-			$response = array();
-			$response['error'] = array(
-					'code' => response::ERROR,
-					'message' => 'Action not yet configured'
-			);
+		$response = array();
+		$response['error'] = array(
+			'code' => response::ERROR,
+			'message' => 'Action not yet configured'
+		);
 
-			//do logging?
+		//do logging?
 
-			return $response;
+		return $response;
 	}
 
 	//read/retrieve
 	public static function doRead($request_obj)
 	{
-			$response = array();
-			$response['error'] = array(
-					'code' => response::ERROR,
-					'message' => 'Action not yet configured'
-			);
+		$response = array();
+		$response['error'] = array(
+			'code' => response::ERROR,
+			'message' => 'Action not yet configured'
+		);
 
-			//do logging?
+		//do logging?
 
-			return $response;
+		return $response;
 	}
 
 	//update
 	public static function doUpdate($request_obj)
 	{
-			$response = array();
-			$response['error'] = array(
-					'code' => response::ERROR,
-					'message' => 'Action not yet configured'
-			);
+		$response = array();
+		$response['error'] = array(
+			'code' => response::ERROR,
+			'message' => 'Action not yet configured'
+		);
 
-			//do logging?
+		//do logging?
 
-			return $response;
+		return $response;
 	}
 
 	//delete
 	public static function doDelete($request_obj)
 	{
-			$response = array();
-			$response['error'] = array(
-					'code' => response::ERROR,
-					'message' => 'Action not yet configured'
-			);
+		$response = array();
+		$response['error'] = array(
+			'code' => response::ERROR,
+			'message' => 'Action not yet configured'
+		);
 
-			//do logging?
+		//do logging?
 
-			return $response;
+		return $response;
 	}
 }
 

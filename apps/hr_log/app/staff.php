@@ -8,8 +8,7 @@ class staff extends \iriki\request
   {
     if (!is_null($request))
     {
-      $request->initializedb();
-      return $request->create();
+      return $request->create($request);
     }
     else
     {

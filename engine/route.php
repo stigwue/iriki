@@ -268,18 +268,18 @@ class route extends config
             }
 
             $model_status = array(
-                'str' => $model, //model e.g session
-                'str_full' => $model_full, //full model string including namespace
-                'defined' => $model_defined, //model defined in app or engine config
-                'exists' => $model_exists, //model class exists
-                'details' => null, //array of description, properties and relationships
-                'app_defined' => $model_is_app_defined, //model defined in app or engine?
-                'action'=> $action, //action e.g create,
-                'default' => $defaults, //default actions
-                'action_defined' => false, //action defined?
-                'action_default' => false, //action is default defined?
-                'action_exists' => $action_exists, //action exists in class
-                'action_details' => null //array of action description and parameters
+                'str' => $model, //string, model
+                'str_full' => $model_full, //string, full model including namespace
+                'defined' => $model_defined, //boolean, model defined in app or engine config
+                'exists' => $model_exists, //boolean, model class exists
+                'details' => null, //array, model description, properties and relationships
+                'app_defined' => $model_is_app_defined, //boolean, model defined in app. otherwise engine
+                'action'=> $action, //string, action
+                'default' => $defaults, //array, default actions
+                'action_defined' => false, //boolean, action defined
+                'action_default' => false, //boolean, action is default defined
+                'action_exists' => $action_exists, //boolean, action exists in class
+                'action_details' => null //array, action description, parameters, exempt
             );
 
             $model_status = model::doMatch($model_status,
@@ -294,9 +294,6 @@ class route extends config
             1. model/action must be in code space (exists)
             2. action can be default or custom
             */
-
-
-            //model definition already determined
 
             //model class does not exist
             if ($model_status['exists'] == false)
@@ -323,20 +320,18 @@ class route extends config
                         {
                             //persistence
                             //defined in one of two locations
-
                             engine\database::doInitialise(
                                 $app['application'],
                                 $app['engine'],
                                 $app['database']
                             );
 
-                            $model_instance =  new $model_status['str_full']();
+                            $model_instance = new $model_status['str_full']();
 
                             //build request
                             $request = request::initialize(
                               engine\database::getClass(), //db_type
-                              $model,
-                              $action,
+                              $model_status,
                               $params //data
                               //session
                             );
@@ -348,10 +343,8 @@ class route extends config
                             {
                                 return response::error(response::showMissing($param_type_status, 'parameter', 'mismatched'));
                             }
-                            //check for parameter values - uniques especially
 
                             //session or auth check
-
 
                             //instance action
                             return $model_instance->$action($request);

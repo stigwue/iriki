@@ -1,0 +1,14 @@
+{
+	"emis":
+	{
+		"routes" : {
+			"session" : {
+				"create_one" : {
+					"description" : "Create a new session.",
+					"parameters" : [],
+					"exempt" : ["_id"]
+				}
+			}
+		}
+	}
+}
