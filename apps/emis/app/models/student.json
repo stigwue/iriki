@@ -32,7 +32,7 @@
 					}
 				},
 				"relationships" : {
-					"belongsto" : [],
+					"belongsto" : ["school"],
 					"hasmany" : []
 				}
 			}

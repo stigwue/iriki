@@ -106,9 +106,12 @@
 
 	//return status
 	if (is_null($status))
-    {
-    	echo json_encode($app_config->getStatus());
-    }
-    else echo json_encode($status);
+  {
+  	echo json_encode($app_config->getStatus());
+  }
+  else
+	{
+		echo json_encode($status);
+	}
 
 ?>

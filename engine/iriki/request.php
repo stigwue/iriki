@@ -10,6 +10,7 @@ class request
 
     //model_status, see array definition in route
     private $_model_status;
+    private $_parameter_status;
 
     /*private $_model;
     private $_action;*/
@@ -25,6 +26,7 @@ class request
     public static function initialize(
       $db_type,
       $model_status,
+      $parameter_status,
       $data = null,
       $session = null
     )
@@ -32,6 +34,7 @@ class request
       $obj = new request;
       $obj->_db_type = $db_type;
       $obj->_model_status = $model_status;
+      $obj->_parameter_status = $parameter_status;
       $obj->_data = $data;
       $obj->_session = $session;
 
@@ -61,7 +64,29 @@ class request
     public function setDBType($db_type)
     {
       $this->_db_type = $db_type;
-      return null;
+      return $this->_db_type;
+    }
+
+    public function getModelStatus()
+    {
+      return $this->_model_status;
+    }
+
+    public function setModelStatus($model_status)
+    {
+      $this->_model_status = $model_status;
+      return $this->_model_status;
+    }
+
+    public function getParameterStatus()
+    {
+      return $this->_parameter_status;
+    }
+
+    public function setParameterStatus($parameter_status)
+    {
+      $this->_parameter_status = $parameter_status;
+      return $this->_parameter_status;
     }
 
     public function getModel()
@@ -72,7 +97,7 @@ class request
     public function setModel($model)
     {
       $this->_model_status['str'] = $model;
-      return null;
+      return $this->_model_status['str'];
     }
 
     public function getData()
@@ -83,7 +108,7 @@ class request
     public function setData($data)
     {
       $this->_data = $data;
-      return null;
+      return $this->_data;
     }
 
     //log
@@ -91,7 +116,7 @@ class request
     //for each of the CRUD actions, do (if available) pre and post actions
     //relationship | C | R | U | D
     //belongsto    | v | x | / | x
-    //hasmany      | x | v | / | v
+    //hasmany      | x | v | x | v
 
     //note that there's a recursivity variable to limit this relationship checks
 
@@ -100,18 +125,46 @@ class request
       $instance = $this->initializedb();
 
       //check unique params
-      /*model::doParameterUniqueCheck(
-        &$model_status,
-        $final_properties,
-        $request->getData(), //$final_values,
-        $request
-      );*/
+      $matching = model::doParameterUniqueCheck($request);
+      if (count($matching) != 0)
+      {
+          $result = array();
 
-      //check belongs to
-      //each model we belong to must have a 'model+id_field' or
-      //'model' field (with id_field) in request data
+          if (!$wrap) return $result;
+          else return response::error(response::showMissing($matching, 'parameter', 'mismatched'));
+      }
 
-      $result = $instance::doCreate($request);
+      //check 'belongsto'
+      $belongsto = array();
+      $belongsto_properties = array();
+      $belongsto = (isset($request->getModelStatus()['details']['relationships']['belongsto']) ? $request->getModelStatus()['details']['relationships']['belongsto'] : array());
+
+      if (count($belongsto) != 0)
+      {
+        foreach ($belongsto as $parent_model)
+        {
+          //all parent models must have a 'parent_model + id_field' parameter supplied
+          //we could go as far as to check that the parent model exists but... maybe not
+
+          $db_instance = &$request::$_db_instance;
+          if (isset($request->getData()[$parent_model . $db_instance::ID_FIELD]))
+          {
+            //pull out supplied from extra parameters via $request->getParameterStatus()
+          }
+          else
+          {
+            //leave present
+          }
+        }
+
+        //var_dump($request->getParameterStatus()/*['extra']*/);
+      }
+
+      //check 'hasmany'
+
+
+      //$result = $instance::doCreate($request);
+      $result = null;
 
       if (!$wrap) return $result;
       else return \iriki\response::data($result);

@@ -314,9 +314,11 @@ class route extends config
                         $parameter_status = model::doPropertyMatch($model_status['details'], $params, $model_status['action_details']);
 
                         $missing_parameters = count($parameter_status['missing']);
-                        $extra_parameters = count($parameter_status['extra']);
+                        //$extra_parameters = count($parameter_status['extra']);
 
-                        if ($missing_parameters == 0 AND $extra_parameters == 0)
+                        //note that extra parameters could be ids signifying belongsto relationships
+                        //so we have to leave that check until later
+                        if ($missing_parameters == 0) // AND $extra_parameters == 0)
                         {
                             //persistence
                             //defined in one of two locations
@@ -332,19 +334,10 @@ class route extends config
                             $request = request::initialize(
                               engine\database::getClass(), //db_type
                               $model_status,
+                              $parameter_status,
                               $params //data
                               //session
                             );
-
-                            //parameter type check
-                            $param_type_status = model::doParameterTypeCheck($model_status, $parameter_status['final'], $params, $request);
-
-                            if (count($param_type_status) != 0)
-                            {
-                                return response::error(response::showMissing($param_type_status, 'parameter', 'mismatched'));
-                            }
-
-                            //session or auth check
 
                             //instance action
                             return $model_instance->$action($request);
@@ -355,8 +348,7 @@ class route extends config
                             {
                                 return response::error(response::showMissing($parameter_status['missing'], 'parameter', 'missing'));
                             }
-                            if ($extra_parameters != 0)
-                                return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'));
+                            //if ($extra_parameters != 0) return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'));
 
                             //authorisation or other error
                             return response::error('Authorisation missing.');

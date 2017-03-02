@@ -15,14 +15,4 @@ class student extends \iriki\request
       //fail gracefully some way?
     }
   }
-
-  public function read_all($request)
-  {
-    if (!is_null($request))
-    {
-      $request->setData(array());
-
-      return $request->read($request);
-    }
-  }
 }

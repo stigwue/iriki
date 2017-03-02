@@ -188,10 +188,27 @@ class model extends config
             if (isset($sent[$property]))
             {
                 //property is valid and was sent
-                //check type?
-                $final_properties[] = $property;
 
-                //unset($extra_properties[$property]);
+                //check type? note that the property might be that of a parent model
+                if (isset($all_properties[$property]['type']))
+                {
+                  $type = $all_properties[$property]['type'];  //might be absent
+                  $value = $sent[$property];
+
+                  if (type::is_type($value, $type))
+                  {
+                    $final_properties[] = $property;
+                  }
+                  else
+                  {
+                    //a supplied property of different type is deemed missing
+                    $properties_missing[] = $property;
+                  }
+                }
+                else
+                {
+                  //ignore, will handle later
+                }
             }
             else
             {
@@ -224,47 +241,13 @@ class model extends config
     }
 
 
-    //parameter check
-    public static function doParameterTypeCheck(&$model_status, $final_properties, $final_values, $request)
-    {
-      $mismatched = array();
-
-      $properties = null;
-      if ($model_status['action_defined'])
-      {
-        $properties = $model_status['details']['properties'];
-      }
-      else if ($model_status['action_default'])
-      {
-        $properties = $model_status['default']['properties'];
-      }
-
-      foreach ($final_properties as $index => $property)
-      {
-        if (isset($properties[$property]))
-        {
-          $property_details = $properties[$property];
-
-          //check type
-          $type = $property_details['type']; //might be absent
-          $type_matched = type::is_type($final_values[$property], $type);
-
-          if (!$type_matched)
-          {
-            $mismatched[] = $property;
-          }
-        }
-        else
-        {
-          //this would not be called because of pre-checks before this point
-        }
-      }
-      return $mismatched;
-    }
-
-    public static function doParameterUniqueCheck(&$model_status, $final_properties, $final_values, $request)
+    public static function doParameterUniqueCheck($request)
     {
       $existing = array();
+
+      $model_status = $request->getModelStatus();
+      $final_properties = $request->getParameterStatus()['final'];
+      $final_values = $request->getData();
 
       $properties = null;
       if ($model_status['action_defined'])
@@ -295,10 +278,37 @@ class model extends config
       return $existing;
     }
 
-    //relationship?
     public static function doRelationMatch($request, $relationship, $parameters)
     {
+      $missing = array();
 
+      $properties = null;
+      if ($model_status['action_defined'])
+      {
+        $properties = $model_status['details']['properties'];
+      }
+      else if ($model_status['action_default'])
+      {
+        $properties = $model_status['default']['properties'];
+      }
+
+      foreach ($final_properties as $index => $property)
+      {
+        if (isset($properties[$property]))
+        {
+          $property_details = $properties[$property];
+
+          //check unique
+          if (isset($property_details['unique']))
+          {
+            //handle $request carefully, it shouldn't be changed permanently
+            $request->setData(array($property => $final_values[$property]));
+            $found = $request->read($request, false);
+            if (count($found) != 0) $existing[] = $property;
+          }
+        }
+      }
+      return $missing;
     }
 
     public function getStatus($status = null, $json = false)

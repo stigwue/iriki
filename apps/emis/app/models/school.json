@@ -16,7 +16,8 @@
 					},
 					"short" : {
 						"description" : "School's acronym",
-						"type" : "string"
+						"type" : "string",
+						"unique" : true
 					},
 					"address" : {
 						"description" : "School address.",
@@ -28,12 +29,12 @@
 					},
 					"state" : {
 						"description" : "State of the nation.",
-						"type" : "string"
+						"type" : "number"
 					}
 				},
 				"relationships" : {
 					"belongsto" : [],
-					"hasmany" : []
+					"hasmany" : ["student", "staff"]
 				}
 			}
 		}
