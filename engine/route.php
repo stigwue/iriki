@@ -348,8 +348,7 @@ class route extends config
                             {
                                 return response::error(response::showMissing($parameter_status['missing'], 'parameter', 'missing'));
                             }
-                            //if ($extra_parameters != 0) return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'));
-
+                            
                             //authorisation or other error
                             return response::error('Authorisation missing.');
                         }

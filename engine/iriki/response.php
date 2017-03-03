@@ -58,17 +58,18 @@ class response
     }
 
     //build
-    public static function data($data)
+    public static function data($data, $wrap = true)
     {
         $response = array();
         $response['data'] = $data;
 
         //do logging?
 
-        return array('response' => $response);
+        if (!$wrap) return $data;
+        else return array('response' => $response);
     }
 
-    public static function information($message)
+    public static function information($message, $wrap = true)
     {
         $response = array();
         $response['info'] = array(
@@ -78,10 +79,11 @@ class response
 
         //do logging?
 
-        return array('response' => $response);
+        if (!$wrap) return $message;
+        else return array('response' => $response);
     }
 
-    public static function error($message)
+    public static function error($message, $wrap = true)
     {
         $response = array();
         $response['error'] = array(
@@ -91,7 +93,8 @@ class response
 
         //do logging?
 
-        return array('response' => $response);
+        if (!$wrap) return $message;
+        else return array('response' => $response);
     }
 
     //log

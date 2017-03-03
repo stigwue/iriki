@@ -6,14 +6,13 @@ class request
 {
     //see https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
 
-    private $_db_type;//db_type
+    //db_type
+    //i've set the default here, otherwise an error is thrown for create in initializedb
+    private $_db_type = '\iriki\engine\mongodb';
 
     //model_status, see array definition in route
     private $_model_status;
     private $_parameter_status;
-
-    /*private $_model;
-    private $_action;*/
 
     private $_data; //data
 
@@ -45,17 +44,28 @@ class request
     {
       if (is_null(Self::$_db_instance))
       {
-        Self::$_db_instance = new $this->_db_type();
+        $db_type = $this->_db_type;
+        //$db_type() throws 'Class name must be a valid object or a string' for only create inherited from request
+        Self::$_db_instance = new $db_type();
 
         $db_instance = &Self::$_db_instance;
 
         $db_instance::initialize();
+      }
+      else
+      {
+
       }
 
       return request::$_db_instance;
     }
 
     //properties
+    public static function getDBInstance()
+    {
+      return Self::$_db_instance;
+    }
+
     public function getDBType()
     {
       return $this->_db_type;
@@ -113,18 +123,27 @@ class request
 
     //log
 
-    //for each of the CRUD actions, do (if available) pre and post actions
+    //before a request action is called, request data is filled
+    //and the keys (parameters) are in one of three groups: final, missing, extra
+    //before relationship checks are done, parent model properties are in extra
+    //a relationship check should move valid ones from extra into final or insert into missing
+    //a model action is not performed until missing and extra is zero
+    //--"fax!" quot the penguin
+
+    //for each of the CRUD actions, do (if available) pre and post actions/checks
     //relationship | C | R | U | D
-    //belongsto    | v | x | / | x
+    //unique       | v | x | x | x
+    //belongsto    | v | x | v | x
     //hasmany      | x | v | x | v
 
-    //note that there's a recursivity variable to limit this relationship checks
+    //note that there's a recursivity variable to limit relationship checks
+
 
     public function create($request, $wrap = true)
     {
       $instance = $this->initializedb();
 
-      //check unique params
+      //unique
       $matching = model::doParameterUniqueCheck($request);
       if (count($matching) != 0)
       {
@@ -134,51 +153,51 @@ class request
           else return response::error(response::showMissing($matching, 'parameter', 'mismatched'));
       }
 
-      //check 'belongsto'
-      $belongsto = array();
-      $belongsto_properties = array();
-      $belongsto = (isset($request->getModelStatus()['details']['relationships']['belongsto']) ? $request->getModelStatus()['details']['relationships']['belongsto'] : array());
+      //var_dump($request->getData());
 
-      if (count($belongsto) != 0)
+      //belongsto
+      $parameter_status = model::doBelongsToRelation($request);
+
+      $missing_parameters = count($parameter_status['missing']);
+      $extra_parameters = count($parameter_status['extra']);
+
+      if ($extra_parameters != 0 OR $missing_parameters != 0)
       {
-        foreach ($belongsto as $parent_model)
+        if ($missing_parameters != 0)
         {
-          //all parent models must have a 'parent_model + id_field' parameter supplied
-          //we could go as far as to check that the parent model exists but... maybe not
-
-          $db_instance = &$request::$_db_instance;
-          if (isset($request->getData()[$parent_model . $db_instance::ID_FIELD]))
-          {
-            //pull out supplied from extra parameters via $request->getParameterStatus()
-          }
-          else
-          {
-            //leave present
-          }
+            return response::error(response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'), $wrap);
         }
-
-        //var_dump($request->getParameterStatus()/*['extra']*/);
+        if ($extra_parameters != 0) return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
       }
 
-      //check 'hasmany'
-
+      //hasmany
 
       //$result = $instance::doCreate($request);
       $result = null;
 
-      if (!$wrap) return $result;
-      else return \iriki\response::data($result);
+      return \iriki\response::data($result, $wrap);
     }
 
     public function read($request, $wrap = true)
     {
       $instance = $request->initializedb();
 
-      //read should also pick up any "hasmany" models up to x recursivity
+      //unique
+      //belongsto
+      //hasmany
+      $parameter_status = model::doHasManyRelation($request);
+      //read should pick up any "hasmany" models up to x recursivity
+
+      $extra_parameters = count($parameter_status['extra']);
+
+      if ($extra_parameters != 0)
+      {
+        return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
+      }
+
       $result = $instance::doRead($request);
 
-      if (!$wrap) return $result;
-      else return \iriki\response::data($result);
+      return \iriki\response::data($result, $wrap);
     }
 
     public function read_all($request, $wrap = true)
@@ -190,35 +209,55 @@ class request
       //read should also pick up any "hasmany" models up to x recursivity
       $result = $instance::doRead($request);
 
-      if (!$wrap) return $result;
-      else return \iriki\response::data($result);
+      return \iriki\response::data($result, $wrap);
     }
 
     public function update($request, $wrap = true)
     {
       $instance = $this->initializedb();
 
+      //unique
+      //belongsto
+      $parameter_status = model::doBelongsToRelation($request);
+
+      $missing_parameters = count($parameter_status['missing']);
+      $extra_parameters = count($parameter_status['extra']);
+
+      if ($extra_parameters != 0 OR $missing_parameters != 0)
+      {
+        if ($missing_parameters != 0)
+        {
+            return response::error(response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'), $wrap);
+        }
+        if ($extra_parameters != 0) return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
+      }
+      //hasmany
+
       $result = $instance::doUpdate($request);
 
-      if (!$wrap) return $result;
-      else return \iriki\response::information($result);
+      return \iriki\response::information($result, $wrap);
     }
 
     public function delete($request, $wrap = true)
     {
       $instance = $this->initializedb();
 
+      //unique
+      //belongsto
+      //hasmany
+      $parameter_status = model::doHasManyRelation($request);
+      //delete should affect any "hasmany" models, ignoring recursivity limits
+
+      $extra_parameters = count($parameter_status['extra']);
+
+      if ($extra_parameters != 0)
+      {
+        return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
+      }
+
       $result = $instance::doDelete($request);
 
-      if (!$wrap) return $result;
-      else return \iriki\response::information($result);
-    }
-
-    public function other()
-    {
-      //log
-
-      //return
+      return \iriki\response::information($result, $wrap);
     }
 }
 

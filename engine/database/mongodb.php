@@ -159,11 +159,9 @@ class mongodb extends database
 
 			$status = $persist->update($query, array('$set' => $data));
 
-			//unset all data properties except id
-			$request->setData(array(Self::ID_FIELD => $id_field));
+			$status_flag = $status["updatedExisting"];
 
-			//re-read it to return properties
-			return Self::doRead($request);
+			return $status_flag;
 		}
 	}
 
@@ -185,7 +183,9 @@ class mongodb extends database
 
 			$status = $persist->remove($query);
 
-			return $status;
+			$status_flag = ($status["n"] != 0);
+
+			return $status_flag;
 		}
 	}
 }

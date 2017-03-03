@@ -278,37 +278,95 @@ class model extends config
       return $existing;
     }
 
-    public static function doRelationMatch($request, $relationship, $parameters)
+    /**
+    * Check a model for 'belongsto' parent relationship
+    * and adds extra data to the request data (modifies original request)
+    *
+    * @param object Request
+    * @return array Extra data not belonging to a parent model
+    * @throw
+    */
+    public static function doBelongsToRelation(&$request)
     {
-      $missing = array();
+      //test to see if request can be sent by reference so we can convert parent model ids to mongoid
+      $parameters = $request->getParameterStatus();
 
-      $properties = null;
-      if ($model_status['action_defined'])
-      {
-        $properties = $model_status['details']['properties'];
-      }
-      else if ($model_status['action_default'])
-      {
-        $properties = $model_status['default']['properties'];
-      }
+      $belongsto = array();
+      $belongsto = (isset($request->getModelStatus()['details']['relationships']['belongsto']) ? $request->getModelStatus()['details']['relationships']['belongsto'] : array());
 
-      foreach ($final_properties as $index => $property)
+      if (count($belongsto) != 0)
       {
-        if (isset($properties[$property]))
+        foreach ($belongsto as $parent_model)
         {
-          $property_details = $properties[$property];
+          //all parent models must have a 'parent_model + id_field' parameter supplied
+          //we could go as far as to check that the parent model exists but... maybe not
 
-          //check unique
-          if (isset($property_details['unique']))
+          $db_instance = &$request::getDBInstance();
+
+          $property_identifier = $parent_model . $db_instance::ID_FIELD;
+          if (isset($request->getData()[$property_identifier]))
           {
-            //handle $request carefully, it shouldn't be changed permanently
-            $request->setData(array($property => $final_values[$property]));
-            $found = $request->read($request, false);
-            if (count($found) != 0) $existing[] = $property;
+            //add to final parameters
+            $parameters['final'][] = $property_identifier;
+
+            //pull out supplied from extra parameters
+            $extra_key = array_search($property_identifier, $parameters['extra']);
+            if ($extra_key !== FALSE)
+            {
+              unset($parameters['extra'][$extra_key]);
+            }
+          }
+          else
+          {
+            //note that it is missing
+            $parameters['missing'][] = $property_identifier;
           }
         }
       }
-      return $missing;
+
+      return $parameters;
+    }
+
+    public static function doHasManyRelation(&$request)
+    {
+      //test to see if request can be sent by reference so we can convert parent model ids to mongoid
+      $parameters = $request->getParameterStatus();
+
+      $hasmany = array();
+      $hasmany_data = array();
+      $hasmany = (isset($request->getModelStatus()['details']['relationships']['hasmany']) ? $request->getModelStatus()['details']['relationships']['hasmany'] : array());
+
+      if (count($hasmany) != 0)
+      {
+        $parent_model = $request->getModelStatus()['str']; //us/me
+        $db_instance = &$request::getDBInstance();
+        $property_identifier = $parent_model . $db_instance::ID_FIELD;
+        $property_value = $request->getData()[$db_instance::ID_FIELD];
+
+        //var_dump(compact('parent_model', 'property_identifier', 'property_value'));
+
+        foreach ($hasmany as $child_model)
+        {
+          //build request to child model
+          /*$child_request = request::initialize(
+            $request->getDBType(),
+            $model_status,
+            $parameter_status,
+            $data = null,
+            $session = null
+          );*/
+
+          //read data from child model
+          //$hasmany_data[$child_model] = $request->
+
+          //modify parameters
+          //final remains same
+          //missing remains same so already reported if not count 0
+          //extra remains same, but report it as it hasn't been yet
+        }
+      }
+
+      return $parameters;
     }
 
     public function getStatus($status = null, $json = false)
