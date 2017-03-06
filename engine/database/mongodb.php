@@ -11,16 +11,24 @@ class mongodb extends database
 
 	private static $__instance = null;
 
-	public static function strToId($query)
+	//parameters has final, missing, extra and ids
+	//we check final for ID_FIELD and set
+	//we check ids and enforce all
+	public static function enforceIds($parameters, $key_values)
 	{
 		//convert mongo id from string into the object
-		foreach ($query as $key => $value)
+
+		$query = array();
+
+		foreach ($parameters['final'] as $key)
 		{
-			if ($key == Self::ID_FIELD)
+			$id_key = array_search($key, $parameters['ids']);
+			if ($key == Self::ID_FIELD OR $id_key !== FALSE)
 			{
+				//$key is an id, enforce
 				try
 				{
-					$query[$key] = new \MongoId($value);
+					$query[$key] = new \MongoId($key_values[$key]);
 				}
 				catch (Exception $e)
 				{
@@ -29,7 +37,7 @@ class mongodb extends database
 				}
 			}
 		}
-
+		
 		return $query;
 	}
 
@@ -107,8 +115,9 @@ class mongodb extends database
 
 			//build query (key => value array)
 			$query = $request->getData();
+			$params = $request->getParameterStatus();
 
-			$query = Self::strToId($query);
+			$query = Self::enforceIds($params, $query);
 
 			$cursor = $persist->find($query);
 
@@ -178,8 +187,9 @@ class mongodb extends database
 
 			//build query (key => value array)
 			$query = $request->getData();
+			$params = $request->getParameterStatus();
 
-			$query = Self::strToId($query);
+			$query = Self::enforceIds($params, $query);
 
 			$status = $persist->remove($query);
 

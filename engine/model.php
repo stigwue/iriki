@@ -6,21 +6,36 @@ require_once(__DIR__ . '/config.php');
 
 class model extends config
 {
-    //engine models
+    /**
+    * Engine's models amd configuration.
+    *
+    * @var array
+    */
     private $_engine = array(
         'config' => null,
         'models' => null
     );
 
-    //app models;
+    /**
+    * Application's models amd configuration.
+    *
+    * @var array
+    */
     private $_app = array(
         'config' => null,
         'models' => null
     );
 
-    //persistence
-    private $_db = array();
-
+    /**
+    * Load model details from configuration files, given an array of routes
+    *
+    *
+    * @param array Configuration key value pairs to get path
+    * @param array Defined routes
+    * @param string Application or engine name
+    * @return array Model details
+    * @throw
+    */
     public function loadFromJson($config_values, $routes, $app = 'iriki')
     {
         $var = '_engine';
@@ -41,12 +56,29 @@ class model extends config
         return $store['models'];
     }
 
-    //essentially its doInitialise
-    public function loadModels($config_values, $routes, $app = 'iriki')
+    /**
+    * Initialize an application's (engine's too) models
+    *
+    *
+    * @param array Configuration key value pairs to get path
+    * @param array Defined routes
+    * @param string Application or engine name
+    * @return array Model details
+    * @throw
+    */
+    public function doInitialise($config_values, $routes, $app = 'iriki')
     {
         return $this->loadFromJson($config_values, $routes['routes'], $app);
     }
 
+    /**
+    * Get application's stored models
+    *
+    *
+    * @param string Application or engine name
+    * @return array Model details
+    * @throw
+    */
     public function getModels($app = 'iriki')
     {
         $var = '_engine';
@@ -60,10 +92,20 @@ class model extends config
     }
 
 
-    //returns a 3 level match
-    //a specific model or alias
-    //a specific action for said model
-    //a specific set of parameters for said action
+    /**
+    * Find a model match among supplied models and routes
+    * A match is 3 levels:
+    * a specific model or alias
+    * a specific action for said model
+    * a specific set of parameters for said action
+    *
+    *
+    * @param array Model status from request made
+    * @param array Defined models
+    * @param array Defined routes
+    * @return array Model status describing match
+    * @throw
+    */
     public static function doMatch($model_status, $models = null, $routes = null)
     {
         //see $model_status structure in route->matchUrl
@@ -76,8 +118,6 @@ class model extends config
             if ($_model == $model_status['str'])
             {
                 //we have found the model
-                $action = $model_status['action'];
-
                 $model_status['details'] = array(
                     'description' => $_action['description'],
                     'properties' => $_action['properties'],
@@ -140,7 +180,17 @@ class model extends config
     }
 
 
-    //parameter property match: exist and type?
+    /**
+    * Match a model's defined parameters to those sent via the request
+    * Note that a parameter failing a type check is 'missing'
+    *
+    *
+    * @param array Model property details
+    * @param array Parameters sent via request
+    * @param array Route filters: parameters and exempt
+    * @return array Properties: final, missing, extra and ids
+    * @throw
+    */
     public static function doPropertyMatch($details, $sent, $filter)
     {
         //parameters work thus:
@@ -207,7 +257,7 @@ class model extends config
                 }
                 else
                 {
-                  //ignore, will handle later
+                  //ignore type check then
                 }
             }
             else
@@ -236,11 +286,21 @@ class model extends config
             //missing properties that should have been supplied
             'missing' => $properties_missing,
             //extra properties that should not have been supplied
-            'extra' => $extra_properties
+            'extra' => $extra_properties,
+            //these, especially for mongodb have to be saved as mongoids
+            'ids' => array()
         );
     }
 
 
+    /**
+    * Check properties in supplied parameters that need to be unique
+    *
+    *
+    * @param object Request object encapsulating necessary details
+    * @return array Pre-existing properties
+    * @throw
+    */
     public static function doParameterUniqueCheck($request)
     {
       $existing = array();
@@ -279,20 +339,22 @@ class model extends config
     }
 
     /**
-    * Check a model for 'belongsto' parent relationship
-    * and adds extra data to the request data (modifies original request)
+    * Check a model for 'belongsto' parent relationship.
+    * Returns a modified parameter statuses you may have to update.
     *
     * @param object Request
-    * @return array Extra data not belonging to a parent model
+    * @return array Modified parameter status
     * @throw
     */
-    public static function doBelongsToRelation(&$request)
+    public static function doBelongsToRelation($request)
     {
       //test to see if request can be sent by reference so we can convert parent model ids to mongoid
       $parameters = $request->getParameterStatus();
 
       $belongsto = array();
       $belongsto = (isset($request->getModelStatus()['details']['relationships']['belongsto']) ? $request->getModelStatus()['details']['relationships']['belongsto'] : array());
+
+      $request_data = $request->getData();
 
       if (count($belongsto) != 0)
       {
@@ -308,6 +370,9 @@ class model extends config
           {
             //add to final parameters
             $parameters['final'][] = $property_identifier;
+
+            //add to ids data
+            $parameters['ids'][] = $property_identifier;
 
             //pull out supplied from extra parameters
             $extra_key = array_search($property_identifier, $parameters['extra']);
@@ -327,6 +392,14 @@ class model extends config
       return $parameters;
     }
 
+    /**
+    * Check a model for 'hasmnay' child relationship.
+    * Will have to make several reads up to a recursivity limit.
+    *
+    * @param object Request
+    * @return array Parameter status for now, should change soon
+    * @throw
+    */
     public static function doHasManyRelation(&$request)
     {
       //test to see if request can be sent by reference so we can convert parent model ids to mongoid
@@ -369,6 +442,15 @@ class model extends config
       return $parameters;
     }
 
+    /**
+    * Get status, a summary of model details
+    *
+    *
+    * @param array Previous status array to append to
+    * @param boolean Encode result as json
+    * @return array Status array or json representation
+    * @throw
+    */
     public function getStatus($status = null, $json = false)
     {
         if (is_null($status))

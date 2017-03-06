@@ -20,7 +20,7 @@
 
 	//this are the components of an iriki app
 	$app = array(
-		//string, the engine, which is also an iriki app ala mysql
+		//string, the engine, which is also an iriki application
 		'engine' => NULL,
 		//string, your application
 		'application' => NULL,
@@ -71,8 +71,8 @@
 		//$status = $app_routes->getStatus($status);
 
 		//load up models
-		$app['models']['engine'] = $app_models->loadModels($app['config'], $app_routes->getRoutes());
-		$app['models']['app'] = $app_models->loadModels($app['config'], $app_routes->getRoutes($app['application']), $app['application']);
+		$app['models']['engine'] = $app_models->doInitialise($app['config'], $app_routes->getRoutes());
+		$app['models']['app'] = $app_models->doInitialise($app['config'], $app_routes->getRoutes($app['application']), $app['application']);
 		//$status = $app_models->getStatus($status);
 
 		$app['expires'] = time(NULL) + IRIKI_REFRESH;

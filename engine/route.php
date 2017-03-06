@@ -35,7 +35,7 @@ class route extends config
     *
     * @param array Configuration key value pairs
     * @param string Application name
-    * @return
+    * @return array Route details such as default, alias, list and an empty routes array
     * @throw
     */
     private function loadFromJsonIndex($config_values, $app = 'iriki')
@@ -67,6 +67,16 @@ class route extends config
         return $store['routes'];
     }
 
+    /**
+    * Load route details from configuration files, given an array of routes
+    *
+    *
+    * @param array Configuration key value pairs to get path
+    * @param array Defined routes
+    * @param string Application or engine name
+    * @return array Route details after empty routes array is filled
+    * @throw
+    */
     private function loadFromJson($config_values, $routes, $app = 'iriki')
     {
         $store = &Self::$_engine;
@@ -77,21 +87,27 @@ class route extends config
             $path = $config_values['application']['path'];
         }
 
-
         /*get route details from json file
         if a route file can't be found, it'll have no actions and default
         properties too won't be defined*/
         foreach ($routes['list'] as $valid_route)
         {
-            //var_dump($path . 'routes/' . $valid_route . '.json');
             $valid_route_json = (new config($path . 'routes/' . $valid_route . '.json'))->getJson();
-            //var_dump($valid_route_json[$app]['routes']);
             $store['routes']['routes'][$valid_route] = $valid_route_json[$app]['routes'][$valid_route];
         }
 
         return $store['routes'];
     }
 
+    /**
+    * Initialize an application's (engine's too) routes
+    *
+    *
+    * @param array Application configuration key value pairs
+    * @param string Application or engine name
+    * @return array Route details
+    * @throw
+    */
     public function doInitialise($config_values, $app = 'iriki')
     {
         $routes = $this->loadFromJsonIndex($config_values, $app);
@@ -99,6 +115,14 @@ class route extends config
         return $this->loadFromJson($config_values, $routes, $app);
     }
 
+    /**
+    * Get application's stored routes
+    *
+    *
+    * @param string Application or engine name
+    * @return array Route details
+    * @throw
+    */
     public function getRoutes($app = 'iriki')
     {
         $store = &Self::$_engine;
@@ -110,6 +134,15 @@ class route extends config
         return $store['routes'];
     }
 
+    /**
+    * Get status, a summary of route details
+    *
+    *
+    * @param array Previous status array to append to
+    * @param boolean Encode result as json
+    * @return array Status array or json representation
+    * @throw
+    */
     public function getStatus($status = null, $json = false)
     {
         //engine's routes
@@ -150,10 +183,15 @@ class route extends config
         }
     }
 
-    //matches route with supplied url
-    //a match is 2 part process
-    //1. a route/alias is matched to a specific model
-    //2. we go into said model to further the match
+    /**
+    * Matches the requested url to a route, performing a model action.
+    *
+    *
+    * @param array HTTP request details
+    * @param array Application configuration already initialised
+    * @return array Status of matched model action
+    * @throw
+    */
     public static function matchUrl($request_details,
         $app = null
     )
@@ -190,6 +228,9 @@ class route extends config
             {
                 $model = $url_parts[$count - 2];
                 $action = $url_parts[$count - 1];
+
+                //TODO: handle requests such as /model/action/val1
+                //e.g /user/read/1
             }
             else
             {
@@ -220,7 +261,7 @@ class route extends config
                 }
                 else
                 {
-                    //?
+                    //third party models?
                 }
             }
             else
@@ -311,14 +352,17 @@ class route extends config
                         //paramter check
                         //on fail, describe action
 
-                        $parameter_status = model::doPropertyMatch($model_status['details'], $params, $model_status['action_details']);
+                        $parameter_status = model::doPropertyMatch(
+                          $model_status['details'],
+                          $params,
+                          $model_status['action_details']
+                        );
 
                         $missing_parameters = count($parameter_status['missing']);
-                        //$extra_parameters = count($parameter_status['extra']);
 
                         //note that extra parameters could be ids signifying belongsto relationships
                         //so we have to leave that check until later
-                        if ($missing_parameters == 0) // AND $extra_parameters == 0)
+                        if ($missing_parameters == 0)
                         {
                             //persistence
                             //defined in one of two locations
@@ -348,7 +392,7 @@ class route extends config
                             {
                                 return response::error(response::showMissing($parameter_status['missing'], 'parameter', 'missing'));
                             }
-                            
+
                             //authorisation or other error
                             return response::error('Authorisation missing.');
                         }
@@ -375,6 +419,14 @@ class route extends config
         return null; //response::error('Please specify a route.');
     }
 
+    /**
+    * Parses the requested url to pull out models, action and queries
+    *
+    *
+    * @param array Request url/path
+    * @return array Path, parts of the url and the query
+    * @throw
+    */
     private static function parseUrl($path)
     {
         //try php's parse_url
@@ -403,10 +455,19 @@ class route extends config
 
         $parts = $model_action;
 
-
         return compact('path', 'parts', 'query');
     }
 
+    /**
+    * Gets the HTTP request details: methods, parameters and so forth
+    *
+    *
+    * @param string URI supplied or deduced
+    * @param string HTTP request method supplied or deduced
+    * @param string Optional base url if framework isn't run from server root/home?
+    * @return array Request details for use
+    * @throw
+    */
     public static function getRequestDetails($uri = null, $method = null, $base_url = '')
     {
         if (is_null($uri))
@@ -416,7 +477,7 @@ class route extends config
 
         if ($base_url != '')
         {
-            //trim uri by base
+          //trim uri by base
 
         	//optional step
         	//if you are running this framework from
@@ -440,12 +501,8 @@ class route extends config
         switch ($method) {
           /*case 'PUT':
             do_something_with_put($request);
-            break;*/
-          /*case 'HEAD':
             break;
           case 'DELETE':
-            break;
-          case 'OPTIONS':
             break;*/
 
             case 'GET':
@@ -473,6 +530,14 @@ class route extends config
         return $status;
     }
 
+    /**
+    * Read GET parameters from query part of the url
+    *
+    *
+    * @param string Query section of url
+    * @return array Key-value query pairs
+    * @throw
+    */
     private static function parseGetParams($query)
     {
         $get_params = array();
@@ -482,10 +547,12 @@ class route extends config
             $pair = explode('=', $key_value);
             if (count($pair) == 2)
             {
+                //property=value
                 $get_params[$pair[0]] = $pair[1];
             }
             else
             {
+                //property=value=corrupted
                 $get_params[$key_value] = '';
             }
         }

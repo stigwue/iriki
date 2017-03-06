@@ -46,6 +46,7 @@ class request
       {
         $db_type = $this->_db_type;
         //$db_type() throws 'Class name must be a valid object or a string' for only create inherited from request
+        //nixed after I supplied a default for db_type
         Self::$_db_instance = new $db_type();
 
         $db_instance = &Self::$_db_instance;
@@ -157,6 +158,7 @@ class request
 
       //belongsto
       $parameter_status = model::doBelongsToRelation($request);
+      //var_dump($parameter_status);
 
       $missing_parameters = count($parameter_status['missing']);
       $extra_parameters = count($parameter_status['extra']);
@@ -172,8 +174,8 @@ class request
 
       //hasmany
 
-      //$result = $instance::doCreate($request);
-      $result = null;
+      $result = $instance::doCreate($request);
+      //$result = null;
 
       return \iriki\response::data($result, $wrap);
     }

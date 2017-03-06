@@ -14,9 +14,7 @@
                 "relationships" : {
                     "belongsto" : [],
                     "hasmany" : [
-                        "user",
-                        "category",
-                        "unit"
+                        "user"
                     ]
                 }
 			}

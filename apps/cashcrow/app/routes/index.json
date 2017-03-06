@@ -9,9 +9,10 @@
             "routes" : [
                 "merchant",
                 "customer",
-                "sector",
+                "category",
                 "contract",
-                "payment"
+                "payment",
+								"unit"
             ]
 		}
 	}

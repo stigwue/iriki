@@ -42,6 +42,7 @@ class stat_request
 
   public static function moveHead($timestamp)
   {
+    //this function's definition has changed since last time
     $request = request::initialize(
       '\iriki\engine\mongodb', //engine\database::getClass(), //db_type
       'iriki_stat_request', //model

@@ -33,7 +33,7 @@
 				},
 				"relationships" : {
 					"belongsto" : ["school"],
-					"hasmany" : []
+					"hasmany" : ["parent"]
 				}
 			}
 		}
