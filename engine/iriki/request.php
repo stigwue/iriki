@@ -154,11 +154,10 @@ class request
           else return response::error(response::showMissing($matching, 'parameter', 'mismatched'));
       }
 
-      //var_dump($request->getData());
-
       //belongsto
       $parameter_status = model::doBelongsToRelation($request);
-      //var_dump($parameter_status);
+      //replace with modified
+      $request->setParameterStatus($parameter_status);
 
       $missing_parameters = count($parameter_status['missing']);
       $extra_parameters = count($parameter_status['extra']);
@@ -175,7 +174,6 @@ class request
       //hasmany
 
       $result = $instance::doCreate($request);
-      //$result = null;
 
       return \iriki\response::data($result, $wrap);
     }

@@ -33,9 +33,13 @@
 			"routes" : [
 				"school",
 				"student",
+				"guardian",
 				"staff",
 				"session",
 				"term"
+
+
+				
 			]
 		}
 	}

@@ -17,10 +17,9 @@ class mongodb extends database
 	public static function enforceIds($parameters, $key_values)
 	{
 		//convert mongo id from string into the object
-
 		$query = array();
 
-		foreach ($parameters['final'] as $key)
+		foreach ($parameters['final'] as $index => $key)
 		{
 			$id_key = array_search($key, $parameters['ids']);
 			if ($key == Self::ID_FIELD OR $id_key !== FALSE)
@@ -33,11 +32,16 @@ class mongodb extends database
 				catch (Exception $e)
 				{
 					//value isn't a valid MongoId
+					//trap errors
 					continue;
 				}
 			}
+			else
+			{
+				$query[$key] = $key_values[$key];
+			}
 		}
-		
+
 		return $query;
 	}
 
@@ -86,16 +90,25 @@ class mongodb extends database
 
 			//build query (key => value array)
 			$query = $request->getData();
+			$params = $request->getParameterStatus();
+
+			$query = Self::enforceIds($params, $query);
 
 			$query[Self::ID_FIELD] = new \MongoId();
-
 			$query['created'] = time(NULL);
 
-			$status = $persist->insert($query);
+      $status = $persist->insert($query);
 
 			//unset all data properties except id
 			$id_field = $query[Self::ID_FIELD];
 			$request->setData(array(Self::ID_FIELD => $id_field));
+			//parameters
+			$request->setParameterStatus(array(
+				'final' => array('_id'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array('_id')
+			));
 
 			//re-read it to return properties
 			return Self::doRead($request);

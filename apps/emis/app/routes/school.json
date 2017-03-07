@@ -3,11 +3,6 @@
 	{
 		"routes" : {
 			"school" : {
-				"create_one" : {
-					"description" : "Create a new school.",
-					"parameters" : [],
-					"exempt" : ["_id"]
-				}
 			}
 		}
 	}

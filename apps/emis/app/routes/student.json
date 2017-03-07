@@ -3,11 +3,6 @@
 	{
 		"routes" : {
 			"student" : {
-				"create_one" : {
-					"description" : "Create a new student.",
-					"parameters" : [],
-					"exempt" : ["_id"]
-				}
 			}
 		}
 	}
