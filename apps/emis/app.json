@@ -22,7 +22,7 @@
         "name" : "emis",
         "description" : "Educational Management Information System",
         "path" : "apps/emis/app/",
-        "author" : "stephen.igwue@bizzdeskgroup.com",
+        "author" : "stephen.igwue@bizzdeskgroup.com, innocent.ujata@bizzdeskgroup.com",
         "version" : {
           "major" : "0",
           "minor" : "0",

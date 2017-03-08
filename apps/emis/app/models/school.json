@@ -29,7 +29,7 @@
 					},
 					"state" : {
 						"description" : "State of the nation.",
-						"type" : "number"
+						"type" : "string"
 					}
 				},
 				"relationships" : {

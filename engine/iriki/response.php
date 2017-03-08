@@ -5,8 +5,19 @@ namespace iriki;
 class response
 {
     //see https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-    const INFO = 200;
+
+    //1xx: Informational responses
+
+    //2xx: Success
+    const OK = 200;
+
+    //3xx: Redirection
+
+    //4xx Client errors
     const ERROR = 400;
+    //412 Precondition Failed
+
+    //5xx Server error
 
     public static function showMissing($list, $description, $action)
     {
@@ -58,43 +69,42 @@ class response
     }
 
     //build
+    private static function build($code, $message = '', $data = null)
+    {
+      /*a response has
+      code: determines data, error or info
+      message: empty, error or information
+      data: data
+      */
+
+      $response = array(
+        'code' => $code
+      );
+
+      if ($message != '') $response['message'] = $message;
+      if (!is_null($data)) $response['data'] = $data;
+
+      return $response;
+    }
+
     public static function data($data, $wrap = true)
     {
-        $response = array();
-        $response['data'] = $data;
-
         //do logging?
 
         if (!$wrap) return $data;
-        else return array('response' => $response);
+        else return Self::build(Self::OK, '', $data);
     }
 
     public static function information($message, $wrap = true)
     {
-        $response = array();
-        $response['info'] = array(
-            'code' => Self::INFO,
-            'message' => $message
-        );
-
-        //do logging?
-
         if (!$wrap) return $message;
-        else return array('response' => $response);
+        else return Self::build(Self::OK, $message);
     }
 
     public static function error($message, $wrap = true)
     {
-        $response = array();
-        $response['error'] = array(
-            'code' => Self::ERROR,
-            'message' => $message
-        );
-
-        //do logging?
-
         if (!$wrap) return $message;
-        else return array('response' => $response);
+        else return Self::build(Self::ERROR, $message);
     }
 
     //log

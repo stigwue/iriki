@@ -318,6 +318,9 @@ class model extends config
         $properties = $model_status['default']['properties'];
       }
 
+      //$request will be modified, save it here
+      $initial_request = clone $request;
+
       foreach ($final_properties as $index => $property)
       {
         if (isset($properties[$property]))
@@ -327,9 +330,20 @@ class model extends config
           //check unique
           if (isset($property_details['unique']))
           {
-            //handle $request carefully, it shouldn't be changed permanently
-            $request->setData(array($property => $final_values[$property]));
-            $found = $request->read($request, false);
+            $new_request = $initial_request;
+            $new_request->setData(array($property => $final_values[$property]));
+            //parameters
+      			$new_request->setParameterStatus(array(
+      				'final' => array($property),
+      				'missing' => array(),
+      				'extra' => array(),
+      				'ids' => $initial_request->getParameterStatus()['ids']
+      			));
+
+            $found = $new_request->read($new_request, false);
+
+            //revert to original here
+            $request = $initial_request;
             if (count($found) != 0) $existing[] = $property;
           }
         }
@@ -362,7 +376,7 @@ class model extends config
           //all parent models must have a 'parent_model + id_field' parameter supplied
           //we could go as far as to check that the parent model exists but... maybe not
 
-          $db_instance = &$request::getDBInstance();
+          $db_instance = $request::getDBInstance();
 
           $property_identifier = $parent_model . $db_instance::ID_FIELD;
           if (isset($request_data[$property_identifier]))
@@ -399,7 +413,7 @@ class model extends config
     * @return array Parameter status for now, should change soon
     * @throw
     */
-    public static function doHasManyRelation(&$request)
+    public static function doHasManyRelation($request)
     {
       //test to see if request can be sent by reference so we can convert parent model ids to mongoid
       $parameters = $request->getParameterStatus();

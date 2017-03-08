@@ -150,8 +150,6 @@ class request
           else return response::error(response::showMissing($matching, 'parameter', 'mismatched'));
       }
 
-      var_dump($request->getData()); exit();
-
       //belongsto
       $parameter_status = model::doBelongsToRelation($request);
       //replace with modified
@@ -173,7 +171,7 @@ class request
 
       $result = $instance::doCreate($request);
 
-      return \iriki\response::data($result, $wrap);
+      return \iriki\response::information($result, $wrap);
     }
 
     public function read($request, $wrap = true)
