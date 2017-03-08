@@ -390,7 +390,7 @@ class route extends config
                         {
                             if ($missing_parameters != 0)
                             {
-                                return response::error(response::showMissing($parameter_status['missing'], 'parameter', 'missing'));
+                                return response::error(response::showMissing($parameter_status['missing'], 'parameter', 'missing or of wrong type'));
                             }
 
                             //authorisation or other error

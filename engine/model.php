@@ -205,7 +205,6 @@ class model extends config
         //build sent properties
         $sent_properties = array_keys($sent);
 
-
         //build valid properties
         if (count($valid_properties) == 0)
         {
@@ -409,9 +408,9 @@ class model extends config
       $hasmany_data = array();
       $hasmany = (isset($request->getModelStatus()['details']['relationships']['hasmany']) ? $request->getModelStatus()['details']['relationships']['hasmany'] : array());
 
-      if (count($hasmany) != 0)
+      /*if (count($hasmany) != 0)
       {
-        $parent_model = $request->getModelStatus()['str']; //us/me
+        $parent_model = $request->getModelStatus()['str']; //this present model
         $db_instance = &$request::getDBInstance();
         $property_identifier = $parent_model . $db_instance::ID_FIELD;
         $property_value = $request->getData()[$db_instance::ID_FIELD];
@@ -421,13 +420,6 @@ class model extends config
         foreach ($hasmany as $child_model)
         {
           //build request to child model
-          /*$child_request = request::initialize(
-            $request->getDBType(),
-            $model_status,
-            $parameter_status,
-            $data = null,
-            $session = null
-          );*/
 
           //read data from child model
           //$hasmany_data[$child_model] = $request->
@@ -437,7 +429,7 @@ class model extends config
           //missing remains same so already reported if not count 0
           //extra remains same, but report it as it hasn't been yet
         }
-      }
+      }*/
 
       return $parameters;
     }

@@ -53,10 +53,6 @@ class request
 
         $db_instance::initialize();
       }
-      else
-      {
-
-      }
 
       return request::$_db_instance;
     }
@@ -153,6 +149,8 @@ class request
           if (!$wrap) return $result;
           else return response::error(response::showMissing($matching, 'parameter', 'mismatched'));
       }
+
+      var_dump($request->getData()); exit();
 
       //belongsto
       $parameter_status = model::doBelongsToRelation($request);

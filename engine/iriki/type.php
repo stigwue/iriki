@@ -19,6 +19,14 @@ class type
       case 'string':
         return true;
       break;
+      
+      case 'boolean':
+        if (strtolower($value) == 'true' OR strtolower($value) == 'false')
+        {
+          return true;
+        }
+        else return false;
+      break;
 
       default:
         return false;
