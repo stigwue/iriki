@@ -1,17 +1,7 @@
 {
-	"iriki":
+	"steadyhike":
 	{
 		"routes" : {
-			"alias" : {
-				"tokenize" : {
-					"model" : "user_session",
-					"action" : "gettoken"
-				},
-				"authenticate" : {
-					"model" : "user_session",
-					"action" : "authtoken"
-				}
-			},
 			"default" : {
 				"description" : {
 					"description" : "Describe a model, listing its properties.",
@@ -26,6 +16,10 @@
 					"description" : "Returns the properties of the matching model.",
 					"parameters" : ["_id"]
 				},
+				"read_all" : {
+					"description" : "Returns the properties of the matching model.",
+					"parameters" : ["session_id"]
+				},
 				"update" : {
 					"description" : "Updates a model instance by supplying new properties and the id of the model to update.",
 					"parameters" : []
@@ -35,9 +29,14 @@
 					"parameters" : ["_id"]
 				}
 			},
+			"alias" : {},
 			"routes" : [
-				"user",
-				"user_session"
+        "user",
+				"status",
+        
+				"trail",
+        "hike",
+        "payment"
 			]
 		}
 	}

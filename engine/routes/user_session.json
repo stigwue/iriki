@@ -1,0 +1,22 @@
+{
+	"iriki":
+	{
+		"routes" : {
+			"user_session" : {
+				"initiate" : {
+					"description" : "Initiate (create) a session, returns a token.",
+					"parameters" : [],
+					"exempt" : ["_id", "token", "ip", "authenticated"]
+				},
+				"validate" : {
+					"description" : "Validate a session, returns expired or not.",
+					"parameters" : ["token"]
+				},
+				"invalidate" : {
+					"description" : "Invalidate a session, it will no longer be honoured.",
+					"parameters" : ["token"]
+				}
+			}
+		}
+	}
+}

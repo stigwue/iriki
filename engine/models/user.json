@@ -3,7 +3,7 @@
 	{
 		"models" : {
 			"user" : {
-				"description" : "The model for most actions. It can be built upon using other models.",
+				"description" : "The user model. You may chose to inherit it.",
 				"properties" : {
 					"_id" : {
 						"description" : "User internal unique ID.",
@@ -11,28 +11,23 @@
 						"unique" : true
 					},
 					"username" :  {
-						"description" : "Username, dependent on some service (email, or this one).",
+						"description" : "Username.",
 						"type" : "string",
 						"unique" : true
 					},
 					"private_key" :  {
-						"description" : "Key only known to user, for asymmetric encryption.",
+						"description" : "Key only known to user.",
 						"type" : "string"
 					},
 					"public_key" : {
-						"description" : "Key known to user and other parties, for encryption.",
-						"type" : "string"
-					},
-					"tag" : {
-						"description" : "Go crazy, store registration status, email, whatever.",
+						"description" : "Key known to user and other parties.",
 						"type" : "string"
 					}
 				},
 				"relationships" : {
-					"belongsto" : ["app"],
+					"belongsto" : [],
 					"hasmany" : [
-						"session",
-						"setting"
+						"user_session"
 					]
 				}
 			}

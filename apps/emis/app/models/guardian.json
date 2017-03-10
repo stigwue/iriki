@@ -1,0 +1,37 @@
+{
+	"emis":
+	{
+		"models" : {
+			"guardian" : {
+				"description" : "A parent.",
+				"properties" : {
+					"_id" : {
+						"description" : "Unique ID.",
+						"type" : "string",
+						"unique" : true
+					},
+					"firstname" : {
+						"description" : "First name",
+						"type" : "string"
+					},
+					"lastname" : {
+						"description" : "Last name",
+						"type" : "string"
+					},
+					"middlename" : {
+						"description" : "Middle name",
+						"type" : "string"
+					},
+					"gender" : {
+						"description" : "Gender",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : ["student"],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

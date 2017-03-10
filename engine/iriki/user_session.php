@@ -2,7 +2,7 @@
 
 namespace iriki;
 
-class session
+class user_session
 {
 	private static function generatetoken()
 	{
@@ -21,7 +21,7 @@ class session
 
 		//generate token
 		$params_persist['data']['token'] = Self::generatetoken();
-		
+
 		//get ip address
 		$params_persist['data']['ip'] = $_SERVER['SERVER_ADDR'];
 

@@ -195,6 +195,9 @@ class mongodb extends database
 			$persist = Self::$__instance->$collection;
 
 			$data = $request->getData();
+			$params = $request->getParameterStatus();
+
+			$data = Self::enforceIds($params, $data);
 
 			//pick only the id field to be used to filter update
 			$query = array(

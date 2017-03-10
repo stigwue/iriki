@@ -1,0 +1,42 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"user_session" : {
+				"description" : "Session manages the current user and authentication state.",
+				"properties" : {
+					"_id" : {
+						"description" : "Unique ID.",
+						"type" : "number",
+						"unique" : true
+					},
+					"token" : {
+						"description" : "Unique token to track sessions with.",
+						"type" : "string",
+						"unique" : true
+					},
+					"ip" :  {
+						"description" : "Origin IP address.",
+						"type" : "string"
+					},
+					"started" :  {
+						"description" : "Time session began",
+						"type" : "date"
+					},
+					"expires" :  {
+						"description" : "Time session expires, will be checked to determine validity.",
+						"type" : "date"
+					},
+					"authenticated" : {
+						"description" : "True or false, determines if a user with this token is signed in.",
+						"type" : "boolean"
+					}
+				},
+				"relationships" : {
+					"belongsto" : ["user"],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

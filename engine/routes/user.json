@@ -3,15 +3,16 @@
 	{
 		"routes" : {
 			"user" : {
-                "auth" : {
-                	"description" : "",
-                	"parameters" : ["auth"]
-                },
+				"auth" : {
+					"description" : "",
+					"parameters" : ["username", "private_key"]
+				},
 				"signup" : {
-                	"description" : "",
-                	"parameters" : []
-                }
-            }
+					"description" : "",
+					"parameters" : [],
+					"exempt" : ["_id"]
+				}
+			}
 		}
 	}
 }

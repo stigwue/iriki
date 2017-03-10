@@ -1,0 +1,48 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"user" : {
+				"description" : "The model for most actions. It can be built upon using other models.",
+				"properties" : {
+					"_id" : {
+						"description" : "User internal unique ID.",
+						"type" : "string",
+						"unique" : true
+					},
+					"username" :  {
+						"description" : "Username, dependent on some service (email, or this one).",
+						"type" : "string",
+						"unique" : true
+					},
+					"phone" :  {
+						"description" : "Phone number.",
+						"type" : "string",
+						"unique" : true
+					},
+					"email" :  {
+						"description" : "User email.",
+						"type" : "email",
+						"unique" : true
+					},
+					"password" :  {
+						"description" : "Key only known to user, for asymmetric encryption.",
+						"type" : "string"
+					},
+					"public_key" : {
+						"description" : "Key known to user and other parties, for encryption.",
+						"type" : "string"
+					},
+					"tag" : {
+						"description" : "Go crazy, store registration status, email, whatever.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}
