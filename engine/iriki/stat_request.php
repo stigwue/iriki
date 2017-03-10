@@ -2,6 +2,13 @@
 
 namespace iriki;
 
+/**
+* Iriki request statistics.
+* We have used a structure which works best with MongoDB.
+* So, the plan to have this stat depend on the application's db type has been nixed.
+* The DB Instance is now passed to log requests.
+*
+*/
 class stat_request
 {
   //structure
@@ -40,18 +47,11 @@ class stat_request
   //so, during fixed intervals, a new one is added
   //ideally, this should be called by cron, except that cron might not know the db_type
 
-  public static function moveHead($timestamp)
+  public static function log($move_head = false, $timestamp = 0)
   {
-    //this function's definition has changed since last time
-    $request = request::initialize(
-      '\iriki\engine\mongodb', //engine\database::getClass(), //db_type
-      'iriki_stat_request', //model
-      'create', //action
-      Self::initialize($timestamp) //data
-    );
 
-    return $request->create($request, false);
   }
+
 }
 
 ?>

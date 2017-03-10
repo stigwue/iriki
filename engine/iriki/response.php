@@ -81,7 +81,7 @@ class response
         'code' => $code
       );
 
-      if ($message != '') $response['message'] = $message;
+      $response['message'] = $message;
       if (!is_null($data)) $response['data'] = $data;
 
       return $response;

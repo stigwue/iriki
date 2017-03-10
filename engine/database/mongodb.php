@@ -11,6 +11,9 @@ class mongodb extends database
 
 	private static $__instance = null;
 
+	//for (de)enforce, note http://php.net/manual/en/mongoid.isvalid.php
+	//deprecation notice
+
 	//parameters has final, missing, extra and ids
 	//we check final for ID_FIELD and set
 	//we check ids and enforce all
@@ -24,15 +27,14 @@ class mongodb extends database
 			$id_key = array_search($key, $parameters['ids']);
 			if ($key == Self::ID_FIELD OR $id_key !== FALSE)
 			{
-				//$key is an id, enforce
-				try
+				if (\MongoId::isValid($key_values[$key]))
 				{
+				//$key is an id, enforce
 					$query[$key] = new \MongoId($key_values[$key]);
 				}
-				catch (Exception $e)
+				else
 				{
 					//value isn't a valid MongoId
-					//trap errors
 					continue;
 				}
 			}
@@ -43,6 +45,28 @@ class mongodb extends database
 		}
 
 		return $query;
+	}
+
+	//function to de-enforceIds
+	//if a mongo_id was x_id, it would be array('$id' => 'string representation')
+	//we need to fix this here, i've seen the alternative and it aint pretty
+	public static function deenforceIds($key_values)
+	{
+		$pretty = array();
+
+		foreach ($key_values as $key => $value)
+		{
+			if ($key == Self::ID_FIELD OR \MongoId::isValid($value))
+			{
+				$pretty[$key] = $value->{'$id'};
+			}
+			else
+			{
+				$pretty[$key] = $value;
+			}
+		}
+
+		return $pretty;
 	}
 
 	public static function initialize()
@@ -150,7 +174,7 @@ class mongodb extends database
 				$list = array();
 				foreach ($cursor as $object)
 				{
-					$list[] = $object;
+					$list[] = Self::deenforceIds($object);
 				}
 				$status = $list;
 			}

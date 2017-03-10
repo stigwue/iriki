@@ -2,6 +2,10 @@
 
 namespace iriki;
 
+/**
+* Iriki route, routes to a model's action
+*
+*/
 class route extends config
 {
     /**

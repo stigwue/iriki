@@ -4,6 +4,10 @@ namespace iriki;
 
 require_once(__DIR__ . '/config.php');
 
+/**
+* Iriki model, capable of self or inhertited actions
+*
+*/
 class model extends config
 {
     /**
