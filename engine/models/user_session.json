@@ -21,14 +21,14 @@
 					},
 					"started" :  {
 						"description" : "Time session began",
-						"type" : "date"
-					},
-					"expires" :  {
-						"description" : "Time session expires, will be checked to determine validity.",
-						"type" : "date"
+						"type" : "number"
 					},
 					"authenticated" : {
 						"description" : "True or false, determines if a user with this token is signed in.",
+						"type" : "boolean"
+					},
+					"remember" : {
+						"description" : "True or false, used to determine session expiration against internal timeframes.",
 						"type" : "boolean"
 					}
 				},

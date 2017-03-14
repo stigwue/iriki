@@ -1,0 +1,29 @@
+{
+	"pyrazi":
+	{
+		"models" : {
+			"trail" : {
+				"description" : "A steadyhike user's status.",
+				"properties" : {
+					"_id" : {
+						"description" : "Unique ID.",
+						"type" : "string",
+						"unique" : true
+					},
+					"blacklisted" : {
+						"description" : "User blacklisted?",
+						"type" : "boolean"
+					},
+					"in_dispute" : {
+						"description" : "User in dispute?",
+						"type" : "boolean"
+					},
+				},
+				"relationships" : {
+					"belongsto" : ["user"],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

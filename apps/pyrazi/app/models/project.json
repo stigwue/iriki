@@ -1,0 +1,25 @@
+{
+	"pyrazi":
+	{
+		"models" : {
+			"project" : {
+				"description" : "A pyrazi project.",
+				"properties" : {
+					"_id" : {
+						"description" : "Unique ID.",
+						"type" : "string",
+						"unique" : true
+					},
+					"amount" : {
+						"description" : "Paid amount",
+						"type" : "number"
+					}
+				},
+				"relationships" : {
+					"belongsto" : ["user"],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

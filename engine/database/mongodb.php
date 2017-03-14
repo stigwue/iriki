@@ -35,6 +35,7 @@ class mongodb extends database
 				else
 				{
 					//value isn't a valid MongoId
+					//skip, still use or default?
 					continue;
 				}
 			}

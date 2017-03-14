@@ -1,30 +1,29 @@
 {
-	"iriki":
+	"pyrazi":
 	{
 		"models" : {
 			"user" : {
-				"description" : "The user model. You may chose to inherit it.",
+				"description" : "The model for most actions. It can be built upon using other models.",
 				"properties" : {
 					"_id" : {
 						"description" : "User internal unique ID.",
 						"type" : "string",
 						"unique" : true
 					},
-					"username" :  {
-						"description" : "Username.",
+					"phone" :  {
+						"description" : "Phone number.",
 						"type" : "string",
 						"unique" : true
 					},
-					"hash" :  {
-						"description" : "Output of bcrypt.",
-						"type" : "string"
+					"email" :  {
+						"description" : "User email.",
+						"type" : "email",
+						"unique" : true
 					}
 				},
 				"relationships" : {
 					"belongsto" : [],
-					"hasmany" : [
-						"user_session"
-					]
+					"hasmany" : []
 				}
 			}
 		}

@@ -19,7 +19,9 @@
 	require_once('engine/autoload.php');
 
 	//this are the components of an iriki app
-	$app = array(
+	global $APP;
+	
+	$APP = array(
 		//string, the engine, which is also an iriki application
 		'engine' => NULL,
 		//string, your application
@@ -53,31 +55,31 @@
 	$app_routes = new iriki\route();
 	$app_models = new iriki\model();
 
-	if ($app['expires'] == 0 OR $app['expires'] <= time(NULL))
+	if ($APP['expires'] == 0 OR $APP['expires'] <= time(NULL))
 	{
 		//initialise app config values
 		$app_config->doInitialise('apps/emis/app.json');
-		$app['config'] = $app_config->getKeyValues();
+		$APP['config'] = $app_config->getKeyValues();
 
 		//load up configurations
-		$app['engine'] = $app['config']['engine']['name'];
-		$app['application'] = $app['config']['application']['name'];
-		$app['database'] = $app['config']['database'][IRIKI_MODE];
+		$APP['engine'] = $APP['config']['engine']['name'];
+		$APP['application'] = $APP['config']['application']['name'];
+		$APP['database'] = $APP['config']['database'][IRIKI_MODE];
 		//$status = $app_config->getStatus();
 
 		//load up routes
-		$app['routes']['engine'] = $app_routes->doInitialise($app['config'], $app['engine']);
-		$app['routes']['app'] = $app_routes->doInitialise($app['config'], $app['application']);
+		$APP['routes']['engine'] = $app_routes->doInitialise($APP['config'], $APP['engine']);
+		$APP['routes']['app'] = $app_routes->doInitialise($APP['config'], $APP['application']);
 		//$status = $app_routes->getStatus($status);
 
 		//load up models
-		$app['models']['engine'] = $app_models->doInitialise($app['config'], $app_routes->getRoutes());
-		$app['models']['app'] = $app_models->doInitialise($app['config'], $app_routes->getRoutes($app['application']), $app['application']);
+		$APP['models']['engine'] = $app_models->doInitialise($APP['config'], $app_routes->getRoutes());
+		$APP['models']['app'] = $app_models->doInitialise($APP['config'], $app_routes->getRoutes($APP['application']), $APP['application']);
 		//$status = $app_models->getStatus($status);
 
-		$app['expires'] = time(NULL) + IRIKI_REFRESH;
-		$_SESSION['iriki_expires'] = $app['expires'];
-		$_SESSION['iriki_app'] = $app;
+		$APP['expires'] = time(NULL) + IRIKI_REFRESH;
+		$_SESSION['iriki_expires'] = $APP['expires'];
+		$_SESSION['iriki_app'] = $APP;
 	}
 	else
 	{
@@ -85,7 +87,7 @@
 	}
 
 	//load up application's class files
-	require_once($app['config']['application']['path'] . 'autoload.php');
+	require_once($APP['config']['application']['path'] . 'autoload.php');
 
 	//vendors
 	require_once('vendors/autoload.php');
@@ -94,13 +96,13 @@
 
 
 	//interprete request
-	$request_details = iriki\route::getRequestDetails(null, null, $app['config']['base_url']);
+	$request_details = iriki\route::getRequestDetails(null, null, $APP['config']['base_url']);
 
 	//handle the request: match a route to a model and its action
 	$status = iriki\route::matchUrl(
     	$request_details,
     	//app
-    	$app
+    	$APP
 	);
 
 

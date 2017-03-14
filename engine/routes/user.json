@@ -3,9 +3,9 @@
 	{
 		"routes" : {
 			"user" : {
-				"auth" : {
+				"authenticate" : {
 					"description" : "",
-					"parameters" : ["username", "private_key"]
+					"parameters" : ["username", "hash"]
 				},
 				"signup" : {
 					"description" : "",
