@@ -405,7 +405,7 @@ class model extends config
           }
         }
       }
-
+      
       return $parameters;
     }
 
