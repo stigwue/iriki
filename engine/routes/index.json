@@ -3,13 +3,9 @@
 	{
 		"routes" : {
 			"alias" : {
-				"tokenize" : {
+				"validate" : {
 					"model" : "user_session",
-					"action" : "gettoken"
-				},
-				"authenticate" : {
-					"model" : "user_session",
-					"action" : "authtoken"
+					"action" : "validate"
 				}
 			},
 			"default" : {

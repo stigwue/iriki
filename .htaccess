@@ -19,7 +19,6 @@ Options -MultiViews -Indexes
 #Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
 #Header add Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT"
 
-
 RewriteEngine on
 #RewriteBase /
 

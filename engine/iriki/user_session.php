@@ -50,12 +50,14 @@ class user_session extends \iriki\request
 	}
 
 
-	public function validate($request)
+	/*public function validate($request)
 	{
 		//read
     if (!is_null($request))
     {
 			$sessions_found = $request->read($request, false);
+
+			//var_dump($request->getData()); var_dump($request->getParameterStatus());
 
 			if (count($sessions_found) == 1)
 			{
@@ -67,10 +69,11 @@ class user_session extends \iriki\request
 			}
       return $sessions_found;
     }
-	}
+	}*/
 
 	public function invalidate($request)
 	{
+		//set token authenticated value to false
 		if (!is_null($request))
 		{
 			return $request->read($request);

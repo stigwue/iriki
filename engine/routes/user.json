@@ -4,13 +4,18 @@
 		"routes" : {
 			"user" : {
 				"authenticate" : {
-					"description" : "",
+					"description" : "Creates a session for the user.",
 					"parameters" : ["username", "hash"]
 				},
 				"signup" : {
-					"description" : "",
+					"description" : "Signs the user up, will let you create a session afterwards.",
 					"parameters" : [],
 					"exempt" : ["_id"]
+				},
+				"reset_password" : {
+					"description" : "Reset the user password.",
+					"parameters" : ["hash_old", "hash_new"],
+					"exempt" : []
 				}
 			}
 		}

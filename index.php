@@ -10,14 +10,13 @@ date_default_timezone_set('Africa/Lagos');
 
 //app persistence switch
 define('IRIKI_MODE', 'local');
-//define('IRIKI_MODE', 'test');
-//define('IRIKI_MODE', 'development');
-//define('IRIKI_MODE', 'production');
 
 //use iriki to manage sessions?
 define('IRIKI_SESSION', false);
 //refresh time in seconds
 define('IRIKI_REFRESH', 120);
+
+define('IRIKI_CONFIG', 'apps/app_name/app.json');
 
 //engine
 require_once('engine/autoload.php');
@@ -62,7 +61,7 @@ $app_models = new iriki\model();
 if ($APP['expires'] == 0 OR $APP['expires'] <= time(NULL))
 {
 	//initialise app config values
-	$app_config->doInitialise('apps/emis/app.json');
+	$app_config->doInitialise(IRIKI_CONFIG);
 	$APP['config'] = $app_config->getKeyValues();
 
 	//load up configurations
