@@ -50,11 +50,11 @@ class user_session extends \iriki\request
 	}
 
 
-	/*public function validate($request)
+	public function validate($request)
 	{
 		//read
-    if (!is_null($request))
-    {
+	    if (!is_null($request))
+	    {
 			$sessions_found = $request->read($request, false);
 
 			//var_dump($request->getData()); var_dump($request->getParameterStatus());
@@ -67,9 +67,9 @@ class user_session extends \iriki\request
 			{
 
 			}
-      return $sessions_found;
-    }
-	}*/
+	      	return $sessions_found;
+	    }
+	}
 
 	public function invalidate($request)
 	{
