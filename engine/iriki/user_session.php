@@ -55,17 +55,43 @@ class user_session extends \iriki\request
 		//read
 	    if (!is_null($request))
 	    {
-			$sessions_found = $request->read($request, true);
-	      	return $sessions_found;
+			return $request->read($request, true);
 	    }
 	}
 
-	public function invalidate($request)
+	public function invalidate($request, $wrap = true)
 	{
-		//set token authenticated value to false
 		if (!is_null($request))
 		{
-			return $request->read($request);
+
+			//get the session details first
+			$sessions_found = $request->read($request, false);
+
+			if (count($sessions_found) == 0)
+			{
+				//this session wasn't found, return error?
+
+				return \iriki\response::error('Session not found', $wrap);
+			}
+			else
+			{
+				$session = $sessions_found[0];
+				//invalidate
+				$data = $session;
+				$data['authenticated'] = false;
+
+				$request->setData($data);
+				$request->setParameterStatus(
+					array(
+						'final' => array('_id', 'authenticated', 'remember', 'token', 'ip', 'started', 'user_id', 'created'),
+						'missing' => array(),
+						'extra' => array(),
+						'ids' => array('_id', 'user_id')
+					)
+				);
+
+				return $request->update($request, $wrap);
+			}
 		}
 	}
 
