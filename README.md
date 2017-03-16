@@ -46,6 +46,10 @@ Models holds the JSON description of the database models/collections/tables. I w
 
 Application is non-Iriki code. It can reside anywhere as long as it is pointed to in the application configuration. When a request is made, a matching model is first looked for in application space. If not found, then the engine folder will be searched. There will be provision to override selected Iriki model actions.
 
+### Vendors
+
+Vendors contain third-party code. Some of it provided via composer.
+
 
 ## To Do
 Rethink DB?

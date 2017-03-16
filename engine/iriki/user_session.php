@@ -25,28 +25,28 @@ class user_session extends \iriki\request
 
 	public function initiate($request)
 	{
-    if (!is_null($request))
-    {
-      $data = $request->getData();
-			$parameters = $request->getParameterStatus();
+	    if (!is_null($request))
+	    {
+	      $data = $request->getData();
+				$parameters = $request->getParameterStatus();
 
-			//generate token
-			$data_added = Self::generate();
+				//generate token
+				$data_added = Self::generate();
 
-			$data = array_merge($data, $data_added);
+				$data = array_merge($data, $data_added);
 
-			//insert these three in final parameters
-			array_push($parameters['final'], 'token', 'ip', 'started');
+				//insert these three in final parameters
+				array_push($parameters['final'], 'token', 'ip', 'started');
 
-      $request->setData($data);
-      $request->setParameterStatus($parameters);
+	      $request->setData($data);
+	      $request->setParameterStatus($parameters);
 
-      return $request->create($request);
-    }
-    else
-    {
-      //fail gracefully some way?
-    }
+	      return $request->create($request);
+	    }
+	    else
+	    {
+	      //fail gracefully some way?
+	    }
 	}
 
 
@@ -55,18 +55,7 @@ class user_session extends \iriki\request
 		//read
 	    if (!is_null($request))
 	    {
-			$sessions_found = $request->read($request, false);
-
-			//var_dump($request->getData()); var_dump($request->getParameterStatus());
-
-			if (count($sessions_found) == 1)
-			{
-
-			}
-			else
-			{
-
-			}
+			$sessions_found = $request->read($request, true);
 	      	return $sessions_found;
 	    }
 	}

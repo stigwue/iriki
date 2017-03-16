@@ -4,6 +4,8 @@ namespace iriki\test;
 
 class request
 {
+    //use guzzle?
+    
 	public static function doGet($url, $parameters)
     {
         $url = $url . '?';
