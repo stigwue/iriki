@@ -12,9 +12,9 @@
 					"parameters" : [],
 					"exempt" : ["_id"]
 				},
-				"reset_password" : {
+				"change_auth" : {
 					"description" : "Reset the user password.",
-					"parameters" : ["hash_old", "hash_new"],
+					"parameters" : ["username", "hash_old", "hash_new"],
 					"exempt" : []
 				}
 			}
