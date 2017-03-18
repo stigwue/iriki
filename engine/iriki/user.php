@@ -135,7 +135,7 @@ class user extends \iriki\request
 		}
 	}
 
-	public function change_auth($request, $wrap)
+	public function change_auth($request, $wrap = true)
 	{
 		if (!is_null($request))
 		{
