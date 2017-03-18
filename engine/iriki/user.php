@@ -4,6 +4,19 @@ namespace iriki;
 
 class user extends \iriki\request
 {
+	public function read_by_username($request, $wrap= true)
+	{
+	    if (!is_null($request))
+			{
+	      $request->setParameterStatus(array(
+					'final' => array('username'),
+					'missing' => array(),
+					'extra' => array(),
+					'ids' => array()
+				));
+				return $request->read($request, $wrap);
+			}
+	}
 	public function signup($request, $wrap = true)
 	{
 		if (!is_null($request))

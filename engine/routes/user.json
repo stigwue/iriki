@@ -16,6 +16,9 @@
 					"description" : "Reset the user password.",
 					"parameters" : ["username", "hash_old", "hash_new"],
 					"exempt" : []
+				},
+				"read_by_username" : {
+					"parameters" : ["username"]
 				}
 			}
 		}
