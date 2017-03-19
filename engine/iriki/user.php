@@ -103,7 +103,7 @@ class user extends \iriki\request
 				);
 				//change parameters
 				$session_request->setParameterStatus(array(
-					'final' => array('authenticated', 'remember'),
+					'final' => array('authenticated', 'remember', 'user_id'),
 					'missing' => array(),
 					'extra' => array(),
 					'ids' => array('user_id')
@@ -133,7 +133,7 @@ class user extends \iriki\request
 				);
 				//change parameters
 				$session_request->setParameterStatus(array(
-					'final' => array('authenticated', 'remember'),
+					'final' => array('authenticated', 'remember', 'user_id'),
 					'missing' => array(),
 					'extra' => array(),
 					'ids' => array('user_id')
