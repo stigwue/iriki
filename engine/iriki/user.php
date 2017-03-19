@@ -17,6 +17,7 @@ class user extends \iriki\request
 				return $request->read($request, $wrap);
 			}
 	}
+
 	public function signup($request, $wrap = true)
 	{
 		if (!is_null($request))
@@ -206,6 +207,20 @@ class user extends \iriki\request
 			}
 
 			return \iriki\response::error('Authentication change failed.', $wrap);
+		}
+	}
+
+	public function delete($request, $wrap= true)
+	{
+	    if (!is_null($request))
+		{
+	      	$request->setParameterStatus(array(
+				'final' => array('username'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array()
+			));
+			return $request->delete($request, $wrap);
 		}
 	}
 }

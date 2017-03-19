@@ -19,8 +19,11 @@
 				},
 				"read_by_username" : {
 					"parameters" : ["username"]
+				},
+				"delete" : {
+					"parameters" : ["username"]
 				}
 			}
-		}
+		}		
 	}
 }
