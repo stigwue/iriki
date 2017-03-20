@@ -389,8 +389,6 @@ class model extends config
           $db_instance = $request::getDBInstance();
 
           $property_identifier = $parent_model . $db_instance::ID_FIELD;
-
-          var_dump($property_identifier);
           
           if (isset($request_data[$property_identifier]))
           {
