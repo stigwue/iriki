@@ -194,6 +194,8 @@ class request
 
       $result = $instance::doRead($request);
 
+      //$relations;
+
       return \iriki\response::data($result, $wrap);
     }
 

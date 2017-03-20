@@ -1,13 +1,7 @@
 {
-	"iriki":
+	"iriki-app":
 	{
 		"routes" : {
-			"alias" : {
-				"validate" : {
-					"model" : "user_session",
-					"action" : "validate"
-				}
-			},
 			"default" : {
 				"description" : {
 					"description" : "Describe a model, listing its properties.",
@@ -35,9 +29,8 @@
 					"parameters" : ["_id"]
 				}
 			},
+			"alias" : {},
 			"routes" : [
-				"user",
-				"user_session"
 			]
 		}
 	}

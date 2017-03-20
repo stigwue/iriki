@@ -380,9 +380,18 @@ class model extends config
           //all parent models must have a 'parent_model + id_field' parameter supplied
           //we could go as far as to check that the parent model exists but... maybe not
 
+
+            //the plan is simple
+            //if the model 'user_session' belongsto 'user'
+            //the user_session model will have a user_id field, get it
+            //then find the user details with the id supplied
+
           $db_instance = $request::getDBInstance();
 
           $property_identifier = $parent_model . $db_instance::ID_FIELD;
+
+          var_dump($property_identifier);
+          
           if (isset($request_data[$property_identifier]))
           {
             //add to final parameters
@@ -433,7 +442,10 @@ class model extends config
         $property_identifier = $parent_model . $db_instance::ID_FIELD;
         $property_value = $request->getData()[$db_instance::ID_FIELD];
 
-        //var_dump(compact('parent_model', 'property_identifier', 'property_value'));
+        //the plan is simple
+        //if the model 'user' hasmany 'user_session'
+        //the user model will have a user_session_id field, get it
+        //then find the user_sessions details with the id supplied
 
         foreach ($hasmany as $child_model)
         {

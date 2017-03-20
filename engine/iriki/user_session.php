@@ -20,6 +20,8 @@ class user_session extends \iriki\request
 
 		$data['started'] = time(NULL);
 
+		$data['pinged'] = time(NULL);
+
 		return $data;
 	}
 
@@ -27,21 +29,21 @@ class user_session extends \iriki\request
 	{
 	    if (!is_null($request))
 	    {
-	      $data = $request->getData();
-				$parameters = $request->getParameterStatus();
+			$data = $request->getData();
+			$parameters = $request->getParameterStatus();
 
-				//generate token
-				$data_added = Self::generate();
+			//generate token
+			$data_added = Self::generate();
 
-				$data = array_merge($data, $data_added);
+			$data = array_merge($data, $data_added);
 
-				//insert these three in final parameters
-				array_push($parameters['final'], 'token', 'ip', 'started');
+			//insert these three in final parameters
+			array_push($parameters['final'], 'token', 'ip', 'started', 'pinged');
 
-	      $request->setData($data);
-	      $request->setParameterStatus($parameters);
+			$request->setData($data);
+			$request->setParameterStatus($parameters);
 
-	      return $request->create($request);
+			return $request->create($request);
 	    }
 	    else
 	    {
@@ -57,6 +59,42 @@ class user_session extends \iriki\request
 	    {
 			return $request->read($request, true);
 	    }
+	}
+
+	public function ping($request, $wrap = true)
+	{
+		if (!is_null($request))
+		{
+
+			//get the session details first
+			$sessions_found = $request->read($request, false);
+
+			if (count($sessions_found) == 0)
+			{
+				//this session wasn't found, return error?
+
+				return \iriki\response::error('Session not found', $wrap);
+			}
+			else
+			{
+				$session = $sessions_found[0];
+				//invalidate
+				$data = $session;
+				$data['pinged'] = time(NULL);
+
+				$request->setData($data);
+				$request->setParameterStatus(
+					array(
+						'final' => array('_id', 'authenticated', 'remember', 'token', 'ip', 'started', 'pinged', 'user_id', 'created'),
+						'missing' => array(),
+						'extra' => array(),
+						'ids' => array('_id', 'user_id')
+					)
+				);
+
+				return $request->update($request, $wrap);
+			}
+		}
 	}
 
 	public function invalidate($request, $wrap = true)

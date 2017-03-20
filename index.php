@@ -16,7 +16,7 @@ define('IRIKI_SESSION', false);
 //refresh time in seconds
 define('IRIKI_REFRESH', 120);
 
-define('IRIKI_CONFIG', 'apps/app_name/app.json');
+define('IRIKI_CONFIG', 'app/app.json');
 
 //engine
 require_once('engine/autoload.php');

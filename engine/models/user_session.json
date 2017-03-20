@@ -23,6 +23,10 @@
 						"description" : "Time session began",
 						"type" : "number"
 					},
+					"pinged" :  {
+						"description" : "Time session was last pinged",
+						"type" : "number"
+					},
 					"authenticated" : {
 						"description" : "True or false, determines if a user with this token is signed in.",
 						"type" : "boolean"

@@ -87,7 +87,7 @@ class response
       return $response;
     }
 
-    public static function data($data, $wrap = true)
+    public static function data($data, $wrap = true, $relations = null)
     {
         //do logging?
 

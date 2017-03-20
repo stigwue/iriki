@@ -6,10 +6,14 @@
 				"initiate" : {
 					"description" : "Initiate (create) a session, returns a token.",
 					"parameters" : [],
-					"exempt" : ["_id", "started", "token", "ip", "authenticated"]
+					"exempt" : ["_id", "started", "pinged", "token", "ip", "authenticated"]
 				},
 				"validate" : {
 					"description" : "Validate a session, returns expired or not.",
+					"parameters" : ["token"]
+				},
+				"ping" : {
+					"description" : "Show the session is still in use.",
 					"parameters" : ["token"]
 				},
 				"invalidate" : {
