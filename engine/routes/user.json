@@ -13,8 +13,13 @@
 					"exempt" : ["_id"]
 				},
 				"change_auth" : {
-					"description" : "Reset the user password.",
+					"description" : "Change the user password.",
 					"parameters" : ["username", "hash_old", "hash_new"],
+					"exempt" : []
+				},
+				"reset_auth" : {
+					"description" : "Reset the user password.",
+					"parameters" : ["username"],
 					"exempt" : []
 				},
 				"read_by_username" : {

@@ -4,6 +4,15 @@ namespace iriki;
 
 class user extends \iriki\request
 {
+	private static function generate()
+	{
+		$seed = time(NULL);
+
+		$data = array();
+
+		return \PseudoCrypt::hash($seed, 6);
+	}
+
 	public function read_by_username($request, $wrap= true)
 	{
 	    if (!is_null($request))
@@ -207,6 +216,63 @@ class user extends \iriki\request
 			}
 
 			return \iriki\response::error('Authentication change failed.', $wrap);
+		}
+	}
+
+	public function reset_auth($request, $wrap = true)
+	{
+		if (!is_null($request))
+		{
+			$new_request = clone $request;
+		  	$data = $new_request->getData();
+
+		  	$new_request->setData(
+				array(
+					'username' => $data['username']
+				)
+			);
+			$new_request->setParameterStatus(array(
+				'final' => array('username'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array()
+			));
+
+			//read by username solely
+			$result = $new_request->read($new_request, false);
+
+			if (count($result) != 0)
+			{
+				//user found
+				$single_result = $result[0];
+				//skip verification, reset it
+				$new_password = Self::generate();
+				$new_hash = password_hash($new_password, PASSWORD_BCRYPT);
+
+
+				$change_request = clone $request;
+			  	$data = $single_result;
+
+			  	//change some properties
+			  	$data['hash'] = $new_hash;
+			  	$change_request->setData($data);
+				$change_request->setParameterStatus(
+					array(
+						'final' => array('_id', 'username', 'hash', 'created'),
+						'missing' => array(),
+						'extra' => array(),
+						'ids' => array('_id')
+					)
+				);
+
+				//save new auth
+				if ($change_request->update($change_request, false))
+				{
+					return \iriki\response::information($new_password, $wrap);
+				}
+			}
+
+			return \iriki\response::error('Authentication reset failed.', $wrap);
 		}
 	}
 
