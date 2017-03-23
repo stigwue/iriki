@@ -12,9 +12,9 @@ date_default_timezone_set('Africa/Lagos');
 define('IRIKI_MODE', 'local');
 
 //use iriki to manage sessions?
-define('IRIKI_SESSION', false);
+define('IRIKI_SESSION', true);
 //refresh time in seconds
-define('IRIKI_REFRESH', 120);
+define('IRIKI_REFRESH', 60 * 7);
 
 define('IRIKI_CONFIG', 'app/app.json');
 
