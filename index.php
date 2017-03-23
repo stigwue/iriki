@@ -86,7 +86,7 @@ if ($APP['expires'] == 0 OR $APP['expires'] <= time(NULL))
 }
 else
 {
-	$app = $_SESSION['iriki_app'];
+	$APP = $_SESSION['iriki_app'];
 }
 
 //load up application's class files
