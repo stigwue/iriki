@@ -27,7 +27,7 @@ class config
     {
         if (strlen($json_path) != 0)
         {
-             $this->_json = Self::load_json_file($json_path);
+            $this->_json = Self::load_json_file($json_path);
         }
     }
 
@@ -39,14 +39,8 @@ class config
     public function getKeyValues()
     {
         //return key-value pairs
-        return $this->_key_values;
-    }
-
-    public function doInitialise($json_path, $app = 'iriki')
-    {
-        $this->_json = Self::load_json_file($json_path);
-
         $this->_key_values = $this->_json['iriki']['app'];
+        return $this->_key_values;
     }
 
     public function getStatus($status = null, $json = false)

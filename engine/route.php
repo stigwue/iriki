@@ -353,7 +353,7 @@ class route extends config
                     //action exists?
                     if ($model_status['action_exists'])
                     {
-                        //paramter check
+                        //parameter check
                         //on fail, describe action
 
                         $parameter_status = model::doPropertyMatch(

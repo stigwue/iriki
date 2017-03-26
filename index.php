@@ -54,14 +54,11 @@ $APP = array(
 
 
 $status = array();
-$app_config = new iriki\config();
-$app_routes = new iriki\route();
-$app_models = new iriki\model();
 
 if ($APP['expires'] == 0 OR $APP['expires'] <= time(NULL))
 {
 	//initialise app config values
-	$app_config->doInitialise(IRIKI_CONFIG);
+	$app_config = new iriki\config(IRIKI_CONFIG);
 	$APP['config'] = $app_config->getKeyValues();
 
 	//load up configurations
@@ -70,11 +67,15 @@ if ($APP['expires'] == 0 OR $APP['expires'] <= time(NULL))
 	$APP['database'] = $APP['config']['database'][IRIKI_MODE];
 	//$status = $app_config->getStatus();
 
+
+	$app_routes = new iriki\route();
 	//load up routes
 	$APP['routes']['engine'] = $app_routes->doInitialise($APP['config'], $APP['engine']);
 	$APP['routes']['app'] = $app_routes->doInitialise($APP['config'], $APP['application']);
 	//$status = $app_routes->getStatus($status);
 
+
+	$app_models = new iriki\model();
 	//load up models
 	$APP['models']['engine'] = $app_models->doInitialise($APP['config'], $app_routes->getRoutes());
 	$APP['models']['app'] = $app_models->doInitialise($APP['config'], $app_routes->getRoutes($APP['application']), $APP['application']);
