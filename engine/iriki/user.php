@@ -13,18 +13,28 @@ class user extends \iriki\request
 		return \PseudoCrypt::hash($seed, 6);
 	}
 
-	public function read_by_username($request, $wrap= true)
+	public function read_by_username($request, $wrap = true)
 	{
 	    if (!is_null($request))
+		{
+	      	$request->setParameterStatus(array(
+				'final' => array('username'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array()
+			));
+
+			$users = $request->read($request, false);
+
+			if (count($users) == 0)
 			{
-	      $request->setParameterStatus(array(
-					'final' => array('username'),
-					'missing' => array(),
-					'extra' => array(),
-					'ids' => array()
-				));
-				return $request->read($request, $wrap);
+				return \iriki\response::error('User not found.', $wrap);
 			}
+			else
+			{
+				return \iriki\response::data($users, $wrap);
+			}
+		}
 	}
 
 	public function signup($request, $wrap = true)
