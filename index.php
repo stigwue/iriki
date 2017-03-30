@@ -110,12 +110,14 @@ $status = iriki\route::matchUrl(
 //return status
 if (is_null($status))
 {
-	echo json_encode($app_config->getStatus());
+	echo json_encode(\iriki\response::error('.....', true));
 }
 else
 {
 	echo json_encode($status);
 }
+
+
 
 
 //http://stackoverflow.com/a/9866124/3323338
