@@ -8,6 +8,9 @@ session_start();
 //set time zone, no where like home
 date_default_timezone_set('Africa/Lagos');
 
+//some random key, the one bellow won't do
+define('IRIKI_KEY', 'correct_horse_battery_staple');
+
 //app persistence switch
 define('IRIKI_MODE', 'local');
 
@@ -46,7 +49,7 @@ $APP = array(
 	//if changes are made to config files, set this to zero
 	//or old ones will be used until expiry
 	'expires' => (IRIKI_SESSION ?
-	(isset($_SESSION['iriki_expires']) ? $_SESSION['iriki_expires'] : 0)
+	(isset($_SESSION[IRIKI_KEY]['iriki_expires']) ? $_SESSION[IRIKI_KEY]['iriki_expires'] : 0)
 	:
 	0
 	)
@@ -82,12 +85,15 @@ if ($APP['expires'] == 0 OR $APP['expires'] <= time(NULL))
 	//$status = $app_models->getStatus($status);
 
 	$APP['expires'] = time(NULL) + IRIKI_REFRESH;
-	$_SESSION['iriki_expires'] = $APP['expires'];
-	$_SESSION['iriki_app'] = $APP;
+	//$_SESSION['iriki_expires'] = $APP['expires'];
+	$_SESSION[IRIKI_KEY] = array(
+		'iriki_expires' => $APP['expires'],
+		'app' => $APP
+	);
 }
 else
 {
-	$APP = $_SESSION['iriki_app'];
+	$APP = $_SESSION[IRIKI_KEY]['app'];
 }
 
 //load up application's class files
@@ -116,8 +122,6 @@ else
 {
 	echo json_encode($status);
 }
-
-
 
 
 //http://stackoverflow.com/a/9866124/3323338
