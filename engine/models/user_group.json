@@ -1,0 +1,26 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"user_group" : {
+				"description" : "The user group model.",
+				"properties" : {
+					"_id" : {
+						"description" : "Unique identifier.",
+						"type" : "string",
+						"unique" : true
+					},
+					"title" :  {
+						"description" : "Group title.",
+						"type" : "string",
+						"unique" : true
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : ["user"]
+				}
+			}
+		}
+	}
+}

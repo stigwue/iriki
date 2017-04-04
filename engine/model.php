@@ -424,7 +424,7 @@ class model extends config
     * @return array Parameter status for now, should change soon
     * @throw
     */
-    public static function doHasManyRelation($request)
+    public static function doHasManyRelation($request, $recursivity = 1)
     {
       //test to see if request can be sent by reference so we can convert parent model ids to mongoid
       $parameters = $request->getParameterStatus();
@@ -433,17 +433,18 @@ class model extends config
       $hasmany_data = array();
       $hasmany = (isset($request->getModelStatus()['details']['relationships']['hasmany']) ? $request->getModelStatus()['details']['relationships']['hasmany'] : array());
 
+        //the plan is simple
+        //if the model 'user' hasmany 'user_session'
+        //the user model will have an _id field: the user_id, get it
+        //then find the user_sessions with the user_id supplied
+
       /*if (count($hasmany) != 0)
       {
         $parent_model = $request->getModelStatus()['str']; //this present model
         $db_instance = &$request::getDBInstance();
         $property_identifier = $parent_model . $db_instance::ID_FIELD;
         $property_value = $request->getData()[$db_instance::ID_FIELD];
-
-        //the plan is simple
-        //if the model 'user' hasmany 'user_session'
-        //the user model will have a user_session_id field, get it
-        //then find the user_sessions details with the id supplied
+        
 
         foreach ($hasmany as $child_model)
         {

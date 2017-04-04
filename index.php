@@ -1,24 +1,43 @@
 <?php
 
-//Cross-origin Resource Sharing
-cors();
-
 session_start();
 
 //set time zone, no where like home
 date_default_timezone_set('Africa/Lagos');
 
-//some random key, the one bellow won't do
+//url where this runs from
+define('IRIKI_URL', 'irikimc.com');
+//do CORS test?
+define('IRIKI_STRICT_CORS', false);
+
+//Cross-origin Resource Sharing (CORS) test
+$cors_test_passed = cors(IRIKI_STRICT_CORS);
+
+if (!$cors_test_passed) {
+	if (IRIKI_STRICT_CORS) {
+		$message = array(
+			'code' => 400,
+			'message' => 'CORS error'
+		);
+		echo json_encode($message);
+		exit();
+	}
+}
+
+//some random key, the one below won't do
+//codeigniter types from http://randomkeygen.com/ should do
 define('IRIKI_KEY', 'correct_horse_battery_staple');
 
 //app persistence switch
 define('IRIKI_MODE', 'local');
 
 //use iriki to manage sessions?
-define('IRIKI_SESSION', true);
+define('IRIKI_SESSION', false);
+
 //refresh time in seconds
 define('IRIKI_REFRESH', 60 * 7);
 
+//config file for this app
 define('IRIKI_CONFIG', 'app/app.json');
 
 //engine
@@ -85,7 +104,6 @@ if ($APP['expires'] == 0 OR $APP['expires'] <= time(NULL))
 	//$status = $app_models->getStatus($status);
 
 	$APP['expires'] = time(NULL) + IRIKI_REFRESH;
-	//$_SESSION['iriki_expires'] = $APP['expires'];
 	$_SESSION[IRIKI_KEY] = array(
 		'iriki_expires' => $APP['expires'],
 		'app' => $APP
@@ -116,11 +134,27 @@ $status = iriki\route::matchUrl(
 //return status
 if (is_null($status))
 {
-	echo json_encode(\iriki\response::error('.....', true));
+	$message = array(
+		'code' => 400,
+		'message' => 'Iriki MC endpoint. Specify a model.'
+	);
+	echo json_encode($message);
 }
 else
 {
 	echo json_encode($status);
+}
+
+
+function strContains($haystack, $needle) {
+	if (strpos($haystack, $needle) !== FALSE)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 
@@ -137,18 +171,34 @@ else
 *  - http://www.w3.org/TR/cors/
 *
 */
-function cors() {
-	// Allow from any origin
-	if (isset($_SERVER['HTTP_ORIGIN'])) {
-		// Decide if the origin in $_SERVER['HTTP_ORIGIN'] is one
-		// you want to allow, and if so:
-		header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-		header('Access-Control-Allow-Credentials: true');
-		header('Access-Control-Max-Age: 86400');    // cache for 1 day
-	}
+function cors($strict_cors) {
 
+	//test request method
+	if ($_SERVER['REQUEST_METHOD'] == 'GET' OR $_SERVER['REQUEST_METHOD'] == 'POST'  ) {
+
+		//test for origin
+		if (isset($_SERVER['HTTP_ORIGIN'])) {
+
+			$http_origin = strtolower($_SERVER['HTTP_ORIGIN']);
+
+			if (strContains($http_origin, IRIKI_URL) OR !IRIKI_STRICT_CORS){
+				header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+				header('Access-Control-Allow-Credentials: true');
+				header('Access-Control-Max-Age: 86400');    // cache for 1 day
+
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			//origin isn't set
+			return false;
+		}
+	}
 	// Access-Control headers are received during OPTIONS requests
-	if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+	else if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
 		// may also be using PUT, PATCH, HEAD etc
@@ -158,7 +208,15 @@ function cors() {
 		header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 
 		exit(0);
+
+		return true; //will not be hit
 	}
+	else {
+
+		//fail
+		return false;
+	}
+	
 }
 
 ?>

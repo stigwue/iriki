@@ -7,7 +7,7 @@
 				"properties" : {
 					"_id" : {
 						"description" : "Unique ID.",
-						"type" : "number",
+						"type" : "string",
 						"unique" : true
 					},
 					"token" : {

@@ -1,0 +1,21 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"user_access" : {
+				"description" : "Model tying users to groups.",
+				"properties" : {
+					"_id" : {
+						"description" : "Unique identifier.",
+						"type" : "string",
+						"unique" : true
+					}
+				},
+				"relationships" : {
+					"belongsto" : ["user", "user_group"],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

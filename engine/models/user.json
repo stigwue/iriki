@@ -3,7 +3,7 @@
 	{
 		"models" : {
 			"user" : {
-				"description" : "The user model. You may chose to inherit it.",
+				"description" : "The user model. Have other models belong to this.",
 				"properties" : {
 					"_id" : {
 						"description" : "User internal unique ID.",
@@ -11,7 +11,7 @@
 						"unique" : true
 					},
 					"username" :  {
-						"description" : "Username.",
+						"description" : "Unique username. Preferrably ones that can be remembered by humans.",
 						"type" : "string",
 						"unique" : true
 					},

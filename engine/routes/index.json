@@ -37,7 +37,9 @@
 			},
 			"routes" : [
 				"user",
-				"user_session"
+				"user_session",
+				"user_group",
+				"user_access"
 			]
 		}
 	}

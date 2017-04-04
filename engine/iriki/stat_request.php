@@ -19,9 +19,22 @@ class stat_request
   models (model => request_count, action ( => request_count))
   actions (action => request_count)
   */
+  private static $_collection = null;
 
-  public static function initialize($timestamp)
+  //db is an array of server and db
+  public static function initialize($db, $timestamp)
   {
+    if (isset($db['server']) AND isset($db['db'])) {
+      $_db = new \MongoClient($db['server']);
+
+      Self::$_collection = $_db->$db['db'];
+
+      return Self::$_collection;
+    }
+    else {
+      return null;
+    }
+
     $stat = array(
       'timestamp' => $timestamp,
       'request_count' => 0,
@@ -47,7 +60,7 @@ class stat_request
   //so, during fixed intervals, a new one is added
   //ideally, this should be called by cron, except that cron might not know the db_type
 
-  public static function log($move_head = false, $timestamp = 0)
+  public static function log($request, $timestamp = 0, $move_head = false)
   {
 
   }
