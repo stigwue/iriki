@@ -122,25 +122,14 @@ class mongodb extends database
 			$query[Self::ID_FIELD] = new \MongoId();
 			$query['created'] = time(NULL);
 
-      $status = $persist->insert($query);
-
-			//unset all data properties except id
-			/*$id_field = $query[Self::ID_FIELD];
-			$request->setData(array(Self::ID_FIELD => $id_field));
-			//parameters
-			$request->setParameterStatus(array(
-				'final' => array('_id'),
-				'missing' => array(),
-				'extra' => array(),
-				'ids' => array('_id')
-			));
-
-			//re-read it to return properties
-			return Self::doRead($request);*/
+      		$status = $persist->insert($query);
 
 			$status_flag = ($status["n"] == 0);
 
-			return $status_flag;
+			return array(
+				'message' => $status_flag,
+				'data' => $query[Self::ID_FIELD]->{'$id'}
+			);
 		}
 	}
 

@@ -95,16 +95,16 @@ class response
         else return Self::build(Self::OK, '', $data);
     }
 
-    public static function information($message, $wrap = true)
+    public static function information($message, $wrap = true, $data = null)
     {
         if (!$wrap) return $message;
-        else return Self::build(Self::OK, $message);
+        else return Self::build(Self::OK, $message, $data);
     }
 
-    public static function error($message, $wrap = true)
+    public static function error($message, $wrap = true, $data = null)
     {
         if (!$wrap) return $message;
-        else return Self::build(Self::ERROR, $message);
+        else return Self::build(Self::ERROR, $message, $data);
     }
 
     //log

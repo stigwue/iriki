@@ -172,7 +172,7 @@ class request
 
       $result = $instance::doCreate($request);
 
-      return \iriki\response::information($result, $wrap);
+      return \iriki\response::information($result['message'], $wrap, $result['data']);
     }
 
     public function read($request, $wrap = true)
