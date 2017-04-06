@@ -4,6 +4,21 @@ namespace iriki;
 
 class user_access extends \iriki\request
 {
+	public function create($request, $wrap = true)
+	{
+    	if (!is_null($request))
+		{
+      		$request->setParameterStatus(array(
+				'final' => array('user_id', 'user_group_id'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array('user_id', 'user_group_id')
+			));
+			
+			return $request->create($request, $wrap);
+		}
+	}
+
 	public function user_in_group($request, $wrap = true)
 	{
     	if (!is_null($request))
