@@ -13,6 +13,10 @@ class mongodb extends database
 
 	//for (de)enforce, note http://php.net/manual/en/mongoid.isvalid.php
 	//deprecation notice
+	//http://stackoverflow.com/a/36135790/3323338
+	private static function isMongoId($id){
+		return is_string($id) && strlen($id) == 24 && ctype_xdigit($id);
+	}
 
 	//parameters has final, missing, extra and ids
 	//we check final for ID_FIELD and set
@@ -27,7 +31,7 @@ class mongodb extends database
 			$id_key = array_search($key, $parameters['ids']);
 			if ($key == Self::ID_FIELD OR $id_key !== FALSE)
 			{
-				if (\MongoId::isValid($key_values[$key]))
+				if (Self::isMongoId($key_values[$key]))
 				{
 				//$key is an id, enforce
 					$query[$key] = new \MongoId($key_values[$key]);
@@ -57,7 +61,7 @@ class mongodb extends database
 
 		foreach ($key_values as $key => $value)
 		{
-			if ($key == Self::ID_FIELD OR \MongoId::isValid($value))
+			if ($key == Self::ID_FIELD OR Self::isMongoId($value))
 			{
 				$pretty[$key] = $value->{'$id'};
 			}
