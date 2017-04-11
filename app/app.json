@@ -3,7 +3,7 @@
   {
     "app" : {
       "base" : "",
-      "base_url" : "/stephenigwue/iriki/",
+      "base_url" : "",
 
       "engine" : {
         "name" : "iriki",
@@ -38,8 +38,10 @@
         }
       },
 
-      "log" : {
-        "path" : "app/iriki/log/"
+      "constants" : {
+        "log_path" : "app/iriki/log/",
+        "mailgun_domain" : "some.domain",
+        "mailgun_secret" : "key-abc-xyz"
       }
     }
   }

@@ -1,0 +1,14 @@
+{
+	"iriki":
+	{
+		"routes" : {
+			"mg_email" : {
+				"send" : {
+					"description" : "Send an email via mailgun.",
+					"parameters" : [],
+					"exempt" : ["_id"]
+				}
+			}
+		}
+	}
+}

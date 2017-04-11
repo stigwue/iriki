@@ -61,7 +61,10 @@ class mongodb extends database
 
 		foreach ($key_values as $key => $value)
 		{
-			if ($key == Self::ID_FIELD OR Self::isMongoId($value))
+			if (
+				$key == Self::ID_FIELD OR
+				isset($value->{'$id'})
+			)
 			{
 				$pretty[$key] = $value->{'$id'};
 			}

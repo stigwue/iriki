@@ -1,0 +1,57 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"mg_email" : {
+				"description" : "An email.",
+				"properties" : {
+					"_id" : {
+						"description" : "Unique ID.",
+						"type" : "string",
+						"unique" : true
+					},
+					"from_name" :  {
+						"description" : "Name of mail sender.",
+						"type" : "string"
+					},
+					"from_email" :  {
+						"description" : "Email of sender.",
+						"type" : "email"
+					},
+					"to_name" :  {
+						"description" : "Name of mail recipient.",
+						"type" : "string"
+					},
+					"to_email" :  {
+						"description" : "Email of recipient.",
+						"type" : "email"
+					},
+					"subject" :  {
+						"description" : "Email subject.",
+						"type" : "string"
+					},
+					"body" :  {
+						"description" : "Email subject.",
+						"type" : "string"
+					},
+					"use_html" :  {
+						"description" : "Email is html or text.",
+						"type" : "boolean"
+					},
+					"cc_emails" :  {
+						"description" : "Carbon-copied recipients, comma-seperated.",
+						"type" : "string"
+					},
+					"bcc_emails" :  {
+						"description" : "Blind carbon-copied recipients, comma-seperated.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}
