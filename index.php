@@ -6,8 +6,8 @@ session_start();
 date_default_timezone_set('Africa/Lagos');
 
 //url where this runs from
-define('IRIKI_URL', 'irikimc.com');
-//do CORS test?
+define('IRIKI_URL', 'eyeti.xyz/iriki');
+//obey CORS?
 define('IRIKI_STRICT_CORS', false);
 
 //Cross-origin Resource Sharing (CORS) test
@@ -87,6 +87,7 @@ if ($APP['expires'] == 0 OR $APP['expires'] <= time(NULL))
 	$APP['engine'] = $APP['config']['engine']['name'];
 	$APP['application'] = $APP['config']['application']['name'];
 	$APP['database'] = $APP['config']['database'][IRIKI_MODE];
+	$APP['constants'] = $APP['config']['constants'];
 	//$status = $app_config->getStatus();
 
 

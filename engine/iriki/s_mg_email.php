@@ -77,8 +77,6 @@ class mg_email extends \iriki\request
                 $mail_options
             );
 
-            //var_dump($result);
-
 
 	        //interprete result
             $status = $result->http_response_code == 200;
