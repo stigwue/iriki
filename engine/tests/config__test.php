@@ -2,7 +2,7 @@
 
 namespace iriki\test;
 
-class config__test extends PHPUnit_Framework_TestCase
+class config__test extends PHPUnit\Framework\TestCase
 {
     private static $test_obj;
     

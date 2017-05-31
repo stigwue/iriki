@@ -3,6 +3,14 @@
 	{
 		"routes" : {
 			"user_group" : {
+				"exists" : {
+					"description" : "Check if a user group exists.",
+					"parameters" : ["title"]
+				},
+				"read_by_title" : {
+					"description" : "Read a user group by its (unique) title.",
+					"parameters" : ["title"]
+				}
 			}
 		}
 	}

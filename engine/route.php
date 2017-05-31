@@ -368,6 +368,9 @@ class route extends config
                         //so we have to leave that check until later
                         if ($missing_parameters == 0)
                         {
+                            //check for authentication
+
+                            
                             //persistence
                             //defined in one of two locations
                             engine\database::doInitialise(

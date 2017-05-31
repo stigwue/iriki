@@ -5,12 +5,14 @@
 			"user" : {
 				"authenticate" : {
 					"description" : "Creates a session for the user.",
-					"parameters" : ["username", "hash"]
+					"parameters" : ["username", "hash"],
+					"authenticate" : "false"
 				},
 				"signup" : {
 					"description" : "Signs the user up, will let you create a session afterwards.",
 					"parameters" : [],
-					"exempt" : ["_id"]
+					"exempt" : ["_id"],
+					"authenticate" : "false"
 				},
 				"change_auth" : {
 					"description" : "Change the user password.",
