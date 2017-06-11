@@ -324,7 +324,7 @@ class route extends config
                 'action_defined' => false, //boolean, action defined
                 'action_default' => false, //boolean, action is default defined
                 'action_exists' => $action_exists, //boolean, action exists in class
-                'action_details' => null //array, action description, parameters, exempt
+                'action_details' => null //array, action description, parameters, exempt, authenticate
             );
 
             $model_status = model::doMatch($model_status,
@@ -370,7 +370,7 @@ class route extends config
                         {
                             //check for authentication
 
-                            
+
                             //persistence
                             //defined in one of two locations
                             engine\database::doInitialise(

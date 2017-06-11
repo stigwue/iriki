@@ -139,7 +139,8 @@ class model extends config
                             $model_status['action_details'] = array(
                                 'description' => (isset($_route_action[$model_status['action']]['description']) ? $_route_action[$model_status['action']]['description'] : ''),
                                 'parameters' => $_route_action[$model_status['action']]['parameters'],
-                                'exempt' => (isset($_route_action[$model_status['action']]['exempt']) ? $_route_action[$model_status['action']]['exempt'] : array())
+                                'exempt' => (isset($_route_action[$model_status['action']]['exempt']) ? $_route_action[$model_status['action']]['exempt'] : array()),
+                                'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? $_route_action[$model_status['action']]['authenticate'] : "true")
                             );
 
                             $model_status['action_defined'] = true;
@@ -153,7 +154,8 @@ class model extends config
                             $model_status['action_details'] = array(
                                 'description' => (isset($model_status['default'][$model_status['action']]['description']) ? $model_status['default'][$model_status['action']]['description'] : ''),
                                 'parameters' => $model_status['default'][$model_status['action']]['parameters'],
-                                'exempt' => (isset($model_status['default'][$model_status['action']]['exempt']) ? $model_status['default'][$model_status['action']]['exempt'] : array())
+                                'exempt' => (isset($model_status['default'][$model_status['action']]['exempt']) ? $model_status['default'][$model_status['action']]['exempt'] : array()),
+                                'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? $_route_action[$model_status['action']]['authenticate'] : "true")
                             );
 
                             $model_status['action_defined'] = true;
