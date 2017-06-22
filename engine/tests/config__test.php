@@ -1,23 +1,31 @@
 <?php
 
-namespace iriki\test;
-
-class config__test extends PHPUnit\Framework\TestCase
-{
-    private static $test_obj;
-    
-	public function load_json_file($json_path)
+class config__test extends \PHPUnit\Framework\TestCase
+{   
+    //load_json_file success test
+	public function test_load_json_file_success()
     {
-        //build
+        $obj = new iriki\config('files/success.json');
 
-        //query
-    	$result = json_decode($result);
+        $json = $obj->getJson();
 
     	//assert
-        $this->assertEquals(false, $result->error);
+        $this->assertEquals(true, (strlen($json) != 0));
     }
 
-    //status
+
+    //loaad_json_file failure test
+    public function test_load_json_file_failure()
+    {
+        $obj = new iriki\config('files/404.json');
+
+        $json = $obj->getJson();
+
+        //assert
+        $this->assertEquals(true, (strlen($json) == 0));
+    }
+
+    //parse_json_string success test
 }
 
 ?>

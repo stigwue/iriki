@@ -1,0 +1,9 @@
+{
+  "iriki":
+  {
+    "app" : {
+      "base" : "",
+      "base_url" : "/stephenigwue/iriki/"
+  	}
+  }
+}
