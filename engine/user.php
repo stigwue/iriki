@@ -286,11 +286,11 @@ class user extends \iriki\request
 		}
 	}
 
-	public function delete($request, $wrap= true)
+	public function delete_by_username($request, $wrap= true)
 	{
-	    if (!is_null($request))
+    if (!is_null($request))
 		{
-	      	$request->setParameterStatus(array(
+    	$request->setParameterStatus(array(
 				'final' => array('username'),
 				'missing' => array(),
 				'extra' => array(),

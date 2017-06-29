@@ -27,10 +27,10 @@
 				"read_by_username" : {
 					"parameters" : ["username"]
 				},
-				"delete" : {
+				"delete_by_username" : {
 					"parameters" : ["username"]
 				}
 			}
-		}		
+		}
 	}
 }

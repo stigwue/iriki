@@ -12,7 +12,7 @@
 					"parameters" : ["user_id", "user_group_id"]
 				},
 				"remove_user" : {
-					"description" : "Checks to see if a user is in a specific group.",
+					"description" : "Removes a user from a specific group.",
 					"parameters" : ["user_id", "user_group_id"]
 				}
 			}
