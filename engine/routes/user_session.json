@@ -19,6 +19,10 @@
 				"invalidate" : {
 					"description" : "Invalidate a session, it will no longer be honoured.",
 					"parameters" : ["token"]
+				},
+				"read_by_token" : {
+					"description" : "Read a session by providing its token.",
+					"parameters" : ["token"]
 				}
 			}
 		}

@@ -1,11 +1,14 @@
 <?php
 
 
-//database
+//databases
 require_once(__DIR__ . '/database/autoload.php');
 
+//primitives
+require_once(__DIR__ . '/config/autoload.php');
+
 //utilities
-require_once(__DIR__ . '/utilities/autoload.php');
+require_once(__DIR__ . '/utility/autoload.php');
 
 foreach (glob(__DIR__ . "/*.php") as $filepath)
 {

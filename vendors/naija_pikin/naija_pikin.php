@@ -4,7 +4,7 @@
 
 //Basically, it combines an adjective (pulled from http://adjectivesthatstart.com/) and a noun (a Nigerian name - names pulled from faker.ng: https://github.com/binkabir/faker.ng).
 
-//I have not gone thorugh the adjectives to remove insultive ones!
+//I have not gone thorugh the adjectives to remove offensive ones!
 
 class NaijaPikin
 { 
@@ -73,7 +73,7 @@ class NaijaPikin
 			}
 			else
 			{
-				return $this->_noun;
+				return $this->noun;
 			}
 		}
 	}
@@ -108,7 +108,7 @@ class NaijaPikin
 			}
 			else
 			{
-				return $this->_adjective;
+				return $this->adjective;
 			}
 		}
 	}
@@ -116,7 +116,7 @@ class NaijaPikin
 	public function getName($randomize = true)
 	{
 		$noun = $this->getNoun($randomize);
-		$adjective = $this->getAdjective($randomize);
+		$adjective = $this->getAdjective(strtolower($noun[0]), $randomize);
 
 		$fullname = $adjective . ' ' . $noun;
 

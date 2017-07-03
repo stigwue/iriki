@@ -10,7 +10,7 @@ class config__test extends \PHPUnit\Framework\TestCase
         $json = $obj->getJson();
 
     	//assert
-        $this->assertEquals(true, (strlen($json) != 0));
+        $this->assertNotEquals(null, $json);
     }
 
 
