@@ -125,13 +125,15 @@ class request
     //before relationship checks are done, parent model properties are in extra
     //a relationship check should move valid ones from extra into final or insert into missing
     //a model action is not performed until missing and extra is zero
-    //--"fax!" quot the penguin
+    //--"fax!" quoth the penguin
 
     //for each of the CRUD actions, do (if available) pre and post actions/checks
     //relationship | C | R | U | D
     //unique       | v | x | x | x
     //belongsto    | v | x | v | x
     //hasmany      | x | v | x | v
+
+    //possible hack for overriding uniques in updates
 
     //note that there's a recursivity variable to limit relationship checks
 

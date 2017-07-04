@@ -7,7 +7,7 @@
 				"properties" : {
 					"_id" : {
 						"description" : "Unique identifier.",
-						"type" : "string",
+						"type" : "key",
 						"unique" : true
 					}
 				},

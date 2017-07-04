@@ -7,7 +7,7 @@
 				"properties" : {
 					"_id" : {
 						"description" : "User internal unique ID.",
-						"type" : "string",
+						"type" : "key",
 						"unique" : true
 					},
 					"username" :  {

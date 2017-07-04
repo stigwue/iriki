@@ -29,10 +29,10 @@ class config
     *
     * @var array
     */
-    private $_key_values;
+    private $_key_values = null;
 
     /**
-    * Load the contents of a supplied json file .
+    * Load the contents of a supplied json file
     *
     *
     * @param string JSON file path
@@ -52,6 +52,14 @@ class config
         }
     }
 
+    /**
+    * Parse supplied json string
+    *
+    *
+    * @param string JSON string
+    * @return array Array of JSON or null if parse fails.
+    * @throw
+    */
     private static function parse_json_string($json_string)
     {
         if ($json_string == '')
@@ -64,6 +72,13 @@ class config
         }
     }
 
+    /**
+    * Constructor, takes file path and sets contents.
+    *
+    *
+    * @param string JSON file path
+    * @throw
+    */
     function __construct($json_path = '')
     {
         if (strlen($json_path) != 0)
@@ -74,18 +89,48 @@ class config
         }
     }
 
+    /**
+    * Get json array
+    *
+    *
+    * @return array Array of JSON or null if parse fails.
+    * @throw
+    */
     public function getJson()
     {
         return $this->_json;
     }
 
+    /**
+    * Get iriki app json array of configuration
+    *
+    *
+    * @return array Array of JSON or null if parse fails.
+    * @throw
+    */
     public function getKeyValues()
     {
         //return key-value pairs
-        $this->_key_values = $this->_json['iriki']['app'];
+        if (isset($this->_json['iriki']['app'])) 
+        {
+            $this->_key_values = $this->_json['iriki']['app'];
+        }
+        else
+        {
+            $this->_key_values = null;
+        }
         return $this->_key_values;
     }
 
+    /**
+    * Get status, a summary of config details
+    *
+    *
+    * @param array Previous status array to append to
+    * @param boolean Encode result as json
+    * @return array Status array or json representation
+    * @throw
+    */
     public function getStatus($status = null, $json = false)
     {
         //unset some private ones?

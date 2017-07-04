@@ -28,6 +28,10 @@ class type
         else return false;
       break;
 
+      case 'key':
+        return is_string($value) && strlen($value) == 24 && ctype_xdigit($value);
+      break;
+
       default:
         return false;
       break;
