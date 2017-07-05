@@ -48,11 +48,13 @@ global $APP;
 
 $APP = array(
 	//string, the engine, which is also an iriki application
-	'engine' => NULL,
+	'engine' => null,
 	//string, your application
-	'application' => NULL,
+	'application' => null,
 	//array, a persistence structure
 	'database' => null,
+	'constants' => null,
+	'session' => null,
 
 
 	//array, the routes
@@ -61,7 +63,7 @@ $APP = array(
 	'models' => null,
 
 
-	//array, the config files parsed on initialisation
+	//array, the configuration used for this instance
 	'config' => null,
 
 	//app expiry stamp so it auto updates
@@ -91,14 +93,14 @@ if ($APP['expires'] == 0 OR $APP['expires'] <= time(NULL))
 	//$status = $app_config->getStatus();
 
 
-	$app_routes = new iriki\route();
+	$app_routes = new iriki\route_config();
 	//load up routes
 	$APP['routes']['engine'] = $app_routes->doInitialise($APP['config'], $APP['engine']);
 	$APP['routes']['app'] = $app_routes->doInitialise($APP['config'], $APP['application']);
 	//$status = $app_routes->getStatus($status);
 
 
-	$app_models = new iriki\model();
+	$app_models = new iriki\model_config();
 	//load up models
 	$APP['models']['engine'] = $app_models->doInitialise($APP['config'], $app_routes->getRoutes());
 	$APP['models']['app'] = $app_models->doInitialise($APP['config'], $app_routes->getRoutes($APP['application']), $APP['application']);
@@ -122,7 +124,7 @@ require_once($APP['config']['application']['path'] . 'autoload.php');
 require_once('vendors/autoload.php');
 
 
-//interprete request
+//interprete request from url
 $request_details = iriki\route::getRequestDetails(null, null, $APP['config']['base_url']);
 
 //handle the request: match a route to a model and its action
@@ -147,6 +149,7 @@ else
 }
 
 
+//utility function, as named
 function strContains($haystack, $needle) {
 	if (strpos($haystack, $needle) !== FALSE)
 	{
@@ -173,7 +176,6 @@ function strContains($haystack, $needle) {
 *
 */
 function cors($strict_cors) {
-
 	//test request method
 	if ($_SERVER['REQUEST_METHOD'] == 'GET' OR $_SERVER['REQUEST_METHOD'] == 'POST'  ) {
 
@@ -217,7 +219,6 @@ function cors($strict_cors) {
 		//fail
 		return false;
 	}
-	
 }
 
 ?>

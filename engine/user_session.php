@@ -51,7 +51,6 @@ class user_session extends \iriki\request
 	    }
 	}
 
-
 	public function validate($request)
 	{
 		//read
@@ -133,6 +132,13 @@ class user_session extends \iriki\request
 		}
 	}
 
+	public function read_by_token($request)
+	{
+	    if (!is_null($request))
+	    {
+				return $request->read($request, true);
+	    }
+	}
 }
 
 ?>

@@ -19,7 +19,7 @@ class request
     //others
     private static $_db_instance = null;
     //relationships
-    private $_session; //session
+    private $_session_token; //user_session token
 
     //build
     public static function initialize(
@@ -27,7 +27,7 @@ class request
       $model_status,
       $parameter_status,
       $data = null,
-      $session = null
+      $session_token = null
     )
     {
       $obj = new request;
@@ -35,7 +35,7 @@ class request
       $obj->_model_status = $model_status;
       $obj->_parameter_status = $parameter_status;
       $obj->_data = $data;
-      $obj->_session = $session;
+      $obj->_session_token = $session_token;
 
       return $obj;
     }
@@ -118,6 +118,17 @@ class request
       return $this->_data;
     }
 
+    public function getSession()
+    {
+      return $this->_session_token;
+    }
+
+    public function setSession($session_token)
+    {
+      $this->_session_token = $session_token;
+      return $this->_session_token;
+    }
+
     //log
 
     //before a request action is called, request data is filled
@@ -179,7 +190,7 @@ class request
 
     public function read($request, $wrap = true)
     {
-      $instance = $request->initializedb();
+      $instance = $this->initializedb();
 
       //unique
       //belongsto
@@ -196,14 +207,12 @@ class request
 
       $result = $instance::doRead($request);
 
-      //$relations;
-
       return \iriki\response::data($result, $wrap);
     }
 
     public function read_all($request, $wrap = true)
     {
-      $instance = $request->initializedb();
+      $instance = $this->initializedb();
 
       $request->setData(array());
 

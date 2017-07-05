@@ -174,7 +174,9 @@ class model
                 }
                 else
                 {
-                  //ignore type check then
+                  //ignore type check
+                  //assume the user knows what they're doing
+                  $final_properties[] = $property;
                 }
             }
             else

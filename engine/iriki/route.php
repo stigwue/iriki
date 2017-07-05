@@ -184,13 +184,14 @@ class route
                           $model_status['action_details']
                         );
 
+                        var_dump($parameter_status);
+
                         $missing_parameters = count($parameter_status['missing']);
 
                         //note that extra parameters could be ids signifying belongsto relationships
                         //so we have to leave that check until later
                         if ($missing_parameters == 0)
                         {
-                            var_dump($parameter_status);
                             //check for authentication
                             if ($model_status['action_details']['authenticate'] == 'true')
                             {
@@ -199,45 +200,92 @@ class route
                                 //look for the token in final, extra or missing
 
                                 //user_session_token is the token
-                                
-                                if (FALSE !== array_search('user_session_token', $parameter_status['extra']) || FALSE !== array_search('user_session_token', $parameter_status['final']))
-                                {
-                                    //test the token
-                                    if (true) 
-                                    {}
-                                    else
-                                    {
-                                        return response::error('User session token invalid or expired.');
-                                    }
-                                }
-                                else //if (array_search('user_session_token', $parameter_status['missing']))
+                                if (array_search('user_session_token', $parameter_status['missing']))
                                 {
                                     //authorisation or other error
                                     return response::error('User session token missing.');
                                 }
+                                else
+                                {
+                                    $user_session_token = '';
+
+                                    $tkn_extra = array_search('user_session_token', $parameter_status['extra']);
+
+                                    $tkn_final = array_search('user_session_token', $parameter_status['final']);
+
+                                    if ($tkn_extra !== FALSE || $tkn_final !== FALSE)
+                                    {
+                                        if ($tkn_extra !== FALSE)
+                                        {
+                                            $user_session_token = $parameter_status['extra'][$tkn_extra];
+
+                                            //drop from extra
+                                            unset($parameter_status['extra'][$tkn_extra]);
+                                        }
+                                        else if ($tkn_final !== FALSE)
+                                        {
+                                            $user_session_token = $parameter_status['final'][$tkn_extra];
+
+                                            //drop from final
+                                            unset($parameter_status['final'][$tkn_extra]);
+                                        }
+
+                                        //persistence
+                                        //defined in one of two locations
+                                        engine\database::doInitialise(
+                                            $app['application'],
+                                            $app['engine'],
+                                            $app['database']
+                                        );
+
+                                        $model_instance = new $model_status['str_full']();
+
+                                        //build request
+                                        //pass session token
+                                        $request = request::initialize(
+                                          engine\database::getClass(), //db_type
+                                          $model_status,
+                                          $parameter_status,
+                                          $params, //data
+                                          $user_session_token //session
+                                        );
+
+                                        //instance action
+                                        return $model_instance->$action($request);
+                                    }
+                                    else
+                                    {
+                                        //authorisation or other error
+                                        return response::error('User session token missing.');
+                                    }
+                                }
                             }
+                            else
+                            {
+                                //persistence
+                                //defined in one of two locations
+                                engine\database::doInitialise(
+                                    $app['application'],
+                                    $app['engine'],
+                                    $app['database']
+                                );
 
-                            //persistence
-                            //defined in one of two locations
-                            engine\database::doInitialise(
-                                $app['application'],
-                                $app['engine'],
-                                $app['database']
-                            );
+                                $model_instance = new $model_status['str_full']();
 
-                            $model_instance = new $model_status['str_full']();
+                                //build request
+                                //pass session token on to return good or
+                                //response::error('User session token invalid or expired.');
+                                $request = request::initialize(
+                                  engine\database::getClass(), //db_type
+                                  $model_status,
+                                  $parameter_status,
+                                  $params, //data
+                                  null //session
+                                );
 
-                            //build request
-                            $request = request::initialize(
-                              engine\database::getClass(), //db_type
-                              $model_status,
-                              $parameter_status,
-                              $params //data
-                              //session
-                            );
-
-                            //instance action
-                            return $model_instance->$action($request);
+                                //instance action
+                                return $model_instance->$action($request);
+                            }
                         }
                         else
                         {

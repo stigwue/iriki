@@ -26,6 +26,8 @@ class config__test extends \PHPUnit\Framework\TestCase
     }
 
     //parse_json_string success test
+
+    //parse_json_string fail test
 }
 
 ?>

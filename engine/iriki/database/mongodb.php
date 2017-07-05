@@ -18,6 +18,49 @@ class mongodb extends database
 		return is_string($id) && strlen($id) == 24 && ctype_xdigit($id);
 	}
 
+	//returns true if all is well
+	//false otherwise so that calling function can
+    //return response::error('User session token invalid or expired.');
+	private static function checkSessionToken($user_session_token, $timestamp)
+	{
+		//read session details from db
+		$persist = Self::$__instance->user_session;
+
+		//build query (key => value array)
+		$query = array(
+			'token' => $user_session_token
+		);
+
+		$cursor = $persist->find($query);
+
+
+		if (count($cursor) != 0)
+		{
+			$user_sessions = array();
+			//loop through cursor
+			//cursor should hold only one object
+			foreach ($cursor as $object)
+			{
+				$user_sessions[] = $object;
+			}
+
+			var_dump($cursor->count(), $user_sessions);
+		}
+
+		//is it authenticated? 
+		//does its user still exist?
+
+		//is it to be remembered?
+
+		//has it expired?
+
+		//IP check?
+
+
+		//token not found
+		return false;
+	}
+
 	//parameters has final, missing, extra and ids
 	//we check final for ID_FIELD and set
 	//we check ids and enforce all
@@ -148,6 +191,13 @@ class mongodb extends database
 		}
 		else
 		{
+			if (!is_null($request->getSession()))
+			{
+				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL));
+
+				var_dump($authenticated);
+			}
+
 			$collection = $request->getModel();
 			$persist = Self::$__instance->$collection;
 
