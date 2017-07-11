@@ -1,0 +1,37 @@
+{
+	"kronos":
+	{
+		"routes" : {
+			"default" : {
+				"description" : {
+					"description" : "Describe a model, listing its properties.",
+					"parameters" : []
+				},
+				"create" : {
+					"description" : "Add a new instance of the model to storage.",
+					"parameters" : [],
+					"exempt" : ["_id"]
+				},
+				"read" : {
+					"description" : "Returns the properties of the matching model.",
+					"parameters" : ["_id"]
+				},
+				"read_all" : {
+					"description" : "Returns the properties of the matching model.",
+					"parameters" : ["user_session_token"]
+				},
+				"update" : {
+					"description" : "Updates a model instance by supplying new properties and the id of the model to update.",
+					"parameters" : []
+				},
+				"delete" : {
+					"description" : "Deletes a model instance by supplying an id of the mode.",
+					"parameters" : ["_id"]
+				}
+			},
+			"alias" : {},
+			"routes" : [
+			]
+		}
+	}
+}
