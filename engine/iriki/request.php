@@ -185,6 +185,15 @@ class request
 
       $result = $instance::doCreate($request);
 
+      //intercept auth error
+      if (isset($result['code']) && isset($result['message']))
+      {
+        if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
+        {
+          return \iriki\response::auth('User session token invalid or expired.');
+        }
+      }
+
       return \iriki\response::information($result['message'], $wrap, $result['data']);
     }
 
@@ -228,6 +237,15 @@ class request
       //read should also pick up any "hasmany" models up to x recursivity
       $result = $instance::doRead($request);
 
+      //intercept auth error
+      if (isset($result['code']) && isset($result['message']))
+      {
+        if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
+        {
+          return \iriki\response::auth('User session token invalid or expired.');
+        }
+      }
+
       return \iriki\response::data($result, $wrap);
     }
 
@@ -254,6 +272,15 @@ class request
 
       $result = $instance::doUpdate($request);
 
+      //intercept auth error
+      if (isset($result['code']) && isset($result['message']))
+      {
+        if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
+        {
+          return \iriki\response::auth('User session token invalid or expired.');
+        }
+      }
+
       return \iriki\response::information($result, $wrap);
     }
 
@@ -275,6 +302,15 @@ class request
       }
 
       $result = $instance::doDelete($request);
+
+      //intercept auth error
+      if (isset($result['code']) && isset($result['message']))
+      {
+        if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
+        {
+          return \iriki\response::auth('User session token invalid or expired.');
+        }
+      }
 
       return \iriki\response::information($result, $wrap);
     }

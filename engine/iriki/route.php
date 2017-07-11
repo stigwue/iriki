@@ -191,8 +191,6 @@ class route
                           $model_status['action_details']
                         );
 
-                        var_dump($parameter_status);
-
                         $missing_parameters = count($parameter_status['missing']);
 
                         //note that extra parameters could be ids signifying belongsto relationships

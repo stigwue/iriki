@@ -32,9 +32,11 @@ define('IRIKI_KEY', 'correct_horse_battery_staple');
 define('IRIKI_MODE', 'local');
 
 //use iriki to manage sessions?
+//should IRIKI_REFRESH be obeyed for re-reads?
 define('IRIKI_SESSION', false);
 
 //refresh time in seconds
+//time (seconds) until Iriki re-reads config files or session token expires
 define('IRIKI_REFRESH', 60 * 7);
 
 //config file for this app

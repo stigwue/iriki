@@ -175,6 +175,19 @@ class mongodb extends database
 		}
 		else
 		{
+			if (!is_null($request->getSession()))
+			{
+				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL));
+
+				if (!$authenticated)
+				{
+					return array(
+						'code' => '401',
+						'message' => 'unauthorized'
+					);
+				}
+			}
+
 			$collection = $request->getModel();
 			$persist = Self::$__instance->$collection;
 
@@ -264,6 +277,19 @@ class mongodb extends database
 		}
 		else
 		{
+			if (!is_null($request->getSession()))
+			{
+				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL));
+
+				if (!$authenticated)
+				{
+					return array(
+						'code' => '401',
+						'message' => 'unauthorized'
+					);
+				}
+			}
+
 			$collection = $request->getModel();
 			$persist = Self::$__instance->$collection;
 
@@ -299,6 +325,19 @@ class mongodb extends database
 		}
 		else
 		{
+			if (!is_null($request->getSession()))
+			{
+				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL));
+
+				if (!$authenticated)
+				{
+					return array(
+						'code' => '401',
+						'message' => 'unauthorized'
+					);
+				}
+			}
+			
 			$collection = $request->getModel();
 			$persist = Self::$__instance->$collection;
 
