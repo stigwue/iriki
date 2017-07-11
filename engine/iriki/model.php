@@ -332,7 +332,7 @@ class model
     }
 
     /**
-    * Check a model for 'hasmnay' child relationship.
+    * Check a model for 'hasmany' child relationship.
     * Will have to make several reads up to a recursivity limit.
     *
     * @param object Request

@@ -9,6 +9,13 @@ namespace iriki;
 class route
 {
     /**
+    * String constant, parameter holding session token
+    *
+    * @var constant
+    */
+    const session_token = 'user_session_token';
+
+    /**
     * Matches the requested url to a route, performing a model action.
     *
     *
@@ -200,7 +207,7 @@ class route
                                 //look for the token in final, extra or missing
 
                                 //user_session_token is the token
-                                if (array_search('user_session_token', $parameter_status['missing']))
+                                if (array_search(Self::session_token, $parameter_status['missing']))
                                 {
                                     //authorisation or other error
                                     return response::error('User session token missing.');
@@ -209,22 +216,22 @@ class route
                                 {
                                     $user_session_token = '';
 
-                                    $tkn_extra = array_search('user_session_token', $parameter_status['extra']);
+                                    $tkn_extra = array_search(Self::session_token, $parameter_status['extra']);
 
-                                    $tkn_final = array_search('user_session_token', $parameter_status['final']);
+                                    $tkn_final = array_search(Self::session_token, $parameter_status['final']);
 
                                     if ($tkn_extra !== FALSE || $tkn_final !== FALSE)
                                     {
                                         if ($tkn_extra !== FALSE)
                                         {
-                                            $user_session_token = $parameter_status['extra'][$tkn_extra];
+                                            $user_session_token = $params[Self::session_token];
 
                                             //drop from extra
                                             unset($parameter_status['extra'][$tkn_extra]);
                                         }
                                         else if ($tkn_final !== FALSE)
                                         {
-                                            $user_session_token = $parameter_status['final'][$tkn_extra];
+                                            $user_session_token = $params[Self::session_token];
 
                                             //drop from final
                                             unset($parameter_status['final'][$tkn_extra]);

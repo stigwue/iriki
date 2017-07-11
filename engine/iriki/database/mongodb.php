@@ -36,26 +36,30 @@ class mongodb extends database
 
 		if (count($cursor) != 0)
 		{
-			$user_sessions = array();
 			//loop through cursor
-			//cursor should hold only one object
-			foreach ($cursor as $object)
+			//cursor should hold only one session object
+			foreach ($cursor as $user_session)
 			{
-				$user_sessions[] = $object;
+				var_dump($user_session);
+
+				//is it authenticated? 
+				if ($user_session['authenticated'] == 'false') {
+					return false;
+				}
+
+				//does its user still exist?
+				//err, beyond our scope, ignore
+
+				//is it to be remembered?
+				//ignore for now
+
+				//has it expired?
+				//use IRIKI_REFRESH to calculate
+
+				//IP check?
+				//too stringent, ignore for now
 			}
-
-			var_dump($cursor->count(), $user_sessions);
 		}
-
-		//is it authenticated? 
-		//does its user still exist?
-
-		//is it to be remembered?
-
-		//has it expired?
-
-		//IP check?
-
 
 		//token not found
 		return false;
