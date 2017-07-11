@@ -15,6 +15,7 @@ class response
 
     //4xx Client errors
     const ERROR = 400;
+    const AUTH = 401; //Unauthorized
     //412 Precondition Failed
 
     //5xx Server error
@@ -105,6 +106,12 @@ class response
     {
         if (!$wrap) return $message;
         else return Self::build(Self::ERROR, $message, $data);
+    }
+
+    public static function auth($message, $wrap = true, $data = null)
+    {
+        if (!$wrap) return $message;
+        else return Self::build(Self::AUTH, $message, $data);
     }
 
     //log

@@ -207,6 +207,15 @@ class request
 
       $result = $instance::doRead($request);
 
+      //intercept auth error
+      if (isset($result['code']) && isset($result['message']))
+      {
+        if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
+        {
+          return \iriki\response::auth('User session token invalid or expired.');
+        }
+      }
+
       return \iriki\response::data($result, $wrap);
     }
 

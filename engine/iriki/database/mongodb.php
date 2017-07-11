@@ -40,8 +40,6 @@ class mongodb extends database
 			//cursor should hold only one session object
 			foreach ($cursor as $user_session)
 			{
-				var_dump($user_session);
-
 				//is it authenticated? 
 				if ($user_session['authenticated'] == 'false') {
 					return false;
@@ -55,9 +53,22 @@ class mongodb extends database
 
 				//has it expired?
 				//use IRIKI_REFRESH to calculate
-
-				//IP check?
-				//too stringent, ignore for now
+				$expire_stamp = $user_session['created'] + IRIKI_REFRESH;
+				if ($timestamp >= $expire_stamp)
+				{
+					//expired
+					//var_dump('expired', $timestamp, $expire_stamp);
+					return false;
+				}
+				else
+				{
+					//IP check?
+					//too stringent, ignore for now
+					//$ip = $_SERVER['SERVER_ADDR'];
+					//if ($ip == $user_session['ip'])
+					
+					return true;
+				}
 			}
 		}
 
@@ -199,7 +210,18 @@ class mongodb extends database
 			{
 				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL));
 
-				var_dump($authenticated);
+				if (!$authenticated)
+				{
+					//return this array to signal to calling function
+					//that request is unauthorized
+					//we could have done
+					//return \iriki\response::auth('User session token invalid or expired.');
+					//but it would result in double wrapping
+					return array(
+						'code' => '401',
+						'message' => 'unauthorized'
+					);
+				}
 			}
 
 			$collection = $request->getModel();
