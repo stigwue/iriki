@@ -132,14 +132,22 @@ class model
 
         //check exempt properties
         //the user_session_token might be here
-        if (count($exempt_properties) == 0)
+        $exempt_properties_count = count($exempt_properties);
+        if ($exempt_properties_count == 0)
         {
             //there's no exempt list, carry on
         }
         else
         {
+            if ($exempt_properties_count == 1 && $exempt_properties[0] == '*')
+            {
+              //unset entire array
+              $valid_properties = array();
+            }
+
             for ($i = count($valid_properties) - 1; $i >= 0; $i--)
             {
+                //note that if exempt holds only *, it means all properties are exempt
                 if (in_array($valid_properties[$i], $exempt_properties))
                 {
                     unset($valid_properties[$i]);

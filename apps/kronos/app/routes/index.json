@@ -18,7 +18,7 @@
 				},
 				"read_all" : {
 					"description" : "Returns the properties of the matching model.",
-					"parameters" : ["user_session_token"]
+					"parameters" : ["*"]
 				},
 				"update" : {
 					"description" : "Updates a model instance by supplying new properties and the id of the model to update.",
