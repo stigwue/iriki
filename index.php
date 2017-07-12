@@ -40,7 +40,7 @@ define('IRIKI_SESSION', false);
 define('IRIKI_REFRESH', 60 * 7);
 
 //config file for this app
-define('IRIKI_CONFIG', 'app/app.json');
+define('IRIKI_CONFIG', 'apps/kronos/app.json');
 
 //engine
 require_once('engine/autoload.php');

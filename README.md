@@ -52,10 +52,13 @@ Vendors contain third-party code. Some of it provided via composer.
 
 
 ## To Do
-Rethink DB?
 
-Persist with another API
+### Database
 
-Add changes to the database like Laravel does outside runtime. 
+* MySql, Rethink DB, another API persistent support.
 
-Port to PHP7? NodeJS?
+* Add changes to the database like Laravel does outside runtime. 
+
+### Language
+
+* Port to PHP7? Or NodeJS?
