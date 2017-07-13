@@ -44,7 +44,7 @@ class user extends \iriki\request
 		  $data = $request->getData();
 
 		  //note, we assume that for signup, hash contains plaintext auth
-		  $data['hash'] = password_hash($data['hash'], PASSWORD_BCRYPT);
+		  //$data['hash'] = password_hash($data['hash'], PASSWORD_BCRYPT);
 
 		  $request->setData($data);
 
@@ -140,7 +140,8 @@ class user extends \iriki\request
 				//user found
 				$single_result = $result[0];
 				$hash = $single_result['hash'];
-				$authenticated = (password_verify($data['hash'], $hash) !== FALSE);
+				//$authenticated = (password_verify($data['hash'], $hash) !== FALSE);
+				$authenticated = ($data['hash'] == $hash);
 
 				//change data
 				$session_request->setData(

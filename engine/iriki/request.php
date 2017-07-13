@@ -232,6 +232,15 @@ class request
     {
       $instance = $this->initializedb();
 
+      $parameter_status = $request->getParameterStatus();
+
+      $extra_parameters = count($parameter_status['extra']);
+
+      if ($extra_parameters != 0)
+      {
+        return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
+      }
+
       $request->setData(array());
 
       //read should also pick up any "hasmany" models up to x recursivity

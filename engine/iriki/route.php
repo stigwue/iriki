@@ -13,7 +13,7 @@ class route
     *
     * @var constant
     */
-    const session_token = 'user_session_token';
+    const authorization = 'user_session_token';
 
     /**
     * Matches the requested url to a route, performing a model action.
@@ -184,7 +184,6 @@ class route
                     {
                         //parameter check
                         //on fail, describe action
-
                         $parameter_status = model::doPropertyMatch(
                           $model_status['details'],
                           $params,
@@ -194,103 +193,62 @@ class route
                         $missing_parameters = count($parameter_status['missing']);
 
                         //note that extra parameters could be ids signifying belongsto relationships
-                        //so we have to leave that check until later
+                        //so we have to remove checking it from route
+                        //to the request
                         if ($missing_parameters == 0)
                         {
+                            //check for auth
+
+                            //user_session_token is left as null if action needs not be authenticated
+                            //else it is set
+                            $user_session_token = null;
+
+                            //get headers
+                            $request_headers = getallheaders();
+
+                            if (isset($request_headers[Self::authorization]))
+                            {
+                                $user_session_token = $request_headers[Self::authorization];
+                            }
+
+
                             //check for authentication
                             if ($model_status['action_details']['authenticate'] == 'true')
                             {
-                                //authentication required
-
-                                //look for the token in final, extra or missing
-
-                                //user_session_token is the token
-                                if (array_search(Self::session_token, $parameter_status['missing']))
+                                //authentication required, was token found?
+                                if (is_null($user_session_token))
                                 {
-                                    //authorisation or other error
+                                    //no, token wasn't found
                                     return response::error('User session token missing.');
-                                }
-                                else
-                                {
-                                    $user_session_token = '';
-
-                                    $tkn_extra = array_search(Self::session_token, $parameter_status['extra']);
-
-                                    $tkn_final = array_search(Self::session_token, $parameter_status['final']);
-
-                                    if ($tkn_extra !== FALSE || $tkn_final !== FALSE)
-                                    {
-                                        if ($tkn_extra !== FALSE)
-                                        {
-                                            $user_session_token = $params[Self::session_token];
-
-                                            //drop from extra
-                                            unset($parameter_status['extra'][$tkn_extra]);
-                                        }
-                                        else if ($tkn_final !== FALSE)
-                                        {
-                                            $user_session_token = $params[Self::session_token];
-
-                                            //drop from final
-                                            unset($parameter_status['final'][$tkn_extra]);
-                                        }
-
-                                        //persistence
-                                        //defined in one of two locations
-                                        engine\database::doInitialise(
-                                            $app['application'],
-                                            $app['engine'],
-                                            $app['database']
-                                        );
-
-                                        $model_instance = new $model_status['str_full']();
-
-                                        //build request
-                                        //pass session token
-                                        $request = request::initialize(
-                                          engine\database::getClass(), //db_type
-                                          $model_status,
-                                          $parameter_status,
-                                          $params, //data
-                                          $user_session_token //session
-                                        );
-
-                                        //instance action
-                                        return $model_instance->$action($request);
-                                    }
-                                    else
-                                    {
-                                        //authorisation or other error
-                                        return response::error('User session token missing.');
-                                    }
                                 }
                             }
                             else
                             {
-                                //persistence
-                                //defined in one of two locations
-                                engine\database::doInitialise(
-                                    $app['application'],
-                                    $app['engine'],
-                                    $app['database']
-                                );
-
-                                $model_instance = new $model_status['str_full']();
-
-                                //build request
-                                //pass session token on to return good or
-                                //response::error('User session token invalid or expired.');
-                                $request = request::initialize(
-                                  engine\database::getClass(), //db_type
-                                  $model_status,
-                                  $parameter_status,
-                                  $params, //data
-                                  null //session
-                                );
-
-                                //instance action
-                                return $model_instance->$action($request);
+                                //authentication isn't required, ignore it
+                                $user_session_token = null;
                             }
+
+                            //persistence
+                            //defined in one of two locations
+                            engine\database::doInitialise(
+                                $app['application'],
+                                $app['engine'],
+                                $app['database']
+                            );
+
+                            $model_instance = new $model_status['str_full']();
+
+                            //build request;
+                            $request = request::initialize(
+                              engine\database::getClass(), //db_type
+                              $model_status,
+                              $parameter_status,
+                              $params, //data
+                              $user_session_token //session
+                            );
+
+                            //instance action
+                            return $model_instance->$action($request);
                         }
                         else
                         {

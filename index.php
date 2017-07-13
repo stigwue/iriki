@@ -45,6 +45,9 @@ define('IRIKI_CONFIG', 'apps/kronos/app.json');
 //engine
 require_once('engine/autoload.php');
 
+//vendors
+require_once('vendors/autoload.php');
+
 //this are the components of an iriki app
 global $APP;
 
@@ -77,7 +80,6 @@ $APP = array(
 	0
 	)
 );
-
 
 $status = array();
 
@@ -122,10 +124,6 @@ else
 //load up application's class files
 require_once($APP['config']['application']['path'] . 'autoload.php');
 
-//vendors
-require_once('vendors/autoload.php');
-
-
 //interprete request from url
 $request_details = iriki\route::getRequestDetails(null, null, $APP['config']['base_url']);
 
@@ -165,7 +163,6 @@ function strContains($haystack, $needle) {
 
 
 //http://stackoverflow.com/a/9866124/3323338
-
 /**
 *  An example CORS-compliant method.  It will allow any GET, POST, or OPTIONS requests from any
 *  origin.
