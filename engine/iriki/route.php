@@ -399,19 +399,22 @@ class route
     private static function parseGetParams($query)
     {
         $get_params = array();
-        $key_values = explode("&", $query);
-        foreach ($key_values as $key_value)
+        if (strlen($query) != 0) 
         {
-            $pair = explode('=', $key_value);
-            if (count($pair) == 2)
+            $key_values = explode("&", $query);
+            foreach ($key_values as $key_value)
             {
-                //property=value
-                $get_params[$pair[0]] = $pair[1];
-            }
-            else
-            {
-                //property=value=corrupted
-                $get_params[$key_value] = '';
+                $pair = explode('=', $key_value);
+                if (count($pair) == 2)
+                {
+                    //property=value
+                    $get_params[$pair[0]] = $pair[1];
+                }
+                else
+                {
+                    //property=value=corrupted
+                    $get_params[$key_value] = '';
+                }
             }
         }
         return $get_params;
