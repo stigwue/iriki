@@ -190,7 +190,14 @@ class request
       {
         if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
         {
-          return \iriki\response::auth('User session token invalid or expired.');
+          if ($wrap)
+          {
+            return \iriki\response::auth('User session token invalid or expired.');
+          }
+          else
+          {
+            return array();
+          }
         }
       }
 
@@ -221,7 +228,14 @@ class request
       {
         if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
         {
-          return \iriki\response::auth('User session token invalid or expired.');
+          if ($wrap)
+          {
+            return \iriki\response::auth('User session token invalid or expired.');
+          }
+          else
+          {
+            return array();
+          }
         }
       }
 
@@ -251,7 +265,14 @@ class request
       {
         if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
         {
-          return \iriki\response::auth('User session token invalid or expired.');
+          if ($wrap)
+          {
+            return \iriki\response::auth('User session token invalid or expired.');
+          }
+          else
+          {
+            return array();
+          }
         }
       }
 
@@ -286,7 +307,14 @@ class request
       {
         if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
         {
-          return \iriki\response::auth('User session token invalid or expired.');
+          if ($wrap)
+          {
+            return \iriki\response::auth('User session token invalid or expired.');
+          }
+          else
+          {
+            return array();
+          }
         }
       }
 
@@ -317,7 +345,14 @@ class request
       {
         if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
         {
-          return \iriki\response::auth('User session token invalid or expired.');
+          if ($wrap)
+          {
+            return \iriki\response::auth('User session token invalid or expired.');
+          }
+          else
+          {
+            return array();
+          }
         }
       }
 

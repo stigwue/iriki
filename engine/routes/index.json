@@ -9,10 +9,6 @@
 				}
 			},
 			"default" : {
-				"description" : {
-					"description" : "Describe a model, listing its properties.",
-					"parameters" : []
-				},
 				"create" : {
 					"description" : "Add a new instance of the model to storage.",
 					"parameters" : [],

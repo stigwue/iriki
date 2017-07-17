@@ -136,7 +136,7 @@ class user_session extends \iriki\request
 	{
 	    if (!is_null($request))
 	    {
-				return $request->read($request, true);
+			return $request->read($request, true);
 	    }
 	}
 }
