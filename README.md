@@ -24,6 +24,18 @@ The idea of a new framework which would:
 
 was born. It features a PHP backend handling request routing, database operations, unit tests and third party libraries via composer.
 
+## Features
+
+IrikiMC comes with the following features out-of-box:
+
+* User management
+
+* User group management
+
+* User sesssion management
+
+* Mailgun support
+
 ## How it works
 
 Iriki MC files all reside in a single directory. All requests to be handled by the framework will be POST/GET to or from this directory.

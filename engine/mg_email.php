@@ -2,9 +2,6 @@
 
 namespace iriki;
 
-//note  that this file is named with an s_ prefix so that it
-//appears before request.php in autoload.php
-
 class mg_email extends \iriki\request
 {
 
