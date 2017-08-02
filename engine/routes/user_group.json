@@ -4,7 +4,7 @@
 		"routes" : {
 			"user_group" : {
 				"create" : {
-					"description" : "Add a new instance of the model to storage.",
+					"description" : "Create a new user group.",
 					"parameters" : [],
 					"exempt" : ["_id"]
 				},

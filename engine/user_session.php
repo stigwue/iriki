@@ -4,16 +4,17 @@ namespace iriki;
 
 class user_session extends \iriki\request
 {
+	private static $generator = null;
+
 	private static function generate()
 	{
-		$seed = time(NULL); //uniqid(time(NULL), true);
+		if (is_null(Self::$generator)) {
+			Self::$generator = (new \RandomLib\Factory)->getLowStrengthGenerator();
+		}
 
 		$data = array();
 
-		$data['token'] = (
-			\PseudoCrypt::hash($seed, 10) .
-			\PseudoCrypt::hash($seed, 4)
-		);
+		$data['token'] = Self::$generator->generateString(14);
 
 		//get ip address
 		$data['ip'] = $_SERVER['SERVER_ADDR'];
