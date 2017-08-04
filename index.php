@@ -201,7 +201,6 @@ function cors_test($strict_cors) {
 		//TODO: add other requests apart from GET and POST
 		else if ($_SERVER['REQUEST_METHOD'] == 'GET' OR $_SERVER['REQUEST_METHOD'] == 'POST')
 		{
-
 			if (strContains($request_origin, IRIKI_CORS_URL))
 			{
 				//valid origin
@@ -251,6 +250,11 @@ function cors_test($strict_cors) {
 
 			if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
 			header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+			
+			//valid origin
+			header("Access-Control-Allow-Origin: *");
+			header('Access-Control-Allow-Credentials: true');
+			header('Access-Control-Max-Age: 86400');    // cache for 1 day
 
 			exit(0);
 
