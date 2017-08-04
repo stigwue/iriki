@@ -51,6 +51,7 @@ class model
                             $model_status['action_details'] = array(
                                 'description' => (isset($_route_action[$model_status['action']]['description']) ? $_route_action[$model_status['action']]['description'] : ''),
                                 'parameters' => $_route_action[$model_status['action']]['parameters'],
+                                'url_params' => (isset($_route_action[$model_status['action']]['url_params']) ? $_route_action[$model_status['action']]['url_params'] : array()),
                                 'exempt' => (isset($_route_action[$model_status['action']]['exempt']) ? $_route_action[$model_status['action']]['exempt'] : array()),
                                 'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? $_route_action[$model_status['action']]['authenticate'] : "true")
                             );
@@ -66,6 +67,7 @@ class model
                             $model_status['action_details'] = array(
                                 'description' => (isset($model_status['default'][$model_status['action']]['description']) ? $model_status['default'][$model_status['action']]['description'] : ''),
                                 'parameters' => $model_status['default'][$model_status['action']]['parameters'],
+                                'url_params' => (isset($_route_action[$model_status['action']]['url_params']) ? $_route_action[$model_status['action']]['url_params'] : array()),
                                 'exempt' => (isset($model_status['default'][$model_status['action']]['exempt']) ? $model_status['default'][$model_status['action']]['exempt'] : array()),
                                 'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? $_route_action[$model_status['action']]['authenticate'] : "true")
                             );

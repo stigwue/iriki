@@ -2,27 +2,16 @@
 
 session_start();
 
-//set time zone, no where like home
-date_default_timezone_set('Africa/Lagos');
-
 //url where this runs from
-define('IRIKI_URL', 'eyeti.xyz/iriki');
+define('IRIKI_CORS_URL', 'eyeti.xyz');
 //obey CORS?
-define('IRIKI_STRICT_CORS', false);
+define('IRIKI_CORS_STRICT', false);
 
 //Cross-origin Resource Sharing (CORS) test
-$cors_test_passed = cors(IRIKI_STRICT_CORS);
+cors_test(IRIKI_CORS_STRICT);
 
-if (!$cors_test_passed) {
-	if (IRIKI_STRICT_CORS) {
-		$message = array(
-			'code' => 400,
-			'message' => 'CORS error'
-		);
-		echo json_encode($message);
-		exit();
-	}
-}
+//set time zone, no where like home
+date_default_timezone_set('Africa/Lagos');
 
 //some random key, the one below won't do
 //codeigniter types from http://randomkeygen.com/ should do
@@ -174,49 +163,108 @@ function strContains($haystack, $needle) {
 *  - http://www.w3.org/TR/cors/
 *
 */
-function cors($strict_cors) {
-	//test request method
-	if ($_SERVER['REQUEST_METHOD'] == 'GET' OR $_SERVER['REQUEST_METHOD'] == 'POST'  ) {
+function cors_test($strict_cors) {
+	//test for origin
+	$request_origin = (isset($_SERVER['HTTP_ORIGIN'])) ? strtolower($_SERVER['HTTP_ORIGIN']) : $_SERVER['HTTP_HOST'];
 
-		//test for origin
-		if (isset($_SERVER['HTTP_ORIGIN'])) {
+	if ($strict_cors)
+	{
+		//we are enforcing strict cors
+		//we tell asks what requests we allow and what origin we allow
+		//we allow requests from only IRIKI_CORS_URL
 
-			$http_origin = strtolower($_SERVER['HTTP_ORIGIN']);
+		// Access-Control headers are received during OPTIONS requests
+		if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
-			if (strContains($http_origin, IRIKI_URL) OR !IRIKI_STRICT_CORS){
-				header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+			if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+			// may also be using PUT, PATCH, HEAD etc
+			header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+
+			if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+			header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+
+			if (strContains($request_origin, IRIKI_CORS_URL))
+			{
+				//valid origin
+				header("Access-Control-Allow-Origin: {$request_origin}");
 				header('Access-Control-Allow-Credentials: true');
 				header('Access-Control-Max-Age: 86400');    // cache for 1 day
 
-				return true;
+				return;
 			}
-			else {
-				return false;
+
+			exit(0);
+
+			return;
+		}
+		//test request method
+		//TODO: add other requests apart from GET and POST
+		else if ($_SERVER['REQUEST_METHOD'] == 'GET' OR $_SERVER['REQUEST_METHOD'] == 'POST')
+		{
+
+			if (strContains($request_origin, IRIKI_CORS_URL))
+			{
+				//valid origin
+				header("Access-Control-Allow-Origin: {$request_origin}");
+				header('Access-Control-Allow-Credentials: true');
+				header('Access-Control-Max-Age: 86400');    // cache for 1 day
+
+				return;
+			}
+			else
+			{
+				//invalid origin
+				echo json_encode([
+					'code' => 400,
+					'message' => 'CORS origin not allowed.'
+				]);
+				
+				exit(0);
+
+				return;
 			}
 		}
-		else {
-			//origin isn't set
-			return false;
+		else
+		{
+			//other request types
+			echo json_encode([
+				'code' => 400,
+				'message' => 'CORS request not handled.'
+			]);
+			
+			exit(0);
+
+			return;
 		}
 	}
-	// Access-Control headers are received during OPTIONS requests
-	else if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+	else
+	{
+		//no strict cors enforcement
+		//we allow all requests
+		//we allow requests from * (all)
 
-		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
-		// may also be using PUT, PATCH, HEAD etc
-		header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+		if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
-		if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
-		header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
+			if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_METHOD']))
+			// may also be using PUT, PATCH, HEAD etc
+			header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 
-		exit(0);
+			if (isset($_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']))
+			header("Access-Control-Allow-Headers: {$_SERVER['HTTP_ACCESS_CONTROL_REQUEST_HEADERS']}");
 
-		return true; //will not be hit
-	}
-	else {
+			exit(0);
 
-		//fail
-		return false;
+			return;
+		}
+		else if ($_SERVER['REQUEST_METHOD'] == 'GET' OR $_SERVER['REQUEST_METHOD'] == 'POST')
+		{
+			//valid origin
+			header("Access-Control-Allow-Origin: *");
+			header('Access-Control-Allow-Credentials: true');
+			header('Access-Control-Max-Age: 86400');    // cache for 1 day
+
+			return;
+		}
 	}
 }
 

@@ -49,30 +49,47 @@ class route
         $action_exists = false;
 
         $params = (isset($request_details['params'])) ? $request_details['params'] : null;
+
         $url_parts = (isset($request_details['url']['parts'])) ? $request_details['url']['parts'] : null;
+
+        $url_params = (isset($request_details['url']['params'])) ? $request_details['url']['params'] : null;
 
         $count = count($url_parts);
 
         if ($count >= 1)
         {
             //get the model
+            if ($count == 1)
+            {
+                $model = $url_parts[$count - 1];
+            }
             if ($count >= 2)
             {
                 $model = $url_parts[$count - 2];
                 $action = $url_parts[$count - 1];
+            
+                if ($count > 2)
+                {
+                    //handle requests such as /model/action/val1
+                    //e.g /user/read/1
+                    //note that these parameters would aready have been configured in url_params
+                    if (is_null($url_params))
+                    {
+                        return response::error("URL parameters not defined.");
+                    }
+                    /*else
+                    {
+                        $url_params_count = count($url_params);
 
-                //TODO: handle requests such as /model/action/val1
-                //e.g /user/read/1
-            }
-            else
-            {
-                $model = $url_parts[$count - 1];
+                    }*/
+                }
             }
 
             //note that namespace is important
             $model_instance = null;
 
             //test for alias
+            //TODO: use a model alias?
             if ($model == 'alias')
             {
                 //set model and action
@@ -93,8 +110,8 @@ class route
                 }
                 else
                 {
-                    //third party models?
-                    //vendors perhaps?
+                    //TODO: third party iriki apps?
+                    //distributed somehow?
                 }
             }
             else
@@ -160,6 +177,8 @@ class route
                 ($model_is_app_defined ? $app_models : $engine_models),
                 ($model_is_app_defined ? $app_routes : $engine_routes)
             );
+
+            //var_dump($request_details, $model_status['action_details']);
 
             /*
             perform action based on $model_status
@@ -305,15 +324,18 @@ class route
         $parts = array_filter($parts);
         //reset index
         $model_action = array();
+        $params = array();
 
+        $count = 0;
         foreach ($parts as $part)
         {
             $model_action[] = $part;
+            $count += 1;
+
+            if ($count > 2) $params[] = $part;
         }
 
-        $parts = $model_action;
-
-        return compact('path', 'parts', 'query');
+        return compact('path', 'parts', 'params', 'query');
     }
 
     /**
@@ -356,6 +378,7 @@ class route
             'params' => null
         );
 
+        //parameters
         switch ($method) {
           /*case 'PUT':
             do_something_with_put($request);
@@ -365,19 +388,16 @@ class route
 
             case 'GET':
                 $status['method'] = 'GET';
-                //$params = $_GET;
-                //array_shift($params);
                 $status['params'] = (isset($status['url']['query'])) ? Self::parseGetParams($status['url']['query']) : null;
             break;
 
             case 'POST':
                 $status['method'] = 'POST';
                 $params = $_POST;
-                //array_shift($params);
                 $status['params'] = $params;
             break;
 
-            default: //case 'POST':
+            default: 
                 //$status['method'] = 'POST';
                 $params = $_REQUEST;
                 //array_shift($params);
