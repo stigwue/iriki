@@ -30,9 +30,11 @@
 					"exempt" : []
 				},
 				"read_by_username" : {
+					"description" : "Read a user by providing its username.",
 					"parameters" : ["username"]
 				},
 				"delete_by_username" : {
+					"description" : "Delete a user using its username.",
 					"parameters" : ["username"]
 				}
 			}

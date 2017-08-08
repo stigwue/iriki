@@ -10,7 +10,8 @@
 				},
 				"validate" : {
 					"description" : "Validate a session, returns expired or not.",
-					"parameters" : ["token"]
+					"parameters" : ["token"],
+					"authenticate" : "false"
 				},
 				"ping" : {
 					"description" : "Show the session is still in use.",

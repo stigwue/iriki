@@ -26,7 +26,7 @@ class user_session extends \iriki\request
 		return $data;
 	}
 
-	public function initiate($request)
+	public function initiate($request, $wrap = true)
 	{
 	    if (!is_null($request))
 	    {
@@ -52,12 +52,85 @@ class user_session extends \iriki\request
 	    }
 	}
 
-	public function validate($request)
+	/*public function validate($request)
 	{
 		//read
 	    if (!is_null($request))
 	    {
 			return $request->read($request, true);
+	    }
+	}*/
+
+	public function validate($request, $wrap = true)
+	{
+		if (!is_null($request))
+	    {
+	    	//read token
+			$token_obj = $request->read($request, false);
+			if (count($token_obj) != 0)
+			{
+				//token exists
+				if (isset($token_obj[0]['user_id']))
+				{
+					//token belongs to an existing user
+					$token = $token_obj[0];
+
+					//flag
+					$authenticated = true;
+
+					//check .authenticated is true
+					$authenticated = (
+						$authenticated &&
+						$token['authenticated'] == 'true'
+					);
+
+					//expiry check
+					$stamp_expired = time(NULL);
+					if ($token['remember'] == 'true')
+					{
+						//specified duration after last ping
+						$stamp_expired = ((int)$token['pinged']) + IRIKI_REFRESH;
+					}
+					else
+					{
+						//specified duration after created
+						$stamp_expired = ((int)$token['started']) + IRIKI_REFRESH;
+					}
+					$authenticated = (
+						$authenticated &&
+						$stamp_expired > time(NULL)
+					);
+
+					//var_dump($authenticated, $token, $stamp_expired, time(NULL));
+
+					if ($authenticated)
+					{
+						return \iriki\response::information($authenticated, $wrap,
+							[
+								'authenticated' => $authenticated,
+								'token' => $request->getData()['token'],
+								'user_id' => $token['user_id'],
+								'created' => $token['created'],
+								'pinged' => $token['pinged']
+							]
+						);
+					}
+					else
+					{
+						return \iriki\response::information('Token is invalid or expired', $wrap, ['token' => $request->getData()['token']]);
+					}
+				}
+				else
+				{
+					//token isn't tied to an existing user
+					return \iriki\response::information('Token does not belong to a user', $wrap, ['token' => $request->getData()['token']]);
+				}
+			}
+			else
+			{
+				//token does not exist
+				return \iriki\response::error('Token does not exist', $wrap, ['token' => $request->getData()['token']]);
+			}
 	    }
 	}
 
@@ -133,7 +206,7 @@ class user_session extends \iriki\request
 		}
 	}
 
-	public function read_by_token($request)
+	public function read_by_token($request, $wrap = true)
 	{
 	    if (!is_null($request))
 	    {
