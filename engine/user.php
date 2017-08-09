@@ -170,7 +170,7 @@ class user extends \iriki\request
 
 				//save token?
 				$token = $session_request->getData()['token'];
-				return \iriki\response::data($token, $wrap);
+				return \iriki\response::data($token, $wrap, $authenticated);
 			}
 		}
 	}

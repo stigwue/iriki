@@ -52,15 +52,6 @@ class user_session extends \iriki\request
 	    }
 	}
 
-	/*public function validate($request)
-	{
-		//read
-	    if (!is_null($request))
-	    {
-			return $request->read($request, true);
-	    }
-	}*/
-
 	public function validate($request, $wrap = true)
 	{
 		if (!is_null($request))
@@ -208,10 +199,94 @@ class user_session extends \iriki\request
 
 	public function read_by_token($request, $wrap = true)
 	{
-	    if (!is_null($request))
-	    {
-			return $request->read($request, true);
-	    }
+		//supplied: token
+
+		/*returned:
+			session : null,
+			user : null,
+			
+			*profile : null,
+			group : null*
+      	*/
+		$result = array(
+			'session' => [
+				'token' => $request->getData()['token'],
+				'user_id' => null
+			],
+			'user' => [
+				'valid' => false,
+				'username' => null,
+				'created' => 0
+			]
+		);
+
+		if (!is_null($request))
+		{
+			//get session details using token
+			//read username using user_id from session
+
+			//do others else where
+			$token_request = clone $request;
+		  	$token_obj = $token_request->read($request, false);
+
+		  	if (count($token_obj) != 0)
+		  	{
+		  		$token = $token_obj[0];
+
+		  		if (isset($token['user_id']))
+		  		{
+		  			$result['session']['user_id'] = $token['user_id'];
+
+		  			//read user details
+					$user_request = clone $request;
+
+		  			$user_request->setModelStatus(
+						array(
+								'str' => 'user', //string, model
+								'str_full' => '\iriki\user', //string, full model including namespace
+								'defined' => true, //boolean, model defined in app or engine config
+								'exists' => true, //boolean, model class exists
+
+								'details' => $GLOBALS['APP']['models']['engine']['user'], //array, model description, properties and relationships
+
+								'app_defined' => false, //boolean, model defined in app. otherwise engine
+								'action'=> 'read', //string, action
+
+								'default' => $GLOBALS['APP']['routes']['engine']['default'], //array, default actions
+
+								'action_defined' => true, //boolean, action defined
+								'action_default' => false, //boolean, action is default defined
+								'action_exists' => true, //boolean, action exists in class
+
+								'action_details' => $GLOBALS['APP']['routes']['engine']['routes']['user'] //array, action description, parameters, exempt
+						)
+					);
+
+					$user_request->setData([
+						'_id' => $token['user_id']
+					]);
+
+					$user_request->setParameterStatus([
+						'final' => array('_id'),
+						'missing' => array(),
+						'extra' => array(),
+						'ids' => array('_id')
+					]);
+
+					$user_handle = new \iriki\user();
+					$user_obj = $user_handle->read($user_request, false);
+
+					if (count($user_obj) != 0)
+		  			{
+		  				$user = $user_obj[0];
+		  				$result['user']['username'] = $user['username'];
+		  				$result['user']['created'] = $user['created'];
+		  			}
+				}
+		 	}
+		}
+
+    	return \iriki\response::data($result, $wrap);
 	}
 }
 

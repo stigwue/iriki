@@ -88,12 +88,12 @@ class response
       return $response;
     }
 
-    public static function data($data, $wrap = true, $relations = null)
+    public static function data($data, $wrap = true, $message = '', $relations = null)
     {
         //do logging?
 
         if (!$wrap) return $data;
-        else return Self::build(Self::OK, '', $data);
+        else return Self::build(Self::OK, $message, $data);
     }
 
     public static function information($message, $wrap = true, $data = null)
