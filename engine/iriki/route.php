@@ -310,7 +310,10 @@ class route
         $parsed = parse_url($path);
 
         $to_parse = $parsed['path'];
-
+        
+        //path should not start with /
+        if ($to_parse[0] == '/') $to_parse = substr($to_parse, 1);
+        
         $query = '';
 
         if (isset($parsed['query']))

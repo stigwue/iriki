@@ -65,6 +65,10 @@ Vendors contain third-party code. Some of it provided via composer.
 
 ## To Do
 
+### Features
+
+* Handle HTTP PUT and DELETE request methods using PSR-7?
+
 ### Database
 
 * MySql, Rethink DB, another API persistent support.

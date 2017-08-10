@@ -14,7 +14,7 @@ class user_session extends \iriki\request
 
 		$data = array();
 
-		$data['token'] = Self::$generator->generateString(14);
+		$data['token'] = Self::$generator->generateString(14, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 		//get ip address
 		$data['ip'] = $_SERVER['SERVER_ADDR'];
@@ -199,15 +199,6 @@ class user_session extends \iriki\request
 
 	public function read_by_token($request, $wrap = true)
 	{
-		//supplied: token
-
-		/*returned:
-			session : null,
-			user : null,
-			
-			*profile : null,
-			group : null*
-      	*/
 		$result = array(
 			'session' => [
 				'token' => $request->getData()['token'],
@@ -236,6 +227,7 @@ class user_session extends \iriki\request
 		  		if (isset($token['user_id']))
 		  		{
 		  			$result['session']['user_id'] = $token['user_id'];
+		  			$result['user']['valid'] = true;
 
 		  			//read user details
 					$user_request = clone $request;
