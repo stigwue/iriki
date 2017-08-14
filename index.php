@@ -18,6 +18,7 @@ date_default_timezone_set('Africa/Lagos');
 define('IRIKI_KEY', 'correct_horse_battery_staple');
 
 //app persistence switch
+//TODO: debug mode should be quite... "debuggy"
 define('IRIKI_MODE', 'local');
 
 //use iriki to manage sessions?
@@ -126,9 +127,11 @@ $status = iriki\route::matchUrl(
 //return status
 if (is_null($status))
 {
+	//null was returned, very odd!
+	//we can tell the user that or?
 	$message = array(
 		'code' => 400,
-		'message' => 'Iriki MC endpoint. Specify a model.'
+		'message' => "This might be an Iriki application's base url or else, Abuja, we have a problem."
 	);
 	echo json_encode($message);
 }

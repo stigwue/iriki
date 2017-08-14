@@ -51,7 +51,7 @@ class model
                             $model_status['action_details'] = array(
                                 'description' => (isset($_route_action[$model_status['action']]['description']) ? $_route_action[$model_status['action']]['description'] : ''),
                                 'parameters' => $_route_action[$model_status['action']]['parameters'],
-                                'url_params' => (isset($_route_action[$model_status['action']]['url_params']) ? $_route_action[$model_status['action']]['url_params'] : array()),
+                                'url_parameters' => (isset($_route_action[$model_status['action']]['url_parameters']) ? $_route_action[$model_status['action']]['url_parameters'] : array()),
                                 'exempt' => (isset($_route_action[$model_status['action']]['exempt']) ? $_route_action[$model_status['action']]['exempt'] : array()),
                                 'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? $_route_action[$model_status['action']]['authenticate'] : "true")
                             );
@@ -67,7 +67,7 @@ class model
                             $model_status['action_details'] = array(
                                 'description' => (isset($model_status['default'][$model_status['action']]['description']) ? $model_status['default'][$model_status['action']]['description'] : ''),
                                 'parameters' => $model_status['default'][$model_status['action']]['parameters'],
-                                'url_params' => (isset($_route_action[$model_status['action']]['url_params']) ? $_route_action[$model_status['action']]['url_params'] : array()),
+                                'url_parameters' => (isset($_route_action[$model_status['action']]['url_parameters']) ? $_route_action[$model_status['action']]['url_parameters'] : array()),
                                 'exempt' => (isset($model_status['default'][$model_status['action']]['exempt']) ? $model_status['default'][$model_status['action']]['exempt'] : array()),
                                 'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? $_route_action[$model_status['action']]['authenticate'] : "true")
                             );
@@ -120,7 +120,7 @@ class model
         $all_properties = $details['properties'];
 
         $valid_properties = $filter['parameters'];
-        $url_properties = $filter['url_params'];
+        $url_properties = $filter['url_parameters'];
 
         $exempt_properties = (isset($filter['exempt']) ? $filter['exempt'] : null);
 
@@ -161,7 +161,7 @@ class model
         }
 
         //add url properties to the mix
-        //first, check if url_params are defined
+        //first, check if url_parameters are defined
         if (count($url_properties) != 0)
         {
           //then find the properties in sent and add or replace

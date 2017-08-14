@@ -52,7 +52,7 @@ class route
 
         $url_parts = (isset($request_details['url']['parts'])) ? $request_details['url']['parts'] : null;
 
-        $url_params = (isset($request_details['url']['params'])) ? $request_details['url']['params'] : null;
+        $url_parameters = (isset($request_details['url']['parameters'])) ? $request_details['url']['parameters'] : null;
 
         $count = count($url_parts);
 
@@ -72,15 +72,15 @@ class route
                 {
                     //handle requests such as /model/action/val1
                     //e.g /user/read/1
-                    //note that these parameters would aready have been configured in url_params
-                    if (is_null($url_params))
+                    //note that these parameters would aready have been configured in url_parameters
+                    if (is_null($url_parameters))
                     {
                         return response::error("URL parameters not defined.");
                     }
                     else
                     {
                     	//does nothing really
-                        $url_params_count = count($url_params);
+                        $url_parameters_count = count($url_parameters);
                     }
                 }
             }
@@ -204,7 +204,7 @@ class route
                         $parameter_status = model::doPropertyMatch(
                           $model_status['details'],
                           $params,
-                          $url_params,
+                          $url_parameters,
                           $model_status['action_details']
                         );
 
@@ -333,7 +333,7 @@ class route
         $parts = array_filter($parts);
         //reset index
         $model_action = array();
-        $params = array();
+        $parameters = array();
 
         $count = 0;
         foreach ($parts as $part)
@@ -341,10 +341,10 @@ class route
             $model_action[] = $part;
             $count += 1;
 
-            if ($count > 2) $params[] = $part;
+            if ($count > 2) $parameters[] = $part;
         }
 
-        return compact('path', 'parts', 'params', 'query');
+        return compact('path', 'parts', 'parameters', 'query');
     }
 
     /**
