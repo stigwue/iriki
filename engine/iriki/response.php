@@ -88,6 +88,8 @@ class response
       return $response;
     }
 
+    //response types
+    
     public static function data($data, $wrap = true, $message = '', $relations = null)
     {
         //do logging?

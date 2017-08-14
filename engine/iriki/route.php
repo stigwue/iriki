@@ -58,15 +58,15 @@ class route
 
         if ($count >= 1)
         {
-            //get the model
+            //get the model and action
             if ($count == 1)
             {
                 $model = $url_parts[$count - 1];
             }
             if ($count >= 2)
             {
-                $model = $url_parts[$count - 2];
-                $action = $url_parts[$count - 1];
+                $model = $url_parts[0];
+                $action = $url_parts[1];
             
                 if ($count > 2)
                 {
@@ -77,11 +77,11 @@ class route
                     {
                         return response::error("URL parameters not defined.");
                     }
-                    /*else
+                    else
                     {
+                    	//does nothing really
                         $url_params_count = count($url_params);
-
-                    }*/
+                    }
                 }
             }
 
@@ -178,8 +178,6 @@ class route
                 ($model_is_app_defined ? $app_routes : $engine_routes)
             );
 
-            //var_dump($request_details, $model_status['action_details']);
-
             /*
             perform action based on $model_status
             order of priority is this:
@@ -206,6 +204,7 @@ class route
                         $parameter_status = model::doPropertyMatch(
                           $model_status['details'],
                           $params,
+                          $url_params,
                           $model_status['action_details']
                         );
 
@@ -291,9 +290,13 @@ class route
                 }
             }
         }
+        else
+        {
+            return response::error('Url parsing failed. Please specify a model and action.', true);
+        }
 
         //all other parsing failed
-        return null; //response::error('Please specify a route.');
+        return response::error('An unknown error occurred.');
     }
 
     /**
@@ -310,9 +313,12 @@ class route
         $parsed = parse_url($path);
 
         $to_parse = $parsed['path'];
-        
+
         //path should not start with /
-        if ($to_parse[0] == '/') $to_parse = substr($to_parse, 1);
+        if (strlen($to_parse) != 0 AND $to_parse[0] == '/')
+        {
+            $to_parse = substr($to_parse, 1);
+        }
         
         $query = '';
 
@@ -360,7 +366,7 @@ class route
 
         if ($base_url != '')
         {
-          //trim uri by base
+            //trim uri by base
 
         	//optional step
         	//if you are running this framework from

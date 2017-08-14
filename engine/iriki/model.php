@@ -111,7 +111,7 @@ class model
     * @return array Properties: final, missing, extra and ids
     * @throw
     */
-    public static function doPropertyMatch($details, $sent, $filter)
+    public static function doPropertyMatch($details, $sent, $sent_url, $filter)
     {
         //parameters work thus:
         //empty valid => all paramters valid except 'exempt'
@@ -120,15 +120,18 @@ class model
         $all_properties = $details['properties'];
 
         $valid_properties = $filter['parameters'];
+        $url_properties = $filter['url_params'];
+
         $exempt_properties = (isset($filter['exempt']) ? $filter['exempt'] : null);
 
         //build sent properties
         $sent_properties = array_keys($sent);
+        $url_sent_properties = $sent_url;
 
         //build valid properties
         if (count($valid_properties) == 0)
         {
-            //all properties are valid
+            //all properties are valid for parameters = []
             $valid_properties = array_keys($all_properties);
         }
 
@@ -155,6 +158,26 @@ class model
                     unset($valid_properties[$i]);
                 }
             }
+        }
+
+        //add url properties to the mix
+        //first, check if url_params are defined
+        if (count($url_properties) != 0)
+        {
+          //then find the properties in sent and add or replace
+          //note that if non valid properties are provided via the url, they will be extra
+          $url_index = 0; $sent_url_count = count($sent_url);
+          foreach ($url_properties as $url_property)
+          {
+            //if defined in the url then handle else ignore
+            if ($url_index < $sent_url_count)
+            {
+              //if already sent, will be replaced
+              //else added anew
+              $sent[$url_property] = $sent_url[$url_index];
+            }
+            $url_index += 1;
+          }
         }
 
         //check for valid sent properties
@@ -209,16 +232,18 @@ class model
             }
         }
 
-        return array(
-            //properties supplied
-            'final' => $final_properties,
-            //missing properties that should have been supplied
-            'missing' => $properties_missing,
-            //extra properties that should not have been supplied
-            'extra' => $extra_properties,
-            //these, especially for mongodb have to be saved as mongoids
-            'ids' => array()
+        $result = array(
+          //properties supplied
+          'final' => $final_properties,
+          //missing properties that should have been supplied
+          'missing' => $properties_missing,
+          //extra properties that should not have been supplied
+          'extra' => $extra_properties,
+          //these, especially for mongodb have to be saved as mongoids
+          'ids' => array()
         );
+
+        return $result;
     }
 
     /**
