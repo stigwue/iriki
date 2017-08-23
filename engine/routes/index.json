@@ -6,6 +6,10 @@
 				"validate" : {
 					"model" : "user_session",
 					"action" : "validate"
+				},
+				"department" : {
+					"model" : "user_group",
+					"action" : "x"
 				}
 			},
 			"default" : {
@@ -16,7 +20,8 @@
 				},
 				"read" : {
 					"description" : "Returns the properties of the matching model.",
-					"parameters" : ["_id"]
+					"parameters" : ["_id"],
+					"url_parameters" : ["_id"]
 				},
 				"read_all" : {
 					"description" : "Returns the properties of the matching model.",
@@ -29,7 +34,8 @@
 				},
 				"delete" : {
 					"description" : "Deletes a model instance by supplying an id of the mode.",
-					"parameters" : ["_id"]
+					"parameters" : ["_id"],
+					"url_parameters" : ["_id"]
 				}
 			},
 			"routes" : [

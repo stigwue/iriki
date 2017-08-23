@@ -67,14 +67,22 @@ Vendors contain third-party code. Some of it provided via composer.
 
 ### Features
 
-* Handle HTTP PUT and DELETE request methods using PSR-7?
+* Handle HTTP PUT and DELETE request methods.
 
 ### Database
 
 * MySql, Rethink DB, another API persistent support.
 
-* Add changes to the database like Laravel does outside runtime. 
+* Handle migration (changes to the database). 
 
 ### Language
 
 * Port to PHP7? Or NodeJS?
+
+### Miscellaneous
+
+* Comments
+
+* Tests
+
+* Open Source

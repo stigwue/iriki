@@ -211,7 +211,7 @@ class mongodb extends database
 		}
 	}
 
-	public static function doRead($request)
+	public static function doRead($request, $sort)
 	{
 		if (is_null(Self::$__instance))
 		{
@@ -247,6 +247,11 @@ class mongodb extends database
 			$query = Self::enforceIds($params, $query);
 
 			$cursor = $persist->find($query);
+
+			if (count($sort) != 0)
+			{
+				$cursor->sort($sort);
+			}
 
 			$status = array();
 

@@ -27,7 +27,7 @@ define('IRIKI_SESSION', false);
 
 //refresh time in seconds
 //time (seconds) until Iriki re-reads config files or session token expires
-define('IRIKI_REFRESH', 60 * 50);
+define('IRIKI_REFRESH', 30 * 24 * 60 * 60);
 
 //config file for this app
 define('IRIKI_CONFIG', 'apps/kronos/app.json');

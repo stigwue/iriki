@@ -76,7 +76,7 @@ class database
 	}
 
 	//read/retrieve
-	public static function doRead($request_obj)
+	public static function doRead($request_obj, $sort)
 	{
 		$response = array();
 		$response['error'] = array(

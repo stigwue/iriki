@@ -106,12 +106,13 @@ class model
     *
     *
     * @param array Model property details
-    * @param array Parameters sent via request
+    * @param array Parameters sent via request. Note that they can be edited
+    * @param array Parameters sent via url
     * @param array Route filters: parameters and exempt
     * @return array Properties: final, missing, extra and ids
     * @throw
     */
-    public static function doPropertyMatch($details, $sent, $sent_url, $filter)
+    public static function doPropertyMatch($details, &$sent, $sent_url, $filter)
     {
         //parameters work thus:
         //empty valid => all paramters valid except 'exempt'

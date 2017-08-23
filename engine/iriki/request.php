@@ -2,26 +2,69 @@
 
 namespace iriki;
 
+/**
+* Iriki request, user written classes inherit this.
+*
+*/
 class request
 {
     //see https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
-
-    //db_type
-    //i've set the default here, otherwise an error is thrown for create in initializedb
+    
+    /**
+    * Full namespace of database object.
+    * The default is set here, otherwise an error is thrown in initializedb
+    *
+    * @var string
+    */
     private $_db_type = '\iriki\engine\mongodb';
 
-    //model_status, see array definition in route
-    private $_model_status;
-    private $_parameter_status;
-
-    private $_data; //data
-
-    //others
+    /**
+    * Internal database handler instance.
+    *
+    * @var object
+    */
     private static $_db_instance = null;
-    //relationships
+
+    /**
+    * Internal database handler instance.
+    *
+    * @var object
+    */
     private $_session_token; //user_session token
 
-    //build
+    /**
+    * Model and action status, see definition in route::matchUrl
+    *
+    * @var array
+    */
+    private $_model_status;
+
+    /**
+    * Parameters expected by request in their states.
+    *
+    * @var array
+    */
+    private $_parameter_status;
+
+    /**
+    * Data to be handled by request. Just an associative array.
+    *
+    * @var array
+    */
+    private $_data;
+
+    /**
+    * Build a new request given parameters.
+    *
+    *
+    * @param string Database namespace
+    * @param array Model status
+    * @param array Parameter status
+    * @param array Data
+    * @param string Session token for authentication
+    * @return object New Request object.
+    * @throw
+    */
     public static function initialize(
       $db_type,
       $model_status,
@@ -40,13 +83,20 @@ class request
       return $obj;
     }
 
+    /**
+    * Initialize the internal database instance
+    *
+    *
+    * @return object Database instance object.
+    * @throw
+    */
     public function initializedb()
     {
       if (is_null(Self::$_db_instance))
       {
         $db_type = $this->_db_type;
         //$db_type() throws 'Class name must be a valid object or a string' for only create inherited from request
-        //nixed after I supplied a default for db_type
+        //Doesn't show up after I supplied a default for db_type
         Self::$_db_instance = new $db_type();
 
         $db_instance = &Self::$_db_instance;
@@ -57,98 +107,187 @@ class request
       return request::$_db_instance;
     }
 
-    //properties
+    /**
+    * Gets the internal database instace
+    *
+    *
+    * @return object Internal database instance object.
+    * @throw
+    */
     public static function getDBInstance()
     {
       return Self::$_db_instance;
     }
 
+    /**
+    * Gets the full namespace of database object
+    *
+    *
+    * @return string Database namespace
+    * @throw
+    */
     public function getDBType()
     {
       return $this->_db_type;
     }
 
+    /**
+    * Sets the full namespace of database object
+    *
+    * @param string Database namespace
+    * @return string Database namespace
+    * @throw
+    */
     public function setDBType($db_type)
     {
       $this->_db_type = $db_type;
       return $this->_db_type;
     }
 
+    /**
+    * Gets the model status
+    *
+    * @return array Model status
+    * @throw
+    */
     public function getModelStatus()
     {
       return $this->_model_status;
     }
 
+    /**
+    * Sets the model status
+    *
+    * @param array Model status
+    * @return array Model status
+    * @throw
+    */
     public function setModelStatus($model_status)
     {
       $this->_model_status = $model_status;
       return $this->_model_status;
     }
 
+    /**
+    * Gets the parameter status/states
+    *
+    * @return array Parameter status
+    * @throw
+    */
     public function getParameterStatus()
     {
       return $this->_parameter_status;
     }
 
+    /**
+    * Sets the parameter status/states
+    *
+    * @param array Parameter status
+    * @return array Parameter status
+    * @throw
+    */
     public function setParameterStatus($parameter_status)
     {
       $this->_parameter_status = $parameter_status;
       return $this->_parameter_status;
     }
 
+    /**
+    * Gets the request model
+    *
+    * @return string Request model
+    * @throw
+    */
     public function getModel()
     {
       return $this->_model_status['str'];
     }
 
+    /**
+    * Sets the request model
+    *
+    * @param string Request model
+    * @return string Request model
+    * @throw
+    */
     public function setModel($model)
     {
       $this->_model_status['str'] = $model;
       return $this->_model_status['str'];
     }
 
+    /**
+    * Gets the request data
+    *
+    * @return array Request data
+    * @throw
+    */
     public function getData()
     {
       return $this->_data;
     }
 
+    /**
+    * Sets the request data
+    *
+    * @param array Request data
+    * @return array Request data
+    * @throw
+    */
     public function setData($data)
     {
       $this->_data = $data;
       return $this->_data;
     }
 
+    /**
+    * Gets the session toekn
+    *
+    * @return string Session token
+    * @throw
+    */
     public function getSession()
     {
       return $this->_session_token;
     }
 
+    /**
+    * Sets the Session token
+    *
+    * @param string Session token
+    * @return string Session token
+    * @throw
+    */
     public function setSession($session_token)
     {
       $this->_session_token = $session_token;
       return $this->_session_token;
     }
 
-    //log
-
-    //before a request action is called, request data is filled
-    //and the keys (parameters) are in one of three groups: final, missing, extra
-    //before relationship checks are done, parent model properties are in extra
-    //a relationship check should move valid ones from extra into final or insert into missing
-    //a model action is not performed until missing and extra is zero
-    //--"fax!" quoth the penguin
-
-    //for each of the CRUD actions, do (if available) pre and post actions/checks
-    //relationship | C | R | U | D
-    //unique       | v | x | x | x
-    //belongsto    | v | x | v | x
-    //hasmany      | x | v | x | v
-
-    //possible hack for overriding uniques in updates
-
-    //note that there's a recursivity variable to limit relationship checks
-
-
+    /**
+    * Perform a create action on a request.
+    * Before a request action is called, request data is filled
+    * and the keys (parameters) are in one of three groups: final, missing, extra
+    * before relationship checks are done, parent model properties are in extra
+    * a relationship check should move valid ones from extra into final or insert into missing
+    * a model action is not performed until missing and extra is zero
+    * --"fax!" quoth the penguin
+    *
+    * For each of the CRUD actions, do (if available) pre and post actions/checks
+    * relationship | C | R | U | D
+    * unique       | v | x | x | x
+    * belongsto    | v | x | v | x
+    * hasmany      | x | v | x | v
+    *
+    * TODO: possible hack for overriding uniques in updates
+    *
+    * Note that there's a recursivity variable to limit relationship checks
+    *
+    * @param object Request object
+    * @param boolean Wrap results with descriptors
+    * @return object Response object or data
+    * @throw
+    */
     public function create($request, $wrap = true)
     {
       $instance = $this->initializedb();
@@ -204,7 +343,16 @@ class request
       return \iriki\response::information($result['message'], $wrap, $result['data']);
     }
 
-    public function read($request, $wrap = true)
+    /**
+    * Perform a read action on a request
+    *
+    * @param object Request object
+    * @param boolean Wrap results with descriptors
+    * @param array Data sort descriptor
+    * @return object Response object or data
+    * @throw
+    */
+    public function read($request, $wrap = true, $sort = array())
     {
       $instance = $this->initializedb();
 
@@ -221,7 +369,7 @@ class request
         return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
       }
 
-      $result = $instance::doRead($request);
+      $result = $instance::doRead($request, $sort);
 
       //intercept auth error
       if (isset($result['code']) && isset($result['message']))
@@ -242,7 +390,16 @@ class request
       return \iriki\response::data($result, $wrap);
     }
 
-    public function read_all($request, $wrap = true)
+    /**
+    * Perform a 'read all' action on a request
+    *
+    * @param object Request object
+    * @param boolean Wrap results with descriptors
+    * @param array Data sort descriptor
+    * @return object Response object or data
+    * @throw
+    */
+    public function read_all($request, $wrap = true, $sort = array())
     {
       $instance = $this->initializedb();
 
@@ -258,7 +415,7 @@ class request
       $request->setData(array());
 
       //read should also pick up any "hasmany" models up to x recursivity
-      $result = $instance::doRead($request);
+      $result = $instance::doRead($request, $sort);
 
       //intercept auth error
       if (isset($result['code']) && isset($result['message']))
@@ -279,6 +436,14 @@ class request
       return \iriki\response::data($result, $wrap);
     }
 
+    /**
+    * Perform an update action on a request
+    *
+    * @param object Request object
+    * @param boolean Wrap results with descriptors
+    * @return object Response object or data
+    * @throw
+    */
     public function update($request, $wrap = true)
     {
       $instance = $this->initializedb();
@@ -321,6 +486,14 @@ class request
       return \iriki\response::information($result, $wrap);
     }
 
+    /**
+    * Perform a delete action on a request
+    *
+    * @param object Request object
+    * @param boolean Wrap results with descriptors
+    * @return object Response object or data
+    * @throw
+    */
     public function delete($request, $wrap = true)
     {
       $instance = $this->initializedb();

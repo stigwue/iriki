@@ -409,7 +409,6 @@ class route
             default: 
                 //$status['method'] = 'POST';
                 $params = $_REQUEST;
-                //array_shift($params);
                 $status['params'] = $params;
             break;
         }
