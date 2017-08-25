@@ -280,10 +280,10 @@ class route
                 }
                 else
                 {
-                    //provide model description and possible actions
+                    //provide model description and possible actions as this action does not exist?
                     if (isset($model_status['details']['description']))
                     {
-                        return response::information(
+                        return response::error(
                             $model_status['details']['description']
                         );
                     }

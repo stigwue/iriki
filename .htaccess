@@ -2,14 +2,10 @@
 
 IndexIgnore .htaccess */.??* *~ *# */HEADER* */README* */_vti*
 
-<Limit GET POST>
+<Limit GET POST PUT DELETE>
 order deny,allow
 deny from all
 allow from all
-</Limit>
-<Limit PUT DELETE>
-order deny,allow
-deny from all
 </Limit>
 
 Options -MultiViews -Indexes
