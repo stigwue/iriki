@@ -2,24 +2,54 @@
 
 namespace iriki;
 
+/**
+* Iriki response.
+*
+*/
 class response
 {
     //see https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
 
     //1xx: Informational responses
 
-    //2xx: Success
+    /**
+    * Success responses
+    * HTTP 2xx: Success
+    *
+    * @var integer
+    */
     const OK = 200;
 
     //3xx: Redirection
 
-    //4xx Client errors
+    /**
+    * Error response
+    * HTTP 4xx Client errors
+    *
+    * @var integer
+    */
     const ERROR = 400;
-    const AUTH = 401; //Unauthorized
+
+    /**
+    * Unauthorized error response
+    * HTTP 4xx Client errors
+    *
+    * @var integer
+    */
+    const AUTH = 401;
     //412 Precondition Failed
 
     //5xx Server error
 
+    /**
+    * Build a message explaining an action.
+    *
+    *
+    * @param array Array of items
+    * @param array Singular and plural name of items
+    * @return Message string
+    * @throw
+    */
     public static function showMissing($list, $description, $action)
     {
         $count_less_one = count($list) - 1;
@@ -69,7 +99,16 @@ class response
         return $message;
     }
 
-    //build
+    /**
+    * Build a response object
+    *
+    *
+    * @param integer Reponse code
+    * @param string Response message, typically user understandable
+    * @param object Response data, mostly arrays or strings
+    * @return Response object
+    * @throw
+    */
     private static function build($code, $message = '', $data = null)
     {
       /*a response has
@@ -88,8 +127,17 @@ class response
       return $response;
     }
 
-    //response types
-    
+    /**
+    * Build and return a data response object
+    *
+    *
+    * @param object Response data, mostly arrays or strings
+    * @param boolean Wrap data to give an Iriki Response or just raw data. Default is true.
+    * @param string Response message. Default is ''.
+    * @param object Model relations. Null for now.
+    * @return Response object
+    * @throw
+    */
     public static function data($data, $wrap = true, $message = '', $relations = null)
     {
         //do logging?
@@ -98,18 +146,48 @@ class response
         else return Self::build(Self::OK, $message, $data);
     }
 
+    /**
+    * Build and return an information response object
+    *
+    *
+    * @param string Response message.
+    * @param boolean Wrap data to give an Iriki Response or just raw message. Default is true.
+    * @param object Response data, mostly arrays or strings. Default is null.
+    * @return Response object
+    * @throw
+    */
     public static function information($message, $wrap = true, $data = null)
     {
         if (!$wrap) return $message;
         else return Self::build(Self::OK, $message, $data);
     }
 
+    /**
+    * Build and return an error response object
+    *
+    *
+    * @param string Response message.
+    * @param boolean Wrap data to give an Iriki Response or just raw message. Default is true.
+    * @param object Response data, mostly arrays or strings. Default is null.
+    * @return Response object
+    * @throw
+    */
     public static function error($message, $wrap = true, $data = null)
     {
         if (!$wrap) return $message;
         else return Self::build(Self::ERROR, $message, $data);
     }
 
+    /**
+    * Build and return an authentication response object
+    *
+    *
+    * @param string Response message.
+    * @param boolean Wrap data to give an Iriki Response or just raw message. Default is true.
+    * @param object Response data, mostly arrays or strings. Default is null.
+    * @return Response object
+    * @throw
+    */
     public static function auth($message, $wrap = true, $data = null)
     {
         if (!$wrap) return $message;
