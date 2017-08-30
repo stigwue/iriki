@@ -17,7 +17,7 @@ RewriteEngine on
 #RewriteCond %{HTTPS} !^on$
 #RewriteRule (.*) https://foobar/$1 [R,L]
 
-#move all requests to the app folder
+#move all requests to the index file
 RewriteRule ^(.*)$ index.php?$1 [L]
 
 #url not found

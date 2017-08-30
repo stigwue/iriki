@@ -1,32 +1,34 @@
 # Iriki
 
-The Iriki Model Controller.
+Iriki, a framework for APIs.
 
 Source code can be found here: [stigwue/iriki](https://github.com/stigwue/iriki).
 
 ## Why Iriki
 
-Most PHP MVC frameworks deal by default with a relational database such as MySQL for the model persistence with a view bundled in.
+Most PHP frameworks use a relational database as a default for persistence with views bundled.
 
-* Preferring the fluidity of NoSQL options (such as MongoDB) for easier modeling,
+Iriki:
 
-* Thinking of apps where a UI is independent, consuming an API capable of handling whatever a front-end developer would build,
+* prefers the fluidity of NoSQL options (such as MongoDB) for easier modeling,
 
-* Preserving the easy routing of the frameworks and
+* thinks of apps as independent UIs consuming an API capable of handling whatever a front-end developer would build,
 
-* Wishing that frequently used models be shared:
+* preserves known easy routing and
 
-The idea of a new framework which would:
+* wishes that frequently used models be re-usable.
 
-* allow for the definition of language agnostic models (JSON),
+As such, Iriki:
 
-* replace traditional framework views with an independent UI, which REQUESTs URLs birthed from preconfigured routing
+* allows for the definition of language agnostic models (JSON) and
 
-was born. It features a PHP backend handling request routing, database operations, unit tests and third party libraries via composer.
+* replaces traditionally included views with an independent UI, which REQUESTs URLs birthed from configured routing.
+
+Iriki features a PHP backend handling request routing, database operations, unit tests and third party libraries via composer.
 
 ## Features
 
-IrikiMC comes with the following features out-of-box:
+Iriki comes with the following features out-of-box:
 
 * User management
 
@@ -38,7 +40,7 @@ IrikiMC comes with the following features out-of-box:
 
 ## How it works
 
-Iriki MC files all reside in a single directory. All requests to be handled by the framework will be POST/GET to or from this directory.
+Iriki files all reside in a single directory. All requests to be handled by the framework will be POST/GET to or from this directory.
 
 These are the key directories within: engine, app and vendors.
 
