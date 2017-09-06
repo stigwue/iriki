@@ -182,7 +182,7 @@ class mongodb extends database
 				if (!$authenticated)
 				{
 					return array(
-						'code' => '401',
+						'code' => '401', //response::AUTH
 						'message' => 'unauthorized'
 					);
 				}

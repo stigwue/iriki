@@ -194,10 +194,13 @@ class model
                 if (isset($all_properties[$property]['type']))
                 {
                   $type = $all_properties[$property]['type'];  //might be absent
+
                   $value = $sent[$property];
 
                   if (type::is_type($value, $type))
                   {
+                    //fix type
+                    $sent[$property] = type::ctype($value, $type);
                     $final_properties[] = $property;
                   }
                   else

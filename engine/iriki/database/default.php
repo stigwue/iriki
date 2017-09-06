@@ -2,15 +2,63 @@
 
 namespace iriki\engine;
 
+/**
+* Iriki database engine template.
+* There should be an extension (inheritance) of this
+* for every supported database.
+*
+*/
 class database
 {
-	protected static $_key_values;
-	protected static $_type = 'default';
-	protected static $_namespace;
-	protected static $_db_class;
-	protected static $_db_class_exists;
-	protected static $_instance;
+	/**
+    * Associative array of database parameters.
+    *
+    * @var array
+    */
+    protected static $_key_values;
+	
+	/**
+    * Database type identifier, unique through out the framework.
+    *
+    * @var string
+    */
+    protected static $_type = 'default';
+	
+	/**
+    * Database class full namespace.
+    *
+    * @var string
+    */
+    protected static $_namespace;
 
+	/**
+    * Database class, typically namespace and type.
+    *
+    * @var string
+    */
+    protected static $_db_class;
+	
+	/**
+    * Database class exists in code.
+    *
+    * @var boolean
+    */
+    protected static $_db_class_exists;
+	
+	/**
+    * Database class instance.
+    *
+    * @var object
+    */
+    protected static $_instance;
+
+    /**
+    * Initialize the database instance
+    *
+    *
+    * @return boolean True of false class exists value.
+    * @throw
+    */
 	public static function doInitialise($app, $engine = 'iriki', $config_values = null)
 	{
 		Self::$_key_values = $config_values;
@@ -51,70 +99,77 @@ class database
 		return Self::$_db_class_exists;
 	}
 
-	public static function getType()
+	/**
+    * Gets the database type.
+    *
+    *
+    * @return string Database type
+    * @throw
+    */
+    public static function getType()
 	{
 		return Self::$_type;
 	}
 
+	/**
+    * Gets the database class.
+    *
+    *
+    * @return string Database class
+    * @throw
+    */
 	public static function getClass()
 	{
 		return Self::$_db_class;
 	}
 
-	//create
-	public static function doCreate($request_obj)
+	/**
+    * Perform a database create action on a request.
+    *
+    * @param object Request object
+    * @return object Response
+    * @throw
+    */
+    public static function doCreate($request_obj)
 	{
-		$response = array();
-		$response['error'] = array(
-			'code' => response::ERROR,
-			'message' => 'Action not yet configured'
-		);
-
-		//do logging?
-
-		return $response;
+		return response::error('Action not yet configured');
 	}
 
-	//read/retrieve
-	public static function doRead($request_obj, $sort)
+	/**
+    * Perform a database read action on a request.
+    *
+    * @param object Request object
+    * @param array Request data sort
+    * @return object Response
+    * @throw
+    */
+    public static function doRead($request_obj, $sort)
 	{
-		$response = array();
-		$response['error'] = array(
-			'code' => response::ERROR,
-			'message' => 'Action not yet configured'
-		);
-
-		//do logging?
-
-		return $response;
+		return response::error('Action not yet configured');
 	}
 
-	//update
-	public static function doUpdate($request_obj)
+	/**
+    * Perform a database update action on a request.
+    *
+    * @param object Request object
+    * @return object Response
+    * @throw
+    */
+    public static function doUpdate($request_obj)
 	{
-		$response = array();
-		$response['error'] = array(
-			'code' => response::ERROR,
-			'message' => 'Action not yet configured'
-		);
-
-		//do logging?
-
-		return $response;
+		return response::error('Action not yet configured');
 	}
 
-	//delete
-	public static function doDelete($request_obj)
+	/**
+    * Perform a database delete action on a request.
+    *
+    * @param object Request object
+    * @return object Response
+    * @throw
+    */
+    public static function doDelete($request_obj)
 	{
-		$response = array();
-		$response['error'] = array(
-			'code' => response::ERROR,
-			'message' => 'Action not yet configured'
-		);
-
-		//do logging?
-
-		return $response;
+		return response::error('Action not yet configured');
 	}
 }
 

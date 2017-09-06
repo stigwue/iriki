@@ -4,12 +4,11 @@ namespace iriki;
 
 /**
 * Iriki request, user written classes inherit this.
+* see https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
 *
 */
 class request
 {
-    //see https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods
-    
     /**
     * Full namespace of database object.
     * The default is set here, otherwise an error is thrown in initializedb
@@ -54,34 +53,12 @@ class request
     private $_data;
 
     /**
-    * Build a new request given parameters.
+    * Metadata to be used by request.
+    * This is an associative array for things like sorting.
     *
-    *
-    * @param string Database namespace
-    * @param array Model status
-    * @param array Parameter status
-    * @param array Data
-    * @param string Session token for authentication
-    * @return object New Request object.
-    * @throw
+    * @var array
     */
-    public static function initialize(
-      $db_type,
-      $model_status,
-      $parameter_status,
-      $data = null,
-      $session_token = null
-    )
-    {
-      $obj = new request;
-      $obj->_db_type = $db_type;
-      $obj->_model_status = $model_status;
-      $obj->_parameter_status = $parameter_status;
-      $obj->_data = $data;
-      $obj->_session_token = $session_token;
-
-      return $obj;
-    }
+    private $_meta;
 
     /**
     * Initialize the internal database instance
@@ -241,6 +218,30 @@ class request
     }
 
     /**
+    * Gets the request metadata
+    *
+    * @return array Request metadata
+    * @throw
+    */
+    public function getMeta()
+    {
+      return $this->_meta;
+    }
+
+    /**
+    * Sets the request metadata
+    *
+    * @param array Request metadata
+    * @return array Request metadata
+    * @throw
+    */
+    public function setMeta($meta)
+    {
+      $this->_meta = $meta;
+      return $this->_meta;
+    }
+
+    /**
     * Gets the session toekn
     *
     * @return string Session token
@@ -352,7 +353,7 @@ class request
     * @return object Response object or data
     * @throw
     */
-    public function read($request, $wrap = true, $sort = array())
+    public function read($request, $wrap = true)
     {
       $instance = $this->initializedb();
 
@@ -368,6 +369,10 @@ class request
       {
         return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
       }
+
+      //check sort metadata
+      $meta = $request->getMeta();
+      $sort = (isset($meta['sort']) ? $meta['sort'] : array());
 
       $result = $instance::doRead($request, $sort);
 
@@ -399,7 +404,7 @@ class request
     * @return object Response object or data
     * @throw
     */
-    public function read_all($request, $wrap = true, $sort = array())
+    public function read_all($request, $wrap = true)
     {
       $instance = $this->initializedb();
 
@@ -413,6 +418,10 @@ class request
       }
 
       $request->setData(array());
+
+      //check sort metadata
+      $meta = $request->getMeta();
+      $sort = (isset($meta['sort']) ? $meta['sort'] : array());
 
       //read should also pick up any "hasmany" models up to x recursivity
       $result = $instance::doRead($request, $sort);

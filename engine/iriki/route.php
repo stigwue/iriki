@@ -257,13 +257,19 @@ class route
                             $model_instance = new $model_status['str_full']();
 
                             //build request;
-                            $request = request::initialize(
-                              engine\database::getClass(), //db_type
-                              $model_status,
-                              $parameter_status,
-                              $params, //data
-                              $user_session_token //session
-                            );
+                            $request = new request();
+                            //db_type
+                            $request->setDBType(engine\database::getClass());
+                            //model status
+                            $request->setModelStatus($model_status);
+                            //parameter_status
+                            $request->setParameterStatus($parameter_status);
+                            //data
+                            $request->setData($params);
+                            //meta
+                            //?
+                            //session
+                            $request->setSession($user_session_token);
 
                             //instance action
                             return $model_instance->$action($request);
