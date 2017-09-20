@@ -1,3 +1,5 @@
+[![Build Status](https://img.shields.io/travis/stigwue/iriki/master.svg?style=flat-square)](https://travis-ci.org/stigwue/iriki)
+
 # Iriki
 
 Iriki, a framework for APIs.
