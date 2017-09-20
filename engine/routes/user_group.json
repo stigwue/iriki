@@ -15,6 +15,12 @@
 				"read_by_title" : {
 					"description" : "Read a user group by its (unique) title.",
 					"parameters" : ["title"]
+				},
+				"read_all" : {
+					"description" : "Read all user groups.",
+					"parameters" : [],
+					"exempt" : ["*"],
+					"authenticate" : false
 				}
 			}
 		}

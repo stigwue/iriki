@@ -1,6 +1,6 @@
 <?php
 
-class type__test extends \PHPUnit\Framework\TestCase
+class typeTest extends \PHPUnit\Framework\TestCase
 {
 	public function test_is_number()
     {

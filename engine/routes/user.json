@@ -33,9 +33,15 @@
 					"description" : "Read a user by providing its username.",
 					"parameters" : ["username"]
 				},
+				"delete" : {
+					"description" : "Returns the properties of the matching model.",
+					"parameters" : ["_id"],
+					"url_parameters" : ["_id"]
+				},
 				"delete_by_username" : {
 					"description" : "Delete a user using its username.",
-					"parameters" : ["username"]
+					"parameters" : ["username"],
+					"url_parameters" : ["username"],
 				}
 			}
 		}

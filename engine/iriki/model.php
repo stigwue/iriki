@@ -16,11 +16,10 @@ class model
     * a specific set of parameters for said action
     *
     *
-    * @param array Model status from request made
-    * @param array Defined models
-    * @param array Defined routes
-    * @return array Model status describing match
-    * @throw
+    * @param {array} Model status from request made
+    * @param {array} Defined models
+    * @param {array} Defined routes
+    * @return {array} Model status describing match
     */
     public static function doMatch($model_status, $models = null, $routes = null)
     {

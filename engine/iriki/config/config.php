@@ -36,10 +36,10 @@ class config
     *
     *
     * @param string JSON file path
-    * @return string File contents or an empty string if file not found.
+    * @return string File contents or null if file not found.
     * @throw
     */
-    private static function load_json_file($json_path)
+    public static function load_json_file($json_path)
     {
         if (file_exists($json_path))
         {
@@ -48,7 +48,7 @@ class config
         }
         else
         {
-            return '';
+            return null;
         }
     }
 
@@ -60,9 +60,9 @@ class config
     * @return array Array of JSON or null if parse fails.
     * @throw
     */
-    private static function parse_json_string($json_string)
+    public static function parse_json_string($json_string)
     {
-        if ($json_string == '')
+        if ($json_string == '' || is_null($json_string))
         {
             return null;
         }

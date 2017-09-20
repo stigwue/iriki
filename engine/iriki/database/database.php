@@ -3,17 +3,17 @@
 namespace iriki\engine;
 
 /**
-* Iriki database engine template.
-* There should be an extension (inheritance) of this
-* for every supported database.
-*
-*/
+ * Iriki database engine template.
+ * There should be an extension (inheritance) of this
+ * for every supported database.
+ *
+ */
 class database
 {
 	/**
     * Associative array of database parameters.
     *
-    * @var array
+    * @var {Array}
     */
     protected static $_key_values;
 	
@@ -48,15 +48,17 @@ class database
 	/**
     * Database class instance.
     *
-    * @var object
+    * @var Object
     */
     protected static $_instance;
 
     /**
     * Initialize the database instance
     *
-    *
-    * @return boolean True of false class exists value.
+    * @param {string} $app The application name
+    * @param {string} $engine The application engine
+    * @param {Array} $config_values Application configuration values
+    * @returns {boolean} True or false class exists value.
     * @throw
     */
 	public static function doInitialise($app, $engine = 'iriki', $config_values = null)

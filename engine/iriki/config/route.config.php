@@ -156,11 +156,11 @@ class route_config extends config
         }
 
         $status['data']['engine'] = array();
-        $status['data']['engine']['name'] = $this->_engine['app']['name'];
-        $status['data']['engine']['path'] = $this->_engine['app']['path'];
+        $status['data']['engine']['name'] = Self::$_engine['app']['name'];
+        $status['data']['engine']['path'] = Self::$_engine['app']['path'];
 
         $status['data']['engine']['routes'] = array();
-        foreach ($this->_engine['routes']['routes'] as $model => $actions)
+        foreach (Self::$_engine['routes']['routes'] as $model => $actions)
         {
             $status['data']['engine']['routes'][] = $model;
         }
@@ -168,11 +168,11 @@ class route_config extends config
         //app's routes
         $status['data']['application'] = array();
 
-        $status['data']['application']['name'] = $this->_app['app']['name'];
-        $status['data']['application']['path'] = $this->_app['app']['path'];
+        $status['data']['application']['name'] = Self::$_app['app']['name'];
+        $status['data']['application']['path'] = Self::$_app['app']['path'];
 
         $status['data']['application']['routes'] = array();
-        foreach ($this->_app['routes']['routes'] as $model => $actions)
+        foreach (Self::$_app['routes']['routes'] as $model => $actions)
         {
             $status['data']['application']['routes'][] = $model;
         }

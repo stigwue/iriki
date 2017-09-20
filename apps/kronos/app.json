@@ -36,6 +36,12 @@
           "server" : "mongodb://localhost:27017",
           "db" : "kronos"
         },
+        "mysql" : {
+          "type" : "mysql",
+          "server" : "localhost",
+          "db" : "kronos",
+          "password" : "plaintext"
+        },
         "test" : {
           "type" : "mongodb",
           "server" : "mongodb://localhost:27017",
@@ -45,7 +51,7 @@
 
       "constants" : {
         "log_path" : "apps/kronos/log/",
-        "mailgun_domain" : "",
+        "mailgun_domain" : "bc.eyeti.xyz",
         "mailgun_secret" : ""
       }
     }
