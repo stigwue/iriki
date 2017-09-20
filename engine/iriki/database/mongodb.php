@@ -2,26 +2,66 @@
 
 namespace iriki\engine;
 
-require_once(__DIR__ . '/default.php');
+//get the definition of the default database class
+require_once(__DIR__ . '/database.php');
 
+//response
+require_once(__DIR__ . '/../response.php');
+
+/**
+* Iriki database engine.
+* This is the mongodb instance.
+*
+*/
 class mongodb extends database
 {
+	/**
+    * Database engine identifier.
+    * This is unique across the framework.
+    *
+    * @var {string}
+    */
 	const TYPE = 'mongodb';
+
+	/**
+    * Database id field.
+    * Any property/column with this name is an id.
+    * Parent model ids are also built with this.
+    *
+    * @var {string}
+    */
 	const ID_FIELD = '_id';
 
+	/**
+    * Internal database handle.
+    * This is shared across all instances of this class.
+    * So handle carefully.
+    *
+    * @var {Object}
+    */
 	private static $__instance = null;
 
-	//for (de)enforce, note http://php.net/manual/en/mongoid.isvalid.php
-	//deprecation notice
-	//http://stackoverflow.com/a/36135790/3323338
+	/**
+    * Checker for valid Mongo IDs.
+    *
+    * @param {string} The id to check.
+    * @return {boolean} True or false
+    */
 	private static function isMongoId($id){
 		return is_string($id) && strlen($id) == 24 && ctype_xdigit($id);
 	}
 
-	//returns true if all is well
-	//false otherwise so that calling function can
-    //return response::error('User session token invalid or expired.');
-	private static function checkSessionToken($user_session_token, $timestamp)
+	/**
+    * Check database if user supplied session token is valid.
+    * Returns true if all is well or false otherwise so that
+    * calling function can
+    * return response::error('User session token invalid or expired.');
+    *
+    * @param {string} Session token.
+    * @param {integer} Timestamp to use for expiry checks
+    * @return {boolean} True or false
+    */
+    private static function checkSessionToken($user_session_token, $timestamp)
 	{
 		//read session details from db
 		$persist = Self::$__instance->user_session;
@@ -76,9 +116,14 @@ class mongodb extends database
 		return false;
 	}
 
-	//parameters has final, missing, extra and ids
-	//we check final for ID_FIELD and set
-	//we check ids and enforce all
+	/**
+    * Convert IDs supplied as strings to MongoIDs
+    * Invalid IDs will be added to missing parameters
+    *
+    * @param {array} Parameters: final, missing and ids.
+    * @param {array} Parameter values
+    * @return {Array} Corrected query array
+    */
 	public static function enforceIds($parameters, $key_values)
 	{
 		//convert mongo id from string into the object
@@ -110,9 +155,13 @@ class mongodb extends database
 		return $query;
 	}
 
-	//function to de-enforceIds
-	//if a mongo_id was x_id, it would be array('$id' => 'string representation')
-	//we need to fix this here, i've seen the alternative and it aint pretty
+	/**
+    * Because MongoIDs are complex variables (an array like '$id' => 'string representation'),
+    * we need to pull out only the string value.
+    *
+    * @param {array} Associative array of key and values
+    * @return {Array} Corrected array
+    */
 	public static function deenforceIds($key_values)
 	{
 		$pretty = array();
@@ -135,6 +184,11 @@ class mongodb extends database
 		return $pretty;
 	}
 
+	/**
+    * Intialize internal database handle using supplied configuration
+    *
+    * @return {boolean} Success value of operation.
+    */
 	public static function initialize()
 	{
 		if (is_null(Self::$__instance))
@@ -167,6 +221,12 @@ class mongodb extends database
 		}
 	}
 
+	/**
+    * Database create action.
+    *
+    * @param {request} Request on which action is performed
+    * @return {Array} One of three options: null, an array with message (true or false) and data values or an array with code (some error code) and message (string description)
+    */
 	public static function doCreate($request)
 	{
 		if (is_null(Self::$__instance))
@@ -211,6 +271,13 @@ class mongodb extends database
 		}
 	}
 
+	/**
+    * Database read action.
+    *
+    * @param {request} Request on which action is performed
+    * @param {array} Array to control read sort
+    * @return {Array} One of three options: null, an array of data values or an array with code (some error code) and message (string description)
+    */
 	public static function doRead($request, $sort)
 	{
 		if (is_null(Self::$__instance))
@@ -274,6 +341,12 @@ class mongodb extends database
 		}
 	}
 
+	/**
+    * Database update action.
+    *
+    * @param {request} Request on which action is performed
+    * @return {Array} One of three options: null, a success flag or an array with code (some error code) and message (string description)
+    */
 	public static function doUpdate($request)
 	{
 		if (is_null(Self::$__instance))
@@ -322,6 +395,12 @@ class mongodb extends database
 		}
 	}
 
+	/**
+    * Database delete action.
+    *
+    * @param {request} Request on which action is performed
+    * @return {Array} One of three options: null, a success flag or an array with code (some error code) and message (string description)
+    */
 	public static function doDelete($request)
 	{
 		if (is_null(Self::$__instance))

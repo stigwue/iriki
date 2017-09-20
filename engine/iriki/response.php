@@ -166,10 +166,10 @@ class response
     * Build and return an error response object
     *
     *
-    * @param string Response message.
-    * @param boolean Wrap data to give an Iriki Response or just raw message. Default is true.
-    * @param object Response data, mostly arrays or strings. Default is null.
-    * @return Response object
+    * @param {string} Response message.
+    * @param {boolean} Wrap data to give an Iriki Response or just raw message. Default is true.
+    * @param {object} Response data, mostly arrays or strings. Default is null.
+    * @returns {object} Response object
     * @throw
     */
     public static function error($message, $wrap = true, $data = null)

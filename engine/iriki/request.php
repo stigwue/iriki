@@ -2,6 +2,9 @@
 
 namespace iriki;
 
+//response
+require_once(__DIR__ . '/response.php');
+
 /**
 * Iriki request, user written classes inherit this.
 * see https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol#Request_methods

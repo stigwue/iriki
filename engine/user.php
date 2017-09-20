@@ -296,31 +296,29 @@ class user extends \iriki\request
 	public function delete($request, $wrap = true)
 	{
 	    if (!is_null($request))
-			{
-	    		$request->setParameterStatus(array(
-					'final' => array('_id'),
-					'missing' => array(),
-					'extra' => array(),
-					'ids' => array('_id')
-				));
-				return $request->delete($request, $wrap);
-			}
+		{
+    		$request->setParameterStatus(array(
+				'final' => array('_id'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array('_id')
+			));
+			return $request->delete($request, $wrap);
 		}
 	}
 
 	public function delete_by_username($request, $wrap= true)
 	{
 	    if (!is_null($request))
-			{
-	    		$request->setParameterStatus(array(
-					'final' => array('username'),
-					'missing' => array(),
-					'extra' => array(),
-					'ids' => array()
-				));
-				return $request->delete($request, $wrap);
-			}
+		{
+    		$request->setParameterStatus(array(
+				'final' => array('username'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array()
+			));
+			return $request->delete($request, $wrap);
 		}
 	}
-
+}
 ?>
