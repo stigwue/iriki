@@ -37,6 +37,24 @@ class mongodbTest extends \PHPUnit\Framework\TestCase
         //assert
         $this->assertEquals(true, $status);
     }
+
+    public function test_initialize_failure()
+    {
+        iriki\engine\database::doInitialise(
+            'kronos',
+            'iriki',
+            array(
+                'type' => 'mongodb',
+                'server' => 'mongodb://localhost:27017',
+                'db' => 'kronos'
+            )
+        );
+
+        $status = \iriki\engine\mongodb::initialize();
+
+        //assert
+        $this->assertEquals(true, $status);
+    }
 }
 
 ?>
