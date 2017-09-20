@@ -69,6 +69,27 @@ class database
 		if (isset(Self::$_key_values['type']))
 		{
 			Self::$_type = Self::$_key_values['type'];
+
+            //defined in \iriki\engine
+            //or \app\database
+            Self::$_namespace = '\\' . $engine . '\\engine\\';
+            Self::$_db_class = Self::$_namespace . Self::$_type;
+            if (class_exists(Self::$_db_class))
+            {
+                Self::$_instance = new Self::$_db_class();
+                Self::$_db_class_exists = true;
+            }
+            else
+            {
+                //try application
+                Self::$_namespace = '\\' . $app . '\\engine\\';
+                Self::$_db_class = Self::$_namespace . Self::$_type;
+                if (class_exists(Self::$_db_class))
+                {
+                    Self::$_instance = new Self::$_db_class();
+                    Self::$_db_class_exists = true;
+                }
+            }
 		}
 		else
 		{
@@ -77,27 +98,7 @@ class database
 			Self::$_instance = null;
 			Self::$_db_class_exists = false;
 		}
-
-		//defined in \iriki\engine
-		//or \app\database
-		Self::$_namespace = '\\' . $engine . '\\engine\\';
-		Self::$_db_class = Self::$_namespace . Self::$_type;
-		if (class_exists(Self::$_db_class))
-		{
-			Self::$_instance = new Self::$_db_class();
-			Self::$_db_class_exists = true;
-		}
-		else
-		{
-			//try application
-			Self::$_namespace = '\\' . $app . '\\engine\\';
-			Self::$_db_class = Self::$_namespace . Self::$_type;
-			if (class_exists(Self::$_db_class))
-			{
-				Self::$_instance = new Self::$_db_class();
-				Self::$_db_class_exists = true;
-			}
-		}
+        
 		return Self::$_db_class_exists;
 	}
 

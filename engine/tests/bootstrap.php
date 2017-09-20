@@ -3,7 +3,7 @@
 //config
 require_once(__DIR__ . '/../iriki/config/autoload.php');
 //database
-require_once(__DIR__ . '/../iriki/config/autoload.php');
+require_once(__DIR__ . '/../iriki/database/autoload.php');
 //log
 //utility
 ?>
