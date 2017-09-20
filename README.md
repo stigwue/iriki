@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/travis/stigwue/iriki/master.svg?style=flat-square)](https://travis-ci.org/stigwue/iriki)
+[![Build Status](https://img.shields.io/travis/stigwue/iriki/master.svg)](https://travis-ci.org/stigwue/iriki)
 
 # Iriki
 
