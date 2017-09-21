@@ -10,5 +10,5 @@ before-script:
 script:
   #pwd
   #ls
-  tree .
-  #vendors/vendor/bin/phpunit --bootstrap engine/tests/bootstrap.php engine/tests/
+  #tree .
+  vendors/vendor/bin/phpunit --bootstrap engine/tests/bootstrap.php engine/tests/
