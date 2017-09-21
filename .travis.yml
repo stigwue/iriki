@@ -8,6 +8,6 @@ before-script:
   composer --working-dir=./vendors install
 
 script:
-  pwd
+  #pwd
   ls
-  ./vendors/vendor/bin/phpunit --bootstrap ./engine/tests/bootstrap.php ./engine/tests/
+  #./vendors/vendor/bin/phpunit --bootstrap ./engine/tests/bootstrap.php ./engine/tests/
