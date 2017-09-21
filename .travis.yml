@@ -6,9 +6,10 @@ php:
 install:
   #install stuff with composer
   composer --working-dir=./vendors install
+  pecl install mongo
+
+services:
+  - mongodb
 
 script:
-  #pwd
-  #ls
-  #tree .
   vendors/vendor/bin/phpunit --bootstrap engine/tests/bootstrap.php engine/tests/
