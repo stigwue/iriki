@@ -3,13 +3,13 @@ language: php
 php:
   - 5.6
 
+services:
+  - mongodb
+
 install:
   #install stuff with composer
   - composer --working-dir=./vendors install
-  - pecl install mongo
-
-services:
-  - mongodb
+  #- pecl install mongo
 
 script:
   - vendors/vendor/bin/phpunit --bootstrap engine/tests/bootstrap.php engine/tests/
