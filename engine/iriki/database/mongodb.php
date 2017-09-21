@@ -47,7 +47,7 @@ class mongodb extends database
     * @param {string} The id to check.
     * @return {boolean} True or false
     */
-	private static function isMongoId($id){
+	public static function isMongoId($id){
 		return is_string($id) && strlen($id) == 24 && ctype_xdigit($id);
 	}
 
