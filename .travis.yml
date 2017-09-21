@@ -6,6 +6,9 @@ php:
 services:
   - mongodb
 
+before-script:
+  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
 install:
   #install stuff with composer
   - composer --working-dir=./vendors install
