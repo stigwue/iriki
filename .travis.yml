@@ -9,5 +9,6 @@ before-script:
 
 script:
   #pwd
-  ls
-  #./vendors/vendor/bin/phpunit --bootstrap ./engine/tests/bootstrap.php ./engine/tests/
+  #ls
+  tree .
+  #vendors/vendor/bin/phpunit --bootstrap engine/tests/bootstrap.php engine/tests/
