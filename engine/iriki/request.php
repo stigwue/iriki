@@ -303,7 +303,9 @@ class request
           $result = array();
 
           if (!$wrap) return $result;
-          else return response::error(response::showMissing($matching, 'parameter', 'mismatched'));
+          else return response::error(
+            response::showMissing($matching, 'parameter', 'mismatched'),
+            $wrap);
       }
 
       //belongsto
@@ -319,9 +321,13 @@ class request
       {
         if ($missing_parameters != 0)
         {
-            return response::error(response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'), $wrap);
+            return response::error(
+              response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
+              $wrap);
         }
-        if ($extra_parameters != 0) return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
+        if ($extra_parameters != 0) return response::error(
+          response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
+          $wrap);
       }
 
       //hasmany
@@ -370,7 +376,9 @@ class request
 
       if ($extra_parameters != 0)
       {
-        return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
+        return response::error(
+          response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
+          $wrap);
       }
 
       //check sort metadata
@@ -417,7 +425,9 @@ class request
 
       if ($extra_parameters != 0)
       {
-        return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
+        return response::error(
+          response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
+          $wrap);
       }
 
       $request->setData(array());
@@ -436,7 +446,9 @@ class request
         {
           if ($wrap)
           {
-            return \iriki\response::auth('User session token invalid or expired.');
+            return \iriki\response::auth(
+              'User session token invalid or expired.',
+              $wrap);
           }
           else
           {
@@ -471,9 +483,13 @@ class request
       {
         if ($missing_parameters != 0)
         {
-            return response::error(response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'), $wrap);
+            return response::error(
+              response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
+              $wrap);
         }
-        if ($extra_parameters != 0) return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
+        if ($extra_parameters != 0) return response::error(
+          response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
+          $wrap);
       }
       //hasmany
 
@@ -486,7 +502,9 @@ class request
         {
           if ($wrap)
           {
-            return \iriki\response::auth('User session token invalid or expired.');
+            return \iriki\response::auth(
+              'User session token invalid or expired.',
+              $wrap);
           }
           else
           {
@@ -520,7 +538,9 @@ class request
 
       if ($extra_parameters != 0)
       {
-        return response::error(response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
+        return response::error(
+          response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
+          $wrap);
       }
 
       $result = $instance::doDelete($request);
@@ -532,7 +552,9 @@ class request
         {
           if ($wrap)
           {
-            return \iriki\response::auth('User session token invalid or expired.');
+            return \iriki\response::auth(
+              'User session token invalid or expired.',
+              $wrap);
           }
           else
           {

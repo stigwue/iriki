@@ -124,7 +124,7 @@ class mongodb extends database
     * @param {array} Parameter values
     * @return {Array} Corrected query array
     */
-	public static function enforceIds($parameters, $key_values)
+	public static function enforceIds(&$parameters, $key_values)
 	{
 		//convert mongo id from string into the object
 		$query = array();
@@ -134,15 +134,21 @@ class mongodb extends database
 			$id_key = array_search($key, $parameters['ids']);
 			if ($key == Self::ID_FIELD OR $id_key !== FALSE)
 			{
-				if (Self::isMongoId($key_values[$key]))
+				if (isset($key_values[$key]) && Self::isMongoId($key_values[$key]))
 				{
 					//$key is an id, enforce
 					$query[$key] = new \MongoId($key_values[$key]);
 				}
 				else
 				{
-					//value isn't a valid MongoId
-					//skip, still use or default?
+					//this parameter's value is:
+					//not a valid MongoId
+					//or has not been set/provided
+
+					//we should indicate it as missing
+					//so as to alert the next step in the process
+					//to truncate things
+					$parameters['missing'][] = $key;
 					continue;
 				}
 			}
@@ -217,7 +223,11 @@ class mongodb extends database
 				{
 					return false;
 				}
-		  }
+		  	}
+		}
+		else
+		{
+			return true;
 		}
 	}
 
@@ -242,7 +252,7 @@ class mongodb extends database
 				if (!$authenticated)
 				{
 					return array(
-						'code' => '401', //response::AUTH
+						'code' => \iriki\response::AUTH,
 						'message' => 'unauthorized'
 					);
 				}
@@ -298,7 +308,7 @@ class mongodb extends database
 					//return \iriki\response::auth('User session token invalid or expired.');
 					//but it would result in double wrapping
 					return array(
-						'code' => '401',
+						'code' => \iriki\response::AUTH,
 						'message' => 'unauthorized'
 					);
 				}
@@ -362,7 +372,7 @@ class mongodb extends database
 				if (!$authenticated)
 				{
 					return array(
-						'code' => '401',
+						'code' => \iriki\response::AUTH,
 						'message' => 'unauthorized'
 					);
 				}
@@ -416,7 +426,7 @@ class mongodb extends database
 				if (!$authenticated)
 				{
 					return array(
-						'code' => '401',
+						'code' => \iriki\response::AUTH,
 						'message' => 'unauthorized'
 					);
 				}

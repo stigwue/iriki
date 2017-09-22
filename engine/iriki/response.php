@@ -45,8 +45,9 @@ class response
     * Build a message explaining an action.
     *
     *
-    * @param array Array of items
-    * @param array Singular and plural name of items
+    * @param {array} Array of items
+    * @param {array} Singular and plural (keys) name of items
+    * @param {array} Singular and plural (keys) name of items
     * @return Message string
     * @throw
     */
@@ -109,7 +110,7 @@ class response
     * @return Response object
     * @throw
     */
-    private static function build($code, $message = '', $data = null)
+    public static function build($code, $message = '', $data = null)
     {
       /*a response has
       code: determines data, error or info
@@ -125,6 +126,125 @@ class response
       if (!is_null($data)) $response['data'] = $data;
 
       return $response;
+    }
+
+    /**
+    * Build a response by specifiying response type
+    *
+    *
+    * @param {string} response_type Response type: data, information or error.
+    * @param {array} Request result
+    * @param {boolean} Wrap response or not?
+    * @return Response object
+    */
+    public static function buildFor($response_type, $result, $wrap)
+    {
+        //already supplied: response_type for code
+
+        //result? check if code is set in result
+        //if yes, result is pre-wrapped
+        $pre_wrapped = isset($result['code']) || isset($result['message']) || isset($result['data']);
+
+        //wrap? if yes, pass as is, changing code maybe
+        if ($wrap)
+        {
+            $response = array();
+            
+            switch (strtolower($response_type))
+            {
+                case 'auth':
+                    $response['code'] = response::AUTH;
+                case 'error':
+                    $response['code'] = response::ERROR;
+
+                    //message
+                    if ($pre_wrapped)
+                    {
+                        $response = Self::build(
+                            $response['code'],
+                            $result['message']
+                        );
+                    }
+                    else
+                    {
+                        $response = Self::build($response['code'], $result);
+                    }
+                break;
+
+                case 'data':
+                    $response['code'] = response::OK;
+
+                    //data
+                    if ($pre_wrapped)
+                    {
+                        $response = Self::data(
+                            $result['data'],
+                            true,
+                            (isset($result['message']) ? $result['message'] : '')
+                        );
+                    }
+                    else
+                    {
+                        $response = Self::data(
+                            $result,
+                            true
+                        );
+                    }
+                break;
+                
+                case 'information':
+                default:
+                    $response['code'] = response::OK;
+
+                    //message
+                    if ($pre_wrapped)
+                    {
+                        $response = Self::build(
+                            $response['code'],
+                            $result['message']
+                        );
+                    }
+                    else
+                    {
+                        $response = Self::build($response['code'], $result);
+                    }
+                break;
+            }
+
+            return $response;
+        }
+        else
+        {
+            //if no, strip out code
+            //then return message or data based on response_type
+            unset($result['code']);
+            $response = null;
+
+            switch (strtolower($response_type))
+            {
+                case 'auth':
+                case 'error':
+                    //message
+                    if ($pre_wrapped) $response = $result['message'];
+                    else $response = $result;
+                break;
+
+                case 'data':
+                    //data
+                    if ($pre_wrapped) $response = $result['data'];
+                    else $response = $result;
+                break;
+                
+                case 'information':
+                default:
+                    //message
+                    if ($pre_wrapped) $response = $result['message'];
+                    else $response = $result;
+                break;
+            }
+
+            return $response;
+        }
     }
 
     /**
