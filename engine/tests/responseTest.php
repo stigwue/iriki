@@ -58,7 +58,7 @@ class responseTest extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	//build
+	//build no data
 	public function test_build_nodata()
 	{
 		$result = \iriki\response::build(
@@ -73,6 +73,7 @@ class responseTest extends \PHPUnit\Framework\TestCase
 		);
 	}
 
+	//build with data
 	public function test_build_data()
 	{
 		$result = \iriki\response::build(
@@ -87,33 +88,104 @@ class responseTest extends \PHPUnit\Framework\TestCase
 		);
 	}
 
-	//buildFor wrap unwrapped
+	//buildFor wrap for unwrapped result
 	public function test_buildFor_wrap()
 	{
-		$result = \iriki\response::build(
-			\iriki\response::OK,
-			'The agabara has been passed',
-			null
+		$result = \iriki\response::buildFor(
+			'data',
+			array('key' => 'The agabara has been passed'),
+			true
 		);
 
 		$this->assertEquals(
 			true,
-			($result['code'] == \iriki\response::OK) AND ($result['message'] == 'The agabara has been passed')
+			($result['code'] == \iriki\response::OK) AND (isset($result['data']))
 		);
 	}
 
-	//buildFor wrap pre-wrapped
-
-	//buildFor nowrap unwrapped
-	/*public function test_buildFor_nowrap()
+	//buildFor wrap for pre-wrapped result
+	public function test_buildFor_wrap_pre()
 	{
+		$result = \iriki\response::buildFor(
+			'data',
+			array(
+				'code' => \iriki\response::OK,
+				'data' => array('key' => 'The agabara has been passed')
+			),
+			true
+		);
 
-	}*/
+		$this->assertEquals(
+			true,
+			($result['code'] == \iriki\response::OK) AND (isset($result['data']))
+		);
+	}
 
-	//buildFor wrap unwrapped
+	//buildFor no wrap for unwrapped result
+	public function test_buildFor_nowrap()
+	{
+		$result = \iriki\response::buildFor(
+			'data',
+			array('key' => 'The agabara has been passed'),
+			false
+		);
+
+		$this->assertEquals(
+			true,
+			isset($result['key'])
+		);
+	}
+
+	//buildFor no wrap for prewrapped result
+	public function test_buildFor_nowrap_pre()
+	{
+		$result = \iriki\response::buildFor(
+			'data',
+			array(
+				'code' => \iriki\response::OK,
+				'data' => array('key' => 'The agabara has been passed')
+			),
+			false
+		);
+
+		$this->assertEquals(
+			true,
+			isset($result['key'])
+		);
+	}
 
 
-	//data
+	//data - wrap
+	public function test_data_wrap()
+	{
+		$result = \iriki\response::data(
+			array(
+				'key' => 'The agabara has been passed'
+			),
+			true
+		);
+
+		$this->assertEquals(
+			true,
+			(isset($result['code']) && isset($result['data']))
+		);
+	}
+
+	//data - nowrap
+	public function test_data_nowrap()
+	{
+		$result = \iriki\response::data(
+			array(
+				'key' => 'The agabara has been passed'
+			),
+			false
+		);
+
+		$this->assertEquals(
+			'The agabara has been passed',
+			$result['key']
+		);
+	}
 
 	//information/error/auth - wrap
 	public function test_information_wrap()
@@ -128,6 +200,7 @@ class responseTest extends \PHPUnit\Framework\TestCase
 			(isset($result['code']) && isset($result['message']))
 		);
 	}
+
 	//information/error/auth - no wrap
 	public function test_information_nowrap()
 	{
