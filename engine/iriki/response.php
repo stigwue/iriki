@@ -149,7 +149,7 @@ class response
         if ($wrap)
         {
             $response = array();
-            
+
             switch (strtolower($response_type))
             {
                 case 'auth':
@@ -217,7 +217,7 @@ class response
         {
             //if no, strip out code
             //then return message or data based on response_type
-            unset($result['code']);
+            if (isset($result['code'])) unset($result['code']);
             $response = null;
 
             switch (strtolower($response_type))

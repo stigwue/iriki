@@ -14,11 +14,11 @@ class request
 {
     /**
     * Full namespace of database object.
-    * The default is set here, otherwise an error is thrown in initializedb
+    * There is no default set here so without setting, initializedb will return null
     *
     * @var string
     */
-    private $_db_type = '\iriki\engine\mongodb';
+    private $_db_type = '';
 
     /**
     * Internal database handler instance.
@@ -62,30 +62,6 @@ class request
     * @var array
     */
     private $_meta;
-
-    /**
-    * Initialize the internal database instance
-    *
-    *
-    * @return object Database instance object.
-    * @throw
-    */
-    public function initializedb()
-    {
-      if (is_null(Self::$_db_instance))
-      {
-        $db_type = $this->_db_type;
-        //$db_type() throws 'Class name must be a valid object or a string' for only create inherited from request
-        //Doesn't show up after I supplied a default for db_type
-        Self::$_db_instance = new $db_type();
-
-        $db_instance = &Self::$_db_instance;
-
-        $db_instance::initialize();
-      }
-
-      return request::$_db_instance;
-    }
 
     /**
     * Gets the internal database instace
@@ -269,6 +245,86 @@ class request
     }
 
     /**
+    * Initialize the internal database instance
+    * This has not been passed as an object?
+    * Because the database class has mostly static functions.
+    *
+    *
+    * @return object Database instance object.
+    * @throw
+    */
+    public function initializedb()
+    {
+      //if uninitialized, do initialization
+      if (is_null(Self::$_db_instance) AND class_exists($this->_db_type))
+      {
+        $db_type = $this->_db_type;
+        Self::$_db_instance = new $db_type();
+
+        $db_instance = &Self::$_db_instance;
+
+        return request::$_db_instance;
+      }
+      else
+      {
+        return null;
+      }
+    }
+
+    /**
+     * Intercepts authentication or some other last minute errors reported.
+     * Note that code is only set if an error occurs (code is then an error code) or wrapping is specified.
+     *
+     * @param {string} result Result returned from database operation
+     * @param {string} default_response Response type to use if all goes well (data, information or error)
+     * @param {boolean} wrap Flag to perform a response wrap or not
+     * @returns {array} Final result
+     */
+    public static function catchError($result, $default_response, $wrap)
+    {
+      $new_result = $result;
+      
+      //if code and message are set,
+      //most probably we are looking at an error
+      if (isset($result['code']) && isset($result['message']))
+      {
+        //something error'd
+        switch ($result['code'])
+        {
+          //authentication failed
+          case response::AUTH:
+            $new_result = \iriki\response::buildFor('auth', 'User session token invalid or expired.', $wrap);
+          break;
+
+          //expecting a particular parameter which is missing
+          //especially ids of parent models
+          case response::ERROR:
+            if ($result['message'] == 'missing_parameter')
+            {
+              $new_result = \iriki\response::buildFor('error', 'Parameter missing or of wrong type.', $wrap);
+            }
+            else
+            {
+              //some other error
+            }
+          break;
+
+          default:
+            //nothing was caught?
+          break;
+        }
+      }
+      //if they are not set, we are returning null or some stuff, just return as is (if we are not to wrap)
+      //else, we should wrap with the appropriate response markers
+      else
+      {
+        //no errors
+      }
+
+      return $new_result;
+    }
+
+    /**
     * Perform a create action on a request.
     * Before a request action is called, request data is filled
     * and the keys (parameters) are in one of three groups: final, missing, extra
@@ -334,23 +390,11 @@ class request
 
       $result = $instance::doCreate($request);
 
-      //intercept auth error
-      if (isset($result['code']) && isset($result['message']))
-      {
-        if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
-        {
-          if ($wrap)
-          {
-            return \iriki\response::auth('User session token invalid or expired.');
-          }
-          else
-          {
-            return array();
-          }
-        }
-      }
+      //intercept errors so as to display them accordingly
+      $final_result = Self::catchError($result, 'information', $wrap);
 
-      return \iriki\response::information($result['message'], $wrap, $result['data']);
+      return $final_result;
+      /*return \iriki\response::information($result['message'], $wrap, $result['data']);*/
     }
 
     /**
@@ -387,8 +431,13 @@ class request
 
       $result = $instance::doRead($request, $sort);
 
-      //intercept auth error
-      if (isset($result['code']) && isset($result['message']))
+      //intercept errors so as to display them accordingly
+      $final_result = Self::catchError($result, 'data', $wrap);
+
+      return $final_result;
+
+      //intercept auth or some other last minute error
+      /*if (isset($result['code']) && isset($result['message']))
       {
         if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
         {
@@ -403,7 +452,7 @@ class request
         }
       }
 
-      return \iriki\response::data($result, $wrap);
+      return \iriki\response::data($result, $wrap);*/
     }
 
     /**
