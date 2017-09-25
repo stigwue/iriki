@@ -12,6 +12,6 @@ require_once(__DIR__ . '/../iriki/database/autoload.php');
 require_once(__DIR__ . '/../iriki/utility/autoload.php');
 
 //vendors
-require_once(__DIR__ . '/../../vendors/autoload.php');
+require_once(__DIR__ . '/../../vendor/autoload.php');
 
 ?>

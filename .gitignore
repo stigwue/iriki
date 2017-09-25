@@ -1,2 +1,3 @@
+composer.lock
 #/apps
-/vendors/vendor/
+/vendor/

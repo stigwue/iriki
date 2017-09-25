@@ -2,7 +2,9 @@
     "require": {
         "guzzlehttp/guzzle": "~6.0",
         "phpunit/phpunit": "^5.0",
-        "ircmaxell/random-lib": "^1.2"
+        "ircmaxell/random-lib": "^1.2",
+        "gabordemooij/redbean": "^4.3",
+        "stigwue/is-mail": "^0.22.0"
     },
     "require-dev": {
         "mailgun/mailgun-php": "^2.2",

@@ -92,8 +92,6 @@ class user_session extends \iriki\request
 						$stamp_expired > time(NULL)
 					);
 
-					//var_dump($authenticated, $token, $stamp_expired, time(NULL));
-
 					if ($authenticated)
 					{
 						return \iriki\response::information($authenticated, $wrap,

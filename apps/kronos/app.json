@@ -2,7 +2,7 @@
   "iriki":
   {
     "app" : {
-      "base" : "",
+      "base" : "eyeti.xyz",
       "base_url" : "",
 
       "engine" : {
@@ -32,18 +32,18 @@
 
       "database" : {
         "local" : {
-          "type" : "mongodb",
+          "type" : "\\iriki\\engine\\mongodb",
           "server" : "mongodb://localhost:27017",
           "db" : "kronos"
         },
         "mysql" : {
-          "type" : "mysql",
+          "type" : "\\iriki\\engine\\mysql",
           "server" : "localhost",
           "db" : "kronos",
           "password" : "plaintext"
         },
         "test" : {
-          "type" : "mongodb",
+          "type" : "\\iriki\\engine\\mongodb",
           "server" : "mongodb://localhost:27017",
           "db" : "kronos_test"
         }

@@ -27,7 +27,7 @@ class type
       break;
 
       case 'email':
-        return \Mail::isValidEmail($value);
+        return \IsMail::isRFCValid($value);
       break;
 
       case 'string':

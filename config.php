@@ -33,8 +33,8 @@ define('IRIKI_CONFIG', 'apps/kronos/app.json');
 //engine
 require_once('engine/autoload.php');
 
-//vendors
-require_once('vendors/autoload.php');
+//vendor via composer
+require_once('vendor/autoload.php');
 
 //utility function, as named
 function strContains($haystack, $needle) {
