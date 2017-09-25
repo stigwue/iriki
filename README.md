@@ -44,7 +44,7 @@ Iriki comes with the following features out-of-box:
 
 Iriki files all reside in a single directory. All requests to be handled by the framework will be POST/GET to or from this directory.
 
-These are the key directories within: engine, app and vendors.
+These are the key directories within: engine, app and vendor.
 
 ### Engine
 
@@ -62,9 +62,9 @@ Models holds the JSON description of the database models/collections/tables. I w
 
 App is non-Iriki code. It can reside anywhere as long as it is pointed to in the application configuration. When a request is made, a matching model is first looked for in application space. If not found, then the engine folder will be searched.
 
-### Vendors
+### Vendor
 
-Vendors contain third-party code. Some of it provided via composer.
+Vendor contain third-party code managed by composer.
 
 
 ## To Do

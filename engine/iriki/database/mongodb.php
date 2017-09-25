@@ -16,14 +16,6 @@ require_once(__DIR__ . '/../response.php');
 class mongodb extends database
 {
 	/**
-    * Database engine identifier.
-    * This is unique across the framework.
-    *
-    * @var {string}
-    */
-	const TYPE = 'mongodb';
-
-	/**
     * Database id field.
     * Any property/column with this name is an id.
     * Parent model ids are also built with this.
@@ -33,6 +25,13 @@ class mongodb extends database
 	const ID_FIELD = '_id';
 
 	/**
+    * Associative array of database parameters.
+    *
+    * @var {Array}
+    */
+    private static $_key_values;
+
+	/**
     * Internal database handle.
     * This is shared across all instances of this class.
     * So handle carefully.
@@ -40,6 +39,92 @@ class mongodb extends database
     * @var {Object}
     */
 	private static $__instance = null;
+
+	/**
+    * Gets the database class.
+    *
+    *
+    * @return string Database class
+    * @throw
+    */
+	public static function getClass()
+	{
+		return static::class;
+	}
+
+	/**
+    * Gets the internal database instance.
+    *
+    *
+    * @returns {Object} Mongo intance
+    */
+	public static function getInstance()
+	{
+		return Self::$__instance;
+	}
+
+    /**
+    * Initialize the database instance using supplied configuration
+    *
+    * @param {Array} $config_values Database configuration values
+    * @returns {boolean} True or false value.
+    * @throw
+    */
+	public static function doInitialise($config_values)
+	{
+		//we have supplied the db's properties in config
+		//the engine name 
+		//and app name
+
+		//the trick is to see if config values are null
+		//if they aren't, we find which class exists (using app first)
+		//we then use the engine as last resort
+
+		//we have config values
+		if (is_null($config_values))
+		{
+			return false;
+		}
+		else
+		{
+			//make sure we have our needed parameters
+			Self::$_key_values = $config_values;
+			if (
+				//class must exist to handle the type
+				class_exists(Self::$_key_values['type']) AND
+				//class must be this one
+				Self::$_key_values['type'] == '\\' . Self::getClass() AND
+				isset(Self::$_key_values['server']) AND
+				isset(Self::$_key_values['db'])
+			)
+			{
+				$mongo_client = new \MongoClient(Self::$_key_values['server']);
+				$mongo_db = Self::$_key_values['db'];
+
+				Self::$__instance = $mongo_client->$mongo_db;
+
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+	}
+
+	/**
+    * Destroy the database instance
+    *
+    * @returns {boolean} True or false value.
+    * @throw
+    */
+	public static function doDestroy()
+	{
+		//close all then
+		Self::$__instance = null;
+
+		return is_null(Self::$__instance);
+	}
 
 	/**
     * Checker for valid Mongo IDs.
@@ -97,7 +182,6 @@ class mongodb extends database
 				if ($timestamp >= $expire_stamp)
 				{
 					//expired
-					//var_dump('expired', $timestamp, $expire_stamp);
 					return false;
 				}
 				else
@@ -191,47 +275,6 @@ class mongodb extends database
 	}
 
 	/**
-    * Intialize internal database handle using supplied configuration
-    *
-    * @return {boolean} Success value of operation.
-    */
-	public static function initialize()
-	{
-		if (is_null(Self::$__instance))
-		{
-			if (is_null(Self::$_key_values))
-			{
-				return false;
-			}
-			else
-			{
-				//parse key values
-				$key_values = Self::$_key_values;
-				if (
-					$key_values['type'] == Self::TYPE AND
-					isset($key_values['server']) AND
-					isset($key_values['db'])
-				)
-				{
-					Self::$__instance = new \MongoClient($key_values['server']);
-
-					Self::$__instance = Self::$__instance->$key_values['db'];
-
-					return true;
-				}
-				else
-				{
-					return false;
-				}
-		  	}
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	/**
     * Database create action.
     *
     * @param {request} Request on which action is performed
@@ -266,6 +309,14 @@ class mongodb extends database
 			$params = $request->getParameterStatus();
 
 			$query = Self::enforceIds($params, $query);
+			//check if $params['missing'] has increased
+			if (count($params['missing']) != 0)
+			{
+				return array(
+					'code' => \iriki\response::ERROR,
+					'message' => 'missing_parameter'
+				);
+			}
 
 			$query[Self::ID_FIELD] = new \MongoId();
 			$query['created'] = time(NULL);
@@ -322,6 +373,14 @@ class mongodb extends database
 			$params = $request->getParameterStatus();
 
 			$query = Self::enforceIds($params, $query);
+			//check if $params['missing'] has increased
+			if (count($params['missing']) != 0)
+			{
+				return array(
+					'code' => \iriki\response::ERROR,
+					'message' => 'missing_parameter'
+				);
+			}
 
 			$cursor = $persist->find($query);
 
@@ -385,6 +444,14 @@ class mongodb extends database
 			$params = $request->getParameterStatus();
 
 			$data = Self::enforceIds($params, $data);
+			//check if $params['missing'] has increased
+			if (count($params['missing']) != 0)
+			{
+				return array(
+					'code' => \iriki\response::ERROR,
+					'message' => 'missing_parameter'
+				);
+			}
 
 			//pick only the id field to be used to filter update
 			$query = array(
@@ -440,6 +507,14 @@ class mongodb extends database
 			$params = $request->getParameterStatus();
 
 			$query = Self::enforceIds($params, $query);
+			//check if $params['missing'] has increased
+			if (count($params['missing']) != 0)
+			{
+				return array(
+					'code' => \iriki\response::ERROR,
+					'message' => 'missing_parameter'
+				);
+			}
 
 			$status = $persist->remove($query);
 
