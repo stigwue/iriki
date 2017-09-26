@@ -223,35 +223,6 @@ class request
     }
 
     /**
-    * Initialize the internal database instance
-    * This has not been passed as an object?
-    * Because the database class has mostly static functions.
-    *
-    *
-    * @return object Database instance object.
-    * @throw
-    */
-    /*public function initializedb()
-    {
-      //if uninitialized, do initialization
-      if (is_null(Self::$_db_instance) AND class_exists($this->_db_type))
-      {
-        $db_type = $this->_db_type;
-        Self::$_db_instance = new $db_type();
-
-        //initialize
-
-        $db_instance = &Self::$_db_instance;
-
-        return request::$_db_instance;
-      }
-      else
-      {
-        return null;
-      }
-    }*/
-
-    /**
      * Intercepts authentication or some other last minute errors reported.
      * Note that code is only set if an error occurs (code is then an error code) or wrapping is specified.
      *
