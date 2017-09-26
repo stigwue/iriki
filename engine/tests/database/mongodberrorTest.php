@@ -4,15 +4,13 @@ require_once(__DIR__ . '/../../iriki/request.php');
 
 class mongodberrorTest extends \PHPUnit\Framework\TestCase
 {
-
-
     //CRUD errors
     //note that errors can be a issing session token
     //or a missing parameter
 
     public function test_doCreate_error()
     {
-        iriki\engine\mongodb::doInitialise(
+        $db_instance = iriki\engine\mongodb::doInitialise(
             array(
                 'type' => '\\iriki\\engine\\mongodb',
                 'server' => 'mongodb://localhost:27017',
@@ -21,8 +19,8 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\iriki\engine\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             array(
@@ -95,7 +93,7 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
 
     public function test_doRead_error()
     {
-        iriki\engine\mongodb::doInitialise(
+        $db_instance = iriki\engine\mongodb::doInitialise(
             array(
                 'type' => '\\iriki\\engine\\mongodb',
                 'server' => 'mongodb://localhost:27017',
@@ -104,8 +102,8 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\iriki\engine\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             array(
@@ -175,7 +173,7 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
 
     public function test_doUpdate_error()
     {
-        iriki\engine\mongodb::doInitialise(
+        $db_instance = iriki\engine\mongodb::doInitialise(
             array(
                 'type' => '\\iriki\\engine\\mongodb',
                 'server' => 'mongodb://localhost:27017',
@@ -184,8 +182,8 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\iriki\engine\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             array(
@@ -255,7 +253,7 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
 
     public function test_doDelete_error()
     {
-        iriki\engine\mongodb::doInitialise(
+        $db_instance = iriki\engine\mongodb::doInitialise(
             array(
                 'type' => '\\iriki\\engine\\mongodb',
                 'server' => 'mongodb://localhost:27017',
@@ -264,8 +262,8 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\iriki\engine\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             array(

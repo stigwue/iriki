@@ -247,32 +247,42 @@ class route
                             }
 
                             //persistence
-                            //defined in one of two locations
-                            engine\database::doInitialise(
-                                $app['application'],
-                                $app['engine'],
-                                $app['database']
-                            );
+                            if (isset($app['database']['type']))
+                            {
+                                $db_class = new $app['database']['type'];
+                                $db_handle = $db_class::doInitialise($app['database']);
 
-                            $model_instance = new $model_status['str_full']();
+                                if (is_null($db_handle))
+                                {
+                                    return response::error('Database type undefined.');
+                                }
+                                else
+                                {
+                                    $model_instance = new $model_status['str_full']();
 
-                            //build request;
-                            $request = new request();
-                            //db_type
-                            $request->setDBType(engine\database::getClass());
-                            //model status
-                            $request->setModelStatus($model_status);
-                            //parameter_status
-                            $request->setParameterStatus($parameter_status);
-                            //data
-                            $request->setData($params);
-                            //meta
-                            //?
-                            //session
-                            $request->setSession($user_session_token);
+                                    //build request;
+                                    $request = new request();
+                                    //db_instance
+                                    $request->setDBInstance($db_class);
+                                    //model status
+                                    $request->setModelStatus($model_status);
+                                    //parameter_status
+                                    $request->setParameterStatus($parameter_status);
+                                    //data
+                                    $request->setData($params);
+                                    //meta
+                                    //?
+                                    //session
+                                    $request->setSession($user_session_token);
 
-                            //instance action
-                            return $model_instance->$action($request);
+                                    //instance action
+                                    return $model_instance->$action($request);
+                                }
+                            }
+                            else
+                            {
+                                return response::error('Database type definition missing.');
+                            }
                         }
                         else
                         {

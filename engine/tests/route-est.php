@@ -2,7 +2,7 @@
 
 class routeTest extends PHPUnit_Framework_TestCase
 {
-	public function loadFromJson()
+	public function test_matchUrl_()
     {
     }
 }

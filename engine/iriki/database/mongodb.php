@@ -83,7 +83,7 @@ class mongodb extends database
 		//we have config values
 		if (is_null($config_values))
 		{
-			return false;
+			return null;
 		}
 		else
 		{
@@ -103,11 +103,11 @@ class mongodb extends database
 
 				Self::$__instance = $mongo_client->$mongo_db;
 
-				return true;
+				return Self::$__instance;
 			}
 			else
 			{
-				return false;
+				return null;
 			}
 		}
 	}

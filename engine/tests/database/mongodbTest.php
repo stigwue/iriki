@@ -31,7 +31,7 @@ class mongodbTest extends \PHPUnit\Framework\TestCase
         );
 
         //assert
-        $this->assertEquals(false, $status);
+        $this->assertEquals(null, $status);
     }
 
 }

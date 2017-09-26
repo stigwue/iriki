@@ -10,7 +10,7 @@
 				},
 				"authenticate" : {
 					"description" : "Creates a session for the user.",
-					"parameters" : ["username", "hash"],
+					"parameters" : ["username", "hash", "remember"],
 					"authenticate" : "false"
 				},
 				"signup" : {
@@ -41,7 +41,7 @@
 				"delete_by_username" : {
 					"description" : "Delete a user using its username.",
 					"parameters" : ["username"],
-					"url_parameters" : ["username"],
+					"url_parameters" : ["username"]
 				}
 			}
 		}

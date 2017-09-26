@@ -9,13 +9,13 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
     {
     	iriki\engine\mongodb::doDestroy();
 
-        iriki\engine\mongodb::doInitialise(
+        $db_instance = iriki\engine\mongodb::doInitialise(
             null
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\\iriki\\engine\\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             null
@@ -43,13 +43,13 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
     {
     	iriki\engine\mongodb::doDestroy();
 
-        iriki\engine\mongodb::doInitialise(
+        $db_instance = iriki\engine\mongodb::doInitialise(
             null
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\\iriki\\engine\\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             null
@@ -77,13 +77,13 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
     {
     	iriki\engine\mongodb::doDestroy();
 
-        iriki\engine\mongodb::doInitialise(
+        $db_instance = iriki\engine\mongodb::doInitialise(
             null
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\\iriki\\engine\\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             null
@@ -111,13 +111,13 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
     {
     	iriki\engine\mongodb::doDestroy();
 
-        iriki\engine\mongodb::doInitialise(
+        $db_instance = iriki\engine\mongodb::doInitialise(
             null
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\\iriki\\engine\\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             null

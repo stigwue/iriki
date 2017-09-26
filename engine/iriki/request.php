@@ -13,22 +13,14 @@ require_once(__DIR__ . '/response.php');
 class request
 {
     /**
-    * Full namespace of database object.
-    * There is no default set here so without setting, initializedb will return null
-    *
-    * @var string
-    */
-    private $_db_type = '';
-
-    /**
-    * Internal database handler instance.
+    * Database handler instance.
     *
     * @var object
     */
     private static $_db_instance = null;
 
     /**
-    * Internal database handler instance.
+    * Session token.
     *
     * @var object
     */
@@ -64,11 +56,10 @@ class request
     private $_meta;
 
     /**
-    * Gets the internal database instace
+    * Gets the database instance
     *
     *
-    * @return object Internal database instance object.
-    * @throw
+    * @returns {object} Database instance object.
     */
     public static function getDBInstance()
     {
@@ -76,28 +67,15 @@ class request
     }
 
     /**
-    * Gets the full namespace of database object
+    * Sets the database instance
     *
-    *
-    * @return string Database namespace
-    * @throw
+    * @params {object} Database object
+    * @returns {object} Database instance object.
     */
-    public function getDBType()
+    public static function setDBInstance($objDB)
     {
-      return $this->_db_type;
-    }
-
-    /**
-    * Sets the full namespace of database object
-    *
-    * @param string Database namespace
-    * @return string Database namespace
-    * @throw
-    */
-    public function setDBType($db_type)
-    {
-      $this->_db_type = $db_type;
-      return $this->_db_type;
+      Self::$_db_instance = $objDB;
+      return Self::$_db_instance;
     }
 
     /**
@@ -253,13 +231,15 @@ class request
     * @return object Database instance object.
     * @throw
     */
-    public function initializedb()
+    /*public function initializedb()
     {
       //if uninitialized, do initialization
       if (is_null(Self::$_db_instance) AND class_exists($this->_db_type))
       {
         $db_type = $this->_db_type;
         Self::$_db_instance = new $db_type();
+
+        //initialize
 
         $db_instance = &Self::$_db_instance;
 
@@ -269,7 +249,7 @@ class request
       {
         return null;
       }
-    }
+    }*/
 
     /**
      * Intercepts authentication or some other last minute errors reported.
@@ -350,7 +330,7 @@ class request
     */
     public function create($request, $wrap = true)
     {
-      $instance = $this->initializedb();
+      $db = Self::$_db_instance;
 
       //unique
       $matching = model::doParameterUniqueCheck($request);
@@ -388,13 +368,12 @@ class request
 
       //hasmany
 
-      $result = $instance::doCreate($request);
+      $result = $db::doCreate($request);
 
       //intercept errors so as to display them accordingly
       $final_result = Self::catchError($result, 'information', $wrap);
 
       return $final_result;
-      /*return \iriki\response::information($result['message'], $wrap, $result['data']);*/
     }
 
     /**
@@ -408,8 +387,7 @@ class request
     */
     public function read($request, $wrap = true)
     {
-      $instance = $this->initializedb();
-
+      $db = Self::$_db_instance;
       //unique
       //belongsto
       //hasmany
@@ -429,30 +407,12 @@ class request
       $meta = $request->getMeta();
       $sort = (isset($meta['sort']) ? $meta['sort'] : array());
 
-      $result = $instance::doRead($request, $sort);
+      $result = $db::doRead($request, $sort);
 
       //intercept errors so as to display them accordingly
       $final_result = Self::catchError($result, 'data', $wrap);
 
       return $final_result;
-
-      //intercept auth or some other last minute error
-      /*if (isset($result['code']) && isset($result['message']))
-      {
-        if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
-        {
-          if ($wrap)
-          {
-            return \iriki\response::auth('User session token invalid or expired.');
-          }
-          else
-          {
-            return array();
-          }
-        }
-      }
-
-      return \iriki\response::data($result, $wrap);*/
     }
 
     /**
@@ -466,7 +426,7 @@ class request
     */
     public function read_all($request, $wrap = true)
     {
-      $instance = $this->initializedb();
+      $db = Self::$_db_instance;
 
       $parameter_status = $request->getParameterStatus();
 
@@ -486,27 +446,12 @@ class request
       $sort = (isset($meta['sort']) ? $meta['sort'] : array());
 
       //read should also pick up any "hasmany" models up to x recursivity
-      $result = $instance::doRead($request, $sort);
 
-      //intercept auth error
-      if (isset($result['code']) && isset($result['message']))
-      {
-        if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
-        {
-          if ($wrap)
-          {
-            return \iriki\response::auth(
-              'User session token invalid or expired.',
-              $wrap);
-          }
-          else
-          {
-            return array();
-          }
-        }
-      }
+      $result = $db::doRead($request, $sort);
 
-      return \iriki\response::data($result, $wrap);
+      $final_result = Self::catchError($result, 'data', $wrap);
+
+      return $final_result;
     }
 
     /**
@@ -519,7 +464,7 @@ class request
     */
     public function update($request, $wrap = true)
     {
-      $instance = $this->initializedb();
+      $db = Self::$_db_instance;
 
       //unique
       //belongsto
@@ -542,27 +487,11 @@ class request
       }
       //hasmany
 
-      $result = $instance::doUpdate($request);
+      $result = $db::doUpdate($request);
 
-      //intercept auth error
-      if (isset($result['code']) && isset($result['message']))
-      {
-        if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
-        {
-          if ($wrap)
-          {
-            return \iriki\response::auth(
-              'User session token invalid or expired.',
-              $wrap);
-          }
-          else
-          {
-            return array();
-          }
-        }
-      }
+      $final_result = Self::catchError($result, 'information', $wrap);
 
-      return \iriki\response::information($result, $wrap);
+      return $final_result;
     }
 
     /**
@@ -575,7 +504,7 @@ class request
     */
     public function delete($request, $wrap = true)
     {
-      $instance = $this->initializedb();
+      $db = Self::$_db_instance;
 
       //unique
       //belongsto
@@ -592,27 +521,11 @@ class request
           $wrap);
       }
 
-      $result = $instance::doDelete($request);
+      $result = $db::doDelete($request);
+      
+      $final_result = Self::catchError($result, 'information', $wrap);
 
-      //intercept auth error
-      if (isset($result['code']) && isset($result['message']))
-      {
-        if ($result['code'] == response::AUTH && $result['message'] == 'unauthorized')
-        {
-          if ($wrap)
-          {
-            return \iriki\response::auth(
-              'User session token invalid or expired.',
-              $wrap);
-          }
-          else
-          {
-            return array();
-          }
-        }
-      }
-
-      return \iriki\response::information($result, $wrap);
+      return $final_result;
     }
 }
 

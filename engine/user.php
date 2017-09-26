@@ -67,9 +67,12 @@ class user extends \iriki\request
 	{
 		if (!is_null($request))
 		{
+			//clone request
 			$new_request = clone $request;
 		  	$data = $new_request->getData();
+		  	$remember = ($data['remember'] == 'true');
 
+		  	//set new request to read solely by username
 		  	$new_request->setData(
 				array(
 					'username' => $data['username']
@@ -87,32 +90,33 @@ class user extends \iriki\request
 
 			$authenticated = false;
 
-			//create a session using a request
+			//create a new session using old request
 			//session details will depend on the status of user authenticate
 			$session_request = clone $request;
 
 			$session_request->setModelStatus(
 				array(
-						'str' => 'user_session', //string, model
-						'str_full' => '\iriki\user_session', //string, full model including namespace
-						'defined' => true, //boolean, model defined in app or engine config
-						'exists' => true, //boolean, model class exists
+					'str' => 'user_session', //string, model
+					'str_full' => '\iriki\user_session', //string, full model including namespace
+					'defined' => true, //boolean, model defined in app or engine config
+					'exists' => true, //boolean, model class exists
 
-						'details' => $GLOBALS['APP']['models']['engine']['user_session'], //array, model description, properties and relationships
+					'details' => $GLOBALS['APP']['models']['engine']['user_session'], //array, model description, properties and relationships
 
-						'app_defined' => false, //boolean, model defined in app. otherwise engine
-						'action'=> 'initiate', //string, action
+					'app_defined' => false, //boolean, model defined in app. otherwise engine
+					'action'=> 'initiate', //string, action
 
-						'default' => $GLOBALS['APP']['routes']['engine']['default'], //array, default actions
+					'default' => $GLOBALS['APP']['routes']['engine']['default'], //array, default actions
 
-						'action_defined' => true, //boolean, action defined
-						'action_default' => false, //boolean, action is default defined
-						'action_exists' => true, //boolean, action exists in class
+					'action_defined' => true, //boolean, action defined
+					'action_default' => false, //boolean, action is default defined
+					'action_exists' => true, //boolean, action exists in class
 
-						'action_details' => $GLOBALS['APP']['routes']['engine']['routes']['user_session'] //array, action description, parameters, exempt
+					'action_details' => $GLOBALS['APP']['routes']['engine']['routes']['user_session'] //array, action description, parameters, exempt
 				)
 			);
 
+			//check if user with username was found
 			if (count($result) == 0)
 			{
 				//user not found
@@ -124,7 +128,7 @@ class user extends \iriki\request
 					array(
 						'user_id' => '0',
 						'authenticated' => 'false',
-						'remember' => 'true'
+						'remember' => $remember
 					)
 				);
 				//change parameters
@@ -154,7 +158,7 @@ class user extends \iriki\request
 					array(
 						'user_id' => $single_result['_id'],
 						'authenticated' => ($authenticated ? 'true' : 'false'),
-						'remember' => 'true'
+						'remember' => $remember
 					)
 				);
 				//change parameters

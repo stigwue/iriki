@@ -20,7 +20,7 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
         );
 
         //assert
-        $this->assertEquals(true, $status);
+        $this->assertNotEquals(null, $status);
     }
 
     public function test_doDestroy_success()
@@ -34,18 +34,18 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
 	public function test_doCreate_success()
     {
         iriki\engine\mongodb::doDestroy();
-    	
-        iriki\engine\mongodb::doInitialise(
+
+        $db_instance = iriki\engine\mongodb::doInitialise(
             array(
-                'type' => '\iriki\engine\mongodb',
+                'type' => '\\iriki\\engine\\mongodb',
                 'server' => 'mongodb://localhost:27017',
                 'db' => 'kronos'
             )
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\iriki\engine\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             array(
@@ -124,18 +124,18 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
     public function test_doRead_success($id_to_read)
     {
         iriki\engine\mongodb::doDestroy();
-    	
-        iriki\engine\mongodb::doInitialise(
+        
+        $db_instance = iriki\engine\mongodb::doInitialise(
             array(
-                'type' => '\iriki\engine\mongodb',
+                'type' => '\\iriki\\engine\\mongodb',
                 'server' => 'mongodb://localhost:27017',
                 'db' => 'kronos'
             )
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\iriki\engine\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             array(
@@ -216,18 +216,18 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
     public function test_doUpdate_success($obj_to_update)
     {
         iriki\engine\mongodb::doDestroy();
-    	
-        iriki\engine\mongodb::doInitialise(
+        
+        $db_instance = iriki\engine\mongodb::doInitialise(
             array(
-                'type' => '\iriki\engine\mongodb',
+                'type' => '\\iriki\\engine\\mongodb',
                 'server' => 'mongodb://localhost:27017',
                 'db' => 'kronos'
             )
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\iriki\engine\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             array(
@@ -305,18 +305,18 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
     public function test_doDelete_success($id)
     {
         iriki\engine\mongodb::doDestroy();
-    	
-        iriki\engine\mongodb::doInitialise(
+        
+        $db_instance = iriki\engine\mongodb::doInitialise(
             array(
-                'type' => '\iriki\engine\mongodb',
+                'type' => '\\iriki\\engine\\mongodb',
                 'server' => 'mongodb://localhost:27017',
                 'db' => 'kronos'
             )
         );
 
         $request = new \iriki\request();
-        //db_type
-        $request->setDBType('\iriki\engine\mongodb');
+        //db_instance
+        $request->setDBInstance($db_instance);
         //model status
         $request->setModelStatus(
             array(
@@ -382,8 +382,6 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
         //$request->setSession('user_session_token');
 
         $status = \iriki\engine\mongodb::doDelete($request);
-
-        var_dump($status);
 
         //assert
         $this->assertEquals(true, $status);
