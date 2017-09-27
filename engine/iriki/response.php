@@ -162,11 +162,13 @@ class response
                     {
                         $response = Self::build(
                             $response['code'],
-                            $result['message']
+                            $result['message'],
+                            isset($result['data']) ? $result['data'] : null
                         );
                     }
                     else
                     {
+                        //errors don't have any data component
                         $response = Self::build($response['code'], $result);
                     }
                 break;
@@ -186,8 +188,11 @@ class response
                     else
                     {
                         $response = Self::data(
+                            //data
                             $result,
+                            //wrap
                             true
+                            //message
                         );
                     }
                 break;
@@ -201,7 +206,8 @@ class response
                     {
                         $response = Self::build(
                             $response['code'],
-                            $result['message']
+                            $result['message'],
+                            isset($result['data']) ? $result['data'] : null
                         );
                     }
                     else

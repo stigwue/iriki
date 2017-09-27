@@ -8,6 +8,10 @@
 					"parameters" : ["_id"],
 					"authenticate" : "false"
 				},
+				"read_by_username" : {
+					"description" : "Read a user by providing its username.",
+					"parameters" : ["username"]
+				},
 				"authenticate" : {
 					"description" : "Creates a session for the user.",
 					"parameters" : ["username", "hash", "remember"],
@@ -28,10 +32,6 @@
 					"description" : "Reset the user password.",
 					"parameters" : ["username"],
 					"exempt" : []
-				},
-				"read_by_username" : {
-					"description" : "Read a user by providing its username.",
-					"parameters" : ["username"]
 				},
 				"delete" : {
 					"description" : "Returns the properties of the matching model.",

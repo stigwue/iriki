@@ -257,11 +257,13 @@ class request
             else
             {
               //some other error
+              $new_result = \iriki\response::buildFor('error', 'Some other error occurred.', $wrap);
             }
           break;
 
           default:
             //nothing was caught?
+            $new_result = \iriki\response::buildFor($default_response, $result, $wrap);
           break;
         }
       }
@@ -270,6 +272,7 @@ class request
       else
       {
         //no errors
+        $new_result = \iriki\response::buildFor($default_response, $result, $wrap);
       }
 
       return $new_result;

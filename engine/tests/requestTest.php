@@ -10,18 +10,18 @@ class requestTest extends \PHPUnit\Framework\TestCase
 		$result = \iriki\request::catchError(
 			//result
 			array(
-				'code' => \iriki\response::ERROR,
-				'message' => 'Funke! Some error occurred!!'
+				'message' => true,
+				'data' => "59cb9986565bb51b740041a7"
 			),
 			//default_response: info,data or error
-			'information',
+			'data',
 			//wrap
 			true
 		);
 
 		$this->assertEquals(true,
-			(isset($result['code']) AND $result['code'] == \iriki\response::ERROR AND
-			isset($result['message']) AND $result['message'] == 'Funke! Some error occurred!!')
+			(isset($result['code']) AND $result['code'] == \iriki\response::OK AND
+			isset($result['message']) AND isset($result['data']))
 		);
 	}
 
