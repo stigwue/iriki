@@ -80,12 +80,12 @@ class user_session extends \iriki\request
 					if ($token['remember'] == 'true')
 					{
 						//specified duration after last ping
-						$stamp_expired = ((int)$token['pinged']) + IRIKI_REFRESH;
+						$stamp_expired = ((int)$token['pinged']) + IRIKI_SESSION_LONG;
 					}
 					else
 					{
 						//specified duration after created
-						$stamp_expired = ((int)$token['started']) + IRIKI_REFRESH;
+						$stamp_expired = ((int)$token['pinged']) + IRIKI_SESSION_SHORT;
 					}
 					$authenticated = (
 						$authenticated &&

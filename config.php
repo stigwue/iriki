@@ -20,12 +20,17 @@ define('IRIKI_KEY', 'correct_horse_battery_staple');
 define('IRIKI_MODE', 'local');
 
 //use iriki to manage sessions?
-//should IRIKI_REFRESH be obeyed for re-reads?
+//should IRIKI_SESSION_REFRESH be obeyed for re-reads?
 define('IRIKI_SESSION', false);
 
-//refresh time in seconds
-//time (seconds) until Iriki re-reads config files or session token expires
-define('IRIKI_REFRESH', 30 * 24 * 60 * 60);
+//time in seconds
+//time until Iriki re-reads config files
+define('IRIKI_SESSION_REFRESH', 30 * 24 * 60 * 60);
+//times until a session token expires:
+//no 'remember me', last 1 week
+define('IRIKI_SESSION_SHORT', 7 * 24 * 60 * 60);
+//'remember me', last 3 months
+define('IRIKI_SESSION_LONG', 3 * 30 * 24 * 60 * 60);
 
 //config file for this app
 define('IRIKI_CONFIG', 'apps/kronos/app.json');

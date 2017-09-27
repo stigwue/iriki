@@ -177,8 +177,15 @@ class mongodb extends database
 				//ignore for now
 
 				//has it expired?
-				//use IRIKI_REFRESH to calculate
-				$expire_stamp = $user_session['created'] + IRIKI_REFRESH;
+				$expire_stamp = $user_session['pinged'];
+				if ($user_session['remember'] == 'true')
+				{
+					$expire_stamp = $user_session['pinged'] + IRIKI_SESSION_LONG;
+				}
+				else
+				{
+					$expire_stamp = $user_session['pinged'] + IRIKI_SESSION_SHORT;
+				}
 				if ($timestamp >= $expire_stamp)
 				{
 					//expired

@@ -61,7 +61,7 @@ if ($APP['expires'] == 0 OR $APP['expires'] <= time(NULL))
 	$APP['models']['app'] = $app_models->doInitialise($APP['config'], $app_routes->getRoutes($APP['application']), $APP['application']);
 	//$status = $app_models->getStatus($status);
 
-	$APP['expires'] = time(NULL) + IRIKI_REFRESH;
+	$APP['expires'] = time(NULL) + IRIKI_SESSION_REFRESH;
 	$_SESSION[IRIKI_KEY] = array(
 		'iriki_expires' => $APP['expires'],
 		'app' => $APP
