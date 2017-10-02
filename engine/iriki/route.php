@@ -308,7 +308,7 @@ class route
         }
         else
         {
-            return response::error('Url parsing failed. Please specify a model and action.', true);
+            return response::error('URL parsing failed. Please specify a model and action.', true);
         }
 
         //all other parsing failed

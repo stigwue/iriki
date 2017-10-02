@@ -2,7 +2,7 @@
 	"iriki":
 	{
 		"routes" : {
-			"mg_email" : {
+			"email" : {
 				"send" : {
 					"description" : "Send an email via mailgun.",
 					"parameters" : [],

@@ -17,11 +17,11 @@
 				}
 			},
 			"routes" : [
+				"email",
 				"user",
 				"user_session",
 				"user_group",
-				"user_access",
-				"mg_email"
+				"user_access"
 			]
 		}
 	}

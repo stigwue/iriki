@@ -78,6 +78,7 @@ class user extends \iriki\request
 					'username' => $data['username']
 				)
 			);
+
 			$new_request->setParameterStatus(array(
 				'final' => array('username'),
 				'missing' => array(),
@@ -140,11 +141,12 @@ class user extends \iriki\request
 				));
 
 				$user_session = new \iriki\user_session();
+				//this session will not be created, user_id is not a valid id
 				$status = $user_session->initiate($session_request);
 
 				//save token?
 				$token = $session_request->getData()['token'];
-				return \iriki\response::data($token, $wrap);
+				return \iriki\response::data($token, $wrap, $authenticated);
 			}
 			else
 			{

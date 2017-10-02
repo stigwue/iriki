@@ -2,7 +2,7 @@
 	"iriki":
 	{
 		"models" : {
-			"mg_email" : {
+			"email" : {
 				"description" : "An email.",
 				"properties" : {
 					"_id" : {

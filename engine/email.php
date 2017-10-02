@@ -2,7 +2,7 @@
 
 namespace iriki;
 
-class mg_email extends \iriki\request
+class email extends \iriki\request
 {
 
 	public static function send($request, $wrap = true)
