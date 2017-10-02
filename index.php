@@ -3,6 +3,7 @@
 session_start();
 
 //base configuration
+//you might have to rename config.default.php to config.php
 require_once(__DIR__ . '/config.php');
 
 //load other configuration
