@@ -1,0 +1,15 @@
+{
+	"iriki":
+	{
+		"routes" : {
+			"model" : {
+				"action" : {
+					"description" : "A route action for 'model'.",
+					"parameters" : [],
+					"exempt" : ["_id"],
+					"authenticate" : "false"
+				}
+			}
+		}
+	}
+}
