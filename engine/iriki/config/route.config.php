@@ -42,7 +42,7 @@ class route_config extends config
     * @return array Route details such as default, alias, list and an empty routes array
     * @throw
     */
-    private function loadFromJsonIndex($config_values, $app = 'iriki')
+    public function loadFromJsonIndex($config_values, $app = 'iriki')
     {
         $store = &Self::$_engine;
         $path = $config_values['engine']['path'];
@@ -81,7 +81,7 @@ class route_config extends config
     * @return array Route details after empty routes array is filled
     * @throw
     */
-    private function loadFromJson($config_values, $routes, $app = 'iriki')
+    public function loadFromJson($config_values, $routes, $app = 'iriki')
     {
         $store = &Self::$_engine;
         $path = $config_values['engine']['path'];

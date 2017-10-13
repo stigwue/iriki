@@ -38,7 +38,7 @@ class model_config extends config
     * @return array Model details
     * @throw
     */
-    private function loadFromJson($config_values, $routes, $app = 'iriki')
+    public function loadFromJson($config_values, $routes, $app = 'iriki')
     {
         $var = '_engine';
         $path = $config_values['engine']['path'];

@@ -1,0 +1,24 @@
+{
+	"iriki":
+	{
+		"routes" : {
+			"alias" : {
+				"validate" : {
+					"model" : "user_session",
+					"action" : "validate"
+				}
+			},
+			"default" : {
+				"info" : {
+					"description" : "Describes the model.",
+					"parameters" : [],
+					"exempt" : ["*"],
+					"authenticate" : "false"
+				}
+			},
+			"routes" : [
+				"model"
+			]
+		}
+	}
+}

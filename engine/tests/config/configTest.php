@@ -14,7 +14,7 @@ class configTest extends \PHPUnit\Framework\TestCase
     //load_json_file success test
 	public function test_load_json_file_success()
     {
-        $contents = iriki\config::load_json_file(__DIR__ . '/files/success.json');
+        $contents = iriki\config::load_json_file(__DIR__ . '/files/app.json');
 
         //assert
         $this->assertNotEquals(null, $contents);

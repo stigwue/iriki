@@ -1,0 +1,25 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"model" : {
+				"description" : "Model description.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"property1" :  {
+						"description" : "Model property1.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}
