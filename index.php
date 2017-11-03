@@ -3,14 +3,17 @@
 session_start();
 
 //base configuration
-//you might have to rename config.default.php to config.php
+//make a copy of config.default.php, edit and save as config.php
 require_once(__DIR__ . '/config.php');
 
-//load other configuration
-require_once(__DIR__ . '/load.php');
+//engine
+require_once('engine/autoload.php');
 
 //load up application's class files
 require_once($APP['config']['application']['path'] . 'autoload.php');
+
+//Cross-origin Resource Sharing (CORS) test
+cors_test(IRIKI_CORS_STRICT);
 
 //interprete request from url
 $request_details = iriki\route::getRequestDetails(null, null, $APP['config']['base_url']);

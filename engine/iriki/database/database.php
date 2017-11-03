@@ -14,7 +14,7 @@ class database
     * Perform a database create action on a request.
     *
     * @param object Request object
-    * @return object Response
+    * @returns object Response
     * @throw
     */
     public static function doCreate($request_obj)
@@ -27,7 +27,7 @@ class database
     *
     * @param object Request object
     * @param array Request data sort
-    * @return object Response
+    * @returns object Response
     * @throw
     */
     public static function doRead($request_obj, $sort)
@@ -39,7 +39,7 @@ class database
     * Perform a database update action on a request.
     *
     * @param object Request object
-    * @return object Response
+    * @returns object Response
     * @throw
     */
     public static function doUpdate($request_obj)
@@ -51,7 +51,7 @@ class database
     * Perform a database delete action on a request.
     *
     * @param object Request object
-    * @return object Response
+    * @returns object Response
     * @throw
     */
     public static function doDelete($request_obj)

@@ -48,7 +48,7 @@ class response
     * @param {array} Array of items
     * @param {array} Singular and plural (keys) name of items
     * @param {array} Singular and plural (keys) name of items
-    * @return Message string
+    * @returns Message string
     * @throw
     */
     public static function showMissing($list, $description, $action)
@@ -107,7 +107,7 @@ class response
     * @param integer Reponse code
     * @param string Response message, typically user understandable
     * @param object Response data, mostly arrays or strings
-    * @return Response object
+    * @returns Response object
     * @throw
     */
     public static function build($code, $message = '', $data = null)
@@ -135,7 +135,7 @@ class response
     * @param {string} response_type Response type: data, information or error.
     * @param {array} Request result
     * @param {boolean} Wrap response or not?
-    * @return Response object
+    * @returns Response object
     */
     public static function buildFor($response_type, $result, $wrap)
     {
@@ -261,7 +261,7 @@ class response
     * @param boolean Wrap data to give an Iriki Response or just raw data. Default is true.
     * @param string Response message. Default is ''.
     * @param object Model relations. Null for now.
-    * @return Response object
+    * @returns Response object
     * @throw
     */
     public static function data($data, $wrap = true, $message = '', $relations = null)
@@ -279,7 +279,7 @@ class response
     * @param string Response message.
     * @param boolean Wrap data to give an Iriki Response or just raw message. Default is true.
     * @param object Response data, mostly arrays or strings. Default is null.
-    * @return Response object
+    * @returns Response object
     * @throw
     */
     public static function information($message, $wrap = true, $data = null)
@@ -311,7 +311,7 @@ class response
     * @param string Response message.
     * @param boolean Wrap data to give an Iriki Response or just raw message. Default is true.
     * @param object Response data, mostly arrays or strings. Default is null.
-    * @return Response object
+    * @returns Response object
     * @throw
     */
     public static function auth($message, $wrap = true, $data = null)

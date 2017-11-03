@@ -21,7 +21,7 @@ class route
     *
     * @param array HTTP request details
     * @param array Application configuration already initialised
-    * @return array Status of matched model action
+    * @returns array Status of matched model action
     * @throw
     */
     public static function matchUrl($request_details,
@@ -320,7 +320,7 @@ class route
     *
     *
     * @param array Request url/path
-    * @return array Path, parts of the url and the query
+    * @returns array Path, parts of the url and the query
     * @throw
     */
     private static function parseUrl($path)
@@ -370,7 +370,7 @@ class route
     * @param string URI supplied or deduced
     * @param string HTTP request method supplied or deduced
     * @param string Optional base url if framework isn't run from server root/home?
-    * @return array Request details for use
+    * @returns array Request details for use
     * @throw
     */
     public static function getRequestDetails($uri = null, $method = null, $base_url = '')
@@ -437,7 +437,7 @@ class route
     *
     *
     * @param string Query section of url
-    * @return array Key-value query pairs
+    * @returns array Key-value query pairs
     * @throw
     */
     private static function parseGetParams($query)

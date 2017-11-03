@@ -35,7 +35,7 @@ class model_config extends config
     * @param array Configuration key value pairs to get path
     * @param array Defined routes
     * @param string Application or engine name
-    * @return array Model details
+    * @returns array Model details
     * @throw
     */
     public function loadFromJson($config_values, $routes, $app = 'iriki')
@@ -65,7 +65,7 @@ class model_config extends config
     * @param array Configuration key value pairs to get path
     * @param array Defined routes
     * @param string Application or engine name
-    * @return array Model details
+    * @returns array Model details
     * @throw
     */
     public function doInitialise($config_values, $routes, $app = 'iriki')
@@ -78,7 +78,7 @@ class model_config extends config
     *
     *
     * @param string Application or engine name
-    * @return array Model details
+    * @returns array Model details
     * @throw
     */
     public function getModels($app = 'iriki')
@@ -99,7 +99,7 @@ class model_config extends config
     *
     * @param array Previous status array to append to
     * @param boolean Encode result as json
-    * @return array Status array or json representation
+    * @returns array Status array or json representation
     * @throw
     */
     public function getStatus($status = null, $json = false)

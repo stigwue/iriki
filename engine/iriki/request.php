@@ -81,7 +81,7 @@ class request
     /**
     * Gets the model status
     *
-    * @return array Model status
+    * @returns array Model status
     * @throw
     */
     public function getModelStatus()
@@ -93,7 +93,7 @@ class request
     * Sets the model status
     *
     * @param array Model status
-    * @return array Model status
+    * @returns array Model status
     * @throw
     */
     public function setModelStatus($model_status)
@@ -105,7 +105,7 @@ class request
     /**
     * Gets the parameter status/states
     *
-    * @return array Parameter status
+    * @returns array Parameter status
     * @throw
     */
     public function getParameterStatus()
@@ -117,7 +117,7 @@ class request
     * Sets the parameter status/states
     *
     * @param array Parameter status
-    * @return array Parameter status
+    * @returns array Parameter status
     * @throw
     */
     public function setParameterStatus($parameter_status)
@@ -129,7 +129,7 @@ class request
     /**
     * Gets the request model
     *
-    * @return string Request model
+    * @returns string Request model
     * @throw
     */
     public function getModel()
@@ -141,7 +141,7 @@ class request
     * Sets the request model
     *
     * @param string Request model
-    * @return string Request model
+    * @returns string Request model
     * @throw
     */
     public function setModel($model)
@@ -153,7 +153,7 @@ class request
     /**
     * Gets the request data
     *
-    * @return array Request data
+    * @returns array Request data
     * @throw
     */
     public function getData()
@@ -165,7 +165,7 @@ class request
     * Sets the request data
     *
     * @param array Request data
-    * @return array Request data
+    * @returns array Request data
     * @throw
     */
     public function setData($data)
@@ -177,7 +177,7 @@ class request
     /**
     * Gets the request metadata
     *
-    * @return array Request metadata
+    * @returns array Request metadata
     * @throw
     */
     public function getMeta()
@@ -189,7 +189,7 @@ class request
     * Sets the request metadata
     *
     * @param array Request metadata
-    * @return array Request metadata
+    * @returns array Request metadata
     * @throw
     */
     public function setMeta($meta)
@@ -201,7 +201,7 @@ class request
     /**
     * Gets the session toekn
     *
-    * @return string Session token
+    * @returns string Session token
     * @throw
     */
     public function getSession()
@@ -213,7 +213,7 @@ class request
     * Sets the Session token
     *
     * @param string Session token
-    * @return string Session token
+    * @returns string Session token
     * @throw
     */
     public function setSession($session_token)
@@ -299,7 +299,7 @@ class request
     *
     * @param object Request object
     * @param boolean Wrap results with descriptors
-    * @return object Response object or data
+    * @returns object Response object or data
     * @throw
     */
     public function create($request, $wrap = true)
@@ -356,7 +356,7 @@ class request
     * @param object Request object
     * @param boolean Wrap results with descriptors
     * @param array Data sort descriptor
-    * @return object Response object or data
+    * @returns object Response object or data
     * @throw
     */
     public function read($request, $wrap = true)
@@ -395,7 +395,7 @@ class request
     * @param object Request object
     * @param boolean Wrap results with descriptors
     * @param array Data sort descriptor
-    * @return object Response object or data
+    * @returns object Response object or data
     * @throw
     */
     public function read_all($request, $wrap = true)
@@ -433,7 +433,7 @@ class request
     *
     * @param object Request object
     * @param boolean Wrap results with descriptors
-    * @return object Response object or data
+    * @returns object Response object or data
     * @throw
     */
     public function update($request, $wrap = true)
@@ -473,7 +473,7 @@ class request
     *
     * @param object Request object
     * @param boolean Wrap results with descriptors
-    * @return object Response object or data
+    * @returns object Response object or data
     * @throw
     */
     public function delete($request, $wrap = true)

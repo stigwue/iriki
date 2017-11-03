@@ -36,7 +36,7 @@ class config
     *
     *
     * @param string JSON file path
-    * @return string File contents or null if file not found.
+    * @returns string File contents or null if file not found.
     * @throw
     */
     public static function load_json_file($json_path)
@@ -57,7 +57,7 @@ class config
     *
     *
     * @param string JSON string
-    * @return array Array of JSON or null if parse fails.
+    * @returns array Array of JSON or null if parse fails.
     * @throw
     */
     public static function parse_json_string($json_string)
@@ -93,7 +93,7 @@ class config
     * Get json array
     *
     *
-    * @return array Array of JSON or null if parse fails.
+    * @returns array Array of JSON or null if parse fails.
     * @throw
     */
     public function getJson()
@@ -105,7 +105,7 @@ class config
     * Get iriki app json array of configuration
     *
     *
-    * @return array Array of JSON or null if parse fails.
+    * @returns array Array of JSON or null if parse fails.
     * @throw
     */
     public function getKeyValues()
@@ -128,7 +128,7 @@ class config
     *
     * @param array Previous status array to append to
     * @param boolean Encode result as json
-    * @return array Status array or json representation
+    * @returns array Status array or json representation
     * @throw
     */
     public function getStatus($status = null, $json = false)

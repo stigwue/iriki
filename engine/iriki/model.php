@@ -19,7 +19,7 @@ class model
     * @param {array} Model status from request made
     * @param {array} Defined models
     * @param {array} Defined routes
-    * @return {array} Model status describing match
+    * @returns {array} Model status describing match
     */
     public static function doMatch($model_status, $models = null, $routes = null)
     {
@@ -108,7 +108,7 @@ class model
     * @param array Parameters sent via request. Note that they can be edited
     * @param array Parameters sent via url
     * @param array Route filters: parameters and exempt
-    * @return array Properties: final, missing, extra and ids
+    * @returns array Properties: final, missing, extra and ids
     * @throw
     */
     public static function doPropertyMatch($details, &$sent, $sent_url, $filter)
@@ -254,7 +254,7 @@ class model
     *
     *
     * @param object Request object encapsulating necessary details
-    * @return array Pre-existing properties
+    * @returns array Pre-existing properties
     * @throw
     */
     public static function doParameterUniqueCheck($request)
@@ -313,7 +313,7 @@ class model
     * Returns a modified parameter statuses you may have to update.
     *
     * @param object Request
-    * @return array Modified parameter status
+    * @returns array Modified parameter status
     * @throw
     */
     public static function doBelongsToRelation($request)
@@ -374,7 +374,7 @@ class model
     * Will have to make several reads up to a recursivity limit.
     *
     * @param object Request
-    * @return array Parameter status for now, should change soon
+    * @returns array Parameter status for now, should change soon
     * @throw
     */
     public static function doHasManyRelation($request, $recursivity = 1)

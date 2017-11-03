@@ -39,7 +39,7 @@ class route_config extends config
     *
     * @param array Configuration key value pairs
     * @param string Application name
-    * @return array Route details such as default, alias, list and an empty routes array
+    * @returns array Route details such as default, alias, list and an empty routes array
     * @throw
     */
     public function loadFromJsonIndex($config_values, $app = 'iriki')
@@ -78,7 +78,7 @@ class route_config extends config
     * @param array Configuration key value pairs to get path
     * @param array Defined routes
     * @param string Application or engine name
-    * @return array Route details after empty routes array is filled
+    * @returns array Route details after empty routes array is filled
     * @throw
     */
     public function loadFromJson($config_values, $routes, $app = 'iriki')
@@ -109,7 +109,7 @@ class route_config extends config
     *
     * @param array Application configuration key value pairs
     * @param string Application or engine name
-    * @return array Route details
+    * @returns array Route details
     * @throw
     */
     public function doInitialise($config_values, $app = 'iriki')
@@ -124,7 +124,7 @@ class route_config extends config
     *
     *
     * @param string Application or engine name
-    * @return array Route details
+    * @returns array Route details
     * @throw
     */
     public function getRoutes($app = 'iriki')
@@ -144,7 +144,7 @@ class route_config extends config
     *
     * @param array Previous status array to append to
     * @param boolean Encode result as json
-    * @return array Status array or json representation
+    * @returns array Status array or json representation
     * @throw
     */
     public function getStatus($status = null, $json = false)

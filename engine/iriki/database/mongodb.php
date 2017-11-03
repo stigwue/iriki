@@ -44,7 +44,7 @@ class mongodb extends database
     * Gets the database class.
     *
     *
-    * @return string Database class
+    * @returns string Database class
     * @throw
     */
 	public static function getClass()
@@ -130,7 +130,7 @@ class mongodb extends database
     * Checker for valid Mongo IDs.
     *
     * @param {string} The id to check.
-    * @return {boolean} True or false
+    * @returns {boolean} True or false
     */
 	public static function isMongoId($id){
 		return is_string($id) && strlen($id) == 24 && ctype_xdigit($id);
@@ -144,7 +144,7 @@ class mongodb extends database
     *
     * @param {string} Session token.
     * @param {integer} Timestamp to use for expiry checks
-    * @return {boolean} True or false
+    * @returns {boolean} True or false
     */
     private static function checkSessionToken($user_session_token, $timestamp)
 	{
@@ -213,7 +213,7 @@ class mongodb extends database
     *
     * @param {array} Parameters: final, missing and ids.
     * @param {array} Parameter values
-    * @return {Array} Corrected query array
+    * @returns {Array} Corrected query array
     */
 	public static function enforceIds(&$parameters, $key_values)
 	{
@@ -257,7 +257,7 @@ class mongodb extends database
     * we need to pull out only the string value.
     *
     * @param {array} Associative array of key and values
-    * @return {Array} Corrected array
+    * @returns {Array} Corrected array
     */
 	public static function deenforceIds($key_values)
 	{
@@ -285,7 +285,7 @@ class mongodb extends database
     * Database create action.
     *
     * @param {request} Request on which action is performed
-    * @return {Array} One of three options: null, an array with message (true or false) and data values or an array with code (some error code) and message (string description)
+    * @returns {Array} One of three options: null, an array with message (true or false) and data values or an array with code (some error code) and message (string description)
     */
 	public static function doCreate($request)
 	{
@@ -344,7 +344,7 @@ class mongodb extends database
     *
     * @param {request} Request on which action is performed
     * @param {array} Array to control read sort
-    * @return {Array} One of three options: null, an array of data values or an array with code (some error code) and message (string description)
+    * @returns {Array} One of three options: null, an array of data values or an array with code (some error code) and message (string description)
     */
 	public static function doRead($request, $sort)
 	{
@@ -421,7 +421,7 @@ class mongodb extends database
     * Database update action.
     *
     * @param {request} Request on which action is performed
-    * @return {Array} One of three options: null, a success flag or an array with code (some error code) and message (string description)
+    * @returns {Array} One of three options: null, a success flag or an array with code (some error code) and message (string description)
     */
 	public static function doUpdate($request)
 	{
@@ -483,7 +483,7 @@ class mongodb extends database
     * Database delete action.
     *
     * @param {request} Request on which action is performed
-    * @return {Array} One of three options: null, a success flag or an array with code (some error code) and message (string description)
+    * @returns {Array} One of three options: null, a success flag or an array with code (some error code) and message (string description)
     */
 	public static function doDelete($request)
 	{

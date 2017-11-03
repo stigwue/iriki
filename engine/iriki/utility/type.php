@@ -15,7 +15,7 @@ class type
   *
   * @param object Variable value to check
   * @param string Type name to compare
-  * @return array Status of type match
+  * @returns array Status of type match
   * @throw
   */
   public static function is_type($value, $type)
@@ -58,7 +58,7 @@ class type
   *
   * @param object Variable value to check
   * @param string Type name to compare
-  * @return object Desired type
+  * @returns object Desired type
   * @throw
   */
   public static function ctype($value, $type)

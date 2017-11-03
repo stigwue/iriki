@@ -11,7 +11,7 @@ before_install:
 
 install:
   - mv config.default.php config.php
-  - composer install
+  - composer --working-dir=./engine install
 
 script:
-  - vendor/bin/phpunit --bootstrap engine/tests/bootstrap.php engine/tests/
+  - engine/vendor/bin/phpunit --bootstrap engine/tests/bootstrap.php engine/tests/
