@@ -6,12 +6,6 @@ session_start();
 //make a copy of config.default.php, edit and save as config.php
 require_once(__DIR__ . '/config.php');
 
-//engine
-require_once('engine/autoload.php');
-
-//load up application's class files
-require_once($APP['config']['application']['path'] . 'autoload.php');
-
 //Cross-origin Resource Sharing (CORS) test
 cors_test(IRIKI_CORS_STRICT);
 
@@ -32,7 +26,7 @@ if (is_null($status))
 	//we can tell the user that or?
 	$message = array(
 		'code' => 400,
-		'message' => "This might be an Iriki application's base url or else, Abuja, we have a problem."
+		'message' => "This is an Iriki application. URL should be in the right format or else, Abuja, we have a problem."
 	);
 	echo json_encode($message);
 }

@@ -1,0 +1,14 @@
+{
+	"kronos":
+	{
+		"routes" : {
+			"event" : {
+				"create" : {
+					"description" : "Create a new event.",
+					"parameters" : [],
+					"exempt" : ["_id"]
+				}
+			}
+		}
+	}
+}

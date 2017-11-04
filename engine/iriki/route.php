@@ -308,7 +308,7 @@ class route
         }
         else
         {
-            return response::error('URL parsing failed. Please specify a model and action.', true);
+            return response::error("This is an Iriki application. URL should be in the right format or else, Abuja, we have a problem.", true);
         }
 
         //all other parsing failed

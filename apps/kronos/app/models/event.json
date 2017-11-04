@@ -1,0 +1,33 @@
+{
+	"kronos":
+	{
+		"models" : {
+			"event" : {
+				"description" : "A kronos event.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"title" :  {
+						"description" : "Title.",
+						"type" : "string"
+					},
+					"created" :  {
+						"description" : "Title.",
+						"type" : "string"
+					},
+					"modified" :  {
+						"description" : "Title.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : ["user"],
+					"hasmany" : ["tag"]
+				}
+			}
+		}
+	}
+}

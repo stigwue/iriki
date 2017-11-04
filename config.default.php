@@ -32,4 +32,10 @@ define('IRIKI_SESSION_LONG', 3 * 30 * 24 * 60 * 60);
 //config file for this app
 define('IRIKI_CONFIG', 'apps/kronos/app.json');
 
+//engine
+require_once('engine/autoload.php');
+
+//load up application's class files
+require_once($GLOBALS['APP']['config']['application']['path'] . 'autoload.php');
+
 ?>
