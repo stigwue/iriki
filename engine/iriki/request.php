@@ -368,6 +368,9 @@ class request
       $parameter_status = model::doHasManyRelation($request);
       //read should pick up any "hasmany" models up to x recursivity
 
+      //replace with modified
+      $request->setParameterStatus($parameter_status);
+
       $extra_parameters = count($parameter_status['extra']);
 
       if ($extra_parameters != 0)
@@ -403,6 +406,9 @@ class request
       $db = Self::$_db_instance;
 
       $parameter_status = $request->getParameterStatus();
+
+      //replace with modified
+      $request->setParameterStatus($parameter_status);
 
       $extra_parameters = count($parameter_status['extra']);
 
@@ -443,6 +449,9 @@ class request
       //unique
       //belongsto
       $parameter_status = model::doBelongsToRelation($request);
+
+      //replace with modified
+      $request->setParameterStatus($parameter_status);
 
       $missing_parameters = count($parameter_status['missing']);
       $extra_parameters = count($parameter_status['extra']);
@@ -485,6 +494,9 @@ class request
       //hasmany
       $parameter_status = model::doHasManyRelation($request);
       //delete should affect any "hasmany" models, ignoring recursivity limits
+
+      //replace with modified
+      $request->setParameterStatus($parameter_status);
 
       $extra_parameters = count($parameter_status['extra']);
 
