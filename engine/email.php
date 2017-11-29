@@ -69,20 +69,84 @@ class email extends \iriki\request
 	            );
 	        }*/
 
+	    	//save email, update on false
+	        $data = $request->getData();
+	        //add other stuff?
+	        $data['status'] = true;
 
-            $result = $mgClient->sendMessage($domain,
-                $mail_options
-            );
+	        $request->setData($data);
+
+	        $request->setParameterStatus(array(
+	            'final' => array(
+	            	"from_name",
+					"from_email",
+					"to_name",
+					"to_email",
+					"subject",
+					"body",
+					"use_html",
+					"cc_emails",
+					"bcc_emails",
+					"status"
+	            ),
+	            'missing' => array(),
+	            'extra' => array(),
+	            'ids' => array()
+	        ));
+
+	        $request_status = $request->create($request, true);
+	        $id = $request_status['data'];
+
+	        $result = null;
+
+
+            //send email, really
+            try
+            {
+	            $result = $mgClient->sendMessage($domain,
+	                $mail_options
+	            );
+            }
+            catch (Exception $e) {
+
+            }
 
 
 	        //interprete result
             $status = $result->http_response_code == 200;
+
 
             if ($status)
 			{
 				return \iriki\response::information('true', $wrap);
 			}
 			else {
+				//update log
+				$data = $request->getData();
+				$data['_id'] = $id;
+		        $data['status'] = false;
+		        $request->setData($data);
+		        $request->setParameterStatus(array(
+		            'final' => array(
+		            	"_id",
+		            	"from_name",
+						"from_email",
+						"to_name",
+						"to_email",
+						"subject",
+						"body",
+						"use_html",
+						"cc_emails",
+						"bcc_emails",
+						"status"
+		            ),
+		            'missing' => array(),
+		            'extra' => array(),
+		            'ids' => array('_id')
+		        ));
+
+	        	$request_status = $request->update($request, false);
+
 				return \iriki\response::information('false', $wrap);
 			}
 	    }

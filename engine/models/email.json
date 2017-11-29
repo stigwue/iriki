@@ -45,6 +45,10 @@
 					"bcc_emails" :  {
 						"description" : "Blind carbon-copied recipients, comma-seperated.",
 						"type" : "string"
+					},
+					"status" :  {
+						"description" : "Status: sent, failed or otherwise",
+						"type" : "string"
 					}
 				},
 				"relationships" : {

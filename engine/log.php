@@ -6,9 +6,9 @@ namespace iriki;
 * Iriki log, base class for handling logs.
 *
 */
-
-class log
+class log extends \iriki\request
 {
+
 	/*
 	Properties include:
 		-user _id/session_token
@@ -49,7 +49,6 @@ class log
 		-update (Hell Naw! Ok, Nasty C's influence)
 		-delete (by criteria defined to save space from time to time)
 	*/
-
 }
 
 ?>

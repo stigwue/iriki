@@ -1,0 +1,21 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"log" : {
+				"description" : "Log of Iriki activities.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}
