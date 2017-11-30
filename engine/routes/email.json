@@ -6,7 +6,13 @@
 				"send" : {
 					"description" : "Send an email via mailgun.",
 					"parameters" : [],
-					"exempt" : ["_id", "status"]
+					"exempt" : ["_id", "status"],
+					"authenticate" : false
+				},
+				"read_all" : {
+					"description" : "Read all emails.",
+					"parameters" : [],
+					"exempt" : ["*"]
 				}
 			}
 		}

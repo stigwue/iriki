@@ -152,6 +152,18 @@ class email extends \iriki\request
 	    }
     }
 
+    public function read_all($request, $wrap = true)
+    {
+	    if (!is_null($request))
+		{
+			$request->setMeta(array(
+				'sort' => ['created' => -1]
+			));
+
+	      	return $request->read($request, $wrap);
+		}
+    }
+
 }
 
 ?>

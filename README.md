@@ -16,7 +16,7 @@ As such, Iriki uses language agnostic (JSON) configuration to handle models and 
 
 ## Features
 
-Iriki comes with user (grouping and authentication) management and email sending (using Mailgun) to get you started.
+Iriki comes with user (grouping and authentication) management, email sending (using Mailgun) and logging to get you started.
 
 ## To Do
 
@@ -26,16 +26,14 @@ Iriki comes with user (grouping and authentication) management and email sending
 
 ### Database
 
-* MySql support (currently, MongoDB only). 
+* MySQL support (currently, MongoDB only). 
 
 ### Language
 
 * Rewrite to take advantage of PHP7.
 
-* Other language ports? Python? NodeJS?
-
 ### Miscellaneous
 
 * Comments that can be parsed for documentation.
 
-* Tests
+* 100% test coverage

@@ -9,6 +9,22 @@
 						"description" : "Internal unique ID.",
 						"type" : "key",
 						"unique" : true
+					},
+					"user" : {
+						"description" : "Internal user ID.",
+						"type" : "string"
+					},
+					"object" : {
+						"description" : "Object performing logged action.",
+						"type" : "string"
+					},
+					"action" : {
+						"description" : "Logged action.",
+						"type" : "string"
+					},
+					"timestamp" : {
+						"description" : "Log timestamp (format free).",
+						"type" : "string"
 					}
 				},
 				"relationships" : {
