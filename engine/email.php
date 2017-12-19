@@ -48,12 +48,12 @@ class email extends \iriki\request
 	            $body_descriptor    => $params['body']
 	        );
 
-	        /*if ($cc != '')
-	            $mail_options['cc'] = $cc;
-	        if ($bcc != '')
-	            $mail_options['bcc'] = $bcc;
+	        if ($params['cc_emails'] != '')
+	            $mail_options['cc'] = $params['cc_emails'];
+	        if ($params['bcc_emails'] != '')
+	            $mail_options['bcc'] = $params['bcc_emails'];
 
-	        if (is_null($attachments))
+	        /*if (is_null($attachments))
 	        {
 	            $result = $mgClient->sendMessage($domain,
 	                $mail_options
@@ -69,12 +69,11 @@ class email extends \iriki\request
 	            );
 	        }*/
 
-	    	//save email, update on false
-	        $data = $request->getData();
-	        //add other stuff?
-	        $data['status'] = true;
+	    	
+	    	//add other stuff?
+	        $params['status'] = true;
 
-	        $request->setData($data);
+	        $request->setData($params);
 
 	        $request->setParameterStatus(array(
 	            'final' => array(

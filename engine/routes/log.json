@@ -1,0 +1,21 @@
+{
+	"iriki":
+	{
+		"routes" : {
+			"log" : {
+				"initiate" : {
+					"description" : "Initiate a log object.",
+					"parameters" : [],
+					"exempt" : ["_id", "status"],
+					"authenticate" : false
+				},
+				"log" : {
+					"description" : "Log an action.",
+					"parameters" : [],
+					"exempt" : ["_id"],
+					"authenticate" : false
+				}
+			}
+		}
+	}
+}

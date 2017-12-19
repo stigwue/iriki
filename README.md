@@ -2,7 +2,7 @@
 
 # Iriki
 
-Iriki, a framework for APIs.
+Iriki, an API framework.
 
 Source code is at [stigwue/iriki](https://github.com/stigwue/iriki).
 

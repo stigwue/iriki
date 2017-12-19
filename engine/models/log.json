@@ -25,6 +25,26 @@
 					"timestamp" : {
 						"description" : "Log timestamp (format free).",
 						"type" : "string"
+					},
+					"duration" : {
+						"description" : "Duration of logged action.",
+						"type" : "number"
+					},
+					"request" : {
+						"description" : "Request metadata.",
+						"type" : "string"
+					},
+					"response" : {
+						"description" : "Response metadata.",
+						"type" : "string"
+					},
+					"status" : {
+						"description" : "Truthful value of action.",
+						"type" : "string"
+					},
+					"tag" : {
+						"description" : "Extra metadata.",
+						"type" : "string"
 					}
 				},
 				"relationships" : {

@@ -17,8 +17,9 @@
 				}
 			},
 			"routes" : [
-				"email",
 				"user",
+				"email",
+				"log",
 				"user_session",
 				"user_group",
 				"user_access"

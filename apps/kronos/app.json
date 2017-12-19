@@ -2,7 +2,7 @@
   "iriki":
   {
     "app" : {
-      "base" : "eyeti.xyz",
+      "base" : "iriki.eyeti.xyz",
       "base_url" : "",
 
       "engine" : {
@@ -10,7 +10,7 @@
         "description" : "The Iriki MC",
         "path" : "engine/",
         "author" : "Stephen Igwue",
-        "email" : "stigwue@olibe.nu",
+        "email" : "stigwue@eyeti.xyz",
         "version" : {
           "major" : "0",
           "minor" : "0",
@@ -22,7 +22,7 @@
         "name" : "kronos",
         "description" : "A chronological chronicler.",
         "path" : "apps/kronos/app/",
-        "author" : "stigwue@olibe.nu",
+        "author" : "stigwue@eyeti.xyz",
         "version" : {
           "major" : "0",
           "minor" : "0",
