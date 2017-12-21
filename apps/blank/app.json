@@ -2,7 +2,7 @@
   "iriki":
   {
     "app" : {
-      "base" : "iriki.eyeti.xyz",
+      "base" : "blank",
       "base_url" : "",
 
       "engine" : {
@@ -19,10 +19,10 @@
       },
 
       "application" : {
-        "name" : "kronos",
-        "description" : "A chronological chronicler.",
-        "path" : "apps/kronos/app/",
-        "author" : "stigwue@eyeti.xyz",
+        "name" : "blank",
+        "description" : "A blank Iriki app.",
+        "path" : "apps/blank/app/",
+        "author" : "Stephen Igwue <stigwue@eyeti.xyz>",
         "version" : {
           "major" : "0",
           "minor" : "0",
@@ -34,25 +34,11 @@
         "local" : {
           "type" : "\\iriki\\engine\\mongodb",
           "server" : "mongodb://localhost:27017",
-          "db" : "kronos"
-        },
-        "mysql" : {
-          "type" : "\\iriki\\engine\\mysql",
-          "server" : "localhost",
-          "db" : "kronos",
-          "password" : "plaintext"
-        },
-        "test" : {
-          "type" : "\\iriki\\engine\\mongodb",
-          "server" : "mongodb://localhost:27017",
-          "db" : "kronos_test"
+          "db" : "blank"
         }
       },
 
       "constants" : {
-        "log_path" : "apps/kronos/log/",
-        "mailgun_domain" : "bc.eyeti.xyz",
-        "mailgun_secret" : ""
       }
     }
   }

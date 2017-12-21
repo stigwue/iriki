@@ -1,19 +1,15 @@
 {
-	"kronos":
+	"blank":
 	{
 		"routes" : {
 			"default" : {
-				"description" : {
-					"description" : "Describe a model, listing its properties.",
-					"parameters" : []
-				},
 				"create" : {
 					"description" : "Add a new instance of the model to storage.",
 					"parameters" : [],
 					"exempt" : ["_id"]
 				},
 				"read" : {
-					"description" : "Returns the properties of the matching model.",
+					"description" : "Returns a single model matching the supplied _id value.",
 					"parameters" : ["_id"]
 				},
 				"read_all" : {
@@ -31,8 +27,9 @@
 			},
 			"alias" : {},
 			"routes" : [
-				"event",
-				"tag"
+				"blank",
+				"empty",
+				"vacant"
 			]
 		}
 	}

@@ -30,7 +30,7 @@ define('IRIKI_SESSION_SHORT', 7 * 24 * 60 * 60);
 define('IRIKI_SESSION_LONG', 3 * 30 * 24 * 60 * 60);
 
 //config file for this app
-define('IRIKI_CONFIG', 'apps/kronos/app.json');
+define('IRIKI_CONFIG', 'apps/blank/app.json');
 
 //engine
 require_once('engine/autoload.php');

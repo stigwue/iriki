@@ -1,12 +1,15 @@
 {
-	"kronos":
+	"blank":
 	{
 		"routes" : {
-			"event" : {
-				"create" : {
+			"blank" : {
+				"no_auth" : {
 					"description" : "Create a new event.",
 					"parameters" : [],
 					"exempt" : ["_id"]
+				},
+				"auth" : {
+					
 				}
 			}
 		}
