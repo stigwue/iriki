@@ -19,11 +19,11 @@
 						"type" : "number"
 					},
 					"boolean" :  {
-						"description" : "A number type property. It must be numeric.",
+						"description" : "A boolean property. It must be true or false.",
 						"type" : "boolean"
 					},
 					"email" :  {
-						"description" : "A number type property. It must be numeric.",
+						"description" : "An email property. It must fit email (RFC) definitions.",
 						"type" : "email"
 					}
 				},
