@@ -1,0 +1,37 @@
+{
+	"blank":
+	{
+		"models" : {
+			"empty" : {
+				"description" : "An empty model.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID. Note its type: key. It will be a MongoID for MongoDBs. Note the unique flag, set to true to trigger a fail for insertion of existing values.",
+						"type" : "key",
+						"unique" : true
+					},
+					"string" :  {
+						"description" : "A string type property.",
+						"type" : "string"
+					},
+					"number" :  {
+						"description" : "A number type property. It must be numeric.",
+						"type" : "number"
+					},
+					"boolean" :  {
+						"description" : "A boolean property. It must be true or false.",
+						"type" : "boolean"
+					},
+					"email" :  {
+						"description" : "An email property. It must fit email (RFC) definitions.",
+						"type" : "email"
+					}
+				},
+				"relationships" : {
+					"belongsto" : ["vacant"],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

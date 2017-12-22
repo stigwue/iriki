@@ -20,7 +20,7 @@
 
       "application" : {
         "name" : "blank",
-        "description" : "A blank Iriki app.",
+        "description" : "A blank Iriki app, showing the basics of building an Iriki API.",
         "path" : "apps/blank/app/",
         "author" : "Stephen Igwue <stigwue@eyeti.xyz>",
         "version" : {

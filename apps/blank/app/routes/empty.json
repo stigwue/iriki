@@ -1,0 +1,19 @@
+{
+	"blank":
+	{
+		"routes" : {
+			"empty" : {
+				"no_auth" : {
+					"description" : "Note that all parameters are required with '_id' exempted. Also, no authentication is needed for this action.",
+					"parameters" : [],
+					"exempt" : ["_id"]
+				},
+				"auth" : {
+					"description" : "Note only the specified parameters are required. Also, authentication is needed for this action.",
+					"parameters" : ["string", "number"],
+					"authenticate" : true
+				}
+			}
+		}
+	}
+}
