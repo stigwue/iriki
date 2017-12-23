@@ -27,7 +27,7 @@
 			},
 			"alias" : {},
 			"routes" : [
-				"empty",
+				"vacuous",
 				"vacant"
 			]
 		}

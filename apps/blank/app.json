@@ -2,7 +2,7 @@
   "iriki":
   {
     "app" : {
-      "base" : "blank",
+      "base" : "iriki.eyeti.xyz",
       "base_url" : "",
 
       "engine" : {

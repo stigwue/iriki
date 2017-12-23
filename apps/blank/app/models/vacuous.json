@@ -2,8 +2,8 @@
 	"blank":
 	{
 		"models" : {
-			"empty" : {
-				"description" : "An empty model.",
+			"vacuous" : {
+				"description" : "A vacuous model.",
 				"properties" : {
 					"_id" : {
 						"description" : "Internal unique ID. Note its type: key. It will be a MongoID for MongoDBs. Note the unique flag, set to true to trigger a fail for insertion of existing values.",

@@ -1,7 +1,7 @@
 <?php
 
 //url where this runs from
-define('IRIKI_CORS_URL', 'eyeti.xyz');
+define('IRIKI_CORS_URL', 'iriki.eyeti.xyz');
 //obey CORS?
 define('IRIKI_CORS_STRICT', false);
 

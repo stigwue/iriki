@@ -2,7 +2,7 @@
 	"blank":
 	{
 		"routes" : {
-			"empty" : {
+			"vacuous" : {
 				"no_auth" : {
 					"description" : "Note that all parameters are required with '_id' exempted. Also, no authentication is needed for this action.",
 					"parameters" : [],

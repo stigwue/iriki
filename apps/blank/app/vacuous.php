@@ -2,7 +2,7 @@
 
 namespace blank;
 
-class empty extends \iriki\request
+class vacuous extends \iriki\request
 {
 	public static function no_auth($request, $wrap = true)
 	{
