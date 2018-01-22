@@ -24,6 +24,10 @@
 				"read_by_token" : {
 					"description" : "Read a session by providing its token.",
 					"parameters" : ["token"]
+				},
+				"read_by_user" : {
+					"description" : "Read a user's authenticated sessions by providing its ID.",
+					"parameters" : ["user_id"]
 				}
 			}
 		}

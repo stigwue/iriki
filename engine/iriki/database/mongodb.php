@@ -166,7 +166,7 @@ class mongodb extends database
 			foreach ($cursor as $user_session)
 			{
 				//is it authenticated? 
-				if ($user_session['authenticated'] == 'false') {
+				if ($user_session['authenticated'] == false) {
 					return false;
 				}
 
@@ -178,7 +178,7 @@ class mongodb extends database
 
 				//has it expired?
 				$expire_stamp = $user_session['pinged'];
-				if ($user_session['remember'] == 'true')
+				if ($user_session['remember'] == true)
 				{
 					$expire_stamp = $user_session['pinged'] + IRIKI_SESSION_LONG;
 				}

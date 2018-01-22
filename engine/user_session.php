@@ -17,7 +17,8 @@ class user_session extends \iriki\request
 		$data['token'] = Self::$generator->generateString(14, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 		//get ip address
-		$data['ip'] = $_SERVER['SERVER_ADDR'];
+		//$data['ip'] = $_SERVER['SERVER_ADDR'];
+		$data['ip'] = $_SERVER['REMOTE_ADDR']; 
 
 		$data['started'] = time(NULL);
 
@@ -277,6 +278,27 @@ class user_session extends \iriki\request
 		}
 
     	return \iriki\response::data($result, $wrap);
+	}
+
+	public function read_by_user($request, $wrap = true)
+	{
+	    if (!is_null($request))
+		{
+			$data = $request->getData();
+			//add authenticated
+			$data['authenticated'] = true;
+
+			//set back data
+			$request->setData($data);
+
+    		$request->setParameterStatus(array(
+				'final' => array('user_id', 'authenticated'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array('user_id')
+			));
+			return $request->read($request, $wrap);
+		}
 	}
 }
 

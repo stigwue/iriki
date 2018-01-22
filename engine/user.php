@@ -128,7 +128,7 @@ class user extends \iriki\request
 				$session_request->setData(
 					array(
 						'user_id' => '0',
-						'authenticated' => 'false',
+						'authenticated' => false,
 						'remember' => $remember
 					)
 				);
@@ -159,7 +159,7 @@ class user extends \iriki\request
 				$session_request->setData(
 					array(
 						'user_id' => $single_result['_id'],
-						'authenticated' => ($authenticated ? 'true' : 'false'),
+						'authenticated' => ($authenticated ? true : false),
 						'remember' => $remember
 					)
 				);

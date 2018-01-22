@@ -27,75 +27,88 @@ class model
 
         $model = (isset($model_status['str']) ? $model_status['str'] : null);
 
-        //find model details
-        foreach ($models as $_model => $_action)
+        //select model details
+        //what if isset($models[$model]) is false?
+        //should be caught before this moment
+        $_model = $models[$model];
+
+        $model_status['details'] = array(
+            'description' => $_model['description'],
+            'properties' => $_model['properties'],
+            'relationships' => $_model['relationships']
+        );
+
+        //now, to find the model's route and other details
+        $model_status = Self::getActionDetails($model, $model_status, $routes['routes']);
+        //if action_details isn't set, use the default:
+        if (!isset($model_status['action_details']))
         {
-            if ($_model == $model_status['str'])
-            {
-                //we have found the model
-                $model_status['details'] = array(
-                    'description' => $_action['description'],
-                    'properties' => $_action['properties'],
-                    'relationships' => $_action['relationships']
-                );
+          //action not found
+          $model_status['action_defined'] = false;
+          $model_status['action_default'] = false;
 
-                //now, to find the model's route
-                foreach ($routes['routes'] as $_route => $_route_action)
-                {
-                    if ($_route == $model_status['str'])
-                    {
-                        //model's route found, look up action
-                        if (isset($_route_action[$model_status['action']]))
-                        {
-                            $model_status['action_details'] = array(
-                                'description' => (isset($_route_action[$model_status['action']]['description']) ? $_route_action[$model_status['action']]['description'] : ''),
-                                'parameters' => $_route_action[$model_status['action']]['parameters'],
-                                'url_parameters' => (isset($_route_action[$model_status['action']]['url_parameters']) ? $_route_action[$model_status['action']]['url_parameters'] : array()),
-                                'exempt' => (isset($_route_action[$model_status['action']]['exempt']) ? $_route_action[$model_status['action']]['exempt'] : array()),
-                                'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? $_route_action[$model_status['action']]['authenticate'] : "true")
-                            );
+          //default to description of model since action does not exist
 
-                            $model_status['action_defined'] = true;
-                            $model_status['action_default'] = false;
-
-                            break;
-                        }
-                        //test for action in default
-                        else if (isset($model_status['default'][$model_status['action']]))
-                        {
-                            $model_status['action_details'] = array(
-                                'description' => (isset($model_status['default'][$model_status['action']]['description']) ? $model_status['default'][$model_status['action']]['description'] : ''),
-                                'parameters' => $model_status['default'][$model_status['action']]['parameters'],
-                                'url_parameters' => (isset($_route_action[$model_status['action']]['url_parameters']) ? $_route_action[$model_status['action']]['url_parameters'] : array()),
-                                'exempt' => (isset($model_status['default'][$model_status['action']]['exempt']) ? $model_status['default'][$model_status['action']]['exempt'] : array()),
-                                'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? $_route_action[$model_status['action']]['authenticate'] : "true")
-                            );
-
-                            $model_status['action_defined'] = true;
-                            $model_status['action_default'] = true;
-
-                            break;
-                        }
-                        else
-                        {
-                            //action not found
-                            $model_status['action_defined'] = false;
-                            $model_status['action_default'] = false;
-
-                            //default to description of model since action does not exist
-
-                            $model_status['action_details'] = array(
-                                'description' => $_action['description']
-                            );
-
-                            break;
-                        }
-                    }
-                }
-            }
+          $model_status['action_details'] = array(
+              'description' => $_model['description']
+          );
         }
 
         return $model_status;
+    }
+
+    /**
+    * Get a model's action details.
+    * These checks the presence of all possible parameters, using default values if absent
+    *
+    *
+    * @param array Chosen model name
+    * @param array Previously filled model status
+    * @param array Routes to get action details from
+    * @returns array Model status: action details such as parameters, authentication etc
+    * @throw
+    */
+    public static function getActionDetails($model, $model_status, $routes)
+    {
+      if (isset($routes[$model]))
+      {
+        //model's route found, look up action
+        //action can be defined per route or as default for all routes
+
+        $_route_action = $routes[$model];
+
+        //action found in route config
+        if (isset($_route_action[$model_status['action']]))
+        {
+            $model_status['action_details'] = array(
+                //action description
+                'description' => (isset($_route_action[$model_status['action']]['description']) ? $_route_action[$model_status['action']]['description'] : ''),
+                //action 
+                'parameters' => $_route_action[$model_status['action']]['parameters'],
+                'url_parameters' => (isset($_route_action[$model_status['action']]['url_parameters']) ? $_route_action[$model_status['action']]['url_parameters'] : array()),
+                'exempt' => (isset($_route_action[$model_status['action']]['exempt']) ? $_route_action[$model_status['action']]['exempt'] : array()),
+                'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? $_route_action[$model_status['action']]['authenticate'] : "true")
+            );
+
+            $model_status['action_defined'] = true;
+            $model_status['action_default'] = false;
+        }
+        //action in default
+        else if (isset($model_status['default'][$model_status['action']]))
+        {
+            $model_status['action_details'] = array(
+                'description' => (isset($model_status['default'][$model_status['action']]['description']) ? $model_status['default'][$model_status['action']]['description'] : ''),
+                'parameters' => $model_status['default'][$model_status['action']]['parameters'],
+                'url_parameters' => (isset($_route_action[$model_status['action']]['url_parameters']) ? $_route_action[$model_status['action']]['url_parameters'] : array()),
+                'exempt' => (isset($model_status['default'][$model_status['action']]['exempt']) ? $model_status['default'][$model_status['action']]['exempt'] : array()),
+                'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? $_route_action[$model_status['action']]['authenticate'] : "true")
+            );
+
+            $model_status['action_defined'] = true;
+            $model_status['action_default'] = true;
+        }
+      }
+      return $model_status;
     }
 
 
