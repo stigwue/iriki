@@ -20,20 +20,20 @@ Iriki comes with user (grouping and authentication) management, email sending (u
 
 ## To Do
 
-### Features
+* 100% test coverage.
 
-* Handle HTTP PUT and DELETE methods.
+* Introduce logging.
 
-### Database
+* Better/standard error description.
 
-* MySQL support (currently, MongoDB only). 
+* Add user_group authentication.
 
-### Language
+* Make code self-document using parsable comments.
 
-* Rewrite to take advantage of PHP7.
+* Specify HTTP request per request, handle PUT and DELETE methods.
 
-### Miscellaneous
+* Add MySQL support (?).
 
-* Comments that can be parsed for documentation.
+* Build in inter-operability
 
-* 100% test coverage
+* Rewrite in PHP7.

@@ -1,0 +1,15 @@
+{
+	"iriki":
+	{
+		"routes" : {
+			"model2" : {
+				"action" : {
+					"description" : "A route action for 'model2'. Note the left out comma."
+					"parameters" : [],
+					"exempt" : ["_id"],
+					"authenticate" : "false"
+				}
+			}
+		}
+	}
+}

@@ -11,16 +11,17 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
     {
     	iriki\engine\mongodb::doDestroy();
 
-        $status = iriki\engine\mongodb::doInitialise(
-            array(
-                'type' => '\\iriki\\engine\\mongodb',
-                'server' => 'mongodb://localhost:27017',
-                'db' => 'kronos'
-            )
+        if (!isset($GLOBALS['APP']['config']['database']['test']))
+        {
+            $this->assertFalse(true, "Test database configuration not found");
+        }
+
+        $db_instance = iriki\engine\mongodb::doInitialise(
+            $GLOBALS['APP']['config']['database']['test']
         );
 
         //assert
-        $this->assertNotEquals(null, $status);
+        $this->assertNotEquals(null, $db_instance);
     }
 
     public function test_doDestroy_success()
@@ -35,12 +36,13 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
     {
         iriki\engine\mongodb::doDestroy();
 
+        if (!isset($GLOBALS['APP']['config']['database']['test']))
+        {
+            $this->assertFalse(true, "Test database configuration not found");
+        }
+
         $db_instance = iriki\engine\mongodb::doInitialise(
-            array(
-                'type' => '\\iriki\\engine\\mongodb',
-                'server' => 'mongodb://localhost:27017',
-                'db' => 'kronos'
-            )
+            $GLOBALS['APP']['config']['database']['test']
         );
 
         $request = new \iriki\request();
@@ -125,12 +127,13 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
     {
         iriki\engine\mongodb::doDestroy();
         
+        if (!isset($GLOBALS['APP']['config']['database']['test']))
+        {
+            $this->assertFalse(true, "Test database configuration not found");
+        }
+
         $db_instance = iriki\engine\mongodb::doInitialise(
-            array(
-                'type' => '\\iriki\\engine\\mongodb',
-                'server' => 'mongodb://localhost:27017',
-                'db' => 'kronos'
-            )
+            $GLOBALS['APP']['config']['database']['test']
         );
 
         $request = new \iriki\request();
@@ -217,12 +220,13 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
     {
         iriki\engine\mongodb::doDestroy();
         
+        if (!isset($GLOBALS['APP']['config']['database']['test']))
+        {
+            $this->assertFalse(true, "Test database configuration not found");
+        }
+
         $db_instance = iriki\engine\mongodb::doInitialise(
-            array(
-                'type' => '\\iriki\\engine\\mongodb',
-                'server' => 'mongodb://localhost:27017',
-                'db' => 'kronos'
-            )
+            $GLOBALS['APP']['config']['database']['test']
         );
 
         $request = new \iriki\request();
@@ -306,12 +310,13 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
     {
         iriki\engine\mongodb::doDestroy();
         
+        if (!isset($GLOBALS['APP']['config']['database']['test']))
+        {
+            $this->assertFalse(true, "Test database configuration not found");
+        }
+
         $db_instance = iriki\engine\mongodb::doInitialise(
-            array(
-                'type' => '\\iriki\\engine\\mongodb',
-                'server' => 'mongodb://localhost:27017',
-                'db' => 'kronos'
-            )
+            $GLOBALS['APP']['config']['database']['test']
         );
 
         $request = new \iriki\request();

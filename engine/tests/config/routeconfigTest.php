@@ -46,6 +46,23 @@ class routeconfigTest extends \PHPUnit\Framework\TestCase
         //assert
         $this->assertNotEquals(0, count($result['routes']));
     }
+    
+    public function test_loadFromJson_failure()
+    {
+        $config_values = array(
+            'engine' => array('path' => __DIR__ . '/files/')
+        );
+        
+        $obj = new iriki\route_config();
+        
+        $result = $obj->loadFromJson(
+            $config_values,
+            array('list' => ['model2'])
+        );
+
+        //assert
+        $this->assertEquals(true, is_null($result['routes']['model2']));
+    }
 }
 
 ?>

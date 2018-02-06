@@ -35,6 +35,8 @@ class type
       break;
       
       case 'boolean':
+        if (is_bool($value)) return $value;
+        
         if (strtolower($value) == 'true' OR strtolower($value) == 'false')
         {
           return true;

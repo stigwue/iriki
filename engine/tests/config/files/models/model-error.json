@@ -1,0 +1,25 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"model-error" : {
+				"description" : "Model description. Note the missing comma after this."
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"property1" :  {
+						"description" : "Model property1.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

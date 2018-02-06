@@ -14,7 +14,7 @@ define('IRIKI_KEY', 'correct_horse_battery_staple');
 
 //app persistence switch
 //TODO: debug mode should be quite... "debuggy"
-define('IRIKI_MODE', 'local');
+define('IRIKI_MODE', 'dev');
 
 //use iriki to manage sessions?
 //should IRIKI_SESSION_REFRESH be obeyed for re-reads?

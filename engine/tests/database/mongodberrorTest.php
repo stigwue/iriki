@@ -10,12 +10,13 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
 
     public function test_doCreate_error()
     {
+        if (!isset($GLOBALS['APP']['config']['database']['test']))
+        {
+            $this->assertFalse(true, "Test database configuration not found");
+        }
+
         $db_instance = iriki\engine\mongodb::doInitialise(
-            array(
-                'type' => '\\iriki\\engine\\mongodb',
-                'server' => 'mongodb://localhost:27017',
-                'db' => 'kronos'
-            )
+            $GLOBALS['APP']['config']['database']['test']
         );
 
         $request = new \iriki\request();
@@ -93,12 +94,13 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
 
     public function test_doRead_error()
     {
+        if (!isset($GLOBALS['APP']['config']['database']['test']))
+        {
+            $this->assertFalse(true, "Test database configuration not found");
+        }
+
         $db_instance = iriki\engine\mongodb::doInitialise(
-            array(
-                'type' => '\\iriki\\engine\\mongodb',
-                'server' => 'mongodb://localhost:27017',
-                'db' => 'kronos'
-            )
+            $GLOBALS['APP']['config']['database']['test']
         );
 
         $request = new \iriki\request();
@@ -173,12 +175,13 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
 
     public function test_doUpdate_error()
     {
+        if (!isset($GLOBALS['APP']['config']['database']['test']))
+        {
+            $this->assertFalse(true, "Test database configuration not found");
+        }
+
         $db_instance = iriki\engine\mongodb::doInitialise(
-            array(
-                'type' => '\\iriki\\engine\\mongodb',
-                'server' => 'mongodb://localhost:27017',
-                'db' => 'kronos'
-            )
+            $GLOBALS['APP']['config']['database']['test']
         );
 
         $request = new \iriki\request();
@@ -253,12 +256,13 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
 
     public function test_doDelete_error()
     {
+        if (!isset($GLOBALS['APP']['config']['database']['test']))
+        {
+            $this->assertFalse(true, "Test database configuration not found");
+        }
+
         $db_instance = iriki\engine\mongodb::doInitialise(
-            array(
-                'type' => '\\iriki\\engine\\mongodb',
-                'server' => 'mongodb://localhost:27017',
-                'db' => 'kronos'
-            )
+            $GLOBALS['APP']['config']['database']['test']
         );
 
         $request = new \iriki\request();

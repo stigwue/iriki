@@ -31,10 +31,20 @@
       },
 
       "database" : {
-        "local" : {
+        "dev" : {
           "type" : "\\iriki\\engine\\mongodb",
           "server" : "mongodb://localhost:27017",
-          "db" : "blank"
+          "db" : "blank-dev"
+        },
+        "test" : {
+          "type" : "\\iriki\\engine\\mongodb",
+          "server" : "mongodb://localhost:27017",
+          "db" : "blank-test"
+        },
+        "live" : {
+          "type" : "\\iriki\\engine\\mongodb",
+          "server" : "mongodb://localhost:27017",
+          "db" : "blank-live"
         }
       },
 
