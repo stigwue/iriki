@@ -8,17 +8,23 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
     //note that errors can be a issing session token
     //or a missing parameter
 
-    public function test_doCreate_error()
+    public function test_database_test_config()
     {
-        if (!isset($GLOBALS['APP']['config']['database']['test']))
-        {
-            $this->assertFalse(true, "Test database configuration not found");
-        }
+        //assert
+        $this->assertEquals(true, isset($GLOBALS['APP']['config']['database']['test']));
 
         $db_instance = iriki\engine\mongodb::doInitialise(
             $GLOBALS['APP']['config']['database']['test']
         );
 
+        return $db_instance;
+    }
+
+    /**
+     * @depends test_database_test_config
+     */
+    public function test_doCreate_error($db_instance)
+    {
         $request = new \iriki\request();
         //db_instance
         $request->setDBInstance($db_instance);
@@ -92,17 +98,11 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, isset($status['code']));
     }
 
-    public function test_doRead_error()
+    /**
+     * @depends test_database_test_config
+     */
+    public function test_doRead_error($db_instance)
     {
-        if (!isset($GLOBALS['APP']['config']['database']['test']))
-        {
-            $this->assertFalse(true, "Test database configuration not found");
-        }
-
-        $db_instance = iriki\engine\mongodb::doInitialise(
-            $GLOBALS['APP']['config']['database']['test']
-        );
-
         $request = new \iriki\request();
         //db_instance
         $request->setDBInstance($db_instance);
@@ -173,17 +173,11 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, isset($status['code']));
     }
 
-    public function test_doUpdate_error()
+    /**
+     * @depends test_database_test_config
+     */
+    public function test_doUpdate_error($db_instance)
     {
-        if (!isset($GLOBALS['APP']['config']['database']['test']))
-        {
-            $this->assertFalse(true, "Test database configuration not found");
-        }
-
-        $db_instance = iriki\engine\mongodb::doInitialise(
-            $GLOBALS['APP']['config']['database']['test']
-        );
-
         $request = new \iriki\request();
         //db_instance
         $request->setDBInstance($db_instance);
@@ -254,17 +248,11 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, isset($status['code']));
     }
 
-    public function test_doDelete_error()
+    /**
+     * @depends test_database_test_config
+     */
+    public function test_doDelete_error($db_instance)
     {
-        if (!isset($GLOBALS['APP']['config']['database']['test']))
-        {
-            $this->assertFalse(true, "Test database configuration not found");
-        }
-
-        $db_instance = iriki\engine\mongodb::doInitialise(
-            $GLOBALS['APP']['config']['database']['test']
-        );
-
         $request = new \iriki\request();
         //db_instance
         $request->setDBInstance($db_instance);

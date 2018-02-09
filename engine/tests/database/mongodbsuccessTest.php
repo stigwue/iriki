@@ -22,6 +22,8 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
 
         //assert
         $this->assertNotEquals(null, $db_instance);
+
+        return $db_instance;
     }
 
     public function test_doDestroy_success()
