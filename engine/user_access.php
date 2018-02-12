@@ -181,10 +181,10 @@ class user_access extends \iriki\request
 
 			if ($status)
 			{
-				return \iriki\response::information('true', $wrap);
+				return \iriki\response::information(true, $wrap);
 			}
 			else {
-				return \iriki\response::information('false', $wrap);
+				return \iriki\response::information(false, $wrap);
 			}
 		}
 	}

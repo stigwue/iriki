@@ -62,7 +62,7 @@ class model
     * These checks the presence of all possible parameters, using default values if absent
     *
     *
-    * @param array Chosen model name
+    * @param string Chosen model name
     * @param array Previously filled model status
     * @param array Routes to get action details from
     * @returns array Model status: action details such as parameters, authentication etc

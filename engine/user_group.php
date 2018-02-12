@@ -19,10 +19,10 @@ class user_group extends \iriki\request
 
 			if (count($data) != 0)
 			{
-				return \iriki\response::information('true', $wrap);
+				return \iriki\response::information(true, $wrap);
 			}
 			else {
-				return \iriki\response::information('false', $wrap);
+				return \iriki\response::information(false, $wrap);
 			}
 		}
 	}

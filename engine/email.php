@@ -117,7 +117,7 @@ class email extends \iriki\request
 
             if ($status)
 			{
-				return \iriki\response::information('true', $wrap);
+				return \iriki\response::information(true, $wrap);
 			}
 			else {
 				//update log
@@ -146,7 +146,7 @@ class email extends \iriki\request
 
 	        	$request_status = $request->update($request, false);
 
-				return \iriki\response::information('false', $wrap);
+				return \iriki\response::information(false, $wrap);
 			}
 	    }
     }
