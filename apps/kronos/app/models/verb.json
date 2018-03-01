@@ -1,0 +1,25 @@
+{
+	"kronos":
+	{
+		"models" : {
+			"verb" : {
+				"description" : "An action.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"name" :  {
+						"description" : "Name.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : ["noun"],
+					"hasmany" : ["adverb"]
+				}
+			}
+		}
+	}
+}

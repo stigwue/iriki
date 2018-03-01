@@ -17,7 +17,7 @@ class route
 
     /**
     * Matches the requested url to a route, performing a model action.
-    *
+    * This function does too much and is too long, refactor.
     *
     * @param array HTTP request details
     * @param array Application configuration already initialised

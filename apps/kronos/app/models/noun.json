@@ -1,0 +1,25 @@
+{
+	"kronos":
+	{
+		"models" : {
+			"noun" : {
+				"description" : "A name of a person, animal, place or thing.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"name" :  {
+						"description" : "Name.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : ["verb"]
+				}
+			}
+		}
+	}
+}

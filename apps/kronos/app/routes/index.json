@@ -1,5 +1,5 @@
 {
-	"blank":
+	"kronos":
 	{
 		"routes" : {
 			"default" : {
@@ -9,12 +9,13 @@
 					"exempt" : ["_id"]
 				},
 				"read" : {
-					"description" : "Returns a single model matching the supplied _id value.",
+					"description" : "Returns the properties of the matching model.",
 					"parameters" : ["_id"]
 				},
 				"read_all" : {
 					"description" : "Returns the properties of the matching model.",
-					"parameters" : ["*"]
+					"parameters" : [],
+					"exempt" : ["*"]
 				},
 				"update" : {
 					"description" : "Updates a model instance by supplying new properties and the id of the model to update.",
@@ -27,8 +28,12 @@
 			},
 			"alias" : {},
 			"routes" : [
-				"vacuous",
-				"vacant"
+				"noun",
+				"verb",
+				"adverb",
+				"adjective",
+
+				"collection"
 			]
 		}
 	}

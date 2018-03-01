@@ -3,7 +3,7 @@
 	{
 		"models" : {
 			"log" : {
-				"description" : "Log of Iriki activities.",
+				"description" : "Record of the two sides of an action: request and response.",
 				"properties" : {
 					"_id" : {
 						"description" : "Internal unique ID.",
@@ -14,8 +14,8 @@
 						"description" : "Internal user ID.",
 						"type" : "string"
 					},
-					"object" : {
-						"description" : "Object performing logged action.",
+					"model" : {
+						"description" : "Object performing action.",
 						"type" : "string"
 					},
 					"action" : {
@@ -30,16 +30,12 @@
 						"description" : "Duration of logged action.",
 						"type" : "number"
 					},
-					"request" : {
-						"description" : "Request metadata.",
-						"type" : "string"
-					},
-					"response" : {
-						"description" : "Response metadata.",
+					"parent" : {
+						"description" : "Suppose this is a logged response, the request is referred to here.",
 						"type" : "string"
 					},
 					"status" : {
-						"description" : "Truthful value of action.",
+						"description" : "Truthy value of action.",
 						"type" : "string"
 					},
 					"tag" : {

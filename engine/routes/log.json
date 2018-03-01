@@ -6,13 +6,13 @@
 				"initiate" : {
 					"description" : "Initiate a log object.",
 					"parameters" : [],
-					"exempt" : ["_id", "status"],
+					"exempt" : ["_id", "duration", "status"],
 					"authenticate" : false
 				},
 				"log" : {
 					"description" : "Log an action.",
 					"parameters" : [],
-					"exempt" : ["_id"],
+					"exempt" : ["_id", "duration"],
 					"authenticate" : false
 				}
 			}

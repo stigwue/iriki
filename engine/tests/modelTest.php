@@ -25,7 +25,17 @@ class modelTest extends PHPUnit_Framework_TestCase
     	$model_def = array(
     		'model_name' => array(
     			'description' => 'The model description.',
-    			'properties' => array(),
+    			'properties' => array(
+    				'string' => array(
+    					'description' => 'A string property',
+    					'type' => 'string',
+    					'unique' => true
+    				),
+    				'number' => array(
+    					'description' => 'A numeric property',
+    					'type' => 'number'
+    				)
+    			),
     			'relationships' => array(
     				'belongsto' => array(),
     				'hasmany' => array()
@@ -45,14 +55,17 @@ class modelTest extends PHPUnit_Framework_TestCase
     			'action_name' => array(
     				'description' => 'The route action description.',
 					'parameters' => array(),
-					'url_parameters' => array(),
+					'url_parameters' => array('string'),
 					'exempt' => array(),
 					'authenticate' => true
+					//'group_authenticate' =>
+					//'user_authrnticate' =>
+					//http_method => GET, POST, *PUT etc
     			)
     		)
     	);
-
-        $this->assertTrue(true, 'Test route built.');
+    	
+    	$this->assertTrue(true, 'Test route built.');
 
     	return $route_def;
     }
@@ -119,6 +132,88 @@ class modelTest extends PHPUnit_Framework_TestCase
 
         return $model_status;
 	}
+
+    
+	/**
+	 * @depends test_Model
+     * @depends test_Model_Status
+     * @depends test_RouteDef
+     */
+    public function test_getActionDetails_no_desc($model, $model_status, $route_def)
+    {
+    	unset($route_def['model_name']['action_name']['description']);
+
+    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+
+    	$this->assertEquals("", $model_status['action_details']['description']);
+    }
+	/**
+	 * @depends test_Model
+     * @depends test_Model_Status
+     * @depends test_RouteDef
+     */
+    public function test_getActionDetails_desc($model, $model_status, $route_def)
+    {
+    	$desc = $route_def['model_name']['action_name']['description'];
+
+    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+
+    	$this->assertEquals($desc, $model_status['action_details']['description']);
+    }
+
+    /**
+	 * @depends test_Model
+     * @depends test_Model_Status
+     * @depends test_RouteDef
+     */
+    public function test_getActionDetails_no_params($model, $model_status, $route_def)
+    {
+    	unset($route_def['model_name']['action_name']['parameters']);
+
+    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+
+    	$this->assertEquals(array(), $model_status['action_details']['parameters']);
+    }
+	/**
+	 * @depends test_Model
+     * @depends test_Model_Status
+     * @depends test_RouteDef
+     */
+    public function test_getActionDetails_params($model, $model_status, $route_def)
+    {
+    	$params = $route_def['model_name']['action_name']['parameters'];
+
+    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+
+    	$this->assertEquals($params, $model_status['action_details']['parameters']);
+    }
+
+    /**
+	 * @depends test_Model
+     * @depends test_Model_Status
+     * @depends test_RouteDef
+     */
+    public function test_getActionDetails_no_url_params($model, $model_status, $route_def)
+    {
+    	unset($route_def['model_name']['action_name']['url_parameters']);
+
+    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+
+    	$this->assertEquals(array(), $model_status['action_details']['url_parameters']);
+    }
+	/**
+	 * @depends test_Model
+     * @depends test_Model_Status
+     * @depends test_RouteDef
+     */
+    public function test_getActionDetails_url_params($model, $model_status, $route_def)
+    {
+    	$url_params = $route_def['model_name']['action_name']['url_parameters'];
+
+    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+
+    	$this->assertEquals($url_params, $model_status['action_details']['url_parameters']);
+    }
 }
 
 ?>

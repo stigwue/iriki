@@ -1,0 +1,25 @@
+{
+	"kronos":
+	{
+		"models" : {
+			"adjective" : {
+				"description" : "A description or property of a noun.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"name" :  {
+						"description" : "Name.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : ["noun"],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

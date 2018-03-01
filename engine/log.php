@@ -4,6 +4,7 @@ namespace iriki;
 
 /**
 * Iriki log, base class for handling logs.
+* Note that a log is a record of the two sides of an action: request and response.
 *
 */
 class log extends \iriki\request
@@ -16,8 +17,6 @@ class log extends \iriki\request
 		-action/route
 		-timestamp
 		-duration (milliseconds)
-		-request
-		-response
 		-status
 		-tag
 	An example:
@@ -26,10 +25,8 @@ class log extends \iriki\request
 		-create
 		-12345678
 		-23
-		-username
-		-created user_id 
 		-true
-		-xyz
+		-username_to_be_created or user_id_created
 
 
 	Possible stats:
@@ -70,8 +67,27 @@ class log extends \iriki\request
 			$data = $request->getData();
 
 			//calculate duration
-			$duration = time(NULL) - $data['duration'];
+			$duration = time(NULL) - $data['timestamp'];
+
 			$data['duration'] = $duration;
+
+			$request->setData($data);
+
+	        $request->setParameterStatus(array(
+	            'final' => array(
+	            	"user",
+					"model",
+					"action",
+					"timestamp",
+					"duration",
+					"parent",
+					"status",
+					"tag"
+	            ),
+	            'missing' => array(),
+	            'extra' => array(),
+	            'ids' => array()
+	        ));
 
 	      	return $request->create($request, $wrap);
 		}

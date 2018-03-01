@@ -19,9 +19,9 @@
       },
 
       "application" : {
-        "name" : "blank",
-        "description" : "A blank Iriki app, showing the basics of building an Iriki API.",
-        "path" : "apps/blank/app/",
+        "name" : "kronos",
+        "description" : "A chronological chronicler.",
+        "path" : "apps/kronos/app/",
         "author" : "Stephen Igwue <stigwue@eyeti.xyz>",
         "version" : {
           "major" : "0",
@@ -34,17 +34,23 @@
         "dev" : {
           "type" : "\\iriki\\engine\\mongodb",
           "server" : "mongodb://localhost:27017",
-          "db" : "blank-dev"
+          "db" : "kronos-dev"
         },
         "test" : {
           "type" : "\\iriki\\engine\\mongodb",
           "server" : "mongodb://localhost:27017",
-          "db" : "blank-test"
+          "db" : "kronos-test"
         },
         "live" : {
           "type" : "\\iriki\\engine\\mongodb",
           "server" : "mongodb://localhost:27017",
-          "db" : "blank-live"
+          "db" : "kronos-live"
+        },
+        "mysql" : {
+          "type" : "\\iriki\\engine\\mysql",
+          "server" : "localhost",
+          "db" : "kronos",
+          "password" : "plaintext"
         }
       },
 

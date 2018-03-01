@@ -26,14 +26,14 @@ Iriki comes with user (grouping and authentication) management, email sending (u
 
 * Better/standard error description.
 
-* Add user_group authentication.
+* Add user and user_group authentication to existing everyone authentication.
 
 * Make code self-document using parsable comments.
 
 * Specify HTTP request per request, handle PUT and DELETE methods.
 
-* Add MySQL support (?).
+* Add MySQL support via RedbeanPHP (?).
 
-* Build in inter-operability
+* Build in inter-operability (app.json should hold an array of apps, callable via config/code).
 
 * Rewrite in PHP7.
