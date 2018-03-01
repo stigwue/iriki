@@ -1,5 +1,7 @@
 <?php
 
+namespace iriki_tests;
+
 require_once(__DIR__ . '/../../iriki/request.php');
 
 class mongodberrorTest extends \PHPUnit\Framework\TestCase
@@ -13,7 +15,7 @@ class mongodberrorTest extends \PHPUnit\Framework\TestCase
         //assert
         $this->assertEquals(true, isset($GLOBALS['APP']['config']['database']['test']));
 
-        $db_instance = iriki\engine\mongodb::doInitialise(
+        $db_instance = \iriki\engine\mongodb::doInitialise(
             $GLOBALS['APP']['config']['database']['test']
         );
 

@@ -1,5 +1,7 @@
 <?php
 
+namespace iriki_tests;
+
 class routeconfigTest extends \PHPUnit\Framework\TestCase
 { 
     public function test_loadFromJsonIndex_success()
@@ -8,7 +10,7 @@ class routeconfigTest extends \PHPUnit\Framework\TestCase
 			'engine' => array('path' => __DIR__ . '/files/')
 		);
 		
-		$obj = new iriki\route_config();
+		$obj = new \iriki\route_config();
 		
         $result = $obj->loadFromJsonIndex($config_values);
 
@@ -22,7 +24,7 @@ class routeconfigTest extends \PHPUnit\Framework\TestCase
 			'engine' => array('path' => __DIR__ . '/files/404.json')
 		);
 		
-		$obj = new iriki\route_config();
+		$obj = new \iriki\route_config();
 		
         $result = $obj->loadFromJsonIndex($config_values);
         
@@ -36,7 +38,7 @@ class routeconfigTest extends \PHPUnit\Framework\TestCase
 			'engine' => array('path' => __DIR__ . '/files/')
 		);
 		
-		$obj = new iriki\route_config();
+		$obj = new \iriki\route_config();
 		
         $result = $obj->loadFromJson(
             $config_values,
@@ -53,7 +55,7 @@ class routeconfigTest extends \PHPUnit\Framework\TestCase
             'engine' => array('path' => __DIR__ . '/files/')
         );
         
-        $obj = new iriki\route_config();
+        $obj = new \iriki\route_config();
         
         $result = $obj->loadFromJson(
             $config_values,

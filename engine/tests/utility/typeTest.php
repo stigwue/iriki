@@ -49,6 +49,8 @@ class typeTest extends \PHPUnit\Framework\TestCase
         $not_key = 'not_5a1d84ee0f6d2f1d160041a7';
         $this->assertEquals(false, \iriki\type::is_type($not_key, 'key'));
     }
+
+    //convert
 }
 
 ?>

@@ -7,36 +7,33 @@ namespace iriki;
 * and its JSON parsing
 *
 */
-
 class config
 {
     /**
-    * String contents of a JSON file
+    * String contents of a JSON file.
     *
-    * @var string
     */
     private $_json_string = '';
 
     /**
-    * Array, parsed contents of a JSON file
+    * An array bearing parsed contents of a JSON file.
     *
-    * @var array
     */
     private $_json = null;
 
     /**
-    * Configuration file contents. Tied to Iriki app name.
+    * A subset of the JSON array of the configuration file.
+    * This is identified by an Iriki app name.
     *
-    * @var array
     */
     private $_key_values = null;
 
     /**
-    * Load the contents of a supplied json file
+    * Load the contents of a supplied json file.
     *
     *
-    * @param string JSON file path
-    * @returns string File contents or null if file not found.
+    * @param json_path JSON file path
+    * @return string File contents or null if file not found.
     * @throw
     */
     public static function load_json_file($json_path)
@@ -53,11 +50,11 @@ class config
     }
 
     /**
-    * Parse supplied json string
+    * Parse a supplied json string.
     *
     *
-    * @param string JSON string
-    * @returns array Array of JSON or null if parse fails.
+    * @param json_string JSON string body
+    * @return An array rray of JSON or null if parse fails.
     * @throw
     */
     public static function parse_json_string($json_string)
@@ -73,10 +70,10 @@ class config
     }
 
     /**
-    * Constructor, takes file path and sets contents.
+    * Constructor. Takes a file path, sets and parses its contents.
     *
     *
-    * @param string JSON file path
+    * @param json_path JSON file path
     * @throw
     */
     function __construct($json_path = '')
@@ -90,10 +87,10 @@ class config
     }
 
     /**
-    * Get json array
+    * Get the json array.
     *
     *
-    * @returns array Array of JSON or null if parse fails.
+    * @return Array of JSON or null if parse fails.
     * @throw
     */
     public function getJson()
@@ -102,10 +99,10 @@ class config
     }
 
     /**
-    * Get iriki app json array of configuration
+    * Get iriki app json array of configuration.
     *
     *
-    * @returns array Array of JSON or null if parse fails.
+    * @return An array of JSON or null if parse fails.
     * @throw
     */
     public function getKeyValues()
@@ -123,12 +120,12 @@ class config
     }
 
     /**
-    * Get status, a summary of config details
+    * Get status, a summary of config details.
     *
     *
-    * @param array Previous status array to append to
-    * @param boolean Encode result as json
-    * @returns array Status array or json representation
+    * @param status Previous status array to append to.
+    * @param json Boolean, encode result as json?
+    * @return array Status array or json representation
     * @throw
     */
     public function getStatus($status = null, $json = false)

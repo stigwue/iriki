@@ -3,7 +3,7 @@
 namespace iriki;
 
 /**
-* Iriki model, capable of self or inhertited actions
+* Iriki model configuration. Capable of self or inhertited actions.
 *
 */
 class model_config extends config
@@ -11,7 +11,6 @@ class model_config extends config
     /**
     * Engine's models amd configuration.
     *
-    * @var array
     */
     private $_engine = array(
         'config' => null,
@@ -21,7 +20,6 @@ class model_config extends config
     /**
     * Application's models amd configuration.
     *
-    * @var array
     */
     private $_app = array(
         'config' => null,
@@ -29,13 +27,13 @@ class model_config extends config
     );
 
     /**
-    * Load model details from configuration files, given an array of routes
+    * Load model details from configuration files, given an array of routes.
     *
     *
-    * @param array Configuration key value pairs to get path
-    * @param array Defined routes
-    * @param string Application or engine name
-    * @returns array Model details
+    * @param config_values Configuration key value pairs to get path.
+    * @param routes Defined routes
+    * @param app Application or engine name
+    * @return Model details.
     * @throw
     */
     public function loadFromJson($config_values, $routes, $app = 'iriki')
@@ -59,13 +57,13 @@ class model_config extends config
     }
 
     /**
-    * Initialize an application's (engine's too) models
+    * Initialize an application's (engine's too) models.
     *
     *
-    * @param array Configuration key value pairs to get path
-    * @param array Defined routes
-    * @param string Application or engine name
-    * @returns array Model details
+    * @param config_values Configuration key value pairs to get path.
+    * @param routes Defined routes.
+    * @param app Application or engine name.
+    * @return Model details
     * @throw
     */
     public function doInitialise($config_values, $routes, $app = 'iriki')

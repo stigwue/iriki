@@ -22,13 +22,13 @@ Iriki comes with user (grouping and authentication) management, email sending (u
 
 * 100% test coverage.
 
+* 100% self-documentation using Doxygen parsable comments.
+
 * Introduce logging.
 
 * Better/standard error description.
 
 * Add user and user_group authentication to existing everyone authentication.
-
-* Make code self-document using parsable comments (via Doxygen).
 
 * Specify HTTP request per request, handle PUT and DELETE methods.
 

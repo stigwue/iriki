@@ -1,5 +1,7 @@
 <?php
 
+namespace iriki_tests;
+
 require_once(__DIR__ . '/../../iriki/request.php');
 
 class mongodbTest extends \PHPUnit\Framework\TestCase
@@ -26,13 +28,19 @@ class mongodbTest extends \PHPUnit\Framework\TestCase
 
     public function test_doInitialise_failure()
     {
-        $status = iriki\engine\mongodb::doInitialise(
+        $status = \iriki\engine\mongodb::doInitialise(
             null
         );
 
         //assert
         $this->assertEquals(null, $status);
     }
+
+    //session token check: auth, remember, ip?
+
+    //enforce ids
+
+    //de enforce
 
 }
 

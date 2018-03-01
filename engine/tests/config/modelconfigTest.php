@@ -1,5 +1,7 @@
 <?php
 
+namespace iriki_tests;
+
 class modelconfigTest extends \PHPUnit\Framework\TestCase
 {
     public function test_loadFromJson_success()
@@ -8,7 +10,7 @@ class modelconfigTest extends \PHPUnit\Framework\TestCase
             'engine' => array('path' => __DIR__ . '/files/')
         );
         
-        $obj = new iriki\model_config();
+        $obj = new \iriki\model_config();
         
         $result = $obj->loadFromJson(
             $config_values, //values from json
@@ -33,7 +35,7 @@ class modelconfigTest extends \PHPUnit\Framework\TestCase
             'engine' => array('path' => __DIR__ . '/files/')
         );
         
-        $obj = new iriki\model_config();
+        $obj = new \iriki\model_config();
         
         $result = $obj->loadFromJson(
             $config_values, //values from json

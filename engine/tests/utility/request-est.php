@@ -1,8 +1,8 @@
 <?php
 
-namespace iriki\test;
+namespace iriki_tests;
 
-class request
+class requestTest
 {
     //use guzzle?
     

@@ -1,11 +1,13 @@
 <?php
 
+namespace iriki_tests;
+
 class configTest extends \PHPUnit\Framework\TestCase
 { 
     //load_json_file failure test
     public function test_load_json_file_failure()
     {
-        $contents = iriki\config::load_json_file(__DIR__ . '/files/404.json');
+        $contents = \iriki\config::load_json_file(__DIR__ . '/files/404.json');
 
         //assert
         $this->assertEquals(null, $contents);
@@ -14,7 +16,7 @@ class configTest extends \PHPUnit\Framework\TestCase
     //load_json_file success test
 	public function test_load_json_file_success()
     {
-        $contents = iriki\config::load_json_file(__DIR__ . '/files/app.json');
+        $contents = \iriki\config::load_json_file(__DIR__ . '/files/app.json');
 
         //assert
         $this->assertNotEquals(null, $contents);
@@ -25,7 +27,7 @@ class configTest extends \PHPUnit\Framework\TestCase
     {
         $non_json_string = 'non json string';
 
-        $json = iriki\config::parse_json_string($non_json_string);
+        $json = \iriki\config::parse_json_string($non_json_string);
 
         //assert
         $this->assertEquals(null, $json);
@@ -44,7 +46,7 @@ class configTest extends \PHPUnit\Framework\TestCase
           }
         }';
 
-        $json = iriki\config::parse_json_string($json_string);
+        $json = \iriki\config::parse_json_string($json_string);
 
         //assert
         $this->assertEquals(true, is_array($json));

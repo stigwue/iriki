@@ -1,5 +1,7 @@
 <?php
 
+namespace iriki_tests;
+
 require_once(__DIR__ . '/../../iriki/request.php');
 
 class mongodbnullTest extends \PHPUnit\Framework\TestCase
@@ -7,9 +9,9 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
 	//CRUD nulls
     public function test_doCreate_null()
     {
-    	iriki\engine\mongodb::doDestroy();
+    	\iriki\engine\mongodb::doDestroy();
 
-        $db_instance = iriki\engine\mongodb::doInitialise(
+        $db_instance = \iriki\engine\mongodb::doInitialise(
             null
         );
 
@@ -41,9 +43,9 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
 
     public function test_doRead_null()
     {
-    	iriki\engine\mongodb::doDestroy();
+    	\iriki\engine\mongodb::doDestroy();
 
-        $db_instance = iriki\engine\mongodb::doInitialise(
+        $db_instance = \iriki\engine\mongodb::doInitialise(
             null
         );
 
@@ -75,9 +77,9 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
 
     public function test_doUpdate_null()
     {
-    	iriki\engine\mongodb::doDestroy();
+    	\iriki\engine\mongodb::doDestroy();
 
-        $db_instance = iriki\engine\mongodb::doInitialise(
+        $db_instance = \iriki\engine\mongodb::doInitialise(
             null
         );
 
@@ -109,9 +111,9 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
 
     public function test_doDelete_null()
     {
-    	iriki\engine\mongodb::doDestroy();
+    	\iriki\engine\mongodb::doDestroy();
 
-        $db_instance = iriki\engine\mongodb::doInitialise(
+        $db_instance = \iriki\engine\mongodb::doInitialise(
             null
         );
 

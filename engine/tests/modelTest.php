@@ -1,6 +1,8 @@
 <?php
 
-class modelTest extends PHPUnit_Framework_TestCase
+namespace iriki_tests;
+
+class modelTest extends \PHPUnit\Framework\TestCase
 {
 	public function test_Model()
     {
@@ -280,6 +282,29 @@ class modelTest extends PHPUnit_Framework_TestCase
 
     	$this->assertEquals($auth, $model_status['action_details']['authenticate']);
     }
+
+    public function test_sentParameters()
+    {
+    	$sent = array(
+    	);
+    	return $sent;
+    }
+
+    public function test_sentUrlParameters()
+    {
+    	$sent_url = array(
+    	);
+    	return $sent_url;
+    }
+
+    /**
+	 * @depends test_ModelDef
+	 * @depends test_sentParameters
+	 * @depends test_sentUrlParameters
+     * @depends test_RouteDef
+     */
+    public function test_doPropertyMatch($model_def, $sent, $sent_url, $route_def)
+    {}
 }
 
 ?>

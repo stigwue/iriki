@@ -1,5 +1,7 @@
 <?php
 
+namespace iriki_tests;
+
 require_once(__DIR__ . '/../iriki/response.php');
 require_once(__DIR__ . '/../iriki/request.php');
 
