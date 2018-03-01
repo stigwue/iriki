@@ -26,15 +26,27 @@ class modelTest extends PHPUnit_Framework_TestCase
     		'model_name' => array(
     			'description' => 'The model description.',
     			'properties' => array(
-    				'string' => array(
-    					'description' => 'A string property',
-    					'type' => 'string',
-    					'unique' => true
-    				),
-    				'number' => array(
-    					'description' => 'A numeric property',
-    					'type' => 'number'
-    				)
+					"_id" => [
+						"description" => "Internal unique ID. Note its type: key. It will be a MongoID for MongoDBs. Note the unique flag, set to true to trigger a fail for insertion of existing values.",
+						"type" => "key",
+						"unique" => true
+					],
+					"string" =>  [
+						"description" => "A string type property.",
+						"type" => "string"
+					],
+					"number" =>  [
+						"description" => "A number type property. It must be numeric.",
+						"type" => "number"
+					],
+					"boolean" =>  [
+						"description" => "A boolean property. It must be true or false.",
+						"type" => "boolean"
+					],
+					"email" =>  [
+						"description" => "An email property. It must fit email (RFC) definitions.",
+						"type" => "email"
+					]
     			),
     			'relationships' => array(
     				'belongsto' => array(),
@@ -54,13 +66,13 @@ class modelTest extends PHPUnit_Framework_TestCase
     		'model_name' => array(
     			'action_name' => array(
     				'description' => 'The route action description.',
+					//http_method => GET, POST, *PUT etc
 					'parameters' => array(),
 					'url_parameters' => array('string'),
-					'exempt' => array(),
-					'authenticate' => true
+					'exempt' => array("_id"),
+					'authenticate' => false
 					//'group_authenticate' =>
 					//'user_authrnticate' =>
-					//http_method => GET, POST, *PUT etc
     			)
     		)
     	);
@@ -213,6 +225,60 @@ class modelTest extends PHPUnit_Framework_TestCase
     	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals($url_params, $model_status['action_details']['url_parameters']);
+    }
+
+    /**
+	 * @depends test_Model
+     * @depends test_Model_Status
+     * @depends test_RouteDef
+     */
+    public function test_getActionDetails_no_exempt($model, $model_status, $route_def)
+    {
+    	unset($route_def['model_name']['action_name']['exempt']);
+
+    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+
+    	$this->assertEquals(array(), $model_status['action_details']['exempt']);
+    }
+	/**
+	 * @depends test_Model
+     * @depends test_Model_Status
+     * @depends test_RouteDef
+     */
+    public function test_getActionDetails_exempt($model, $model_status, $route_def)
+    {
+    	$exempt = $route_def['model_name']['action_name']['exempt'];
+
+    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+
+    	$this->assertEquals($exempt, $model_status['action_details']['exempt']);
+    }
+
+    /**
+	 * @depends test_Model
+     * @depends test_Model_Status
+     * @depends test_RouteDef
+     */
+    public function test_getActionDetails_no_auth($model, $model_status, $route_def)
+    {
+    	unset($route_def['model_name']['action_name']['authenticate']);
+
+    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+
+    	$this->assertEquals(true, $model_status['action_details']['authenticate']);
+    }
+	/**
+	 * @depends test_Model
+     * @depends test_Model_Status
+     * @depends test_RouteDef
+     */
+    public function test_getActionDetails_auth($model, $model_status, $route_def)
+    {
+    	$auth = $route_def['model_name']['action_name']['authenticate'];
+
+    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+
+    	$this->assertEquals($auth, $model_status['action_details']['authenticate']);
     }
 }
 

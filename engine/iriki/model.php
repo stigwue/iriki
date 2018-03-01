@@ -149,7 +149,6 @@ class model
         }
 
         //check exempt properties
-        //the user_session_token might be here
         $exempt_properties_count = count($exempt_properties);
         if ($exempt_properties_count == 0)
         {

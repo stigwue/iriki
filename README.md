@@ -28,12 +28,12 @@ Iriki comes with user (grouping and authentication) management, email sending (u
 
 * Add user and user_group authentication to existing everyone authentication.
 
-* Make code self-document using parsable comments.
+* Make code self-document using parsable comments (via Doxygen).
 
 * Specify HTTP request per request, handle PUT and DELETE methods.
 
-* Add MySQL support via RedbeanPHP (?).
+* Add new Mongo and MySQL support via RedbeanPHP (?).
 
 * Build in inter-operability (app.json should hold an array of apps, callable via config/code).
 
-* Rewrite in PHP7.
+* Rewrite in PHP7 and or Python.
