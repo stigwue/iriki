@@ -3,7 +3,7 @@
 namespace iriki;
 
 /**
-* Iriki route, routes to a model's action
+* Iriki route configuration. Routes to a model's action.
 *
 */
 class route_config extends config
@@ -11,7 +11,6 @@ class route_config extends config
     /**
     * Engine's routes.
     *
-    * @var array
     */
     private static $_engine = array(
         //app details
@@ -25,7 +24,6 @@ class route_config extends config
     /**
     * Application's routes.
     *
-    * @var array
     */
     private static $_app = array(
         'app' => null,
@@ -37,9 +35,9 @@ class route_config extends config
     * Load route index details from supplied app configuration.
     *
     *
-    * @param array Configuration key value pairs
-    * @param string Application name
-    * @returns array Route details such as default, alias, list and an empty routes array
+    * @param config_values Configuration key value pairs.
+    * @param app Application name.
+    * @return Route details such as default, alias, list and an empty routes array.
     * @throw
     */
     public function loadFromJsonIndex($config_values, $app = 'iriki')
@@ -72,13 +70,13 @@ class route_config extends config
     }
 
     /**
-    * Load route details from configuration files, given an array of routes
+    * Load route details from configuration files, given an array of routes.
     *
     *
-    * @param array Configuration key value pairs to get path
-    * @param array Defined routes
-    * @param string Application or engine name
-    * @returns array Route details after empty routes array is filled
+    * @param config_values Configuration key value pairs to get path.
+    * @param routes Defined routes.
+    * @param app Application or engine name.
+    * @return Route details after empty routes array is filled
     * @throw
     */
     public function loadFromJson($config_values, $routes, $app = 'iriki')

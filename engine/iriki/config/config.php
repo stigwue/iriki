@@ -3,7 +3,7 @@
 namespace iriki;
 
 /**
-* Iriki config, base class for handling a configuration file
+* Iriki config. Base class for handling a configuration file
 * and its JSON parsing
 *
 */

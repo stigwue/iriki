@@ -10,9 +10,17 @@
 						"type" : "key",
 						"unique" : true
 					},
+					"name" :  {
+						"description" : "Name.",
+						"type" : "string"
+					},
 					"type" :  {
 						"description" : "The object types a collection holds: noun, verbs etc. Collection of a collection too?",
 						"type" : "string"
+					},
+					"items" : {
+						"description" : "The items of this collection.",
+						"type" : "list"
 					}
 				},
 				"relationships" : {

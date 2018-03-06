@@ -404,21 +404,30 @@ class route
         );
 
         //parameters
+        $params = array();
+        //parameters are of http methods which correspond to CRUD
+        //CRUD => POST, GET, PUT, DELETE
         switch ($method) {
-          /*case 'PUT':
-            do_something_with_put($request);
+            case 'POST':
+                $status['method'] = 'POST';
+                $params = $_POST;
+                $status['params'] = $params;
             break;
-          case 'DELETE':
-            break;*/
 
             case 'GET':
                 $status['method'] = 'GET';
                 $status['params'] = (isset($status['url']['query'])) ? Self::parseGetParams($status['url']['query']) : null;
             break;
 
-            case 'POST':
-                $status['method'] = 'POST';
-                $params = $_POST;
+            case 'PUT':
+                $status['method'] = 'PUT';
+                //parse_str(file_get_contents('php://input'), $params);
+                $status['params'] = $params;
+            break;
+
+            case 'DELETE':
+                $status['method'] = 'DELETE';
+                //parse_str(file_get_contents('php://input'), $params);
                 $status['params'] = $params;
             break;
 

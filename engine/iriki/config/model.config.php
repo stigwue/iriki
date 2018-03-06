@@ -72,11 +72,11 @@ class model_config extends config
     }
 
     /**
-    * Get application's stored models
+    * Get application's stored models.
     *
     *
-    * @param string Application or engine name
-    * @returns array Model details
+    * @param app Application or engine name.
+    * @return Model details.
     * @throw
     */
     public function getModels($app = 'iriki')
@@ -92,12 +92,12 @@ class model_config extends config
     }
 
     /**
-    * Get status, a summary of model details
+    * Get status, a summary of model details.
     *
     *
-    * @param array Previous status array to append to
-    * @param boolean Encode result as json
-    * @returns array Status array or json representation
+    * @param status Previous status array to append to.
+    * @param json Encode result as json.
+    * @return Status array or json representation.
     * @throw
     */
     public function getStatus($status = null, $json = false)

@@ -2,9 +2,9 @@
 	"kronos":
 	{
 		"routes" : {
-			"noun" : {
+			"collection" : {
 				"create" : {
-					"description" : "Create a new noun.",
+					"description" : "Create a new collection.",
 					"parameters" : ["name"],
 					"url_parameters" : ["name"],
 					"authenticate" : false

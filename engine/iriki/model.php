@@ -126,7 +126,6 @@ class model
     */
     public static function doPropertyMatch($details, &$sent, $sent_url, $filter)
     {
-      var_dump($sent, $sent_url, $filter);
         //parameters work thus:
         //empty valid => all parameters valid except 'exempt'
         //non-empty valid => listed parameters except 'exempt'
