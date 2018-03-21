@@ -2,7 +2,7 @@
 
 namespace kronos;
 
-class verb extends \iriki\request
+class verb extends \iriki\engine\request
 {
 }
 

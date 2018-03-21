@@ -1,0 +1,34 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"app" : {
+				"description" : "An Iriki app. Model exposing an Iriki app's properties. Should eventually leave JSON files to be stored in memory.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"name" :  {
+						"description" : "App unique name, a single word (has to be a valid PHP namespace.",
+						"type" : "string",
+						"unique" : true
+					},
+					"description" :  {
+						"description" : "Description.",
+						"type" : "string"
+					},
+					"path" :  {
+						"description" : "Path to app.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki;
+namespace iriki\engine;
 
 //response
 require_once(__DIR__ . '/response.php');
@@ -244,7 +244,7 @@ class request
         {
           //authentication failed
           case response::AUTH:
-            $new_result = \iriki\response::buildFor('auth', 'User session token invalid or expired.', $wrap);
+            $new_result = \iriki\engine\response::buildFor('auth', 'User session token invalid or expired.', $wrap);
           break;
 
           //expecting a particular parameter which is missing
@@ -252,18 +252,18 @@ class request
           case response::ERROR:
             if ($result['message'] == 'missing_parameter')
             {
-              $new_result = \iriki\response::buildFor('error', 'Parameter missing or of wrong type.', $wrap);
+              $new_result = \iriki\engine\response::buildFor('error', 'Parameter missing or of wrong type.', $wrap);
             }
             else
             {
               //some other error
-              $new_result = \iriki\response::buildFor('error', 'Some other error occurred.', $wrap);
+              $new_result = \iriki\engine\response::buildFor('error', 'Some other error occurred.', $wrap);
             }
           break;
 
           default:
             //nothing was caught?
-            $new_result = \iriki\response::buildFor($default_response, $result, $wrap);
+            $new_result = \iriki\engine\response::buildFor($default_response, $result, $wrap);
           break;
         }
       }
@@ -272,7 +272,7 @@ class request
       else
       {
         //no errors
-        $new_result = \iriki\response::buildFor($default_response, $result, $wrap);
+        $new_result = \iriki\engine\response::buildFor($default_response, $result, $wrap);
       }
 
       return $new_result;

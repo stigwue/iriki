@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki_tests;
+namespace iriki_engine_tests;
 
 class modelconfigTest extends \PHPUnit\Framework\TestCase
 {
@@ -10,7 +10,7 @@ class modelconfigTest extends \PHPUnit\Framework\TestCase
             'engine' => array('path' => __DIR__ . '/files/')
         );
         
-        $obj = new \iriki\model_config();
+        $obj = new \iriki\engine\model_config();
         
         $result = $obj->loadFromJson(
             $config_values, //values from json
@@ -35,7 +35,7 @@ class modelconfigTest extends \PHPUnit\Framework\TestCase
             'engine' => array('path' => __DIR__ . '/files/')
         );
         
-        $obj = new \iriki\model_config();
+        $obj = new \iriki\engine\model_config();
         
         $result = $obj->loadFromJson(
             $config_values, //values from json

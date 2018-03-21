@@ -2,7 +2,7 @@
 
 namespace kronos;
 
-class adjective extends \iriki\request
+class adjective extends \iriki\engine\request
 {
 }
 

@@ -2,7 +2,7 @@
 
 namespace kronos;
 
-class adverb extends \iriki\request
+class adverb extends \iriki\engine\request
 {
 }
 

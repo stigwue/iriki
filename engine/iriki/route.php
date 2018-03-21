@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki;
+namespace iriki\engine;
 
 /**
 * Iriki route, routes to a model's action
@@ -11,7 +11,6 @@ class route
     /**
     * String constant, parameter holding session token
     *
-    * @var constant
     */
     const authorization = 'user_session_token';
 
@@ -19,9 +18,9 @@ class route
     * Matches the requested url to a route, performing a model action.
     * This function does too much and is too long, refactor.
     *
-    * @param array HTTP request details
-    * @param array Application configuration already initialised
-    * @returns array Status of matched model action
+    * @param request_details HTTP request details.
+    * @param app Application configuration already initialised.
+    * @return Status of matched model action.
     * @throw
     */
     public static function matchUrl($request_details,
@@ -436,6 +435,16 @@ class route
                 $params = $_REQUEST;
                 $status['params'] = $params;
             break;
+        }
+
+        //files may have been sent too, look for them and add them
+        //parameters with the same name as files will be replaced
+        if (!empty($_FILES))
+        {
+            foreach ($_FILES as $file_param => $file_details)
+            {
+                $status['params'][$file_param] = $file_details;
+            }
         }
 
         return $status;

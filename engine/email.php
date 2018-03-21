@@ -2,7 +2,7 @@
 
 namespace iriki;
 
-class email extends \iriki\request
+class email extends \iriki\engine\request
 {
 
 	public static function send($request, $wrap = true)
@@ -117,7 +117,7 @@ class email extends \iriki\request
 
             if ($status)
 			{
-				return \iriki\response::information(true, $wrap);
+				return \iriki\engine\response::information(true, $wrap);
 			}
 			else {
 				//update log
@@ -146,7 +146,7 @@ class email extends \iriki\request
 
 	        	$request_status = $request->update($request, false);
 
-				return \iriki\response::information(false, $wrap);
+				return \iriki\engine\response::information(false, $wrap);
 			}
 	    }
     }

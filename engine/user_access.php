@@ -2,7 +2,7 @@
 
 namespace iriki;
 
-class user_access extends \iriki\request
+class user_access extends \iriki\engine\request
 {
 	public function create($request, $wrap = true)
 	{
@@ -34,10 +34,10 @@ class user_access extends \iriki\request
 
 			if (count($data) != 0)
 			{
-				return \iriki\response::information(true, $wrap);
+				return \iriki\engine\response::information(true, $wrap);
 			}
 			else {
-				return \iriki\response::information(false, $wrap);
+				return \iriki\engine\response::information(false, $wrap);
 			}
 		}
 	}
@@ -91,7 +91,7 @@ class user_access extends \iriki\request
 	        }
 	        else
 	        {
-				return \iriki\response::information(false, $wrap);
+				return \iriki\engine\response::information(false, $wrap);
 	        }
 
 			//fetch user_group_id
@@ -137,7 +137,7 @@ class user_access extends \iriki\request
 	        }
 	        else
 	        {
-				return \iriki\response::information(false, $wrap);
+				return \iriki\engine\response::information(false, $wrap);
 	        }
 
 			//check for user_in_group
@@ -158,10 +158,10 @@ class user_access extends \iriki\request
 
 			if (count($data) != 0)
 			{
-				return \iriki\response::information(true, $wrap);
+				return \iriki\engine\response::information(true, $wrap);
 			}
 			else {
-				return \iriki\response::information(false, $wrap);
+				return \iriki\engine\response::information(false, $wrap);
 			}
 		}
 	}
@@ -181,10 +181,10 @@ class user_access extends \iriki\request
 
 			if ($status)
 			{
-				return \iriki\response::information(true, $wrap);
+				return \iriki\engine\response::information(true, $wrap);
 			}
 			else {
-				return \iriki\response::information(false, $wrap);
+				return \iriki\engine\response::information(false, $wrap);
 			}
 		}
 	}

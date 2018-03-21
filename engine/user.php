@@ -2,7 +2,7 @@
 
 namespace iriki;
 
-class user extends \iriki\request
+class user extends \iriki\engine\request
 {
 	private static $generator = null;
 
@@ -35,11 +35,11 @@ class user extends \iriki\request
 
 			if (count($users) == 0)
 			{
-				return \iriki\response::error('User not found.', $wrap);
+				return \iriki\engine\response::error('User not found.', $wrap);
 			}
 			else
 			{
-				return \iriki\response::data($users, $wrap);
+				return \iriki\engine\response::data($users, $wrap);
 			}
 		}
 	}
@@ -146,7 +146,7 @@ class user extends \iriki\request
 
 				//save token?
 				$token = $session_request->getData()['token'];
-				return \iriki\response::data($token, $wrap, $authenticated);
+				return \iriki\engine\response::data($token, $wrap, $authenticated);
 			}
 			else
 			{
@@ -176,7 +176,7 @@ class user extends \iriki\request
 
 				//save token?
 				$token = $session_request->getData()['token'];
-				return \iriki\response::data($token, $wrap, $authenticated);
+				return \iriki\engine\response::data($token, $wrap, $authenticated);
 			}
 		}
 	}
@@ -238,7 +238,7 @@ class user extends \iriki\request
 				}
 			}
 
-			return \iriki\response::error('Authentication change failed.', $wrap);
+			return \iriki\engine\response::error('Authentication change failed.', $wrap);
 		}
 	}
 
@@ -291,11 +291,11 @@ class user extends \iriki\request
 				//save new auth
 				if ($change_request->update($change_request, false))
 				{
-					return \iriki\response::information($new_password, $wrap);
+					return \iriki\engine\response::information($new_password, $wrap);
 				}
 			}
 
-			return \iriki\response::error('Authentication reset failed.', $wrap);
+			return \iriki\engine\response::error('Authentication reset failed.', $wrap);
 		}
 	}
 

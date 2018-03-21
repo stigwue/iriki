@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki;
+namespace iriki\engine;
 
 /**
 * Iriki model configuration. Capable of self or inhertited actions.

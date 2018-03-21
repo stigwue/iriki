@@ -1,0 +1,14 @@
+{
+	"iriki":
+	{
+		"routes" : {
+			"config" : {
+				"create" : {
+					"description" : "Add a new app config.",
+					"parameters" : [],
+					"exempt" : ["_id"]
+				}
+			}
+		}
+	}
+}

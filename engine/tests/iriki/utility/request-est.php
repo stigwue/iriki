@@ -1,8 +1,10 @@
 <?php
 
-namespace iriki_tests;
+namespace iriki_engine_tests;
 
-class requestTest
+//replace with a better composer installed library
+
+class requestTest extends \PHPUnit\Framework\TestCase
 {
     //use guzzle?
     

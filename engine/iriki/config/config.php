@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki;
+namespace iriki\engine;
 
 /**
 * Iriki config. Base class for handling a configuration file

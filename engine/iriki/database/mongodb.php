@@ -302,7 +302,7 @@ class mongodb extends database
 				if (!$authenticated)
 				{
 					return array(
-						'code' => \iriki\response::AUTH,
+						'code' => \iriki\engine\response::AUTH,
 						'message' => 'unauthorized'
 					);
 				}
@@ -320,7 +320,7 @@ class mongodb extends database
 			if (count($params['missing']) != 0)
 			{
 				return array(
-					'code' => \iriki\response::ERROR,
+					'code' => \iriki\engine\response::ERROR,
 					'message' => 'missing_parameter'
 				);
 			}
@@ -363,10 +363,10 @@ class mongodb extends database
 					//return this array to signal to calling function
 					//that request is unauthorized
 					//we could have done
-					//return \iriki\response::auth('User session token invalid or expired.');
+					//return \iriki\engine\response::auth('User session token invalid or expired.');
 					//but it would result in double wrapping
 					return array(
-						'code' => \iriki\response::AUTH,
+						'code' => \iriki\engine\response::AUTH,
 						'message' => 'unauthorized'
 					);
 				}
@@ -384,7 +384,7 @@ class mongodb extends database
 			if (count($params['missing']) != 0)
 			{
 				return array(
-					'code' => \iriki\response::ERROR,
+					'code' => \iriki\engine\response::ERROR,
 					'message' => 'missing_parameter'
 				);
 			}
@@ -438,7 +438,7 @@ class mongodb extends database
 				if (!$authenticated)
 				{
 					return array(
-						'code' => \iriki\response::AUTH,
+						'code' => \iriki\engine\response::AUTH,
 						'message' => 'unauthorized'
 					);
 				}
@@ -455,7 +455,7 @@ class mongodb extends database
 			if (count($params['missing']) != 0)
 			{
 				return array(
-					'code' => \iriki\response::ERROR,
+					'code' => \iriki\engine\response::ERROR,
 					'message' => 'missing_parameter'
 				);
 			}
@@ -500,7 +500,7 @@ class mongodb extends database
 				if (!$authenticated)
 				{
 					return array(
-						'code' => \iriki\response::AUTH,
+						'code' => \iriki\engine\response::AUTH,
 						'message' => 'unauthorized'
 					);
 				}
@@ -518,7 +518,7 @@ class mongodb extends database
 			if (count($params['missing']) != 0)
 			{
 				return array(
-					'code' => \iriki\response::ERROR,
+					'code' => \iriki\engine\response::ERROR,
 					'message' => 'missing_parameter'
 				);
 			}

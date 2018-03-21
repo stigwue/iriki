@@ -1,8 +1,6 @@
 <?php
 
-namespace iriki_tests;
-
-require_once(__DIR__ . '/../../iriki/request.php');
+namespace iriki_engine_tests;
 
 class mongodbnullTest extends \PHPUnit\Framework\TestCase
 {
@@ -15,7 +13,7 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
             null
         );
 
-        $request = new \iriki\request();
+        $request = new \iriki\engine\request();
         //db_instance
         $request->setDBInstance($db_instance);
         //model status
@@ -49,7 +47,7 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
             null
         );
 
-        $request = new \iriki\request();
+        $request = new \iriki\engine\request();
         //db_instance
         $request->setDBInstance($db_instance);
         //model status
@@ -83,7 +81,7 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
             null
         );
 
-        $request = new \iriki\request();
+        $request = new \iriki\engine\request();
         //db_instance
         $request->setDBInstance($db_instance);
         //model status
@@ -117,7 +115,7 @@ class mongodbnullTest extends \PHPUnit\Framework\TestCase
             null
         );
 
-        $request = new \iriki\request();
+        $request = new \iriki\engine\request();
         //db_instance
         $request->setDBInstance($db_instance);
         //model status

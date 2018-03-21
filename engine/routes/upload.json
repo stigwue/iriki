@@ -1,0 +1,19 @@
+{
+	"iriki":
+	{
+		"routes" : {
+			"upload" : {
+				"path" : {
+					"description" : "Get the upload path for specified timestamp (making the directory if it doesn't exist).",
+					"parameters" : ["timestamp"],
+					"authenticate" : false
+				},
+				"upload" : {
+					"description" : "Uploads a file.",
+					"parameters" : ["title", "file"],
+					"authenticate" : false
+				}
+			}
+		}
+	}
+}

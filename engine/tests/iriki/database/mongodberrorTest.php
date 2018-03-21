@@ -1,55 +1,31 @@
 <?php
 
-namespace iriki_tests;
+namespace iriki_engine_tests;
 
-require_once(__DIR__ . '/../../iriki/request.php');
-
-class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
+class mongodberrorTest extends \PHPUnit\Framework\TestCase
 {
-    //please note that this test creates a valid internal db handle
-    //so tests that rely on this handle being invalid will fail
-    //so order tests accordingly, will you?
-    public function test_doInitialise_success()
-    {
-    	\iriki\engine\mongodb::doDestroy();
+    //CRUD errors
+    //note that errors can be a issing session token
+    //or a missing parameter
 
-        if (!isset($GLOBALS['APP']['config']['database']['test']))
-        {
-            $this->assertFalse(true, "Test database configuration not found");
-        }
+    public function test_database_test_config()
+    {
+        //assert
+        $this->assertEquals(true, isset($GLOBALS['APP']['config']['database']['test']));
 
         $db_instance = \iriki\engine\mongodb::doInitialise(
             $GLOBALS['APP']['config']['database']['test']
         );
-
-        //assert
-        $this->assertNotEquals(null, $db_instance);
 
         return $db_instance;
     }
 
-    public function test_doDestroy_success()
+    /**
+     * @depends test_database_test_config
+     */
+    public function test_doCreate_error($db_instance)
     {
-    	$status = \iriki\engine\mongodb::doDestroy();
-
-        //assert
-        $this->assertEquals(true, $status);
-    }
-
-	public function test_doCreate_success()
-    {
-        \iriki\engine\mongodb::doDestroy();
-
-        if (!isset($GLOBALS['APP']['config']['database']['test']))
-        {
-            $this->assertFalse(true, "Test database configuration not found");
-        }
-
-        $db_instance = \iriki\engine\mongodb::doInitialise(
-            $GLOBALS['APP']['config']['database']['test']
-        );
-
-        $request = new \iriki\request();
+        $request = new \iriki\engine\request();
         //db_instance
         $request->setDBInstance($db_instance);
         //model status
@@ -73,7 +49,7 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
                         )
                     ),
                     "relationships" => array(
-                        "belongsto" => [],
+                        "belongsto" => ["test2"],
                         "hasmany" => []
                     )
                 ), //array, model description, properties and relationships
@@ -87,7 +63,7 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
                     "action" => array(
                         "description" => "Test action",
                         "parameters" => ["description"],
-                        "authenticate" => false
+                        "authenticate" => true
                     )
                 ) //array, action description, parameters, exempt, authenticate
             )
@@ -96,9 +72,9 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
         $request->setParameterStatus(
             array(
                 //properties supplied
-                'final' => array('property'),
+                'final' => array(),
                 //missing properties that should have been supplied
-                'missing' => array(),
+                'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
                 //these, especially for mongodb have to be saved as mongoids
@@ -114,33 +90,20 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
         //meta
         //?
         //session
-        //$request->setSession('user_session_token');
+        $request->setSession('user_session_token');
 
         $status = \iriki\engine\mongodb::doCreate($request);
 
         //assert
-        $this->assertEquals(true, $status['message']);
-
-        if (isset($status['data'])) return $status['data'];
+        $this->assertEquals(true, isset($status['code']));
     }
 
     /**
-     * @depends test_doCreate_success
+     * @depends test_database_test_config
      */
-    public function test_doRead_success($id_to_read)
+    public function test_doRead_error($db_instance)
     {
-        \iriki\engine\mongodb::doDestroy();
-        
-        if (!isset($GLOBALS['APP']['config']['database']['test']))
-        {
-            $this->assertFalse(true, "Test database configuration not found");
-        }
-
-        $db_instance = \iriki\engine\mongodb::doInitialise(
-            $GLOBALS['APP']['config']['database']['test']
-        );
-
-        $request = new \iriki\request();
+        $request = new \iriki\engine\request();
         //db_instance
         $request->setDBInstance($db_instance);
         //model status
@@ -164,7 +127,7 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
                         )
                     ),
                     "relationships" => array(
-                        "belongsto" => [],
+                        "belongsto" => ["test2"],
                         "hasmany" => []
                     )
                 ), //array, model description, properties and relationships
@@ -175,10 +138,11 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
                 'action_default' => false, //boolean, action is default defined
                 'action_exists' => true, //boolean, action exists in class
                 'action_details' => array(
-                    "read" => array(
-                        "description" => "Test read action",
-                        "parameters" => ["_id"],
-                        "authenticate" => false
+                    "action" => array(
+                        "description" => "Test action",
+                        "parameters" => [],
+                        "exempt" => ['*'],
+                        "authenticate" => true
                     )
                 ) //array, action description, parameters, exempt, authenticate
             )
@@ -187,53 +151,34 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
         $request->setParameterStatus(
             array(
                 //properties supplied
-                'final' => array('_id'),
+                'final' => array(),
                 //missing properties that should have been supplied
-                'missing' => array(),
+                'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
                 //these, especially for mongodb have to be saved as mongoids
-                'ids' => array('_id')
+                'ids' => array()
             )
         );
         //data
-        $request->setData(
-        	//reads all
-            array(
-            	'_id' => $id_to_read
-            )
-        );
-
+        $request->setData(array());
         //meta
         //?
         //session
-        //$request->setSession('user_session_token');
+        $request->setSession('user_session_token');
 
         $status = \iriki\engine\mongodb::doRead($request, array());
 
         //assert
-        $this->assertEquals($id_to_read, $status[0]['_id']);
-
-        return $status[0];
+        $this->assertEquals(true, isset($status['code']));
     }
 
     /**
-     * @depends test_doRead_success
+     * @depends test_database_test_config
      */
-    public function test_doUpdate_success($obj_to_update)
+    public function test_doUpdate_error($db_instance)
     {
-        \iriki\engine\mongodb::doDestroy();
-        
-        if (!isset($GLOBALS['APP']['config']['database']['test']))
-        {
-            $this->assertFalse(true, "Test database configuration not found");
-        }
-
-        $db_instance = \iriki\engine\mongodb::doInitialise(
-            $GLOBALS['APP']['config']['database']['test']
-        );
-
-        $request = new \iriki\request();
+        $request = new \iriki\engine\request();
         //db_instance
         $request->setDBInstance($db_instance);
         //model status
@@ -257,7 +202,7 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
                         )
                     ),
                     "relationships" => array(
-                        "belongsto" => [],
+                        "belongsto" => ["test2"],
                         "hasmany" => []
                     )
                 ), //array, model description, properties and relationships
@@ -268,10 +213,11 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
                 'action_default' => false, //boolean, action is default defined
                 'action_exists' => true, //boolean, action exists in class
                 'action_details' => array(
-                    "update" => array(
-                        "description" => "Test update action",
+                    "action" => array(
+                        "description" => "Test action",
                         "parameters" => [],
-                        "authenticate" => false
+                        "exempt" => ['*'],
+                        "authenticate" => true
                     )
                 ) //array, action description, parameters, exempt, authenticate
             )
@@ -280,50 +226,34 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
         $request->setParameterStatus(
             array(
                 //properties supplied
-                'final' => array('_id', 'property'),
+                'final' => array(),
                 //missing properties that should have been supplied
-                'missing' => array(),
+                'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
                 //these, especially for mongodb have to be saved as mongoids
-                'ids' => array('_id')
+                'ids' => array()
             )
         );
         //data
-        $request->setData(
-            array(
-            	'_id' => $obj_to_update['_id'],
-            	'property' => 'changed property'
-            )
-        );
+        $request->setData(array());
         //meta
         //?
         //session
-        //$request->setSession('user_session_token');
+        $request->setSession('user_session_token');
 
         $status = \iriki\engine\mongodb::doUpdate($request);
 
         //assert
-        $this->assertEquals(true, $status);
+        $this->assertEquals(true, isset($status['code']));
     }
 
     /**
-     * @depends test_doCreate_success
+     * @depends test_database_test_config
      */
-    public function test_doDelete_success($id)
+    public function test_doDelete_error($db_instance)
     {
-        \iriki\engine\mongodb::doDestroy();
-        
-        if (!isset($GLOBALS['APP']['config']['database']['test']))
-        {
-            $this->assertFalse(true, "Test database configuration not found");
-        }
-
-        $db_instance = \iriki\engine\mongodb::doInitialise(
-            $GLOBALS['APP']['config']['database']['test']
-        );
-
-        $request = new \iriki\request();
+        $request = new \iriki\engine\request();
         //db_instance
         $request->setDBInstance($db_instance);
         //model status
@@ -347,7 +277,7 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
                         )
                     ),
                     "relationships" => array(
-                        "belongsto" => [],
+                        "belongsto" => ["test2"],
                         "hasmany" => []
                     )
                 ), //array, model description, properties and relationships
@@ -358,10 +288,11 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
                 'action_default' => false, //boolean, action is default defined
                 'action_exists' => true, //boolean, action exists in class
                 'action_details' => array(
-                    "delete" => array(
-                        "description" => "Test delete action",
-                        "parameters" => ['_id'],
-                        "authenticate" => false
+                    "action" => array(
+                        "description" => "Test action",
+                        "parameters" => [],
+                        "exempt" => ['*'],
+                        "authenticate" => true
                     )
                 ) //array, action description, parameters, exempt, authenticate
             )
@@ -370,30 +301,26 @@ class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
         $request->setParameterStatus(
             array(
                 //properties supplied
-                'final' => array('_id'),
+                'final' => array(),
                 //missing properties that should have been supplied
-                'missing' => array(),
+                'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
                 //these, especially for mongodb have to be saved as mongoids
-                'ids' => array('_id')
+                'ids' => array()
             )
         );
         //data
-        $request->setData(
-            array(
-            	'_id' => $id
-            )
-        );
+        $request->setData(array());
         //meta
         //?
         //session
-        //$request->setSession('user_session_token');
+        $request->setSession('user_session_token');
 
         $status = \iriki\engine\mongodb::doDelete($request);
 
         //assert
-        $this->assertEquals(true, $status);
+        $this->assertEquals(true, isset($status['code']));
     }
 }
 

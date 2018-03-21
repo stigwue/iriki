@@ -1,15 +1,15 @@
 <?php
 
-namespace iriki_tests;
+namespace iriki_engine_tests;
 
-require_once(__DIR__ . '/../iriki/response.php');
-require_once(__DIR__ . '/../iriki/request.php');
+require_once(__DIR__ . '/../../iriki/response.php');
+require_once(__DIR__ . '/../../iriki/request.php');
 
 class requestTest extends \PHPUnit\Framework\TestCase
 {
 	public function test_catchError_error_wrap()
 	{
-		$result = \iriki\request::catchError(
+		$result = \iriki\engine\request::catchError(
 			//result
 			array(
 				'message' => true,
@@ -22,14 +22,14 @@ class requestTest extends \PHPUnit\Framework\TestCase
 		);
 
 		$this->assertEquals(true,
-			(isset($result['code']) AND $result['code'] == \iriki\response::OK AND
+			(isset($result['code']) AND $result['code'] == \iriki\engine\response::OK AND
 			isset($result['message']) AND isset($result['data']))
 		);
 	}
 
 	public function test_catchError_error_nowrap()
 	{
-		$result = \iriki\request::catchError(
+		$result = \iriki\engine\request::catchError(
 			//result
 			'Funke! Some error occurred!!',
 			//default_response: info,data or error
@@ -46,7 +46,7 @@ class requestTest extends \PHPUnit\Framework\TestCase
 
 	public function test_catchError_noerror()
 	{
-		$result = \iriki\request::catchError(
+		$result = \iriki\engine\request::catchError(
 			//result
 			array('data' => ['property' => 'minutae']),
 			//default_response: info,data or error

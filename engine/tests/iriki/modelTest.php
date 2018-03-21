@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki_tests;
+namespace iriki_engine_tests;
 
 class modelTest extends \PHPUnit\Framework\TestCase
 {
@@ -157,7 +157,7 @@ class modelTest extends \PHPUnit\Framework\TestCase
     {
     	unset($route_def['model_name']['action_name']['description']);
 
-    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+    	$model_status = \iriki\engine\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals("", $model_status['action_details']['description']);
     }
@@ -170,7 +170,7 @@ class modelTest extends \PHPUnit\Framework\TestCase
     {
     	$desc = $route_def['model_name']['action_name']['description'];
 
-    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+    	$model_status = \iriki\engine\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals($desc, $model_status['action_details']['description']);
     }
@@ -184,7 +184,7 @@ class modelTest extends \PHPUnit\Framework\TestCase
     {
     	unset($route_def['model_name']['action_name']['parameters']);
 
-    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+    	$model_status = \iriki\engine\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals(array(), $model_status['action_details']['parameters']);
     }
@@ -197,7 +197,7 @@ class modelTest extends \PHPUnit\Framework\TestCase
     {
     	$params = $route_def['model_name']['action_name']['parameters'];
 
-    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+    	$model_status = \iriki\engine\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals($params, $model_status['action_details']['parameters']);
     }
@@ -211,7 +211,7 @@ class modelTest extends \PHPUnit\Framework\TestCase
     {
     	unset($route_def['model_name']['action_name']['url_parameters']);
 
-    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+    	$model_status = \iriki\engine\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals(array(), $model_status['action_details']['url_parameters']);
     }
@@ -224,7 +224,7 @@ class modelTest extends \PHPUnit\Framework\TestCase
     {
     	$url_params = $route_def['model_name']['action_name']['url_parameters'];
 
-    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+    	$model_status = \iriki\engine\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals($url_params, $model_status['action_details']['url_parameters']);
     }
@@ -238,7 +238,7 @@ class modelTest extends \PHPUnit\Framework\TestCase
     {
     	unset($route_def['model_name']['action_name']['exempt']);
 
-    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+    	$model_status = \iriki\engine\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals(array(), $model_status['action_details']['exempt']);
     }
@@ -251,7 +251,7 @@ class modelTest extends \PHPUnit\Framework\TestCase
     {
     	$exempt = $route_def['model_name']['action_name']['exempt'];
 
-    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+    	$model_status = \iriki\engine\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals($exempt, $model_status['action_details']['exempt']);
     }
@@ -265,7 +265,7 @@ class modelTest extends \PHPUnit\Framework\TestCase
     {
     	unset($route_def['model_name']['action_name']['authenticate']);
 
-    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+    	$model_status = \iriki\engine\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals(true, $model_status['action_details']['authenticate']);
     }
@@ -278,15 +278,20 @@ class modelTest extends \PHPUnit\Framework\TestCase
     {
     	$auth = $route_def['model_name']['action_name']['authenticate'];
 
-    	$model_status = \iriki\model::getActionDetails($model, $model_status, $route_def);
+    	$model_status = \iriki\engine\model::getActionDetails($model, $model_status, $route_def);
 
     	$this->assertEquals($auth, $model_status['action_details']['authenticate']);
     }
 
-    public function test_sentParameters()
+    /*public function test_sentParameters()
     {
     	$sent = array(
+    		'string' => 'some string',
+    		'number' => 419,
+    		'boolean' => true,
+    		'email' => 'email@provider'
     	);
+    	
     	return $sent;
     }
 
@@ -302,9 +307,9 @@ class modelTest extends \PHPUnit\Framework\TestCase
 	 * @depends test_sentParameters
 	 * @depends test_sentUrlParameters
      * @depends test_RouteDef
-     */
+     *
     public function test_doPropertyMatch($model_def, $sent, $sent_url, $route_def)
-    {}
+    {}*/
 }
 
 ?>

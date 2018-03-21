@@ -2,7 +2,7 @@
 
 namespace kronos;
 
-class collection extends \iriki\request
+class collection extends \iriki\engine\request
 {
 }
 

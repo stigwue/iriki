@@ -1,15 +1,15 @@
 <?php
 
-namespace iriki_tests;
+namespace iriki_engine_tests;
 
-require_once(__DIR__ . '/../iriki/response.php');
+require_once(__DIR__ . '/../../iriki/response.php');
 
 class responseTest extends \PHPUnit\Framework\TestCase
 {
 	//show missing one
 	public function test_showMissing_one()
 	{
-		$result = \iriki\response::showMissing(
+		$result = \iriki\engine\response::showMissing(
 			array('Tomato paste'),
 			array(
 				'singular' => 'jollof ingredient',
@@ -27,7 +27,7 @@ class responseTest extends \PHPUnit\Framework\TestCase
 	//show missing two
 	public function test_showMissing_two()
 	{
-		$result = \iriki\response::showMissing(
+		$result = \iriki\engine\response::showMissing(
 			array('Tomato paste', 'Crayfish'),
 			array(
 				'singular' => 'jollof ingredient',
@@ -45,7 +45,7 @@ class responseTest extends \PHPUnit\Framework\TestCase
 	//show missing more
 	public function test_showMissing_more()
 	{
-		$result = \iriki\response::showMissing(
+		$result = \iriki\engine\response::showMissing(
 			array('Tomato paste', 'Crayfish', 'Meat'),
 			array(
 				'singular' => 'jollof ingredient',
@@ -63,23 +63,23 @@ class responseTest extends \PHPUnit\Framework\TestCase
 	//build no data
 	public function test_build_nodata()
 	{
-		$result = \iriki\response::build(
-			\iriki\response::OK,
+		$result = \iriki\engine\response::build(
+			\iriki\engine\response::OK,
 			'The agabara has been passed',
 			null
 		);
 
 		$this->assertEquals(
 			true,
-			($result['code'] == \iriki\response::OK) AND ($result['message'] == 'The agabara has been passed')
+			($result['code'] == \iriki\engine\response::OK) AND ($result['message'] == 'The agabara has been passed')
 		);
 	}
 
 	//build with data
 	public function test_build_data()
 	{
-		$result = \iriki\response::build(
-			\iriki\response::OK,
+		$result = \iriki\engine\response::build(
+			\iriki\engine\response::OK,
 			'The agabara has been passed',
 			array('woli', 'agba')
 		);
@@ -93,7 +93,7 @@ class responseTest extends \PHPUnit\Framework\TestCase
 	//buildFor wrap for unwrapped result
 	public function test_buildFor_wrap()
 	{
-		$result = \iriki\response::buildFor(
+		$result = \iriki\engine\response::buildFor(
 			'data',
 			array('key' => 'The agabara has been passed'),
 			true
@@ -101,17 +101,17 @@ class responseTest extends \PHPUnit\Framework\TestCase
 
 		$this->assertEquals(
 			true,
-			($result['code'] == \iriki\response::OK) AND (isset($result['data']))
+			($result['code'] == \iriki\engine\response::OK) AND (isset($result['data']))
 		);
 	}
 
 	//buildFor wrap for pre-wrapped result
 	public function test_buildFor_wrap_pre()
 	{
-		$result = \iriki\response::buildFor(
+		$result = \iriki\engine\response::buildFor(
 			'data',
 			array(
-				'code' => \iriki\response::OK,
+				'code' => \iriki\engine\response::OK,
 				'data' => array('key' => 'The agabara has been passed')
 			),
 			true
@@ -119,14 +119,14 @@ class responseTest extends \PHPUnit\Framework\TestCase
 
 		$this->assertEquals(
 			true,
-			($result['code'] == \iriki\response::OK) AND (isset($result['data']))
+			($result['code'] == \iriki\engine\response::OK) AND (isset($result['data']))
 		);
 	}
 
 	//buildFor no wrap for unwrapped result
 	public function test_buildFor_nowrap()
 	{
-		$result = \iriki\response::buildFor(
+		$result = \iriki\engine\response::buildFor(
 			'data',
 			array('key' => 'The agabara has been passed'),
 			false
@@ -141,10 +141,10 @@ class responseTest extends \PHPUnit\Framework\TestCase
 	//buildFor no wrap for prewrapped result
 	public function test_buildFor_nowrap_pre()
 	{
-		$result = \iriki\response::buildFor(
+		$result = \iriki\engine\response::buildFor(
 			'data',
 			array(
-				'code' => \iriki\response::OK,
+				'code' => \iriki\engine\response::OK,
 				'data' => array('key' => 'The agabara has been passed')
 			),
 			false
@@ -160,7 +160,7 @@ class responseTest extends \PHPUnit\Framework\TestCase
 	//data - wrap
 	public function test_data_wrap()
 	{
-		$result = \iriki\response::data(
+		$result = \iriki\engine\response::data(
 			array(
 				'key' => 'The agabara has been passed'
 			),
@@ -176,7 +176,7 @@ class responseTest extends \PHPUnit\Framework\TestCase
 	//data - nowrap
 	public function test_data_nowrap()
 	{
-		$result = \iriki\response::data(
+		$result = \iriki\engine\response::data(
 			array(
 				'key' => 'The agabara has been passed'
 			),
@@ -192,7 +192,7 @@ class responseTest extends \PHPUnit\Framework\TestCase
 	//information/error/auth - wrap
 	public function test_information_wrap()
 	{
-		$result = \iriki\response::information(
+		$result = \iriki\engine\response::information(
 			'The agabara has been passed',
 			true
 		);
@@ -206,7 +206,7 @@ class responseTest extends \PHPUnit\Framework\TestCase
 	//information/error/auth - no wrap
 	public function test_information_nowrap()
 	{
-		$result = \iriki\response::information(
+		$result = \iriki\engine\response::information(
 			'The agabara has been passed',
 			false
 		);

@@ -35,12 +35,15 @@
 				}
 			},
 			"routes" : [
-				"user",
+				"app",
+				"config",
 				"email",
 				"log",
+				"user",
 				"user_session",
 				"user_group",
-				"user_access"
+				"user_access",
+				"upload"
 			]
 		}
 	}

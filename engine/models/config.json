@@ -1,0 +1,30 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"config" : {
+				"description" : "An app's configuration and settings.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"key" :  {
+						"description" : "Unique configuration key.",
+						"type" : "string",
+						"unique" : true
+					},
+					"value" :  {
+						"description" : "Value.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

@@ -2,7 +2,7 @@
 
 namespace iriki;
 
-class user_session extends \iriki\request
+class user_session extends \iriki\engine\request
 {
 	private static $generator = null;
 
@@ -95,7 +95,7 @@ class user_session extends \iriki\request
 
 					if ($authenticated)
 					{
-						return \iriki\response::information($authenticated, $wrap,
+						return \iriki\engine\response::information($authenticated, $wrap,
 							[
 								'authenticated' => $authenticated,
 								'token' => $request->getData()['token'],
@@ -107,19 +107,19 @@ class user_session extends \iriki\request
 					}
 					else
 					{
-						return \iriki\response::information('Token is invalid or expired', $wrap, ['token' => $request->getData()['token']]);
+						return \iriki\engine\response::information('Token is invalid or expired', $wrap, ['token' => $request->getData()['token']]);
 					}
 				}
 				else
 				{
 					//token isn't tied to an existing user
-					return \iriki\response::information('Token does not belong to a user', $wrap, ['token' => $request->getData()['token']]);
+					return \iriki\engine\response::information('Token does not belong to a user', $wrap, ['token' => $request->getData()['token']]);
 				}
 			}
 			else
 			{
 				//token does not exist
-				return \iriki\response::error('Token does not exist', $wrap, ['token' => $request->getData()['token']]);
+				return \iriki\engine\response::error('Token does not exist', $wrap, ['token' => $request->getData()['token']]);
 			}
 	    }
 	}
@@ -136,7 +136,7 @@ class user_session extends \iriki\request
 			{
 				//this session wasn't found, return error?
 
-				return \iriki\response::error('Session not found', $wrap);
+				return \iriki\engine\response::error('Session not found', $wrap);
 			}
 			else
 			{
@@ -172,7 +172,7 @@ class user_session extends \iriki\request
 			{
 				//this session wasn't found, return error?
 
-				return \iriki\response::error('Session not found', $wrap);
+				return \iriki\engine\response::error('Session not found', $wrap);
 			}
 			else
 			{
@@ -277,7 +277,7 @@ class user_session extends \iriki\request
 		 	}
 		}
 
-    	return \iriki\response::data($result, $wrap);
+    	return \iriki\engine\response::data($result, $wrap);
 	}
 
 	public function read_by_user($request, $wrap = true)

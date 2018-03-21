@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki_tests;
+namespace iriki_engine_tests;
 
 class routeTest extends \PHPUnit\Framework\TestCase
 {

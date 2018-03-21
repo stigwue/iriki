@@ -1,8 +1,6 @@
 <?php
 
-namespace iriki_tests;
-
-require_once(__DIR__ . '/../../iriki/request.php');
+namespace iriki_engine_tests;
 
 class mongodbTest extends \PHPUnit\Framework\TestCase
 {

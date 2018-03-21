@@ -2,7 +2,7 @@
 
 namespace kronos;
 
-class noun extends \iriki\request
+class noun extends \iriki\engine\request
 {
 }
 

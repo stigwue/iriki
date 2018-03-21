@@ -7,7 +7,7 @@ namespace iriki;
 * Note that a log is a record of the two sides of an action: request and response.
 *
 */
-class log extends \iriki\request
+class log extends \iriki\engine\request
 {
 
 	/*

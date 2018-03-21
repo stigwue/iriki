@@ -2,7 +2,7 @@
 
 namespace iriki;
 
-class user_group extends \iriki\request
+class user_group extends \iriki\engine\request
 {
 	public function exists($request, $wrap = true)
 	{
@@ -19,10 +19,10 @@ class user_group extends \iriki\request
 
 			if (count($data) != 0)
 			{
-				return \iriki\response::information(true, $wrap);
+				return \iriki\engine\response::information(true, $wrap);
 			}
 			else {
-				return \iriki\response::information(false, $wrap);
+				return \iriki\engine\response::information(false, $wrap);
 			}
 		}
 	}

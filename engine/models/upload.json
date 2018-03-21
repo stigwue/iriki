@@ -1,0 +1,33 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"upload" : {
+				"description" : "An uploaded file.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"title" :  {
+						"description" : "Uploaded file title.",
+						"type" : "string"
+					},
+					"path" :  {
+						"description" : "Path to uploaded file.",
+						"type" : "string"
+					},
+					"tag" :  {
+						"description" : "File tag. Feel free to save whatever.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}

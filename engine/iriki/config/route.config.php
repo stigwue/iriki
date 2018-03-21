@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki;
+namespace iriki\engine;
 
 /**
 * Iriki route configuration. Routes to a model's action.
@@ -76,7 +76,7 @@ class route_config extends config
     * @param config_values Configuration key value pairs to get path.
     * @param routes Defined routes.
     * @param app Application or engine name.
-    * @return Route details after empty routes array is filled
+    * @return Route details after empty routes array is filled.
     * @throw
     */
     public function loadFromJson($config_values, $routes, $app = 'iriki')
@@ -102,12 +102,12 @@ class route_config extends config
     }
 
     /**
-    * Initialize an application's (engine's too) routes
+    * Initialize an application's (engine's too) routes.
     *
     *
-    * @param array Application configuration key value pairs
-    * @param string Application or engine name
-    * @returns array Route details
+    * @param config_values Application configuration key value pairs.
+    * @param app Application or engine name.
+    * @return Route details.
     * @throw
     */
     public function doInitialise($config_values, $app = 'iriki')
@@ -118,11 +118,11 @@ class route_config extends config
     }
 
     /**
-    * Get application's stored routes
+    * Get application's stored routes.
     *
     *
-    * @param string Application or engine name
-    * @returns array Route details
+    * @param app Application or engine name.
+    * @return Route details.
     * @throw
     */
     public function getRoutes($app = 'iriki')
@@ -137,12 +137,12 @@ class route_config extends config
     }
 
     /**
-    * Get status, a summary of route details
+    * Get status, a summary of route details.
     *
     *
-    * @param array Previous status array to append to
-    * @param boolean Encode result as json
-    * @returns array Status array or json representation
+    * @param status Previous status array to append to.
+    * @param json Encode result as json.
+    * @returns Status array or json representation.
     * @throw
     */
     public function getStatus($status = null, $json = false)
