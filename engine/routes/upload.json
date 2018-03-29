@@ -10,7 +10,7 @@
 				},
 				"upload" : {
 					"description" : "Uploads a file.",
-					"parameters" : ["title", "file"],
+					"parameters" : ["title", "file", "tag", "overwrite"],
 					"authenticate" : false
 				}
 			}

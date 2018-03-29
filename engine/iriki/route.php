@@ -9,26 +9,157 @@ namespace iriki\engine;
 class route
 {
     /**
-    * String constant, parameter holding session token
+    * String constant, header parameter holding session token.
     *
     */
     const authorization = 'user_session_token';
 
     /**
-    * Matches the requested url to a route, performing a model action.
-    * This function does too much and is too long, refactor.
+    * Parse the HTTP request details before matching existing models.
     *
-    * @param request_details HTTP request details.
-    * @param app Application configuration already initialised.
-    * @return Status of matched model action.
+    *
+    * @param base_url Optional base url if framework isn't run from server root/home. Default is ''.
+    * @return An associative array of request details: url (properties include path, parts, parameters and the query), HTTP method and params supplied or an error response.
     * @throw
     */
-    public static function matchUrl($request_details,
-        $app = null
-    )
+    public static function parseRequest($base_url = '')
     {
+        //get the details of the request
+        $request_details = \iriki\engine\url::getRequestDetails(null, null, $base_url);
+
+        //check the details
+        /*
+        url [path, parts, parameters, query],
+        method,
+        params
+        */
+
+        $url_parts = (isset($request_details['url']['parts'])) ? $request_details['url']['parts'] : null;
+
+        $url_parameters = (isset($request_details['url']['parameters'])) ? $request_details['url']['parameters'] : null;
+
+        $params = (isset($request_details['params'])) ? $request_details['params'] : null;
+
+        //check url_parts count
+        //typically, Iriki uses the model/action/parameters....
+        //format, so count(url_parts) must be at least 1
+
+        $url_parts_count = count($url_parts);
+
+        if ($url_parts_count >= 1)
+        {
+            //get the model and action
+            $result = array(
+                'model' => null,
+                'action' => null,
+                'url_parameters' => $url_parameters,
+                'params' => $params
+            );
+
+            if ($url_parts_count == 1)
+            {
+                $result['model'] = $url_parts[$url_parts_count - 1];
+                //set the default action
+                $result['action'] = 'info';
+            }
+            if ($url_parts_count >= 2)
+            {
+                $result['model'] = $url_parts[0];
+                $result['action'] = $url_parts[1];
+            
+                if ($url_parts_count > 2)
+                {
+                    //handle requests such as /model/action/val1
+                    //e.g /user/read/1
+                    //note that these parameters would aready have been configured as url_parameters
+                    if (is_null($url_parameters))
+                    {
+                        return response::error("URL parameters not defined.");
+                    }
+                }
+            }
+
+            return response::data($result);
+        }
+        else
+        {
+            return response::error("This is an Iriki application. URL should be in the right format or else, Abuja, we have a problem.", true);
+        }
+    }
+
+    /**
+    * Given a model action, build a profile that defines availability, filling out aliases and synonyms.
+    * @param app Application configuration already initialised.
+    * @param request_details Request details.
+    * @return Status of matched model action. See especially code and message properties.
+    * @throw
+    */
+    public static function buildModelProfile($app = null, $request_details)
+    {
+        //default model profile to fill
+        $model_profile = array(
+            //string, model
+            'str' => null, 
+            //string, full model including namespace
+            'str_full' => null, 
+            //boolean, model defined in app or engine config
+            'defined' => false, 
+            //boolean, model class exists in code
+            'exists' => false, 
+            //array, model description, properties and relationships
+            'details' => null,
+            //boolean, model defined in app. otherwise engine 
+            'app_defined' => false, 
+            //string, action
+            'action'=> null, 
+            //array, default actions
+            'default' => null, 
+            //boolean, action defined
+            'action_defined' => false, 
+            //boolean, action is defined in default actions
+            'action_default' => false, 
+            //boolean, action exists in class
+            'action_exists' => false, 
+            //array, action description, parameters, exempt, authenticate
+            'action_details' => null,
+
+            'code' => response::OK,
+            'message' => ''
+        );
+
         //app must be initialised
-        if (is_null($app)) return null;
+        if (is_null($app))
+        {
+            $model_profile['code'] = response::ERROR;
+            $model_profile['message'] = "Iriki application not initialised.";
+
+            return $model_profile;
+        }
+        //request_details must be OK
+        elseif (isset($request_details['code']) AND ($request_details['code'] != response::OK))
+        {
+            //some previous error contained in request_details
+            $model_profile['code'] = $request_details['code'];
+            $model_profile['message'] = $request_details['message'];
+
+            return $model_profile;
+        }
+
+        //existing models and routes
+        $existing = array(
+            'name' => array(
+                'engine' => $app['engine'],
+                'application' => $app['application']
+            ),
+            'models' => array(
+                'app' => $app['models']['app'],
+                'engine' => $app['models']['engine']
+            ),
+            'routes' => array(
+                'app' => $app['routes']['app'],
+                'engine' => $app['routes']['engine']
+            )
+        );
 
         //models
         $engine_models = $app['models']['engine'];
@@ -38,448 +169,389 @@ class route
         $engine_routes = $app['routes']['engine'];
         $app_routes = $app['routes']['app'];
 
-        $model = null;
-        $action = null;
-        $defaults = null;
-
-        $model_defined = false;
-        $model_exists = false;
-        $model_is_app_defined = true;
-        $action_exists = false;
-
-        $params = (isset($request_details['params'])) ? $request_details['params'] : null;
-
-        $url_parts = (isset($request_details['url']['parts'])) ? $request_details['url']['parts'] : null;
-
-        $url_parameters = (isset($request_details['url']['parameters'])) ? $request_details['url']['parameters'] : null;
-
-        $count = count($url_parts);
-
-        if ($count >= 1)
+        //check if the supplied model is an alias/synonym
+        //aliases are of two types:
+        // 1. alias e.g api/alias/action => api/model/action
+        // 2. synonyms e.g api/synonym/action => api/model/action
+        if ($request_details['data']['model'] == 'alias')
         {
-            //get the model and action
-            if ($count == 1)
+            $alias = array(
+                'model' => null, 
+                'action' => $request_details['data']['action'],
+                'details' => null,
+                'default' => null
+            );
+            //where is the alias defined? engine or app?
+            //then we can read the model & action it points to
+            $alias_is_defined = array(
+                'in_app' => isset($existing['routes']['app']['alias'][$alias['action']]),
+                'in_engine' => isset($existing['routes']['engine']['alias'][$alias['action']])
+            );
+
+            if ($alias_is_defined['in_app'] OR $alias_is_defined['in_engine'])
             {
-                $model = $url_parts[$count - 1];
-            }
-            if ($count >= 2)
-            {
-                $model = $url_parts[0];
-                $action = $url_parts[1];
-            
-                if ($count > 2)
+                if ($alias_is_defined['in_app'])
                 {
-                    //handle requests such as /model/action/val1
-                    //e.g /user/read/1
-                    //note that these parameters would aready have been configured in url_parameters
-                    if (is_null($url_parameters))
-                    {
-                        return response::error("URL parameters not defined.");
-                    }
-                    else
-                    {
-                    	//does nothing really
-                        $url_parameters_count = count($url_parameters);
-                    }
+                    $alias['model'] = $existing['routes']['app']['alias'][$alias['action']]['model'];
+                    $alias['action'] = $existing['routes']['app']['alias'][$alias['action']]['action'];
+
+                    $alias['details'] = $existing['models']['app'][$alias['model']];
+                    $alias['default'] = $existing['routes']['app']['default'];
                 }
-            }
-
-            //note that namespace is important
-            $model_instance = null;
-
-            //test for alias
-            //TODO: use a model alias?
-            if ($model == 'alias')
-            {
-                //set model and action
-
-                //test for model existence is a configuration search in app then engine
-                $model_is_engine_defined = isset($engine_routes['alias'][$action]);
-                $model_is_app_defined = isset($app_routes['alias'][$action]);
-
-                if ($model_is_engine_defined)
+                elseif ($alias_is_defined['in_engine'])
                 {
-                    $model = $engine_routes['alias'][$action]['model'];
-                    $action = $engine_routes['alias'][$action]['action'];
+                    $alias['model'] = $existing['routes']['engine']['alias'][$alias['action']]['model'];
+                    $alias['action'] = $existing['routes']['engine']['alias'][$alias['action']]['action'];
+
+                    $alias['details'] = $existing['models']['engine'][$alias['model']];
+                    $alias['default'] = $existing['routes']['engine']['default'];
                 }
-                else if ($model_is_app_defined)
+
+                $model_profile['str'] = $alias['model'];
+                //$model_profile[str_full'] = null;
+                $model_profile['defined'] = true; 
+                //$model_profile['exists'] = false;
+                $model_profile['details'] = $alias['details'];
+                $model_profile['app_defined'] = $alias_is_defined['in_app'];
+                $model_profile['action'] = $alias['action']; 
+                $model_profile['default'] = $alias['default'];
+
+                $model_profile = Self::buildActionProfile($existing, $model_profile);
+            }
+            else
+            {
+                //alias not found in app or engine
+                $model_profile['code'] = response::ERROR;
+                $model_profile['message'] = "Aliased model not found in application or engine.";
+
+                return $model_profile;
+            }
+        
+        }
+        else
+        {
+            //where is the model defined? engine or app? or is it a synonym?
+            $route = array(
+                'model' => $request_details['data']['model'], 
+                'action' => $request_details['data']['action'],
+                'details' => null,
+                'default' => null
+            );
+
+            $model_is_defined = array(
+                'in_app' => isset($existing['models']['app'][$route['model']]),
+                'in_engine' => isset($existing['models']['engine'][$route['model']])
+            );
+
+            if ($model_is_defined['in_app'] OR $model_is_defined['in_engine'])
+            {
+                if ($model_is_defined['in_app'])
                 {
-                    $model = $app_routes['alias'][$action]['model'];
-                    $action = $app_routes['alias'][$action]['action'];
+                    $route['details'] = $existing['models']['app'][$route['model']];
+                    $route['default'] = $existing['routes']['app']['default'];
+                }
+                elseif ($model_is_defined['in_engine'])
+                {
+                    $route['details'] = $existing['models']['engine'][$route['model']];
+                    $route['default'] = $existing['routes']['engine']['default'];
+                }
+
+                $model_profile['str'] = $route['model'];
+                //$model_profile[str_full'] = null;
+                $model_profile['defined'] = true; 
+                //$model_profile['exists'] = false;
+                $model_profile['details'] = $route['details'];
+                $model_profile['app_defined'] = $model_is_defined['in_app'];
+                $model_profile['action'] = $route['action']; 
+                $model_profile['default'] = $route['default'];
+
+                $model_profile = Self::buildActionProfile($existing, $model_profile);
+            }
+            else
+            {
+                //model not found in app or engine
+                //could it be a synonym?
+
+                $synonym_defined = array(
+                    'in_app' => isset($existing['routes']['app']['synonym'][$route['model']]),
+                    'in_engine' => isset($existing['routes']['engine']['synonym'][$route['model']])
+                );
+
+                if ($synonym_defined['in_app'] OR $synonym_defined['in_engine'])
+                {
+                    if ($synonym_defined['in_app'])
+                    {
+                        $route['model'] = $existing['routes']['app']['synonym'][$route['model']];
+
+                        $route['details'] = $existing['models']['app'][$route['model']];
+                        $route['default'] = $existing['routes']['app']['default'];
+                    }
+                    elseif ($synonym_defined['in_engine'])
+                    {
+                        $route['model'] = $existing['routes']['engine']['synonym'][$route['model']];
+                        
+                        $route['details'] = $existing['models']['engine'][$route['model']];
+                        $route['default'] = $existing['routes']['engine']['default'];
+                    }
+
+                    $model_profile['str'] = $route['model'];
+                    //$model_profile[str_full'] = null;
+                    $model_profile['defined'] = true; 
+                    //$model_profile['exists'] = false;
+                    $model_profile['details'] = $route['details'];
+                    $model_profile['app_defined'] = $model_is_defined['in_app'];
+                    $model_profile['action'] = $route['action']; 
+                    $model_profile['default'] = $route['default'];
+
+                    $model_profile = Self::buildActionProfile($existing, $model_profile);
                 }
                 else
                 {
-                    //TODO: third party iriki apps?
-                    //distributed somehow?
+                    $model_profile['code'] = response::ERROR;
+                    $model_profile['message'] = 'Model \'' . $route['model'] . '\' is not defined.';
+
+                    return $model_profile;
                 }
             }
-            else
+        }
+
+        return $model_profile;
+    }
+
+    /**
+    * Given an action, build a profile that defines it.
+    * @param existing Application model and routes.
+    * @param model_profile Already built model profile to complete.
+    * @return Status of matched action.
+    * @throw
+    */
+    public static function buildActionProfile($existing, $model_profile)
+    {
+        //we can't have a model defined in an app and its action defined in the engine
+        //not that it can't work but it is bad practice
+        //a user should be aware of the defaults they have set
+
+        //please note that some already filled model_profile properties
+        //can be used to infer some of the later conditions
+
+        $action_is_defined = array(
+            'in_custom' => false,
+            'in_default' => false
+        );
+
+        if ($model_profile['app_defined'])
+        {
+            // we are already looking in the app space
+            //default is already preloaded by app defaults
+            $action_is_defined = array(
+                'in_custom' => isset($existing['routes']['app']['routes'][$model_profile['str']][$model_profile['action']]),
+                'in_default' => isset($model_profile['default'][$model_profile['action']])
+            );
+
+            $model_profile['str_full'] = '\\' . $existing['name']['application'] . '\\' . $model_profile['str'];
+        }
+        else
+        {
+            //engine space
+            $action_is_defined = array(
+                'in_custom' => isset($existing['routes']['engine']['routes'][$model_profile['str']][$model_profile['action']]),
+                'in_default' => isset($model_profile['default'][$model_profile['action']])
+            );
+
+            $model_profile['str_full'] = '\\' . $existing['name']['engine'] . '\\' . $model_profile['str'];
+        }
+
+        if ($action_is_defined['in_custom'] OR $action_is_defined['in_default'])
+        {
+            $model_profile['action_defined'] = true;
+            if ($action_is_defined['in_custom'])
             {
-                $model_defined = (
-                    (isset($app_models[$model]))
-                        OR
-                    (isset($engine_models[$model]))
+                $model_profile['action_default'] = false;
+                //$model_profile['action_exists'] = false;
+
+                //app or engine?
+                if ($model_profile['app_defined'])
+                {
+                    $model_profile['action_details'] = $existing['routes']['app']['routes'][$model_profile['str']][$model_profile['action']];
+                }
+                else
+                {
+                    $model_profile['action_details'] = $existing['routes']['engine']['routes'][$model_profile['str']][$model_profile['action']];
+                }
+            }
+            else //default
+            {
+                $model_profile['action_default'] = true;
+                //$model_profile['action_exists'] = false;
+
+                //default already set from app or engine
+                $model_profile['action_details'] = $model_profile['default'][$model_profile['action']];
+            }
+
+
+            //at this point, the model_profile properties not yet set
+            //are those that have to do with the actual code classes
+            
+            $model_profile['exists'] = class_exists($model_profile['str_full']);
+            $model_profile['action_exists'] = method_exists($model_profile['str_full'], $model_profile['action']);
+        }
+
+        return $model_profile;
+    }
+
+    /**
+    * Matches the request to a route, performing a model action.
+    *
+    * @param app Application configuration already initialised.
+    * @param model_profile Matched model profile.
+    * @param request_details Details of the HTTP request.
+    * @return Status of matched model action.
+    * @throw
+    */
+    public static function matchRequestToModel($app = null, $model_status, $request_details
+    )
+    {
+        //model class exists
+        if ($model_status['exists'])
+        {
+            //fill in action details
+            if ($model_status['app_defined'])
+            {
+                $model_status = model::getActionDetails(
+                    $model_status['str'],
+                    $model_status,
+                    $app['routes']['app']['routes']
                 );
-
-                if (!$model_defined)
-                {
-                    return response::error('Model \'' . $model . '\' is not defined.');
-                }
-
-                //test for model existence is a configuration search in app then engine
-                $model_is_app_defined = isset($app_models[$model]);
-                //confirm using route
-                $route_is_app_defined = isset($app_routes['routes'][$model]);
-
-                if ($model_is_app_defined != $route_is_app_defined)
-                {
-                    //something's wrong
-                    //model and route definitions are across app/engine boundary
-                    //might have to explain further
-
-                    return response::error('Model and route not defined in the same space.');
-                }
-            }
-
-            //class exist test
-            $app_namespace = ($model_is_app_defined ?
-                $app['application'] :
-                $app['engine']
-            );
-            $model_full = '\\' . $app_namespace . '\\' . $model;
-
-            $model_exists = class_exists($model_full);
-            $action_exists = method_exists($model_full, $action);
-
-            $defaults = $engine_routes['default'];
-            if ($model_is_app_defined)
-            {
-                $defaults = $app_routes['default'];
-            }
-
-            $model_status = array(
-                'str' => $model, //string, model
-                'str_full' => $model_full, //string, full model including namespace
-                'defined' => $model_defined, //boolean, model defined in app or engine config
-                'exists' => $model_exists, //boolean, model class exists
-                'details' => null, //array, model description, properties and relationships
-                'app_defined' => $model_is_app_defined, //boolean, model defined in app. otherwise engine
-                'action'=> $action, //string, action
-                'default' => $defaults, //array, default actions
-                'action_defined' => false, //boolean, action defined
-                'action_default' => false, //boolean, action is default defined
-                'action_exists' => $action_exists, //boolean, action exists in class
-                'action_details' => null //array, action description, parameters, exempt, authenticate
-            );
-
-            $model_status = model::doMatch($model_status,
-                ($model_is_app_defined ? $app_models : $engine_models),
-                ($model_is_app_defined ? $app_routes : $engine_routes)
-            );
-
-            /*
-            perform action based on $model_status
-            order of priority is this:
-            0. model/action must be in config space (defined)
-            1. model/action must be in code space (exists)
-            2. action can be default or custom
-            */
-
-            //model class does not exist
-            if ($model_status['exists'] == false)
-            {
-                return response::error($model_status['str_full'] . ' does not exist.');
             }
             else
             {
-                //action defined? plus exception made for default defined action
-                if ($model_status['action_defined'] OR $model_status['action_default'])
+                $model_status = model::getActionDetails(
+                    $model_status['str'],
+                    $model_status,
+                    $app['routes']['engine']['routes']
+                );
+            }
+
+            //action defined? plus exception made for default defined action
+            if ($model_status['action_defined'] OR $model_status['action_default'])
+            {
+                //action exists?
+                if ($model_status['action_exists'])
                 {
-                    //action exists?
-                    if ($model_status['action_exists'])
+                    //parameter check
+                    //on fail, describe action
+                    $params = $request_details['data']['params'];
+                    $url_parameters = $request_details['data']['url_parameters'];
+
+                    $parameter_status = model::doPropertyMatch(
+                      $model_status['details'],
+                      $params,
+                      $url_parameters,
+                      $model_status['action_details']
+                    );
+
+                    $missing_parameters = count($parameter_status['missing']);
+
+                    //note that extra parameters could be ids signifying belongsto relationships
+                    //so we have to remove checking it from route
+                    //to the request
+                    if ($missing_parameters == 0)
                     {
-                        //parameter check
-                        //on fail, describe action
-                        $parameter_status = model::doPropertyMatch(
-                          $model_status['details'],
-                          $params,
-                          $url_parameters,
-                          $model_status['action_details']
-                        );
+                        //check for auth
 
-                        $missing_parameters = count($parameter_status['missing']);
+                        //user_session_token is left as null if action needs not be authenticated
+                        //else it is set
+                        $user_session_token = null;
 
-                        //note that extra parameters could be ids signifying belongsto relationships
-                        //so we have to remove checking it from route
-                        //to the request
-                        if ($missing_parameters == 0)
+                        //get headers
+                        $request_headers = getallheaders();
+
+                        if (isset($request_headers[Self::authorization]))
                         {
-                            //check for auth
+                            $user_session_token = $request_headers[Self::authorization];
+                        }
 
-                            //user_session_token is left as null if action needs not be authenticated
-                            //else it is set
-                            $user_session_token = null;
 
-                            //get headers
-                            $request_headers = getallheaders();
-
-                            if (isset($request_headers[Self::authorization]))
+                        //check for authentication
+                        if ($model_status['action_details']['authenticate'] == 'true')
+                        {
+                            //authentication required, was token found?
+                            if (is_null($user_session_token))
                             {
-                                $user_session_token = $request_headers[Self::authorization];
-                            }
-
-
-                            //check for authentication
-                            if ($model_status['action_details']['authenticate'] == 'true')
-                            {
-                                //authentication required, was token found?
-                                if (is_null($user_session_token))
-                                {
-                                    //no, token wasn't found
-                                    return response::error('User session token missing.');
-                                }
-                            }
-                            else
-                            {
-                                //authentication isn't required, ignore it
-                                $user_session_token = null;
-                            }
-
-                            //persistence
-                            if (isset($app['database']['type']))
-                            {
-                                $db_class = new $app['database']['type'];
-                                $db_handle = $db_class::doInitialise($app['database']);
-
-                                if (is_null($db_handle))
-                                {
-                                    return response::error('Database type undefined.');
-                                }
-                                else
-                                {
-                                    $model_instance = new $model_status['str_full']();
-
-                                    //build request;
-                                    $request = new request();
-                                    //db_instance
-                                    $request->setDBInstance($db_class);
-                                    //model status
-                                    $request->setModelStatus($model_status);
-                                    //parameter_status
-                                    $request->setParameterStatus($parameter_status);
-                                    //data
-                                    $request->setData($params);
-                                    //meta
-                                    //?
-                                    //session
-                                    $request->setSession($user_session_token);
-
-                                    //instance action
-                                    return $model_instance->$action($request);
-                                }
-                            }
-                            else
-                            {
-                                return response::error('Database type definition missing.');
+                                //no, token wasn't found
+                                return response::error('User session token missing.');
                             }
                         }
                         else
                         {
-                            return response::error(response::showMissing($parameter_status['missing'], 'parameter', 'missing or of wrong type'));
+                            //authentication isn't required, ignore it
+                            $user_session_token = null;
+                        }
+
+                        //persistence
+                        if (isset($app['database']['type']))
+                        {
+                            $db_class = new $app['database']['type'];
+                            $db_handle = $db_class::doInitialise($app['database']);
+
+                            if (is_null($db_handle))
+                            {
+                                return response::error('Database type undefined.');
+                            }
+                            else
+                            {
+                                $model_instance = new $model_status['str_full']();
+                                $action = $model_status['action'];
+
+                                //build request;
+                                $request = new request();
+                                //db_instance
+                                $request->setDBInstance($db_class);
+                                //model status
+                                $request->setModelStatus($model_status);
+                                //parameter_status
+                                $request->setParameterStatus($parameter_status);
+                                //data
+                                $request->setData($params);
+                                //meta
+                                //?
+                                //session
+                                $request->setSession($user_session_token);
+
+                                //instance action
+                                return $model_instance->$action($request);
+                            }
+                        }
+                        else
+                        {
+                            return response::error('Database type definition missing.');
                         }
                     }
                     else
                     {
-                        return response::error('Action \'' . $model_status['action'] . '\' of ' . $model_status['str_full'] . ' does not exist.');
+                        return response::error(response::showMissing($parameter_status['missing'], 'parameter', 'missing or of wrong type'));
                     }
                 }
                 else
                 {
-                    //provide model description and possible actions as this action does not exist?
-                    if (isset($model_status['details']['description']))
-                    {
-                        return response::error(
-                            $model_status['details']['description']
-                        );
-                    }
+                    return response::error('Action \'' . $model_status['action'] . '\' of ' . $model_status['str_full'] . ' does not exist.');
+                }
+            }
+            else
+            {
+                //provide model description and possible actions as this action does not exist?
+                if (isset($model_status['details']['description']))
+                {
+                    return response::error(
+                        $model_status['details']['description']
+                    );
                 }
             }
         }
         else
         {
-            return response::error("This is an Iriki application. URL should be in the right format or else, Abuja, we have a problem.", true);
+            return response::error($model_status['str_full'] . ' does not exist.');
         }
-
-        //all other parsing failed
-        return response::error('An unknown error occurred.');
-    }
-
-    /**
-    * Parses the requested url to pull out models, action and queries
-    *
-    *
-    * @param array Request url/path
-    * @returns array Path, parts of the url and the query
-    * @throw
-    */
-    private static function parseUrl($path)
-    {
-        //try php's parse_url
-        $parsed = parse_url($path);
-
-        $to_parse = $parsed['path'];
-
-        //path should not start with /
-        if (strlen($to_parse) != 0 AND $to_parse[0] == '/')
-        {
-            $to_parse = substr($to_parse, 1);
-        }
-        
-        $query = '';
-
-        if (isset($parsed['query']))
-        {
-            $query = $parsed['query'];
-        }
-
-        //split path
-        $parts = explode("/", $to_parse);
-        //clear empties
-        $parts = array_filter($parts);
-        //reset index
-        $model_action = array();
-        $parameters = array();
-
-        $count = 0;
-        foreach ($parts as $part)
-        {
-            $model_action[] = $part;
-            $count += 1;
-
-            if ($count > 2) $parameters[] = $part;
-        }
-
-        return compact('path', 'parts', 'parameters', 'query');
-    }
-
-    /**
-    * Gets the HTTP request details: methods, parameters and so forth
-    *
-    *
-    * @param string URI supplied or deduced
-    * @param string HTTP request method supplied or deduced
-    * @param string Optional base url if framework isn't run from server root/home?
-    * @returns array Request details for use
-    * @throw
-    */
-    public static function getRequestDetails($uri = null, $method = null, $base_url = '')
-    {
-        if (is_null($uri))
-        {
-            $uri = $_SERVER['REQUEST_URI'];
-        }
-
-        if ($base_url != '')
-        {
-            //trim uri by base
-
-        	//optional step
-        	//if you are running this framework from
-        	//foobar.com/*iriki* then ignore
-        	//or else, if running from foobar.com/some/weird/path/*iriki* then
-        	//shorten url by /some/weird/path
-        	$uri = substr($uri, strlen($base_url));
-        }
-
-        if (is_null($method))
-        {
-            $method = $_SERVER['REQUEST_METHOD'];
-        }
-
-        $status = array(
-            'url' => Self::parseUrl($uri),
-            'method' => $method,
-            'params' => null
-        );
-
-        //parameters
-        $params = array();
-        //parameters are of http methods which correspond to CRUD
-        //CRUD => POST, GET, PUT, DELETE
-        switch ($method) {
-            case 'POST':
-                $status['method'] = 'POST';
-                $params = $_POST;
-                $status['params'] = $params;
-            break;
-
-            case 'GET':
-                $status['method'] = 'GET';
-                $status['params'] = (isset($status['url']['query'])) ? Self::parseGetParams($status['url']['query']) : null;
-            break;
-
-            case 'PUT':
-                $status['method'] = 'PUT';
-                //parse_str(file_get_contents('php://input'), $params);
-                $status['params'] = $params;
-            break;
-
-            case 'DELETE':
-                $status['method'] = 'DELETE';
-                //parse_str(file_get_contents('php://input'), $params);
-                $status['params'] = $params;
-            break;
-
-            default: 
-                //$status['method'] = 'POST';
-                $params = $_REQUEST;
-                $status['params'] = $params;
-            break;
-        }
-
-        //files may have been sent too, look for them and add them
-        //parameters with the same name as files will be replaced
-        if (!empty($_FILES))
-        {
-            foreach ($_FILES as $file_param => $file_details)
-            {
-                $status['params'][$file_param] = $file_details;
-            }
-        }
-
-        return $status;
-    }
-
-    /**
-    * Read GET parameters from query part of the url
-    *
-    *
-    * @param string Query section of url
-    * @returns array Key-value query pairs
-    * @throw
-    */
-    private static function parseGetParams($query)
-    {
-        $get_params = array();
-        if (strlen($query) != 0) 
-        {
-            $key_values = explode("&", $query);
-            foreach ($key_values as $key_value)
-            {
-                $pair = explode('=', $key_value);
-                if (count($pair) == 2)
-                {
-                    //property=value
-                    $get_params[$pair[0]] = $pair[1];
-                }
-                else
-                {
-                    //property=value=corrupted
-                    $get_params[$key_value] = '';
-                }
-            }
-        }
-        return $get_params;
     }
 
 }

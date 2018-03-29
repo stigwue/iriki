@@ -9,63 +9,14 @@ namespace iriki\engine;
 class model
 {
     /**
-    * Find a model match among supplied models and routes
-    * A match is 3 levels:
-    * a specific model or alias
-    * a specific action for said model
-    * a specific set of parameters for said action
-    *
-    *
-    * @param {array} Model status from request made
-    * @param {array} Defined models
-    * @param {array} Defined routes
-    * @returns {array} Model status describing match
-    */
-    public static function doMatch($model_status, $models = null, $routes = null)
-    {
-        //see $model_status structure in route->matchUrl
-
-        $model = (isset($model_status['str']) ? $model_status['str'] : null);
-
-        //select model details
-        //what if isset($models[$model]) is false?
-        //should be caught before this moment
-        $_model = $models[$model];
-
-        $model_status['details'] = array(
-            'description' => $_model['description'],
-            'properties' => $_model['properties'],
-            'relationships' => $_model['relationships']
-        );
-
-        //now, to find the model's route and other details
-        $model_status = Self::getActionDetails($model, $model_status, $routes['routes']);
-        //if action_details isn't set, use the default:
-        if (!isset($model_status['action_details']))
-        {
-          //action not found
-          $model_status['action_defined'] = false;
-          $model_status['action_default'] = false;
-
-          //default to description of model since action does not exist
-
-          $model_status['action_details'] = array(
-              'description' => $_model['description']
-          );
-        }
-
-        return $model_status;
-    }
-
-    /**
     * Get a model's action details.
-    * These checks the presence of all possible parameters, using default values if absent
+    * These checks the presence of all possible parameters, using default values if absent.
     *
     *
-    * @param string Chosen model name
-    * @param array Previously filled model status
-    * @param array Routes to get action details from
-    * @returns array Model status: action details such as parameters, authentication etc
+    * @param model Chosen model name
+    * @param model_status Previously filled model status to edit.
+    * @param aroutes Routes to get action details from
+    * @return Model status: action details such as parameters, authentication etc
     * @throw
     */
     public static function getActionDetails($model, $model_status, $routes)

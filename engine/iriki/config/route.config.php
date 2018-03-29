@@ -62,6 +62,8 @@ class route_config extends config
 
         $store['routes']['alias'] = (isset($route_json[$app]['routes']['alias']) ? $route_json[$app]['routes']['alias'] : array());
 
+        $store['routes']['synonym'] = (isset($route_json[$app]['routes']['synonym']) ? $route_json[$app]['routes']['synonym'] : array());
+
         $store['routes']['list'] = (isset($route_json[$app]['routes']['routes']) ? $route_json[$app]['routes']['routes'] : array());
 
         $store['routes']['routes'] = array();

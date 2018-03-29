@@ -1,0 +1,180 @@
+<?php
+
+namespace iriki\engine;
+
+/**
+* Iriki URI/URL utility.
+*
+*/
+class url
+{
+    /**
+    * Parses url to pull out models, action and queries.
+    *
+    *
+    * @param path Request url/path.
+    * @return Path, parts of the url and the query
+    * @throw
+    */
+    public static function parseUrl($path)
+    {
+        //try php's parse_url
+        $parsed = parse_url($path);
+
+        $to_parse = $parsed['path'];
+
+        //path should not start with /
+        if (strlen($to_parse) != 0 AND $to_parse[0] == '/')
+        {
+            $to_parse = substr($to_parse, 1);
+        }
+        
+        $query = '';
+
+        if (isset($parsed['query']))
+        {
+            $query = $parsed['query'];
+        }
+
+        //split path
+        $parts = explode("/", $to_parse);
+        //clear empties
+        $parts = array_filter($parts);
+        //reset index
+        $model_action = array();
+        $parameters = array();
+
+        $count = 0;
+        foreach ($parts as $part)
+        {
+            $model_action[] = $part;
+            $count += 1;
+
+            if ($count > 2) $parameters[] = $part;
+        }
+
+        return compact('path', 'parts', 'parameters', 'query');
+    }
+
+    /**
+    * Read GET parameters from query part of the url.
+    *
+    *
+    * @param query Query section of url
+    * @return Key-value query pairs
+    * @throw
+    */
+    public static function parseGetParams($query)
+    {
+        $get_params = array();
+        if (strlen($query) != 0) 
+        {
+            $key_values = explode("&", $query);
+            foreach ($key_values as $key_value)
+            {
+                $pair = explode('=', $key_value);
+                if (count($pair) == 2)
+                {
+                    //property=value
+                    $get_params[$pair[0]] = $pair[1];
+                }
+                else
+                {
+                    //property=value=corrupted
+                    $get_params[$key_value] = '';
+                }
+            }
+        }
+        return $get_params;
+    }
+
+    /**
+    * Gets the HTTP request details: methods, parameters and so forth.
+    *
+    *
+    * @param uri URI supplied or deduced.
+    * @param method HTTP request method supplied or deduced.
+    * @param base_url Optional base url if framework isn't run from server root/home. Default is ''.
+    * @return Request details for use.
+    * @throw
+    */
+    public static function getRequestDetails($uri = null, $method = null, $base_url = '')
+    {
+        if (is_null($uri))
+        {
+            $uri = $_SERVER['REQUEST_URI'];
+        }
+
+        if ($base_url != '')
+        {
+            //trim uri by base
+
+            //optional step
+            //if you are running this framework from
+            //foobar.com/*iriki* then ignore
+            //or else, if running from foobar.com/some/weird/path/*iriki* then
+            //shorten url by /some/weird/path
+            $uri = substr($uri, strlen($base_url));
+        }
+
+        if (is_null($method))
+        {
+            $method = $_SERVER['REQUEST_METHOD'];
+        }
+
+        $status = array(
+            'url' => Self::parseUrl($uri),
+            'method' => $method,
+            'params' => null
+        );
+
+        //parameters
+        $params = array();
+        //parameters are of http methods which correspond to CRUD
+        //CRUD => POST, GET, PUT, DELETE
+        switch ($method) {
+            case 'POST':
+                $status['method'] = 'POST';
+                $params = $_POST;
+                $status['params'] = $params;
+            break;
+
+            case 'GET':
+                $status['method'] = 'GET';
+                $status['params'] = (isset($status['url']['query'])) ? Self::parseGetParams($status['url']['query']) : null;
+            break;
+
+            case 'PUT':
+                $status['method'] = 'PUT';
+                //parse_str(file_get_contents('php://input'), $params);
+                $status['params'] = $params;
+            break;
+
+            case 'DELETE':
+                $status['method'] = 'DELETE';
+                //parse_str(file_get_contents('php://input'), $params);
+                $status['params'] = $params;
+            break;
+
+            default: 
+                //$status['method'] = 'POST';
+                $params = $_REQUEST;
+                $status['params'] = $params;
+            break;
+        }
+
+        //files may have been sent too, look for them and add them
+        //parameters with the same name as files will be replaced
+        if (!empty($_FILES))
+        {
+            foreach ($_FILES as $file_param => $file_details)
+            {
+                $status['params'][$file_param] = $file_details;
+            }
+        }
+
+        return $status;
+    }
+}
+
+?>

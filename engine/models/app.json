@@ -11,7 +11,7 @@
 						"unique" : true
 					},
 					"name" :  {
-						"description" : "App unique name, a single word (has to be a valid PHP namespace.",
+						"description" : "App unique name, a single word (has to be a valid PHP namespace).",
 						"type" : "string",
 						"unique" : true
 					},

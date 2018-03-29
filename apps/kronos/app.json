@@ -12,9 +12,9 @@
         "author" : "Stephen Igwue",
         "email" : "stigwue@eyeti.xyz",
         "version" : {
-          "major" : "0",
+          "major" : "2",
           "minor" : "0",
-          "build" : "2"
+          "build" : "0"
         }
       },
 
@@ -24,9 +24,9 @@
         "path" : "apps/kronos/app/",
         "author" : "Stephen Igwue <stigwue@eyeti.xyz>",
         "version" : {
-          "major" : "0",
+          "major" : "2",
           "minor" : "0",
-          "build" : "1"
+          "build" : "0"
         }
       },
 
@@ -55,6 +55,8 @@
       },
 
       "constants" : {
+        "upload_dir" : "/var/www/iriki/uploads/",
+        "upload_http" : "http://iriki/uploads/"
       }
     }
   }

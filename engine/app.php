@@ -11,6 +11,11 @@ class app extends \iriki\engine\request
 	//routes: alias, default, list
 	//models: list
 
+	public function info($request, $wrap = true)
+	{
+		return \iriki\engine\response::information("This is the 'app' model.", $wrap);
+	}
+
 	public function config($request, $wrap = true)
 	{
 		$app = $GLOBALS['APP'];

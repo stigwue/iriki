@@ -15,51 +15,45 @@ class request
     /**
     * Database handler instance.
     *
-    * @var object
     */
     private static $_db_instance = null;
 
     /**
-    * Session token.
+    * Session token, passed around in header.
     *
-    * @var object
     */
-    private $_session_token; //user_session token
+    private $_session_token;
 
     /**
     * Model and action status, see definition in route::matchUrl
     *
-    * @var array
     */
     private $_model_status;
 
     /**
     * Parameters expected by request in their states.
     *
-    * @var array
     */
     private $_parameter_status;
 
     /**
-    * Data to be handled by request. Just an associative array.
+    * Data to be handled by request. An associative array.
     *
-    * @var array
     */
     private $_data;
 
     /**
     * Metadata to be used by request.
-    * This is an associative array for things like sorting.
+    * For instance, an associative array for sorting.
     *
-    * @var array
     */
     private $_meta;
 
     /**
-    * Gets the database instance
+    * Gets the database instance.
     *
     *
-    * @returns {object} Database instance object.
+    * @return Database instance object.
     */
     public static function getDBInstance()
     {
@@ -67,10 +61,10 @@ class request
     }
 
     /**
-    * Sets the database instance
+    * Sets the database instance.
     *
-    * @params {object} Database object
-    * @returns {object} Database instance object.
+    * @param objDB Database object.
+    * @return Database instance object.
     */
     public static function setDBInstance($objDB)
     {
@@ -81,7 +75,7 @@ class request
     /**
     * Gets the model status
     *
-    * @returns array Model status
+    * @return Model status.
     * @throw
     */
     public function getModelStatus()
@@ -90,10 +84,10 @@ class request
     }
 
     /**
-    * Sets the model status
+    * Sets the model status.
     *
-    * @param array Model status
-    * @returns array Model status
+    * @param model_status Model status.
+    * @return Model status.
     * @throw
     */
     public function setModelStatus($model_status)
@@ -103,9 +97,9 @@ class request
     }
 
     /**
-    * Gets the parameter status/states
+    * Gets the parameter status/states.
     *
-    * @returns array Parameter status
+    * @return Parameter status.
     * @throw
     */
     public function getParameterStatus()
@@ -114,10 +108,10 @@ class request
     }
 
     /**
-    * Sets the parameter status/states
+    * Sets the parameter status/states.
     *
-    * @param array Parameter status
-    * @returns array Parameter status
+    * @param parameter_status Parameter status.
+    * @return Parameter status.
     * @throw
     */
     public function setParameterStatus($parameter_status)
@@ -127,9 +121,9 @@ class request
     }
 
     /**
-    * Gets the request model
+    * Gets the request model.
     *
-    * @returns string Request model
+    * @return Request model.
     * @throw
     */
     public function getModel()
@@ -138,10 +132,10 @@ class request
     }
 
     /**
-    * Sets the request model
+    * Sets the request model.
     *
-    * @param string Request model
-    * @returns string Request model
+    * @param model Request model.
+    * @return Request model.
     * @throw
     */
     public function setModel($model)
@@ -151,9 +145,9 @@ class request
     }
 
     /**
-    * Gets the request data
+    * Gets the request data.
     *
-    * @returns array Request data
+    * @return Request data.
     * @throw
     */
     public function getData()
@@ -162,10 +156,10 @@ class request
     }
 
     /**
-    * Sets the request data
+    * Sets the request data.
     *
-    * @param array Request data
-    * @returns array Request data
+    * @param data Request data.
+    * @return Request data.
     * @throw
     */
     public function setData($data)
@@ -175,9 +169,9 @@ class request
     }
 
     /**
-    * Gets the request metadata
+    * Gets the request metadata.
     *
-    * @returns array Request metadata
+    * @return Request metadata.
     * @throw
     */
     public function getMeta()
@@ -186,10 +180,10 @@ class request
     }
 
     /**
-    * Sets the request metadata
+    * Sets the request metadata.
     *
-    * @param array Request metadata
-    * @returns array Request metadata
+    * @param meta Request metadata.
+    * @return Request metadata.
     * @throw
     */
     public function setMeta($meta)

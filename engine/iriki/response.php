@@ -16,7 +16,6 @@ class response
     * Success responses
     * HTTP 2xx: Success
     *
-    * @var integer
     */
     const OK = 200;
 
@@ -26,7 +25,6 @@ class response
     * Error response
     * HTTP 4xx Client errors
     *
-    * @var integer
     */
     const ERROR = 400;
 
@@ -34,7 +32,6 @@ class response
     * Unauthorized error response
     * HTTP 4xx Client errors
     *
-    * @var integer
     */
     const AUTH = 401;
     //412 Precondition Failed
@@ -45,10 +42,10 @@ class response
     * Build a message explaining an action.
     *
     *
-    * @param {array} Array of items
-    * @param {array} Singular and plural (keys) name of items
-    * @param {array} Singular and plural (keys) name of items
-    * @returns Message string
+    * @param list Array of items.
+    * @param description Singular and plural (keys) name of items.
+    * @param action Singular and plural (keys) name of items.
+    * @return Message string.
     * @throw
     */
     public static function showMissing($list, $description, $action)
@@ -101,13 +98,13 @@ class response
     }
 
     /**
-    * Build a response object
+    * Build a response object.
     *
     *
-    * @param integer Reponse code
-    * @param string Response message, typically user understandable
-    * @param object Response data, mostly arrays or strings
-    * @returns Response object
+    * @param code Reponse code
+    * @param message Response message, typically user understandable. Optionally empty.
+    * @param data Response data, mostly arrays or strings. Optionally null.
+    * @return Response object.
     * @throw
     */
     public static function build($code, $message = '', $data = null)
@@ -129,13 +126,13 @@ class response
     }
 
     /**
-    * Build a response by specifiying response type
+    * Build a response by specifiying response type.
     *
     *
-    * @param {string} response_type Response type: data, information or error.
-    * @param {array} Request result
-    * @param {boolean} Wrap response or not?
-    * @returns Response object
+    * @param response_type Response type: data, information or error.
+    * @param result Request result.
+    * @param wrap Wrap response or not?
+    * @return Response object
     */
     public static function buildFor($response_type, $result, $wrap)
     {
@@ -254,14 +251,14 @@ class response
     }
 
     /**
-    * Build and return a data response object
+    * Build and return a data response object.
     *
     *
-    * @param object Response data, mostly arrays or strings
-    * @param boolean Wrap data to give an Iriki Response or just raw data. Default is true.
-    * @param string Response message. Default is ''.
-    * @param object Model relations. Null for now.
-    * @returns Response object
+    * @param data Response data, mostly arrays or strings.
+    * @param wrap Wrap data to give an Iriki Response or just raw data. Default is true.
+    * @param message Response message. Default is ''.
+    * @param relations Model relations. Null for now.
+    * @return Response object.
     * @throw
     */
     public static function data($data, $wrap = true, $message = '', $relations = null)
@@ -273,13 +270,13 @@ class response
     }
 
     /**
-    * Build and return an information response object
+    * Build and return an information response object.
     *
     *
-    * @param string Response message.
-    * @param boolean Wrap data to give an Iriki Response or just raw message. Default is true.
-    * @param object Response data, mostly arrays or strings. Default is null.
-    * @returns Response object
+    * @param message Response message.
+    * @param wrap Wrap data to give an Iriki Response or just raw message. Default is true.
+    * @param data Response data, mostly arrays or strings. Default is null.
+    * @return Response object.
     * @throw
     */
     public static function information($message, $wrap = true, $data = null)
@@ -289,13 +286,13 @@ class response
     }
 
     /**
-    * Build and return an error response object
+    * Build and return an error response object.
     *
     *
-    * @param {string} Response message.
-    * @param {boolean} Wrap data to give an Iriki Response or just raw message. Default is true.
-    * @param {object} Response data, mostly arrays or strings. Default is null.
-    * @returns {object} Response object
+    * @param message Response message.
+    * @param wrap Wrap data to give an Iriki Response or just raw message. Default is true.
+    * @param data Response data, mostly arrays or strings. Default is null.
+    * @return Response object.
     * @throw
     */
     public static function error($message, $wrap = true, $data = null)
@@ -305,13 +302,13 @@ class response
     }
 
     /**
-    * Build and return an authentication response object
+    * Build and return an authentication response object.
     *
     *
-    * @param string Response message.
-    * @param boolean Wrap data to give an Iriki Response or just raw message. Default is true.
-    * @param object Response data, mostly arrays or strings. Default is null.
-    * @returns Response object
+    * @param message Response message.
+    * @param wrap Wrap data to give an Iriki Response or just raw message. Default is true.
+    * @param data Response data, mostly arrays or strings. Default is null.
+    * @return Response object.
     * @throw
     */
     public static function auth($message, $wrap = true, $data = null)
