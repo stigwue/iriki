@@ -24,18 +24,16 @@ Iriki comes with user (grouping and authentication) management, email sending (u
 
 * 100% self-documentation using Doxygen parsable comments.
 
-* Add 'upload' for all file uploads.
-
 * Introduce logging.
 
 * Better/standard error description.
 
 * Add user and user_group authentication to existing everyone authentication.
 
-* Specify HTTP request per request, handle PUT and DELETE methods.
+* Specify HTTP request method per request, handle PUT and DELETE methods.
 
 * Add new Mongo and MySQL support via RedbeanPHP (?).
 
-* Build in inter-operability (app.json should hold an array of apps, callable via config/code).
+* Build in inter-operability (app.json should hold an array of apps, callable via config/code), also configurations provided in more than json files.
 
 * Rewrite in PHP7 and or Python.
