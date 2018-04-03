@@ -12,8 +12,8 @@ cors_test(IRIKI_CORS_STRICT);
 //interprete request from url
 $request_details = iriki\engine\route::parseRequest(
 	(
-		isset($app['config']['base_url']) ?
-		$app['config']['base_url'] :
+		isset($APP['config']['base_url']) ?
+		$APP['config']['base_url'] :
 		''
 	)
 );

@@ -136,7 +136,7 @@ class route
             return $model_profile;
         }
         //request_details must be OK
-        elseif (isset($request_details['code']) AND ($request_details['code'] != response::OK))
+        else if (isset($request_details['code']) AND ($request_details['code'] != response::OK))
         {
             //some previous error contained in request_details
             $model_profile['code'] = $request_details['code'];
@@ -361,6 +361,9 @@ class route
             $model_profile['str_full'] = '\\' . $existing['name']['engine'] . '\\' . $model_profile['str'];
         }
 
+        //test for model exists (exists)
+        $model_profile['exists'] = class_exists($model_profile['str_full']);
+
         if ($action_is_defined['in_custom'] OR $action_is_defined['in_default'])
         {
             $model_profile['action_defined'] = true;
@@ -389,10 +392,8 @@ class route
             }
 
 
-            //at this point, the model_profile properties not yet set
-            //are those that have to do with the actual code classes
-            
-            $model_profile['exists'] = class_exists($model_profile['str_full']);
+            //at this point, the model_profile property not yet set
+            //is that of the actual class method
             $model_profile['action_exists'] = method_exists($model_profile['str_full'], $model_profile['action']);
         }
 
@@ -411,6 +412,12 @@ class route
     public static function matchRequestToModel($app = null, $model_status, $request_details
     )
     {
+        //model_status may contain an error message
+        if (isset($model_status['code']) AND ($model_status['code'] != response::OK))
+        {
+            return response::error($model_status['message']);
+        }
+
         //model class exists
         if ($model_status['exists'])
         {
