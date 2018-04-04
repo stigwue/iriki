@@ -3,7 +3,7 @@
 	{
 		"models" : {
 			"app" : {
-				"description" : "An Iriki app. Model exposing an Iriki app's properties. Should eventually leave JSON files to be stored in memory.",
+				"description" : "Iriki app details.",
 				"properties" : {
 					"_id" : {
 						"description" : "Internal unique ID.",

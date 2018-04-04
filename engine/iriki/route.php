@@ -59,8 +59,8 @@ class route
             if ($url_parts_count == 1)
             {
                 $result['model'] = $url_parts[$url_parts_count - 1];
-                //set the default action
-                $result['action'] = 'info';
+                //set the default action?
+                //$result['action'] = 'info';
             }
             if ($url_parts_count >= 2)
             {
@@ -470,17 +470,20 @@ class route
                         //else it is set
                         $user_session_token = null;
 
-                        //get headers
-                        $request_headers = getallheaders();
+                        //get headers, please note that this function might not be available
+                        //for instance, via the CLI
 
-                        if (isset($request_headers[Self::authorization]))
+                        if (function_exists('getallheaders'))
                         {
-                            $user_session_token = $request_headers[Self::authorization];
+                            $request_headers = getallheaders();
+                            if (isset($request_headers[Self::authorization]))
+                            {
+                                $user_session_token = $request_headers[Self::authorization];
+                            }
                         }
 
-
                         //check for authentication
-                        if ($model_status['action_details']['authenticate'] == 'true')
+                        if ($model_status['action_details']['authenticate'] == true)
                         {
                             //authentication required, was token found?
                             if (is_null($user_session_token))
@@ -546,13 +549,7 @@ class route
             }
             else
             {
-                //provide model description and possible actions as this action does not exist?
-                if (isset($model_status['details']['description']))
-                {
-                    return response::error(
-                        $model_status['details']['description']
-                    );
-                }
+                return response::error('No valid action specified.');
             }
         }
         else

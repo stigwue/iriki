@@ -16,12 +16,6 @@
 				"application" : "app"
 			},
 			"default" : {
-				"info" : {
-					"description" : "Returns information about the model if it is called with no specified action.",
-					"parameters" : [],
-					"exempt" : ["*"],
-					"authenticate" : false
-				},
 				"create" : {
 					"description" : "Add a new instance of the model to storage.",
 					"parameters" : [],

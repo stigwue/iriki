@@ -38,9 +38,7 @@ class uploadTest extends \PHPUnit\Framework\TestCase
     	return $upload_http_set;
     }
 
-	/*public function test_path_failed()
-    {
-    }*/
+    
 }
 
 ?>

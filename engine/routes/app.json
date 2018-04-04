@@ -9,6 +9,20 @@
 					"exempt" : ["*"],
 					"authenticate" : false
 				},
+				"models" : {
+					"description" : "Returns an app's models.",
+					"parameters" : [],
+					"exempt" : ["*"],
+					"authenticate" : false
+				},
+				"model_matrix" : {
+					"description" : "Returns an app's model inter-dependency matrix.",
+					"parameters" : [],
+					"exempt" : ["*"],
+					"authenticate" : false
+				},
+
+
 				"initialise" : {
 					"description" : "Initialise the application.",
 					"parameters" : [],
