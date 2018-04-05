@@ -68,21 +68,6 @@ class app extends \iriki\engine\request
 
         return \iriki\engine\response::data($matrix, $wrap);
     }
-
-	public function initialise($request, $wrap = true)
-	{
-		return \iriki\engine\response::error('Not yet implemented.', $wrap);
-	}
-
-	public function reset($request, $wrap = true)
-	{
-		return \iriki\engine\response::error('Not yet implemented.', $wrap);
-	}
-
-	public function destroy($request, $wrap = true)
-	{
-		return \iriki\engine\response::error('Not yet implemented.', $wrap);
-	}
 }
 
 ?>

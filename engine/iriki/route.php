@@ -406,10 +406,12 @@ class route
     * @param app Application configuration already initialised.
     * @param model_profile Matched model profile.
     * @param request_details Details of the HTTP request.
+    * @param test_mode Test mode to disable authentication needs. Use very sparingly. Default is false.
+    * @param user_session_token For cases where setting headers isn't possible, add user session token here.
     * @return Status of matched model action.
     * @throw
     */
-    public static function matchRequestToModel($app = null, $model_status, $request_details
+    public static function matchRequestToModel($app = null, $model_status, $request_details, $test_mode = false, $user_session_token = null
     )
     {
         //model_status may contain an error message
@@ -466,9 +468,7 @@ class route
                     {
                         //check for auth
 
-                        //user_session_token is left as null if action needs not be authenticated
-                        //else it is set
-                        $user_session_token = null;
+                        //user_session_token is already null or set
 
                         //get headers, please note that this function might not be available
                         //for instance, via the CLI
@@ -482,20 +482,27 @@ class route
                             }
                         }
 
-                        //check for authentication
-                        if ($model_status['action_details']['authenticate'] == true)
+                        if ($test_mode)
                         {
-                            //authentication required, was token found?
-                            if (is_null($user_session_token))
-                            {
-                                //no, token wasn't found
-                                return response::error('User session token missing.');
-                            }
+                            //ignore auth checks
                         }
                         else
                         {
-                            //authentication isn't required, ignore it
-                            $user_session_token = null;
+                            //check for authentication
+                            if ($model_status['action_details']['authenticate'] == true)
+                            {
+                                //authentication required, was token found?
+                                if (is_null($user_session_token))
+                                {
+                                    //no, token wasn't found
+                                    return response::error('User session token missing.');
+                                }
+                            }
+                            else
+                            {
+                                //authentication isn't required, ignore it
+                                $user_session_token = null;
+                            }
                         }
 
                         //persistence
@@ -556,6 +563,32 @@ class route
         {
             return response::error($model_status['str_full'] . ' does not exist.');
         }
+    }
+
+    /**
+    * Combine the two after-parse-request steps: buildModelProfile and matchRequestToModel.
+    *
+    * @param request_details Details of the HTTP request.
+    * @param app Application configuration already initialised.
+    * @param test_mode Test mode to disable authentication needs. Use very sparingly. Default is false.
+    * @param user_session_token For cases where setting headers isn't possible, add user session token here.
+    * @return Status of matched model action.
+    * @throw
+    */
+    public static function simulateRequest($request_details, $app, $test_mode = false, $user_session_token = null)
+    {
+        $model_profile = Self::buildModelProfile($app, $request_details);
+
+        //handle the request: match a route to a model and its action
+        $status = Self::matchRequestToModel(
+            $app,
+            $model_profile,
+            $request_details,
+            $test_mode,
+            $user_session_token
+        );
+
+        return $status;
     }
 
 }

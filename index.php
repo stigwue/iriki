@@ -10,7 +10,7 @@ require_once(__DIR__ . '/config.php');
 cors_test(IRIKI_CORS_STRICT);
 
 //interprete request from url
-$request_details = iriki\engine\route::parseRequest(
+$request_details = \iriki\engine\route::parseRequest(
 	(
 		isset($APP['config']['base_url']) ?
 		$APP['config']['base_url'] :
@@ -18,10 +18,10 @@ $request_details = iriki\engine\route::parseRequest(
 	)
 );
 
-$model_profile = iriki\engine\route::buildModelProfile($APP, $request_details);
+$model_profile = \iriki\engine\route::buildModelProfile($APP, $request_details);
 
 //handle the request: match a route to a model and its action
-$status = iriki\engine\route::matchRequestToModel(
+$status = \iriki\engine\route::matchRequestToModel(
 	$APP,
 	$model_profile,
 	$request_details

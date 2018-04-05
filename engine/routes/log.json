@@ -3,16 +3,16 @@
 	{
 		"routes" : {
 			"log" : {
-				"initiate" : {
-					"description" : "Initiate a log object.",
+				"request" : {
+					"description" : "Log a request event. Most important bits are the details.",
 					"parameters" : [],
-					"exempt" : ["_id", "duration", "status"],
+					"exempt" : ["_id"],
 					"authenticate" : false
 				},
-				"log" : {
-					"description" : "Log an action.",
+				"response" : {
+					"description" : "Log a response event. Most important is duration and truthy value.",
 					"parameters" : [],
-					"exempt" : ["_id", "duration"],
+					"exempt" : ["_id"],
 					"authenticate" : false
 				}
 			}

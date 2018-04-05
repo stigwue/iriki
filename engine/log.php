@@ -50,46 +50,29 @@ class log extends \iriki\engine\request
 		Initiate does not write to the db.
 		It initializes some log properties to be used for later calculations e.g duration)
 	*/
-	public function initiate($request, $wrap = true)
+	public function request($request, $wrap = true)
     {
 	    if (!is_null($request))
 		{
-			$data = $request->getData();
-
-	      	return response::data($data, $wrap);
+			$status = $request->create($request, $wrap);
+			return $status;
+		}
+		else
+		{
+			return \iriki\engine\response::error('Request not initialised.');
 		}
     }
 
-    public function log($request, $wrap = true)
+    public function response($request, $wrap = true)
     {
 	    if (!is_null($request))
 		{
-			$data = $request->getData();
-
-			//calculate duration
-			$duration = time(NULL) - $data['timestamp'];
-
-			$data['duration'] = $duration;
-
-			$request->setData($data);
-
-	        $request->setParameterStatus(array(
-	            'final' => array(
-	            	"user",
-					"model",
-					"action",
-					"timestamp",
-					"duration",
-					"parent",
-					"status",
-					"tag"
-	            ),
-	            'missing' => array(),
-	            'extra' => array(),
-	            'ids' => array()
-	        ));
-
-	      	return $request->create($request, $wrap);
+			$status = $request->create($request, $wrap);
+			return $status;
+		}
+		else
+		{
+			return \iriki\engine\response::error('Request not initialised.');
 		}
     }
 }

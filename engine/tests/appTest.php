@@ -4,50 +4,84 @@ namespace iriki_tests;
 
 class appTest extends \PHPUnit\Framework\TestCase
 {
-	/*public function test_create_failed()
+    public function test_class_exist()
     {
-    	$request = new \iriki\app();
-    	$request->setData([
-    		'name' => 'kronos',
-    		'description' => 'The chronological chronicler.',
-    		//'path' => '/some/where'
-    	]);
+        $status = class_exists('\iriki\app');
 
-        $request->setParameterStatus(array(
-            'final' => array('name', 'description'),
-            'missing' => array('path'),
-            'extra' => array(),
-            'ids' => array()
-        ));
+        $this->assertEquals(true, $status);
 
-        $request_status = $request->create($request, true);
-
-    	$this->assertEquals(400, $request_status['code']);
+        return $status;
     }
 
-	public function test_create_success()
+    /**
+     * @depends test_class_exist
+     */
+    public function test_create_failed($status)
     {
-    	//build a new model/request
-    	$request = new \iriki\app();
-    	//set all its properties
+        $title = 'Administrator';
 
-    	$request->setData([
-    		'name' => 'kronos',
-    		'description' => 'The chronological chronicler.',
-    		//'path' => '/some/where'
-    	]);
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'app',
+                'action' => 'create',
+                'url_parameters' => array(),
+                'params' => array(
+                    'name' => 'kronos',
+                    'description' => 'The chronological chronicler.',
+                    //'path' => '/some/where' //the missing parameter
+                )
+            )
+        );
 
-        $request->setParameterStatus(array(
-            'final' => array('name', 'description'),
-            'missing' => array('path'),
-            'extra' => array(),
-            'ids' => array()
-        ));
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
 
-        $request_status = $request->create($request, true);
+        //handle the request: match a route to a model and its action
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true //enable test mode
+        );
 
-    	$this->assertEquals(400, $request_status['code']);
-    }*/
+        $this->assertEquals(400, $status['code']);
+    }
+
+	/**
+     * @depends test_class_exist
+     */
+    public function test_create_success($status)
+    {
+        $title = 'Administrator';
+
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'app',
+                'action' => 'create',
+                'url_parameters' => array(),
+                'params' => array(
+                    'name' => 'kronos',
+                    'description' => 'The chronological chronicler.',
+                    'path' => '/some/where'
+                )
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        //handle the request: match a route to a model and its action
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true //enable test mode
+        );
+
+        $this->assertEquals(200, $status['code']);
+    }
 
 }
 

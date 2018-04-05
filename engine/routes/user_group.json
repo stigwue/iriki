@@ -6,11 +6,13 @@
 				"create" : {
 					"description" : "Create a new user group.",
 					"parameters" : [],
-					"exempt" : ["_id"]
+					"exempt" : ["_id"],
+					"authenticate" : false
 				},
 				"exists" : {
 					"description" : "Check if a user group exists.",
-					"parameters" : ["title"]
+					"parameters" : ["title"],
+					"authenticate" : false
 				},
 				"read_by_title" : {
 					"description" : "Read a user group by its (unique) title.",

@@ -26,16 +26,8 @@
 						"description" : "Log timestamp (format free).",
 						"type" : "string"
 					},
-					"duration" : {
-						"description" : "Duration of logged action.",
-						"type" : "number"
-					},
 					"parent" : {
 						"description" : "Suppose this is a logged response, the request is referred to here.",
-						"type" : "string"
-					},
-					"status" : {
-						"description" : "Truthy value of action.",
 						"type" : "string"
 					},
 					"tag" : {

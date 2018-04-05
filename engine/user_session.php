@@ -17,8 +17,14 @@ class user_session extends \iriki\engine\request
 		$data['token'] = Self::$generator->generateString(14, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 		//get ip address
-		//$data['ip'] = $_SERVER['SERVER_ADDR'];
-		$data['ip'] = $_SERVER['REMOTE_ADDR']; 
+		if (isset($_SERVER['REMOTE_ADDR']))
+		{
+			$data['ip'] = $_SERVER['REMOTE_ADDR'];
+		}
+		else
+		{
+			$data['ip'] = '0.0.0.0';  //unknown
+		}
 
 		$data['started'] = time(NULL);
 
