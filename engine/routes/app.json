@@ -20,26 +20,6 @@
 					"parameters" : [],
 					"exempt" : ["*"],
 					"authenticate" : false
-				},
-
-
-				"initialise" : {
-					"description" : "Initialise the application.",
-					"parameters" : [],
-					"exempt" : ["*"],
-					"authenticate" : false
-				},
-				"reset" : {
-					"description" : "Reset the application.",
-					"parameters" : [],
-					"exempt" : ["*"],
-					"authenticate" : true
-				},
-				"destroy" : {
-					"description" : "Destroy (delete) the application.",
-					"parameters" : [],
-					"exempt" : ["*"],
-					"authenticate" : true
 				}
 			}
 		}

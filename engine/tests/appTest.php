@@ -4,7 +4,7 @@ namespace iriki_tests;
 
 class appTest extends \PHPUnit\Framework\TestCase
 {
-	public function test_create_failed()
+	/*public function test_create_failed()
     {
     	$request = new \iriki\app();
     	$request->setData([
@@ -25,7 +25,7 @@ class appTest extends \PHPUnit\Framework\TestCase
     	$this->assertEquals(400, $request_status['code']);
     }
 
-	/*public function test_create_success()
+	public function test_create_success()
     {
     	//build a new model/request
     	$request = new \iriki\app();

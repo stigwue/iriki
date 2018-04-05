@@ -13,7 +13,8 @@
 				}
 			},
 			"synonym" : {
-				"application" : "app"
+				"group" : "user_group",
+				"session" : "user_session"
 			},
 			"default" : {
 				"create" : {
