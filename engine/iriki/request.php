@@ -565,7 +565,6 @@ class request
       //requests
       if (!is_null($request) AND is_null($parent_obj))
       {
-        var_dump('ok request');
         //do not log a log action or we will be locked in an infinite loop
         $model = $request->getModelStatus()['str'];
         if ($model == 'log') return;
@@ -591,7 +590,6 @@ class request
       //response
       else if (is_null($request) AND !is_null($parent_obj))
       {
-        var_dump('ok response');
         //do not log a log action or we will be locked in an infinite loop
         $model = $parent_obj['model'];
         if ($model == 'log') return;
@@ -617,7 +615,6 @@ class request
       else
       {
         //neither request nor reponse
-        var_dump('wtf?');
         return;
       }
 

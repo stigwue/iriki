@@ -18,7 +18,8 @@ class requestTest extends \PHPUnit\Framework\TestCase
 			//default_response: info,data or error
 			'data',
 			//wrap
-			true
+			true,
+			null
 		);
 
 		$this->assertEquals(true,
@@ -35,7 +36,8 @@ class requestTest extends \PHPUnit\Framework\TestCase
 			//default_response: info,data or error
 			'information',
 			//wrap
-			false
+			false,
+			null
 		);
 
 		$this->assertEquals(
@@ -52,7 +54,8 @@ class requestTest extends \PHPUnit\Framework\TestCase
 			//default_response: info,data or error
 			'data',
 			//wrap
-			true
+			true,
+			null
 		);
 
 		$this->assertEquals(true,
