@@ -195,7 +195,7 @@ class request
     /**
     * Gets the session toekn
     *
-    * @returns string Session token
+    * @return Session token
     * @throw
     */
     public function getSession()
@@ -206,8 +206,8 @@ class request
     /**
     * Sets the Session token
     *
-    * @param string Session token
-    * @returns string Session token
+    * @param session_token Session token
+    * @return Session token
     * @throw
     */
     public function setSession($session_token)
@@ -220,12 +220,13 @@ class request
      * Intercepts authentication or some other last minute errors reported.
      * Note that code is only set if an error occurs (code is then an error code) or wrapping is specified.
      *
-     * @param {string} result Result returned from database operation
-     * @param {string} default_response Response type to use if all goes well (data, information or error)
-     * @param {boolean} wrap Flag to perform a response wrap or not
-     * @returns {array} Final result
+     * @param result Result returned from database operation
+     * @param default_response Response type to use if all goes well (data, information or error)
+     * @param wrap Flag to perform a response wrap or not.
+     * @param log_object Request log object for continuity in loggin response.
+     * @return Final result
      */
-    public static function catchError($result, $default_response, $wrap)
+    public static function catchError($result, $default_response, $wrap, $log_object)
     {
       $new_result = $result;
       
@@ -238,12 +239,16 @@ class request
         {
           //authentication failed
           case response::AUTH:
+            Self::log(null, time(NULL), $log_object, response::AUTH);
+
             $new_result = \iriki\engine\response::buildFor('auth', 'User session token invalid or expired.', $wrap);
           break;
 
           //expecting a particular parameter which is missing
           //especially ids of parent models
           case response::ERROR:
+            Self::log(null, time(NULL), $log_object, response::ERROR);
+
             if ($result['message'] == 'missing_parameter')
             {
               $new_result = \iriki\engine\response::buildFor('error', 'Parameter missing or of wrong type.', $wrap);
@@ -257,6 +262,8 @@ class request
 
           default:
             //nothing was caught?
+            Self::log(null, time(NULL), $log_object, \iriki\engine\response::responseToCode($default_response));
+
             $new_result = \iriki\engine\response::buildFor($default_response, $result, $wrap);
           break;
         }
@@ -265,6 +272,8 @@ class request
       //else, we should wrap with the appropriate response markers
       else
       {
+        Self::log(null, time(NULL), $log_object, \iriki\engine\response::responseToCode($default_response));
+
         //no errors
         $new_result = \iriki\engine\response::buildFor($default_response, $result, $wrap);
       }
@@ -299,12 +308,15 @@ class request
     public function create($request, $wrap = true)
     {
       $db = Self::$_db_instance;
+      $log_object = Self::log($request, time(NULL));
 
       //unique
       $matching = model::doParameterUniqueCheck($request);
       if (count($matching) != 0)
       {
           $result = array();
+
+          Self::log(null, time(NULL), $log_object, response::ERROR);
 
           if (!$wrap) return $result;
           else return response::error(
@@ -325,13 +337,19 @@ class request
       {
         if ($missing_parameters != 0)
         {
+            Self::log(null, time(NULL), $log_object, response::ERROR);
+
             return response::error(
               response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
               $wrap);
         }
-        if ($extra_parameters != 0) return response::error(
-          response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
-          $wrap);
+        if ($extra_parameters != 0)
+        {
+          Self::log(null, time(NULL), $log_object, response::ERROR);
+
+          return response::error(
+          response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
+        }
       }
 
       //hasmany
@@ -339,7 +357,7 @@ class request
       $result = $db::doCreate($request);
 
       //intercept errors so as to display them accordingly
-      $final_result = Self::catchError($result, 'information', $wrap);
+      $final_result = Self::catchError($result, 'information', $wrap, $log_object);
 
       return $final_result;
     }
@@ -356,6 +374,9 @@ class request
     public function read($request, $wrap = true)
     {
       $db = Self::$_db_instance;
+
+      $log_object = Self::log($request, time(NULL));
+
       //unique
       //belongsto
       //hasmany
@@ -369,6 +390,8 @@ class request
 
       if ($extra_parameters != 0)
       {
+        Self::log(null, time(NULL), $log_object, response::ERROR);
+        
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
           $wrap);
@@ -381,7 +404,7 @@ class request
       $result = $db::doRead($request, $sort);
 
       //intercept errors so as to display them accordingly
-      $final_result = Self::catchError($result, 'data', $wrap);
+      $final_result = Self::catchError($result, 'data', $wrap, $log_object);
 
       return $final_result;
     }
@@ -399,6 +422,8 @@ class request
     {
       $db = Self::$_db_instance;
 
+      $log_object = Self::log($request, time(NULL));
+
       $parameter_status = $request->getParameterStatus();
 
       //replace with modified
@@ -408,6 +433,8 @@ class request
 
       if ($extra_parameters != 0)
       {
+        Self::log(null, time(NULL), $log_object, response::ERROR);
+        
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
           $wrap);
@@ -423,7 +450,7 @@ class request
 
       $result = $db::doRead($request, $sort);
 
-      $final_result = Self::catchError($result, 'data', $wrap);
+      $final_result = Self::catchError($result, 'data', $wrap, $log_object);
 
       return $final_result;
     }
@@ -440,6 +467,8 @@ class request
     {
       $db = Self::$_db_instance;
 
+      $log_object = Self::log($request, time(NULL));
+
       //unique
       //belongsto
       $parameter_status = model::doBelongsToRelation($request);
@@ -454,34 +483,43 @@ class request
       {
         if ($missing_parameters != 0)
         {
-            return response::error(
-              response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
-              $wrap);
+          Self::log(null, time(NULL), $log_object, response::ERROR);
+
+          return response::error(
+            response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
+            $wrap);
         }
-        if ($extra_parameters != 0) return response::error(
+        if ($extra_parameters != 0)
+        {
+          Self::log(null, time(NULL), $log_object, response::ERROR);
+
+          return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
           $wrap);
+        }
       }
       //hasmany
 
       $result = $db::doUpdate($request);
 
-      $final_result = Self::catchError($result, 'information', $wrap);
+      $final_result = Self::catchError($result, 'information', $wrap, $log_object);
 
       return $final_result;
     }
 
     /**
-    * Perform a delete action on a request
+    * Perform a delete action on a request.
     *
-    * @param object Request object
-    * @param boolean Wrap results with descriptors
-    * @returns object Response object or data
+    * @param request Request object.
+    * @param wrap Wrap results with descriptors.
+    * @return Response object or data
     * @throw
     */
     public function delete($request, $wrap = true)
     {
       $db = Self::$_db_instance;
+
+      $log_object = Self::log($request, time(NULL));
 
       //unique
       //belongsto
@@ -496,6 +534,8 @@ class request
 
       if ($extra_parameters != 0)
       {
+        Self::log(null, time(NULL), $log_object, response::ERROR);
+
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
           $wrap);
@@ -503,9 +543,99 @@ class request
 
       $result = $db::doDelete($request);
       
-      $final_result = Self::catchError($result, 'information', $wrap);
+      $final_result = Self::catchError($result, 'information', $wrap, $log_object);
 
       return $final_result;
+    }
+
+    /**
+    * Log an action.
+    *
+    * @param request Request details. Will be null for responses.
+    * @param timestamp Action timestamp.
+    * @param parent_obj Parent log object. Default null.
+    * @param tag Log tag. Default empty.
+    * @return Log object.
+    * @throw
+    */
+    private static function log($request, $timestamp, $parent_obj=null, $tag='')
+    {
+      $request_details = array();
+
+      //requests
+      if (!is_null($request) AND is_null($parent_obj))
+      {
+        var_dump('ok request');
+        //do not log a log action or we will be locked in an infinite loop
+        $model = $request->getModelStatus()['str'];
+        if ($model == 'log') return;
+
+        //null parent object, build request_details from request supplied
+        $request_details = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'log',
+                'action' => 'request',
+                'url_parameters' => array(),
+                'params' => array(
+                    'model' => $request->getModelStatus()['str'],
+                    'action' => $request->getModelStatus()['action'],
+                    'timestamp' => $timestamp,
+                    'parent' => '',
+                    'tag' => $tag
+                )
+            )
+        );
+      }
+      //response
+      else if (is_null($request) AND !is_null($parent_obj))
+      {
+        var_dump('ok response');
+        //do not log a log action or we will be locked in an infinite loop
+        $model = $parent_obj['model'];
+        if ($model == 'log') return;
+
+        //build request details from parent_obj
+        $request_details = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'log',
+                'action' => 'request',
+                'url_parameters' => array(),
+                'params' => array(
+                    'model' => $parent_obj['model'],
+                    'action' => $parent_obj['action'],
+                    'timestamp' => $timestamp,
+                    'parent' => $parent_obj['_id'],
+                    'tag' => $tag
+                )
+            )
+        );
+      }
+      else
+      {
+        //neither request nor reponse
+        var_dump('wtf?');
+        return;
+      }
+
+      $status = \iriki\engine\route::simulateRequest(
+        $request_details,
+        $GLOBALS['APP']
+      );
+
+      $log_object = array(
+        '_id' => $status['data'],
+        'model' => $request_details['data']['params']['model'],
+        'action' => $request_details['data']['params']['action'],
+        'timestamp' => $timestamp,
+        'parent' => $request_details['data']['params']['parent'],
+        'tag' => $tag
+      );
+
+      return $log_object;
     }
 }
 

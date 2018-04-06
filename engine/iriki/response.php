@@ -126,6 +126,37 @@ class response
     }
 
     /**
+    * Convert response type to response code.
+    *
+    *
+    * @param response_type Response type. String.
+    * @return Response code.
+    * @throw
+    */
+    public static function responseToCode($response_type)
+    {
+        switch (strtolower($response_type))
+        {
+            case 'auth':
+                return response::AUTH;
+            break;
+
+            case 'error':
+                return response::ERROR;
+            break;
+
+            case 'data':
+                return response::OK;
+            break;
+            
+            case 'information':
+            default:
+                return response::OK;
+            break;
+        }
+    }
+
+    /**
     * Build a response by specifiying response type.
     *
     *

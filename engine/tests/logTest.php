@@ -23,12 +23,11 @@ class logTest extends \PHPUnit\Framework\TestCase
                 'action' => 'request',
                 'url_parameters' => array(),
                 'params' => array(
-                    'user' => 'root',
                     'model' => 'log',
                     'action' => 'request',
                     'timestamp' => time(NULL),
-                    'parent' => '-',
-                    'tag' => 'test'
+                    'parent' => '',
+                    'tag' => ''
                 )
             )
         );
@@ -62,7 +61,6 @@ class logTest extends \PHPUnit\Framework\TestCase
                 'action' => 'response',
                 'url_parameters' => array(),
                 'params' => array(
-                    'user' => 'root',
                     'model' => 'log',
                     'action' => 'request',
                     'timestamp' => time(NULL),

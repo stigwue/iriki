@@ -10,10 +10,6 @@
 						"type" : "key",
 						"unique" : true
 					},
-					"user" : {
-						"description" : "Internal user ID.",
-						"type" : "string"
-					},
 					"model" : {
 						"description" : "Object performing action.",
 						"type" : "string"

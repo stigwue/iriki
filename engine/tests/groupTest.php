@@ -1,5 +1,7 @@
 <?php
 
+namespace iriki_tests;
+
 class groupTest extends \PHPUnit\Framework\TestCase
 {
 	public function test_class_exist()
