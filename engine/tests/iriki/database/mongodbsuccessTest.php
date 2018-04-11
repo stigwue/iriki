@@ -2,7 +2,7 @@
 
 namespace iriki_engine_tests;
 
-class mongodbsuccessTest extends \PHPUnit\Framework\TestCase
+class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
 {
     //please note that this test creates a valid internal db handle
     //so tests that rely on this handle being invalid will fail

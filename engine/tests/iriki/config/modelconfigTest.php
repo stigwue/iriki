@@ -2,7 +2,7 @@
 
 namespace iriki_engine_tests;
 
-class modelconfigTest extends \PHPUnit\Framework\TestCase
+class modelConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function test_loadFromJson_success()
     {

@@ -2,7 +2,7 @@
 
 namespace iriki_engine_tests;
 
-class mongodberrorTest extends \PHPUnit\Framework\TestCase
+class mongodbErrorTest extends \PHPUnit\Framework\TestCase
 {
     //CRUD errors
     //note that errors can be a issing session token

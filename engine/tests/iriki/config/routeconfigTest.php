@@ -2,7 +2,7 @@
 
 namespace iriki_engine_tests;
 
-class routeconfigTest extends \PHPUnit\Framework\TestCase
+class routeConfigTest extends \PHPUnit\Framework\TestCase
 { 
     public function test_loadFromJsonIndex_success()
     {

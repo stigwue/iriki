@@ -2,7 +2,7 @@
 
 namespace iriki_engine_tests;
 
-class mongodbnullTest extends \PHPUnit\Framework\TestCase
+class mongodbNullTest extends \PHPUnit\Framework\TestCase
 {
 	//CRUD nulls
     public function test_doCreate_null()

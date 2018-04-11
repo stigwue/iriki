@@ -17,8 +17,13 @@ class app extends \iriki\engine\request
         return \iriki\engine\response::data($app, $wrap);
 	}
 
-	public function models($request, $wrap = true)
+	public function wheel($request, $wrap = true)
 	{
+		$result = array(
+			'list' => array(),
+			'matrix' => array()
+		);
+
 		$app = $GLOBALS['APP'];
 
 		//get the models
@@ -28,33 +33,25 @@ class app extends \iriki\engine\request
 		$model_list = array();
 		foreach ($models['app'] as $app_model => $details)
 		{
-			$model_list[] = $app_model;
+			$result['list'][] = $app_model;
 		}
 		foreach ($models['engine'] as $engine_model => $details)
 		{
-			$model_list[] = $engine_model;
+			$result['list'][] = $engine_model;
 		}
 
-        return \iriki\engine\response::data($model_list, $wrap);
-	}
+		//merge the two model spaces
+		$all_models = array_merge($models['app'], $models['engine']);
 
-	public static function model_matrix($request, $wrap = true)
-    {
-		$app = $GLOBALS['APP'];
-
-		//get the models
-		$models = array_merge($app['models']['app'], $app['models']['engine']);
-
-        $size = count($models);
-
-        $matrix = array();
+		//get the dependency matrix
+		$size = count($all_models);
 
         //first loop
-        foreach ($models as $current_model => $_model)
+        foreach ($all_models as $current_model => $_model)
         {
             $matrix_row = array();
             //second loop for dependency ('belongsto') check
-            foreach ($models as $_model_name => $_model_two)
+            foreach ($all_models as $_model_name => $_model_two)
             {
                 //inner loop for 'belongsto' check
                 if (in_array($current_model, $_model_two['relationships']['belongsto'], true))
@@ -63,11 +60,46 @@ class app extends \iriki\engine\request
                 }
                 else $matrix_row[] = 0;
             }
-            $matrix[] = $matrix_row;
+            $result['matrix'][] = $matrix_row;
         }
 
-        return \iriki\engine\response::data($matrix, $wrap);
-    }
+        return \iriki\engine\response::data($result, $wrap);
+	}
+
+	public function models($request, $wrap = true)
+	{
+		$app = $GLOBALS['APP'];
+
+		//get the models
+		$models = $app['models'];
+
+		//merge the two model spaces
+		$all_models = array_merge($models['app'], $models['engine']);
+
+        return \iriki\engine\response::data($all_models, $wrap);
+	}
+
+	public function routes($request, $wrap = true)
+	{
+		$app = $GLOBALS['APP'];
+
+		//get the routes
+		$routes = $app['routes'];
+
+		//merge the two model spaces
+		$all_routes = array_merge($routes['app'], $routes['engine']);
+
+		$defaults = array_merge($app['routes']['engine']['default'], $app['routes']['app']['default']);
+
+
+		$result = array(
+			'default' => $defaults,
+			'custom' => $all_routes
+		);
+
+        return \iriki\engine\response::data($result, $wrap);
+	}
+
 }
 
 ?>
