@@ -73,6 +73,8 @@ class app extends \iriki\engine\request
 		//get the models
 		$models = $app['models'];
 
+		//try filling out model details?
+
 		//merge the two model spaces
 		$all_models = array_merge($models['app'], $models['engine']);
 
@@ -86,10 +88,13 @@ class app extends \iriki\engine\request
 		//get the routes
 		$routes = $app['routes'];
 
-		//merge the two model spaces
-		$all_routes = array_merge($routes['app'], $routes['engine']);
+		//routes/app and routes/engine all have the following:
+		//default, alias, synonym, list and routes
 
 		$defaults = array_merge($app['routes']['engine']['default'], $app['routes']['app']['default']);
+
+		//merge the two model spaces
+		$all_routes = array_merge($routes['app']['routes'], $routes['engine']['routes']);
 
 
 		$result = array(

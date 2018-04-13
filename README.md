@@ -35,3 +35,5 @@ Iriki comes with user (grouping and authentication) management, email sending (u
 * Build in inter-operability (app.json should hold an array of apps, callable via config/code), also configurations provided in more than json files.
 
 * Rewrite in PHP7 and or Python.
+
+* Check model synonyms, do they work in model and route properties and parameters (for belongs to and co)?
