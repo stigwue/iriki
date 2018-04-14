@@ -99,8 +99,30 @@ class app extends \iriki\engine\request
 
 		$result = array(
 			'default' => $defaults,
-			'custom' => $all_routes
+			'custom' => array()
 		);
+
+		
+		//expand custom route parameters
+		//get the models
+		$models = $app['models'];
+		//merge them
+		$all_models = array_merge($models['app'], $models['engine']);
+		//loop through existing routes
+		foreach ($all_routes as $model => $route_details)
+		{
+			$expanded_routes = array();
+			$model_details = $all_models[$model];
+			//for each models routes....
+			foreach ($route_details as $route => $details)
+			{
+				$parameters = \iriki\engine\model::doExpandProperty($model_details, $details);
+				$details['parameters'] = array_values($parameters);
+
+				$expanded_routes[$route] = $details;
+			}
+			$result['custom'][$model] = $expanded_routes;
+		}
 
         return \iriki\engine\response::data($result, $wrap);
 	}

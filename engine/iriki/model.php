@@ -64,152 +64,172 @@ class model
 
 
     /**
+    * Expand an action's defined parameters. Because sometimes parameters are defined using shortcuts: especially parameters and exempt fields.
+    *
+    *
+    * @param details Model property details
+    * @param filter Route filters: parameters and exempt
+    * @return Properties: final, missing, extra and ids
+    * @throw
+    */
+    public static function doExpandProperty($details, $filter)
+    {
+      //var_dump($details, $filter);
+
+      $all_properties = $details['properties'];
+
+      $valid_properties = $filter['parameters'];
+
+      $exempt_properties = (isset($filter['exempt']) ? $filter['exempt'] : null);
+
+      //build valid properties
+      if (count($valid_properties) == 0)
+      {
+          //all properties are valid for parameters = []
+          $valid_properties = array_keys($all_properties);
+      }
+
+      //check exempt properties
+      $exempt_properties_count = count($exempt_properties);
+      if ($exempt_properties_count == 0)
+      {
+          //there's no exempt list, carry on
+      }
+      else
+      {
+          if ($exempt_properties_count == 1 && $exempt_properties[0] == '*')
+          {
+            //unset entire array
+            $valid_properties = array();
+          }
+
+          for ($i = count($valid_properties) - 1; $i >= 0; $i--)
+          {
+              //note that if exempt holds only *, it means all properties are exempt
+              if (in_array($valid_properties[$i], $exempt_properties))
+              {
+                  unset($valid_properties[$i]);
+              }
+          }
+      }
+
+      return $valid_properties;
+    }
+
+
+    /**
     * Match a model's defined parameters to those sent via the request
     * Note that a parameter failing a type check is 'missing'
     *
     *
-    * @param array Model property details
-    * @param array Key-value parameters sent via request. Note that they can be edited
-    * @param array Array of url parameters
-    * @param array Route filters: parameters and exempt
-    * @returns array Properties: final, missing, extra and ids
+    * @param details Model property details
+    * @param sent Key-value parameters sent via request. Note that they can be edited
+    * @param sent_url Array of url parameters
+    * @param filter Route filters: parameters and exempt
+    * @return Properties: final, missing, extra and ids
     * @throw
     */
     public static function doPropertyMatch($details, &$sent, $sent_url, $filter)
     {
-        //parameters work thus:
-        //empty valid => all parameters valid except 'exempt'
-        //non-empty valid => listed parameters except 'exempt'
+      //parameters work thus:
+      //empty valid => all parameters valid except 'exempt'
+      //non-empty valid => listed parameters except 'exempt'
 
-        $all_properties = $details['properties'];
+      $valid_properties = Self::doExpandProperty($details, $filter);
 
-        $valid_properties = $filter['parameters'];
-        $url_properties = $filter['url_parameters'];
+      $url_properties = isset($filter['url_parameters']) ? $filter['url_parameters'] : array();      
 
-        $exempt_properties = (isset($filter['exempt']) ? $filter['exempt'] : null);
+      //build sent properties
+      $sent_properties = array_keys($sent);
+      $url_sent_properties = $sent_url;
 
-        //build sent properties
-        $sent_properties = array_keys($sent);
-        $url_sent_properties = $sent_url;
-
-        //build valid properties
-        if (count($valid_properties) == 0)
+      //add url properties to the mix
+      //first, check if url_parameters are defined
+      if (count($url_properties) != 0)
+      {
+        //then find the properties in sent and add or replace
+        //note that if non valid properties are provided via the url, they will be extra
+        $url_index = 0; $sent_url_count = count($sent_url);
+        foreach ($url_properties as $url_property)
         {
-            //all properties are valid for parameters = []
-            $valid_properties = array_keys($all_properties);
-        }
-
-        //check exempt properties
-        $exempt_properties_count = count($exempt_properties);
-        if ($exempt_properties_count == 0)
-        {
-            //there's no exempt list, carry on
-        }
-        else
-        {
-            if ($exempt_properties_count == 1 && $exempt_properties[0] == '*')
-            {
-              //unset entire array
-              $valid_properties = array();
-            }
-
-            for ($i = count($valid_properties) - 1; $i >= 0; $i--)
-            {
-                //note that if exempt holds only *, it means all properties are exempt
-                if (in_array($valid_properties[$i], $exempt_properties))
-                {
-                    unset($valid_properties[$i]);
-                }
-            }
-        }
-
-        //add url properties to the mix
-        //first, check if url_parameters are defined
-        if (count($url_properties) != 0)
-        {
-          //then find the properties in sent and add or replace
-          //note that if non valid properties are provided via the url, they will be extra
-          $url_index = 0; $sent_url_count = count($sent_url);
-          foreach ($url_properties as $url_property)
+          //if defined in the url then handle else ignore
+          if ($url_index < $sent_url_count)
           {
-            //if defined in the url then handle else ignore
-            if ($url_index < $sent_url_count)
-            {
-              //if already sent, will be replaced
-              //else added anew
-              $sent[$url_property] = $sent_url[$url_index];
-            }
-            $url_index += 1;
+            //if already sent, will be replaced
+            //else added anew
+            $sent[$url_property] = $sent_url[$url_index];
           }
+          $url_index += 1;
         }
+      }
 
-        //check for valid sent properties
-        $properties_missing = array();
-        $final_properties = array();
-        foreach ($valid_properties as $property)
-        {
-            if (isset($sent[$property]))
-            {
-                //property is valid and was sent
+      //check for valid sent properties
+      $properties_missing = array();
+      $final_properties = array();
+      foreach ($valid_properties as $property)
+      {
+          if (isset($sent[$property]))
+          {
+              //property is valid and was sent
 
-                //check type? note that the property might be that of a parent model
-                if (isset($all_properties[$property]['type']))
+              //check type? note that the property might be that of a parent model
+              if (isset($all_properties[$property]['type']))
+              {
+                $type = $all_properties[$property]['type'];  //might be absent
+
+                $value = $sent[$property];
+
+                if (type::is_type($value, $type))
                 {
-                  $type = $all_properties[$property]['type'];  //might be absent
-
-                  $value = $sent[$property];
-
-                  if (type::is_type($value, $type))
-                  {
-                    //fix type
-                    $sent[$property] = type::ctype($value, $type);
-                    $final_properties[] = $property;
-                  }
-                  else
-                  {
-                    //a supplied property of different type is deemed missing
-                    $properties_missing[] = $property;
-                  }
+                  //fix type
+                  $sent[$property] = type::ctype($value, $type);
+                  $final_properties[] = $property;
                 }
                 else
                 {
-                  //ignore type check
-                  //assume the user knows what they're doing
-                  $final_properties[] = $property;
+                  //a supplied property of different type is deemed missing
+                  $properties_missing[] = $property;
                 }
-            }
-            else
-            {
-                $properties_missing[] = $property;
-            }
-        }
+              }
+              else
+              {
+                //ignore type check
+                //assume the user knows what they're doing
+                $final_properties[] = $property;
+              }
+          }
+          else
+          {
+              $properties_missing[] = $property;
+          }
+      }
 
-        //check for invalid sent properties
-        $extra_properties = array();
-        foreach ($sent_properties as $index => $property)
-        {
-            if (FALSE !== array_search($property, $valid_properties))
-            {
-                //property sent is valid
-            }
-            else
-            {
-                $extra_properties[] = $property;
-            }
-        }
+      //check for invalid sent properties
+      $extra_properties = array();
+      foreach ($sent_properties as $index => $property)
+      {
+          if (FALSE !== array_search($property, $valid_properties))
+          {
+              //property sent is valid
+          }
+          else
+          {
+              $extra_properties[] = $property;
+          }
+      }
 
-        $result = array(
-          //properties supplied
-          'final' => $final_properties,
-          //missing properties that should have been supplied
-          'missing' => $properties_missing,
-          //extra properties that should not have been supplied
-          'extra' => $extra_properties,
-          //these, especially for mongodb have to be saved as mongoids
-          'ids' => array()
-        );
+      $result = array(
+        //properties supplied
+        'final' => $final_properties,
+        //missing properties that should have been supplied
+        'missing' => $properties_missing,
+        //extra properties that should not have been supplied
+        'extra' => $extra_properties,
+        //these, especially for mongodb have to be saved as mongoids
+        'ids' => array()
+      );
 
-        return $result;
+      return $result;
     }
 
     /**
@@ -275,8 +295,8 @@ class model
     * Check a model for 'belongsto' parent relationship.
     * Returns a modified parameter statuses you may have to update.
     *
-    * @param object Request
-    * @returns array Modified parameter status
+    * @param request Request
+    * @return Modified parameter status
     * @throw
     */
     public static function doBelongsToRelation($request)
