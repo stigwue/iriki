@@ -522,6 +522,10 @@ class route
 
                                 //build request;
                                 $request = new request();
+                                //test mode
+                                $request->setTestMode($test_mode);
+                                //session
+                                $request->setSession($user_session_token);
                                 //db_instance
                                 $request->setDBInstance($db_class);
                                 //model status
@@ -532,8 +536,6 @@ class route
                                 $request->setData($params);
                                 //meta
                                 //?
-                                //session
-                                $request->setSession($user_session_token);
 
                                 //instance action
                                 return $model_instance->$action($request);

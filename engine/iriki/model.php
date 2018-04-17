@@ -74,8 +74,6 @@ class model
     */
     public static function doExpandProperty($details, $filter)
     {
-      //var_dump($details, $filter);
-
       $all_properties = $details['properties'];
 
       $valid_properties = $filter['parameters'];

@@ -19,6 +19,12 @@ class request
     private static $_db_instance = null;
 
     /**
+    * Test mode, boolean value to determine if tests are been run and as such, ignore authentication.
+    *
+    */
+    private $_test_mode;
+
+    /**
     * Session token, passed around in header.
     *
     */
@@ -48,6 +54,54 @@ class request
     *
     */
     private $_meta;
+
+    /**
+    * Gets the test mode value
+    *
+    * @return Test mode
+    * @throw
+    */
+    public function getTestMode()
+    {
+      return $this->_test_mode;
+    }
+
+    /**
+    * Sets the test mode
+    *
+    * @param test_mode Test mode value
+    * @return Test mode
+    * @throw
+    */
+    public function setTestMode($test_mode)
+    {
+      $this->_test_mode = $test_mode;
+      return $this->_test_mode;
+    }
+
+    /**
+    * Gets the session token
+    *
+    * @return Session token
+    * @throw
+    */
+    public function getSession()
+    {
+      return $this->_session_token;
+    }
+
+    /**
+    * Sets the Session token
+    *
+    * @param session_token Session token
+    * @return Session token
+    * @throw
+    */
+    public function setSession($session_token)
+    {
+      $this->_session_token = $session_token;
+      return $this->_session_token;
+    }
 
     /**
     * Gets the database instance.
@@ -190,30 +244,6 @@ class request
     {
       $this->_meta = $meta;
       return $this->_meta;
-    }
-
-    /**
-    * Gets the session toekn
-    *
-    * @return Session token
-    * @throw
-    */
-    public function getSession()
-    {
-      return $this->_session_token;
-    }
-
-    /**
-    * Sets the Session token
-    *
-    * @param session_token Session token
-    * @return Session token
-    * @throw
-    */
-    public function setSession($session_token)
-    {
-      $this->_session_token = $session_token;
-      return $this->_session_token;
     }
 
     /**
