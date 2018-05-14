@@ -10,7 +10,8 @@
 				},
 				"read_by_username" : {
 					"description" : "Read a user by providing its username.",
-					"parameters" : ["username"]
+					"parameters" : ["username"],
+					"authenticate" : "false"
 				},
 				"authenticate" : {
 					"description" : "Creates a session for the user.",

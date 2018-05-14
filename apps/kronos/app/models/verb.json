@@ -16,7 +16,7 @@
 					}
 				},
 				"relationships" : {
-					"belongsto" : ["noun"],
+					"belongsto" : [],
 					"hasmany" : ["adverb"]
 				}
 			}

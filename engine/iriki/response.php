@@ -294,8 +294,6 @@ class response
     */
     public static function data($data, $wrap = true, $message = '', $relations = null)
     {
-        //do logging?
-
         if (!$wrap) return $data;
         else return Self::build(Self::OK, $message, $data);
     }
@@ -347,8 +345,6 @@ class response
         if (!$wrap) return $message;
         else return Self::build(Self::AUTH, $message, $data);
     }
-
-    //log
 }
 
 ?>

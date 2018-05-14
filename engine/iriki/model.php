@@ -168,33 +168,33 @@ class model
       {
           if (isset($sent[$property]))
           {
-              //property is valid and was sent
+            //property is valid and was sent
 
-              //check type? note that the property might be that of a parent model
-              if (isset($all_properties[$property]['type']))
+            //check type? note that the property might be that of a parent model
+            if (isset($all_properties[$property]['type']))
+            {
+              $type = $all_properties[$property]['type'];  //might be absent
+
+              $value = $sent[$property];
+
+              if (!type::is_type($value, $type))
               {
-                $type = $all_properties[$property]['type'];  //might be absent
-
-                $value = $sent[$property];
-
-                if (type::is_type($value, $type))
-                {
-                  //fix type
-                  $sent[$property] = type::ctype($value, $type);
-                  $final_properties[] = $property;
-                }
-                else
-                {
-                  //a supplied property of different type is deemed missing
-                  $properties_missing[] = $property;
-                }
+                //a supplied property of different type is deemed missing
+                $properties_missing[] = $property;
               }
               else
               {
-                //ignore type check
-                //assume the user knows what they're doing
+                //fix type
+                $sent[$property] = type::ctype($value, $type);
                 $final_properties[] = $property;
               }
+            }
+            else
+            {
+              //ignore type check
+              //assume the user knows what they're doing
+              $final_properties[] = $property;
+            }
           }
           else
           {
