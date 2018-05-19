@@ -133,6 +133,8 @@ class model
       //empty valid => all parameters valid except 'exempt'
       //non-empty valid => listed parameters except 'exempt'
 
+      $all_properties = $details['properties'];
+
       $valid_properties = Self::doExpandProperty($details, $filter);
 
       $url_properties = isset($filter['url_parameters']) ? $filter['url_parameters'] : array();      
