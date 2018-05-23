@@ -1,0 +1,14 @@
+{
+	"kronos":
+	{
+		"routes" : {
+			"instance" : {
+				"read_by_parent" : {
+					"description" : "Read an instance by type and parent.",
+					"parameters" : ["type", "parent"],
+					"authenticate" : false
+				}
+			}
+		}
+	}
+}

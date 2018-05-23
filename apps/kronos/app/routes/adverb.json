@@ -1,0 +1,14 @@
+{
+	"kronos":
+	{
+		"routes" : {
+			"adverb" : {
+				"create" : {
+					"description" : "Create a new adverb.",
+					"parameters" : ["name"],
+					"url_parameters" : ["name"]
+				}
+			}
+		}
+	}
+}

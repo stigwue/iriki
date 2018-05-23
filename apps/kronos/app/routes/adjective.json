@@ -1,0 +1,14 @@
+{
+	"kronos":
+	{
+		"routes" : {
+			"adjective" : {
+				"create" : {
+					"description" : "Create a new adjective.",
+					"parameters" : ["name"],
+					"url_parameters" : ["name"]
+				}
+			}
+		}
+	}
+}
