@@ -4,15 +4,21 @@
 		"routes" : {
 			"log" : {
 				"request" : {
-					"description" : "Log a request event. Most important bits are the details.",
+					"description" : "Log a request event.",
 					"parameters" : [],
 					"exempt" : ["_id"],
 					"authenticate" : false
 				},
 				"response" : {
-					"description" : "Log a response event. Most important is duration and truthy value.",
+					"description" : "Log a response event.",
 					"parameters" : [],
 					"exempt" : ["_id"],
+					"authenticate" : false
+				},
+				"read" : {
+					"description" : "Read event logs.",
+					"parameters" : ["from_timestamp"],
+					"exempt" : ["*"],
 					"authenticate" : false
 				}
 			}

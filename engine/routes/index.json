@@ -2,20 +2,6 @@
 	"iriki":
 	{
 		"routes" : {
-			"alias" : {
-				"validate" : {
-					"model" : "user_session",
-					"action" : "validate"
-				},
-				"init" : {
-					"model" : "app",
-					"action" : "create"
-				}
-			},
-			"synonym" : {
-				"group" : "user_group",
-				"session" : "user_session"
-			},
 			"default" : {
 				"create" : {
 					"description" : "Add a new instance of the model to storage.",
@@ -41,6 +27,20 @@
 					"parameters" : ["_id"],
 					"url_parameters" : ["_id"]
 				}
+			},
+			"alias" : {
+				"validate" : {
+					"model" : "user_session",
+					"action" : "validate"
+				},
+				"init" : {
+					"model" : "app",
+					"action" : "create"
+				}
+			},
+			"synonym" : {
+				"group" : "user_group",
+				"session" : "user_session"
 			},
 			"routes" : [
 				"app",

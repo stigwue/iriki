@@ -28,6 +28,12 @@
 				"read_by_user" : {
 					"description" : "Read a user's authenticated sessions by providing its ID.",
 					"parameters" : ["user_id"]
+				},
+				"read_anonymized" : {
+					"description" : "Return anonymized user_sessions for statistical purposes.",
+					"parameters" : [],
+					"exempt" : ["*"],
+					"authenticate" : false
 				}
 			}
 		}

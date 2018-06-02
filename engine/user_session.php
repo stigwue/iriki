@@ -306,6 +306,34 @@ class user_session extends \iriki\engine\request
 			return $request->read($request, $wrap);
 		}
 	}
+
+    public function read_anonymized($request, $wrap = true)
+    {
+        $request->setParameterStatus(array(
+          'final' => array(),
+          'missing' => array(),
+          'extra' => array(),
+          'ids' => array()
+        ));
+
+        $request->setMeta(['sort' => array('created' => -1)]);
+
+        $user_sessions = $request->read($request, false);
+
+        $anon_user_sessions = array();
+
+        //anonymize
+        foreach ($user_sessions as $index => $user_session)
+        {
+        	unset($user_session['token']);
+        	unset($user_session['remember']);
+        	unset($user_session['user_id']);
+
+        	$anon_user_sessions[] = $user_session;
+        }
+
+        return \iriki\engine\response::data($anon_user_sessions, $wrap);
+    }
 }
 
 ?>

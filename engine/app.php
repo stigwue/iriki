@@ -111,6 +111,7 @@ class app extends \iriki\engine\request
 		//loop through existing routes
 		foreach ($all_routes as $model => $route_details)
 		{
+			if (is_null($route_details)) continue;
 			$expanded_routes = array();
 			$model_details = $all_models[$model];
 			//for each models routes....
