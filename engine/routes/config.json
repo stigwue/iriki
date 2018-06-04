@@ -6,7 +6,24 @@
 				"create" : {
 					"description" : "Add a new app config.",
 					"parameters" : [],
-					"exempt" : ["_id"]
+					"exempt" : ["_id"],
+					"authenticate" : false
+				},
+				"read" : {
+					"description" : "Read an existing config.",
+					"parameters" : ["_id"],
+					"authenticate" : false
+				},
+				"read_by_key" : {
+					"description" : "Read an existing config by key.",
+					"parameters" : ["key"],
+					"authenticate" : false
+				},
+				"read_all" : {
+					"description" : "Read all existing config.",
+					"parameters" : [],
+					"exempt" : ["*"],
+					"authenticate" : false
 				}
 			}
 		}

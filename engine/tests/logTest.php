@@ -46,8 +46,6 @@ class logTest extends \PHPUnit\Framework\TestCase
         return $id;
     } 
 
-    
-
     /**
      * @depends test_request
      */
