@@ -536,7 +536,8 @@ class route
                                 //data
                                 $request->setData($params);
                                 //meta
-                                //?
+                                //parameters explicitly defined?
+                                $request->setTag($parameter_status['explicit_def']);
 
                                 //instance action
                                 return $model_instance->$action($request);

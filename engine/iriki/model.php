@@ -80,14 +80,22 @@ class model
 
       $exempt_properties = (isset($filter['exempt']) ? $filter['exempt'] : null);
 
+      $explicit_def = true;
+
       //build valid properties
       if (count($valid_properties) == 0)
       {
           //all properties are valid for parameters = []
           $valid_properties = array_keys($all_properties);
+
+          //this is where we note that specific paramters were
+          //not supplied for later
+          $explicit_def = false;
       }
 
       //check exempt properties
+      //because of the way this is written, do not exempt
+      //parent_id properties, it'll break
       $exempt_properties_count = count($exempt_properties);
       if ($exempt_properties_count == 0)
       {
@@ -95,6 +103,7 @@ class model
       }
       else
       {
+          //note that if exempt holds only *, it means all properties are exempt
           if ($exempt_properties_count == 1 && $exempt_properties[0] == '*')
           {
             //unset entire array
@@ -111,7 +120,10 @@ class model
           }
       }
 
-      return $valid_properties;
+      return array(
+        'valid_properties' => $valid_properties,
+        'explicit_def' => $explicit_def
+      );
     }
 
 
@@ -135,7 +147,8 @@ class model
 
       $all_properties = $details['properties'];
 
-      $valid_properties = Self::doExpandProperty($details, $filter);
+      $property_details = Self::doExpandProperty($details, $filter);
+      $valid_properties = $property_details['valid_properties'];
 
       $url_properties = isset($filter['url_parameters']) ? $filter['url_parameters'] : array();      
 
@@ -226,7 +239,9 @@ class model
         //extra properties that should not have been supplied
         'extra' => $extra_properties,
         //these, especially for mongodb have to be saved as mongoids
-        'ids' => array()
+        'ids' => array(),
+        //extra data to pass on to request that parameters were explicitly defined or not, helps with belongs to
+        'explicit_def' => $property_details['explicit_def']
       );
 
       return $result;
@@ -293,7 +308,7 @@ class model
 
     /**
     * Check a model for 'belongsto' parent relationship.
-    * Returns a modified parameter statuses you may have to update.
+    * Returns a modified parameter status you may have to update.
     *
     * @param request Request
     * @return Modified parameter status
@@ -301,7 +316,7 @@ class model
     */
     public static function doBelongsToRelation($request)
     {
-      //test to see if request can be sent by reference so we can convert parent model ids to mongoid
+      //todo?: test to see if request can be sent by reference so we can convert parent model ids to mongoid
       $parameters = $request->getParameterStatus();
 
       $belongsto = array();
@@ -319,8 +334,9 @@ class model
 
             //the plan is simple
             //if the model 'user_session' belongsto 'user'
-            //the user_session model will have a user_id field, get it
-            //then find the user details with the id supplied
+            //the user_session model will need a user_id field for:
+            //creates. that's it, anything else need be explicitly defined
+
 
           $db_instance = $request::getDBInstance();
 

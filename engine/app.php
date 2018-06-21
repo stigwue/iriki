@@ -117,7 +117,8 @@ class app extends \iriki\engine\request
 			//for each models routes....
 			foreach ($route_details as $route => $details)
 			{
-				$parameters = \iriki\engine\model::doExpandProperty($model_details, $details);
+				$deets = \iriki\engine\model::doExpandProperty($model_details, $details);
+				$parameters = $deets['valid_properties'];
 				$details['parameters'] = array_values($parameters);
 
 				$expanded_routes[$route] = $details;

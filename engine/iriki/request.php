@@ -56,6 +56,12 @@ class request
     private $_meta;
 
     /**
+    * Tag, other data to be used.
+    *
+    */
+    private $_tag;
+
+    /**
     * Gets the test mode value
     *
     * @return Test mode
@@ -244,6 +250,30 @@ class request
     {
       $this->_meta = $meta;
       return $this->_meta;
+    }
+
+    /**
+    * Gets the request tag.
+    *
+    * @return Request tag.
+    * @throw
+    */
+    public function getTag()
+    {
+      return $this->_tag;
+    }
+
+    /**
+    * Sets the request tag.
+    *
+    * @param meta Request tag.
+    * @return Request tag.
+    * @throw
+    */
+    public function setTag($tag)
+    {
+      $this->_tag = $tag;
+      return $this->_tag;
     }
 
     /**
@@ -500,34 +530,42 @@ class request
       $log_object = Self::log($request, time(NULL));
 
       //unique
-      //belongsto
-      $parameter_status = model::doBelongsToRelation($request);
-
-      //replace with modified
-      $request->setParameterStatus($parameter_status);
-
-      $missing_parameters = count($parameter_status['missing']);
-      $extra_parameters = count($parameter_status['extra']);
-
-      if ($extra_parameters != 0 OR $missing_parameters != 0)
+      //belongsto: only if request has no explicitly defined parameters (stored in tag)
+      if ($request->getTag() == true)
       {
-        if ($missing_parameters != 0)
-        {
-          Self::log(null, time(NULL), $log_object, response::ERROR);
+        //explicitly defined
+      }
+      else
+      {
+        $parameter_status = model::doBelongsToRelation($request);
 
-          return response::error(
-            response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
+        //replace with modified
+        $request->setParameterStatus($parameter_status);
+
+        $missing_parameters = count($parameter_status['missing']);
+        $extra_parameters = count($parameter_status['extra']);
+
+        if ($extra_parameters != 0 OR $missing_parameters != 0)
+        {
+          if ($missing_parameters != 0)
+          {
+            Self::log(null, time(NULL), $log_object, response::ERROR);
+
+            return response::error(
+              response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
+              $wrap);
+          }
+          if ($extra_parameters != 0)
+          {
+            Self::log(null, time(NULL), $log_object, response::ERROR);
+
+            return response::error(
+            response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
             $wrap);
-        }
-        if ($extra_parameters != 0)
-        {
-          Self::log(null, time(NULL), $log_object, response::ERROR);
-
-          return response::error(
-          response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
-          $wrap);
+          }
         }
       }
+      
       //hasmany
 
       $result = $db::doUpdate($request);

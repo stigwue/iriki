@@ -27,12 +27,11 @@
 				"change_auth" : {
 					"description" : "Change the user password.",
 					"parameters" : ["username", "hash_old", "hash_new"],
-					"exempt" : []
+					"authenticate" : "false"
 				},
 				"reset_auth" : {
 					"description" : "Reset the user password.",
-					"parameters" : ["username"],
-					"exempt" : []
+					"parameters" : ["username"]
 				},
 				"delete" : {
 					"description" : "Returns the properties of the matching model.",
