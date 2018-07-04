@@ -170,7 +170,7 @@ class model
           {
             //if already sent, will be replaced
             //else added anew
-            $sent[$url_property] = $sent_url[$url_index];
+            $sent[$url_property] = $sent_url[$url_property];
           }
           $url_index += 1;
         }
