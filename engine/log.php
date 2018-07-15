@@ -45,10 +45,10 @@ class log extends \iriki\engine\request
 		}
     }
 
-    public function read($request, $wrap = true)
+    public function read_timestamp($request, $wrap = true)
     {
-
         $data = $request->getData();
+
         //filter
         $query_data = array(
             'created' => array(
@@ -65,6 +65,27 @@ class log extends \iriki\engine\request
         ));
 
         $request->setMeta(['sort' => array('created' => -1)]);
+
+        return $request->read($request, $wrap);
+    }
+
+    public function read_index($request, $wrap = true)
+    {
+        $data = $request->getData();
+
+        $request->setData([]);
+
+        $request->setParameterStatus(array(
+          'final' => array(),
+          'missing' => array(),
+          'extra' => array(),
+          'ids' => array()
+        ));
+
+        $request->setMeta([
+        	'limit' => $data['index'],
+        	'sort' => array('created' => -1)
+        ]);
 
         return $request->read($request, $wrap);
     }

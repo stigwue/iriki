@@ -343,10 +343,10 @@ class mongodb extends database
     * Database read action.
     *
     * @param {request} Request on which action is performed
-    * @param {array} Array to control read sort
+    * @param {array} Array to control read action e.g sort, limit etc
     * @returns {Array} One of three options: null, an array of data values or an array with code (some error code) and message (string description)
     */
-	public static function doRead($request, $sort)
+	public static function doRead($request, $meta)
 	{
 		if (is_null(Self::$__instance))
 		{
@@ -391,9 +391,17 @@ class mongodb extends database
 
 			$cursor = $persist->find($query);
 
+			$sort = (isset($meta['sort']) ? $meta['sort'] : array());
+			$limit = (isset($meta['limit']) ? $meta['limit'] : 0);
+
 			if (count($sort) != 0)
 			{
 				$cursor->sort($sort);
+			}
+
+			if ($limit != 0)
+			{
+				$cursor->limit($limit);
 			}
 
 			$status = array();

@@ -459,9 +459,8 @@ class request
 
       //check sort metadata
       $meta = $request->getMeta();
-      $sort = (isset($meta['sort']) ? $meta['sort'] : array());
-
-      $result = $db::doRead($request, $sort);
+      
+      $result = $db::doRead($request, $meta);
 
       //intercept errors so as to display them accordingly
       $final_result = Self::catchError($result, 'data', $wrap, $log_object);

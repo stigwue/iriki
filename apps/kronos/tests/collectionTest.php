@@ -1,10 +1,10 @@
 <?php
 
-class adverbTest extends \PHPUnit\Framework\TestCase
+class collectionTest extends \PHPUnit\Framework\TestCase
 {
 	public function test_class_exist()
     {
-    	$status = class_exists('\kronos\adverb');
+    	$status = class_exists('\kronos\collection');
 
         $this->assertEquals(true, $status);
 
@@ -20,11 +20,11 @@ class adverbTest extends \PHPUnit\Framework\TestCase
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'adverb',
+                'model' => 'collection',
                 'action' => 'create',
                 'url_parameters' => array(),
                 'params' => array(
-            		'name' => 'An adverb'
+            		'name' => 'A collection'
                 )
             )
         );
@@ -54,7 +54,7 @@ class adverbTest extends \PHPUnit\Framework\TestCase
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'adverb',
+                'model' => 'collection',
                 'action' => 'read',
                 'url_parameters' => array(),
                 'params' => array(
@@ -89,7 +89,7 @@ class adverbTest extends \PHPUnit\Framework\TestCase
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'adverb',
+                'model' => 'collection',
                 'action' => 'read_all',
                 'url_parameters' => array(),
                 'params' => array(
@@ -122,12 +122,12 @@ class adverbTest extends \PHPUnit\Framework\TestCase
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'adverb',
+                'model' => 'collection',
                 'action' => 'update',
                 'url_parameters' => array(),
                 'params' => array(
             		'_id' => $id,
-            		'name' => 'Another adverb'
+            		'name' => 'Another collection'
                 )
             )
         );
@@ -157,7 +157,7 @@ class adverbTest extends \PHPUnit\Framework\TestCase
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'adverb',
+                'model' => 'collection',
                 'action' => 'delete',
                 'url_parameters' => array(),
                 'params' => array(

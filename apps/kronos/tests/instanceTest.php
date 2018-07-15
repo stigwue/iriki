@@ -7,6 +7,8 @@ class instanceTest extends \PHPUnit\Framework\TestCase
     	$status = class_exists('\kronos\instance');
 
         $this->assertEquals(true, $status);
+
+        return $status;
     }
 
     /**
@@ -153,7 +155,7 @@ class instanceTest extends \PHPUnit\Framework\TestCase
     /**
 	 * @depends test_create_success
      */
-    public function test_delete_success($id)
+    public function txst_delete_success($id)
 	{
 		$request = array(
             'code' => 200,
