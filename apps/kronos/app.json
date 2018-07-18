@@ -45,12 +45,6 @@
           "type" : "\\iriki\\engine\\mongodb",
           "server" : "mongodb://localhost:27017",
           "db" : "kronos-live"
-        },
-        "mysql" : {
-          "type" : "\\iriki\\engine\\mysql",
-          "server" : "localhost",
-          "db" : "kronos",
-          "password" : "plaintext"
         }
       },
 

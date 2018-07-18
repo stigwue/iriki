@@ -15,9 +15,15 @@
 					"exempt" : ["_id"],
 					"authenticate" : false
 				},
-				"read" : {
-					"description" : "Read event logs.",
+				"read_timestamp" : {
+					"description" : "Read event logs from specified timestamp.",
 					"parameters" : ["from_timestamp"],
+					"exempt" : ["*"],
+					"authenticate" : false
+				},
+				"read_count" : {
+					"description" : "Read event logs limited by count.",
+					"parameters" : ["count"],
 					"exempt" : ["*"],
 					"authenticate" : false
 				}

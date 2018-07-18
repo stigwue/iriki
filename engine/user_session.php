@@ -309,6 +309,10 @@ class user_session extends \iriki\engine\request
 
     public function read_anonymized($request, $wrap = true)
     {
+        $data = $request->getData();
+
+        $request->setData([]);
+        
         $request->setParameterStatus(array(
           'final' => array(),
           'missing' => array(),
@@ -316,7 +320,10 @@ class user_session extends \iriki\engine\request
           'ids' => array()
         ));
 
-        $request->setMeta(['sort' => array('created' => -1)]);
+        $request->setMeta([
+        	'limit' => $data['count'],
+        	'sort' => array('created' => -1)
+        ]);
 
         $user_sessions = $request->read($request, false);
 
