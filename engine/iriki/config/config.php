@@ -33,7 +33,7 @@ class config
     *
     *
     * @param json_path JSON file path
-    * @return string File contents or null if file not found.
+    * @return File contents or null if file not found.
     * @throw
     */
     public static function load_json_file($json_path)

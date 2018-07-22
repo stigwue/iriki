@@ -16,18 +16,18 @@ Test that all associated configuration and class files are present and rightly f
 
 This will create a specified Iriki block.
 
-### app
+## app
 
-Create a new Iriki application.
+Create a new Iriki application. Security modes can be insecure, non-secure and secure with varying provision of default routes at various authentication levels.
 
-### model
+## model
 
 Create a new Iriki model. This will also create a route and php class (both empty) for the model except you specify the xyz flag.
 
-### route
+## route
 
 Create a route for a model.
 
-### class
+## class
 
 Create a class file for a model.
