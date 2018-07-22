@@ -7,6 +7,8 @@ class adverbTest extends \PHPUnit\Framework\TestCase
     	$status = class_exists('\kronos\adverb');
 
         $this->assertEquals(true, $status);
+
+        return $status;
     }
 
     /**

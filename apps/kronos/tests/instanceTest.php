@@ -7,6 +7,8 @@ class instanceTest extends \PHPUnit\Framework\TestCase
     	$status = class_exists('\kronos\instance');
 
         $this->assertEquals(true, $status);
+
+        return $status;
     }
 
     /**

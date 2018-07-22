@@ -7,6 +7,8 @@ class verbTest extends \PHPUnit\Framework\TestCase
     	$status = class_exists('\kronos\verb');
 
         $this->assertEquals(true, $status);
+
+        return $status;
     }
 
     /**

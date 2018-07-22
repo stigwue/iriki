@@ -7,6 +7,8 @@ class adjectiveTest extends \PHPUnit\Framework\TestCase
     	$status = class_exists('\kronos\adjective');
 
         $this->assertEquals(true, $status);
+
+        return $status;
     }
 
     /**

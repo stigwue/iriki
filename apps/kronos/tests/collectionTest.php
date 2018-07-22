@@ -1,10 +1,10 @@
 <?php
 
-class nounTest extends \PHPUnit\Framework\TestCase
+class collectionTest extends \PHPUnit\Framework\TestCase
 {
 	public function test_class_exist()
     {
-    	$status = class_exists('\kronos\noun');
+    	$status = class_exists('\kronos\collection');
 
         $this->assertEquals(true, $status);
 
@@ -20,11 +20,11 @@ class nounTest extends \PHPUnit\Framework\TestCase
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'noun',
+                'model' => 'collection',
                 'action' => 'create',
                 'url_parameters' => array(),
                 'params' => array(
-            		'name' => 'A noun'
+            		'name' => 'A collection'
                 )
             )
         );
@@ -54,7 +54,7 @@ class nounTest extends \PHPUnit\Framework\TestCase
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'noun',
+                'model' => 'collection',
                 'action' => 'read',
                 'url_parameters' => array(),
                 'params' => array(
@@ -89,7 +89,7 @@ class nounTest extends \PHPUnit\Framework\TestCase
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'noun',
+                'model' => 'collection',
                 'action' => 'read_all',
                 'url_parameters' => array(),
                 'params' => array(
@@ -122,12 +122,12 @@ class nounTest extends \PHPUnit\Framework\TestCase
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'noun',
+                'model' => 'collection',
                 'action' => 'update',
                 'url_parameters' => array(),
                 'params' => array(
             		'_id' => $id,
-            		'name' => 'Another noun'
+            		'name' => 'Another collection'
                 )
             )
         );
@@ -151,13 +151,13 @@ class nounTest extends \PHPUnit\Framework\TestCase
     /**
 	 * @depends test_create_success
      */
-    public function test_delete_success($id)
+    public function txst_delete_success($id)
 	{
 		$request = array(
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'noun',
+                'model' => 'collection',
                 'action' => 'delete',
                 'url_parameters' => array(),
                 'params' => array(
