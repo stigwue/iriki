@@ -1,0 +1,26 @@
+{
+	"kronos":
+	{
+		"routes" : {
+			"collection_item" : {
+				"add" : {
+					"description" : "Add a unique item to a collection.",
+					"parameters" : ["collection_id", "type", "model"]
+				},
+				"read_by_collection" : {
+					"description" : "Read items of a collection.",
+					"parameters" : ["collection_id"],
+					"url_parameters" : ["collection_id"]
+				},
+				"exists" : {
+					"description" : "Check if a model exists in a collection.",
+					"parameters" : ["collection_id", "model"]
+				},
+				"remove" : {
+					"description" : "Remove an item from a collection.",
+					"parameters" : ["collection_id", "model"]
+				}
+			}
+		}
+	}
+}
