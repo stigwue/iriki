@@ -6,13 +6,21 @@ Source code is at [stigwue/iriki](https://github.com/stigwue/iriki).
 
 An Iriki installation is made up of two parts: the engine and the app. 
 
-The engine is the framework. Vendor provided third-party code needs to be installed using composer. Just go to the _engine_ directory and run:
+The engine is the framework. Vendor provided third-party code needs to be installed using composer. Just change directory to the _engine_ directory and run:
 
 ```
 composer install
 ```
 
+Then copy _config.default.php_ to _config.php_ to use the default configurations for your installation. Note that paths in _config.php_ should be absolute or relative to _index.php_. Those in the app configuration _app.json_ should be absolute. 
+
 The app can be generated using the Iriki _scarf_ tool or created manually if you know what you're doing.
+
+## Tests
+
+```
+engine/vendor/bin/phpunit --bootstrap engine/tests/bootstrap.php engine/tests/
+```
 
 ## How it works
 

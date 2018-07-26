@@ -7,6 +7,8 @@ Source code is at [stigwue/iriki](https://github.com/stigwue/iriki).
 
 ## To Do
 
+* Add Mongo authentication support.
+
 * 100% test coverage.
 
 * 100% self-documentation using Doxygen parsable comments.
@@ -19,11 +21,11 @@ Source code is at [stigwue/iriki](https://github.com/stigwue/iriki).
 
 * Add 'scarf', an app for automating common Iriki tasks.
 
-* Add (via composer) stigwue/naija_pikin to be used in test suites for generating random types.
+* Use _hasmany_ relationship to recurse read.
 
 * Better/standard error description?
 
-* Add new Mongo support.
+* Add other NoSQL db support?
 
 * Build in inter-operability (app.json should hold an array of apps, callable via config/code), also configurations provided in more than json files.
 
