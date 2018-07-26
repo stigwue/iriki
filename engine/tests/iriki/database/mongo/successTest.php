@@ -2,21 +2,21 @@
 
 namespace iriki_engine_tests;
 
-class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
+class successTest extends \PHPUnit\Framework\TestCase
 {
     //please note that this test creates a valid internal db handle
     //so tests that rely on this handle being invalid will fail
     //so order tests accordingly, will you?
     public function test_doInitialise_success()
     {
-    	\iriki\engine\mongodb::doDestroy();
+    	\iriki\engine\mongo::doDestroy();
 
         if (!isset($GLOBALS['APP']['config']['database']['test']))
         {
             $this->assertFalse(true, "Test database configuration not found");
         }
 
-        $db_instance = \iriki\engine\mongodb::doInitialise(
+        $db_instance = \iriki\engine\mongo::doInitialise(
             $GLOBALS['APP']['config']['database']['test']
         );
 
@@ -28,7 +28,7 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
 
     public function test_doDestroy_success()
     {
-    	$status = \iriki\engine\mongodb::doDestroy();
+    	$status = \iriki\engine\mongo::doDestroy();
 
         //assert
         $this->assertEquals(true, $status);
@@ -36,14 +36,14 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
 
 	public function test_doCreate_success()
     {
-        \iriki\engine\mongodb::doDestroy();
+        \iriki\engine\mongo::doDestroy();
 
         if (!isset($GLOBALS['APP']['config']['database']['test']))
         {
             $this->assertFalse(true, "Test database configuration not found");
         }
 
-        $db_instance = \iriki\engine\mongodb::doInitialise(
+        $db_instance = \iriki\engine\mongo::doInitialise(
             $GLOBALS['APP']['config']['database']['test']
         );
 
@@ -99,7 +99,7 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
                 'missing' => array(),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongodb have to be saved as mongoids
+                //these, especially for mongo have to be saved as mongoids
                 'ids' => array()
             )
         );
@@ -114,7 +114,7 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
         //session
         //$request->setSession('user_session_token');
 
-        $status = \iriki\engine\mongodb::doCreate($request);
+        $status = \iriki\engine\mongo::doCreate($request);
 
         //assert
         $this->assertEquals(true, $status['message']);
@@ -127,14 +127,14 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
      */
     public function test_doRead_success($id_to_read)
     {
-        \iriki\engine\mongodb::doDestroy();
+        \iriki\engine\mongo::doDestroy();
         
         if (!isset($GLOBALS['APP']['config']['database']['test']))
         {
             $this->assertFalse(true, "Test database configuration not found");
         }
 
-        $db_instance = \iriki\engine\mongodb::doInitialise(
+        $db_instance = \iriki\engine\mongo::doInitialise(
             $GLOBALS['APP']['config']['database']['test']
         );
 
@@ -190,7 +190,7 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
                 'missing' => array(),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongodb have to be saved as mongoids
+                //these, especially for mongo have to be saved as mongoids
                 'ids' => array('_id')
             )
         );
@@ -207,7 +207,7 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
         //session
         //$request->setSession('user_session_token');
 
-        $status = \iriki\engine\mongodb::doRead($request, array());
+        $status = \iriki\engine\mongo::doRead($request, array());
 
         //assert
         $this->assertEquals($id_to_read, $status[0]['_id']);
@@ -220,14 +220,14 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
      */
     public function test_doUpdate_success($obj_to_update)
     {
-        \iriki\engine\mongodb::doDestroy();
+        \iriki\engine\mongo::doDestroy();
         
         if (!isset($GLOBALS['APP']['config']['database']['test']))
         {
             $this->assertFalse(true, "Test database configuration not found");
         }
 
-        $db_instance = \iriki\engine\mongodb::doInitialise(
+        $db_instance = \iriki\engine\mongo::doInitialise(
             $GLOBALS['APP']['config']['database']['test']
         );
 
@@ -283,7 +283,7 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
                 'missing' => array(),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongodb have to be saved as mongoids
+                //these, especially for mongo have to be saved as mongoids
                 'ids' => array('_id')
             )
         );
@@ -299,7 +299,7 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
         //session
         //$request->setSession('user_session_token');
 
-        $status = \iriki\engine\mongodb::doUpdate($request);
+        $status = \iriki\engine\mongo::doUpdate($request);
 
         //assert
         $this->assertEquals(true, $status);
@@ -310,14 +310,14 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
      */
     public function test_doDelete_success($id)
     {
-        \iriki\engine\mongodb::doDestroy();
+        \iriki\engine\mongo::doDestroy();
         
         if (!isset($GLOBALS['APP']['config']['database']['test']))
         {
             $this->assertFalse(true, "Test database configuration not found");
         }
 
-        $db_instance = \iriki\engine\mongodb::doInitialise(
+        $db_instance = \iriki\engine\mongo::doInitialise(
             $GLOBALS['APP']['config']['database']['test']
         );
 
@@ -373,7 +373,7 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
                 'missing' => array(),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongodb have to be saved as mongoids
+                //these, especially for mongo have to be saved as mongoids
                 'ids' => array('_id')
             )
         );
@@ -388,7 +388,7 @@ class mongodbSuccessTest extends \PHPUnit\Framework\TestCase
         //session
         //$request->setSession('user_session_token');
 
-        $status = \iriki\engine\mongodb::doDelete($request);
+        $status = \iriki\engine\mongo::doDelete($request);
 
         //assert
         $this->assertEquals(true, $status);

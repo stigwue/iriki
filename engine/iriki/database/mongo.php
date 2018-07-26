@@ -9,10 +9,10 @@ require_once(__DIR__ . '/database.php');
 require_once(__DIR__ . '/../response.php');
 
 /**
-* Iriki MongoDB database engine.
+* Iriki Mongo database engine.
 *
 */
-class mongodb extends database
+class mongo extends database
 {
 	/**
     * Database id field.
@@ -69,7 +69,7 @@ class mongodb extends database
 	public static function doInitialise($config_values)
 	{
 		//we have supplied the db's properties in config
-		//the engine name
+		//the engine name 
 		//and app name
 
 		//the trick is to see if config values are null
@@ -94,11 +94,10 @@ class mongodb extends database
 				isset(Self::$_key_values['db'])
 			)
 			{
-			    //(new MongoDB\Client)->test->users
-				//$mongo_client = new \MongoDB\Client(Self::$_key_values['server']);
+				$mongo_client = new \MongoClient(Self::$_key_values['server']);
 				$mongo_db = Self::$_key_values['db'];
 
-				Self::$__instance = (new \MongoDB\Client)->$mongo_db;
+				Self::$__instance = $mongo_client->$mongo_db;
 
 				return Self::$__instance;
 			}
@@ -162,7 +161,7 @@ class mongodb extends database
 			//cursor should hold only one session object
 			foreach ($cursor as $user_session)
 			{
-				//is it authenticated?
+				//is it authenticated? 
 				if ($user_session['authenticated'] == false) {
 					return false;
 				}
@@ -194,7 +193,7 @@ class mongodb extends database
 					//too stringent, ignore for now
 					//$ip = $_SERVER['SERVER_ADDR'];
 					//if ($ip == $user_session['ip'])
-
+					
 					return true;
 				}
 			}
@@ -225,7 +224,7 @@ class mongodb extends database
 				if (isset($key_values[$key]) && Self::isMongoId($key_values[$key]))
 				{
 					//$key is an id, enforce
-					$query[$key] = new \MongoDB\BSON\ObjectId($key_values[$key]);
+					$query[$key] = new \MongoId($key_values[$key]);
 				}
 				else
 				{
@@ -263,11 +262,11 @@ class mongodb extends database
 		foreach ($key_values as $key => $value)
 		{
 			if (
-				$key == Self::ID_FIELD OR //somehow check that value is MongoDB\BSON\ObjectId
+				$key == Self::ID_FIELD OR
 				isset($value->{'$id'})
 			)
 			{
-				$pretty[$key] = (string) $value;
+				$pretty[$key] = $value->{'$id'};
 			}
 			else
 			{
@@ -322,14 +321,16 @@ class mongodb extends database
 				);
 			}
 
-			$query[Self::ID_FIELD] = new \MongoDB\BSON\ObjectId();
+			$query[Self::ID_FIELD] = new \MongoId();
 			$query['created'] = time(NULL);
 
-      		$status = $persist->insertOne($query);
+      		$status = $persist->insert($query);
+
+			$status_flag = ($status["n"] == 0);
 
 			return array(
-				'message' => $status->isAcknowledged(),
-				'data' => (string) $status->getInsertedId()
+				'message' => $status_flag,
+				'data' => $query[Self::ID_FIELD]->{'$id'}
 			);
 		}
 	}
@@ -401,13 +402,20 @@ class mongodb extends database
 
 			$status = array();
 
-			//loop through cursor
-			$list = array();
-			foreach ($cursor as $object)
+			if (count($cursor) == 0)
 			{
-				$list[] = Self::deenforceIds($object);
+				$status = array();
 			}
-			$status = $list;
+			else
+			{
+				//loop through cursor
+				$list = array();
+				foreach ($cursor as $object)
+				{
+					$list[] = Self::deenforceIds($object);
+				}
+				$status = $list;
+			}
 
 			return $status;
 		}
@@ -458,7 +466,7 @@ class mongodb extends database
 
 			//pick only the id field to be used to filter update
 			$query = array(
-				Self::ID_FIELD => new \MongoDB\BSON\ObjectId($data[Self::ID_FIELD])
+				Self::ID_FIELD => new \MongoId($data[Self::ID_FIELD])
 			);
 
 			//remove the id field to prevent it from being edited
@@ -467,9 +475,9 @@ class mongodb extends database
 
 			$data['modified'] = time(NULL);
 
-			$status = $persist->updateOne($query, array('$set' => $data));
+			$status = $persist->update($query, array('$set' => $data));
 
-			$status_flag = ($status->getMatchedCount() == $status->getModifiedCount());
+			$status_flag = $status["updatedExisting"];
 
 			return $status_flag;
 		}
@@ -501,7 +509,7 @@ class mongodb extends database
 					);
 				}
 			}
-
+			
 			$collection = $request->getModel();
 			$persist = Self::$__instance->$collection;
 
@@ -519,9 +527,9 @@ class mongodb extends database
 				);
 			}
 
-			$status = $persist->deleteOne($query);
+			$status = $persist->remove($query);
 
-			$status_flag = ($status->getDeletedCount() != 0);
+			$status_flag = ($status["n"] != 0);
 
 			return $status_flag;
 		}

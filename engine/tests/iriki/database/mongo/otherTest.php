@@ -2,13 +2,13 @@
 
 namespace iriki_engine_tests;
 
-class mongodbTest extends \PHPUnit\Framework\TestCase
+class otherTest extends \PHPUnit\Framework\TestCase
 {
     public function test_isMongoId_failure()
     {
         $false_mongo_id = 'false mongo id';
 
-        $status = \iriki\engine\mongodb::isMongoId($false_mongo_id);
+        $status = \iriki\engine\mongo::isMongoId($false_mongo_id);
 
         //assert
         $this->assertNotEquals(true, $status);
@@ -18,7 +18,7 @@ class mongodbTest extends \PHPUnit\Framework\TestCase
     {
         $true_mongo_id = '596cbd52565bb550080041b8';
 
-        $status = \iriki\engine\mongodb::isMongoId($true_mongo_id);
+        $status = \iriki\engine\mongo::isMongoId($true_mongo_id);
 
         //assert
         $this->assertEquals(true, $status);
@@ -26,7 +26,7 @@ class mongodbTest extends \PHPUnit\Framework\TestCase
 
     public function test_doInitialise_failure()
     {
-        $status = \iriki\engine\mongodb::doInitialise(
+        $status = \iriki\engine\mongo::doInitialise(
             null
         );
 
