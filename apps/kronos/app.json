@@ -32,17 +32,17 @@
 
       "database" : {
         "dev" : {
-          "type" : "\\iriki\\engine\\mongodb",
+          "type" : "\\iriki\\engine\\mongo",
           "server" : "mongodb://localhost:27017",
           "db" : "kronos-dev"
         },
         "test" : {
-          "type" : "\\iriki\\engine\\mongodb",
+          "type" : "\\iriki\\engine\\mongo",
           "server" : "mongodb://localhost:27017",
           "db" : "kronos-test"
         },
         "live" : {
-          "type" : "\\iriki\\engine\\mongodb",
+          "type" : "\\iriki\\engine\\mongo",
           "server" : "mongodb://localhost:27017",
           "db" : "kronos-live"
         }
