@@ -1,10 +1,10 @@
 <?php
 
-namespace iriki_engine_tests;
+namespace iriki_tests\engine\database\mongodb;
 
 class otherTest extends \PHPUnit\Framework\TestCase
 {
-    public function test_isMongoId_failure()
+    public function txst_isMongoId_failure()
     {
         $false_mongo_id = 'false mongo id';
 
@@ -14,7 +14,7 @@ class otherTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEquals(true, $status);
     }
 
-    public function test_isMongoId_success()
+    public function txst_isMongoId_success()
     {
         $true_mongo_id = '596cbd52565bb550080041b8';
 
@@ -24,7 +24,7 @@ class otherTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $status);
     }
 
-    public function test_doInitialise_failure()
+    public function txst_doInitialise_failure()
     {
         $status = \iriki\engine\mongodb::doInitialise(
             null

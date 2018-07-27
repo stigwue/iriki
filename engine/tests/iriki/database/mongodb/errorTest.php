@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki_engine_tests;
+namespace iriki_tests\engine\database\mongodb;
 
 class errorTest extends \PHPUnit\Framework\TestCase
 {
@@ -8,7 +8,7 @@ class errorTest extends \PHPUnit\Framework\TestCase
     //note that errors can be a issing session token
     //or a missing parameter
 
-    public function test_database_test_config()
+    public function txst_database_test_config()
     {
         //assert
         $this->assertEquals(true, isset($GLOBALS['APP']['config']['database']['test']));
@@ -23,7 +23,7 @@ class errorTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_database_test_config
      */
-    public function test_doCreate_error($db_instance)
+    public function txst_doCreate_error($db_instance)
     {
         $request = new \iriki\engine\request();
         //db_instance
@@ -101,7 +101,7 @@ class errorTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_database_test_config
      */
-    public function test_doRead_error($db_instance)
+    public function txst_doRead_error($db_instance)
     {
         $request = new \iriki\engine\request();
         //db_instance
@@ -176,7 +176,7 @@ class errorTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_database_test_config
      */
-    public function test_doUpdate_error($db_instance)
+    public function txst_doUpdate_error($db_instance)
     {
         $request = new \iriki\engine\request();
         //db_instance
@@ -251,7 +251,7 @@ class errorTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_database_test_config
      */
-    public function test_doDelete_error($db_instance)
+    public function txst_doDelete_error($db_instance)
     {
         $request = new \iriki\engine\request();
         //db_instance

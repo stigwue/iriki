@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki_engine_tests;
+namespace iriki_tests\engine\database\mongo;
 
 class otherTest extends \PHPUnit\Framework\TestCase
 {

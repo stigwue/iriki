@@ -1,11 +1,11 @@
 <?php
 
-namespace iriki_engine_tests;
+namespace iriki_tests\engine\database\mongodb;
 
 class nullTest extends \PHPUnit\Framework\TestCase
 {
 	//CRUD nulls
-    public function test_doCreate_null()
+    public function txst_doCreate_null()
     {
     	\iriki\engine\mongodb::doDestroy();
 
@@ -39,7 +39,7 @@ class nullTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(null, $status);
     }
 
-    public function test_doRead_null()
+    public function txst_doRead_null()
     {
     	\iriki\engine\mongodb::doDestroy();
 
@@ -73,7 +73,7 @@ class nullTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(null, $status);
     }
 
-    public function test_doUpdate_null()
+    public function txst_doUpdate_null()
     {
     	\iriki\engine\mongodb::doDestroy();
 
@@ -107,7 +107,7 @@ class nullTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(null, $status);
     }
 
-    public function test_doDelete_null()
+    public function txst_doDelete_null()
     {
     	\iriki\engine\mongodb::doDestroy();
 

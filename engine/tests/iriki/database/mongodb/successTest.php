@@ -1,13 +1,13 @@
 <?php
 
-namespace iriki_engine_tests;
+namespace iriki_tests\engine\database\mongo;
 
 class successTest extends \PHPUnit\Framework\TestCase
 {
     //please note that this test creates a valid internal db handle
     //so tests that rely on this handle being invalid will fail
     //so order tests accordingly, will you?
-    public function test_doInitialise_success()
+    public function txst_doInitialise_success()
     {
     	\iriki\engine\mongodb::doDestroy();
 
@@ -26,7 +26,7 @@ class successTest extends \PHPUnit\Framework\TestCase
         return $db_instance;
     }
 
-    public function test_doDestroy_success()
+    public function txst_doDestroy_success()
     {
     	$status = \iriki\engine\mongodb::doDestroy();
 
@@ -34,7 +34,7 @@ class successTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(true, $status);
     }
 
-	public function test_doCreate_success()
+	public function txst_doCreate_success()
     {
         \iriki\engine\mongodb::doDestroy();
 
@@ -125,7 +125,7 @@ class successTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_doCreate_success
      */
-    public function test_doRead_success($id_to_read)
+    public function txst_doRead_success($id_to_read)
     {
         \iriki\engine\mongodb::doDestroy();
 
@@ -218,7 +218,7 @@ class successTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_doRead_success
      */
-    public function test_doUpdate_success($obj_to_update)
+    public function txst_doUpdate_success($obj_to_update)
     {
         \iriki\engine\mongodb::doDestroy();
 
@@ -308,7 +308,7 @@ class successTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_doCreate_success
      */
-    public function test_doDelete_success($id)
+    public function txst_doDelete_success($id)
     {
         \iriki\engine\mongodb::doDestroy();
 
