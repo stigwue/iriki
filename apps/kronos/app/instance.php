@@ -163,6 +163,44 @@ class instance extends \iriki\engine\request
 			}
 		}
 	}
+
+	public function read($request, $wrap = true)
+	{
+		$parameters = $request->getData();
+
+		if ($parameters['recursion'] == 0)
+		{
+			//no recursion whatsoever
+			
+			//drop the recursion parameter
+			$request->setParameterStatus([
+				'final' => array('_id'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array('_id')
+			]);
+
+			unset($parameters['recursion']);
+
+			$request->setData($parameters);
+
+			return $request->read($request, $wrap);
+		}
+		else
+		{
+			//recursion for collection types
+			if ($parameters['type'] != 'collection')
+			{
+				return \iriki\engine\response::error('Recursive action not available for this type.');
+			}
+			else
+			{
+				//read a collection recursively
+				//call this function again and again, reducing the recursion number
+				//manage results
+			}
+		}
+	}
 }
 
 ?>

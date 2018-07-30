@@ -2,7 +2,7 @@
 
 namespace iriki_engine_tests;
 
-class mongodbErrorTest extends \PHPUnit\Framework\TestCase
+class errorTest extends \PHPUnit\Framework\TestCase
 {
     //CRUD errors
     //note that errors can be a issing session token
@@ -77,7 +77,7 @@ class mongodbErrorTest extends \PHPUnit\Framework\TestCase
                 'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongodb have to be saved as mongoids
+                //these, especially for mongo have to be saved as mongoids
                 'ids' => array()
             )
         );
@@ -156,7 +156,7 @@ class mongodbErrorTest extends \PHPUnit\Framework\TestCase
                 'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongodb have to be saved as mongoids
+                //these, especially for mongo have to be saved as mongoids
                 'ids' => array()
             )
         );
@@ -231,7 +231,7 @@ class mongodbErrorTest extends \PHPUnit\Framework\TestCase
                 'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongodb have to be saved as mongoids
+                //these, especially for mongo have to be saved as mongoids
                 'ids' => array()
             )
         );
@@ -306,7 +306,7 @@ class mongodbErrorTest extends \PHPUnit\Framework\TestCase
                 'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongodb have to be saved as mongoids
+                //these, especially for mongo have to be saved as mongoids
                 'ids' => array()
             )
         );

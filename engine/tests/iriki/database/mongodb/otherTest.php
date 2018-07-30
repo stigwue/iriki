@@ -2,7 +2,7 @@
 
 namespace iriki_engine_tests;
 
-class mongodbTest extends \PHPUnit\Framework\TestCase
+class otherTest extends \PHPUnit\Framework\TestCase
 {
     public function test_isMongoId_failure()
     {

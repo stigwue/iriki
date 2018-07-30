@@ -179,6 +179,7 @@ class model
       //check for valid sent properties
       $properties_missing = array();
       $final_properties = array();
+      $id_properties = array();
       foreach ($valid_properties as $property)
       {
           if (isset($sent[$property]))
@@ -202,6 +203,12 @@ class model
                 //fix type
                 $sent[$property] = type::ctype($value, $type);
                 $final_properties[] = $property;
+              }
+
+              //if key, add to ids
+              if ($type == 'key' && !in_array($property, $id_properties))
+              {
+                $id_properties[] = $property;
               }
             }
             else
@@ -239,8 +246,8 @@ class model
         //extra properties that should not have been supplied
         'extra' => $extra_properties,
         //these, especially for mongodb have to be saved as mongoids
-        'ids' => array(),
-        //extra data to pass on to request that parameters were explicitly defined or not, helps with belongs to
+        'ids' => $id_properties,
+        //extra data to pass on to request that parameters were explicitly defined or not, helps with belongsto defined parameters
         'explicit_def' => $property_details['explicit_def']
       );
 
@@ -292,6 +299,7 @@ class model
       				'final' => array($property),
       				'missing' => array(),
       				'extra' => array(),
+              		//sure you need to pass in ids?
       				'ids' => $initial_request->getParameterStatus()['ids']
       			));
 

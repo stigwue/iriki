@@ -21,9 +21,15 @@
 					"exempt" : ["*"],
 					"authenticate" : false
 				},
-				"read_index" : {
-					"description" : "Read event logs using an index.",
-					"parameters" : ["index"],
+				"read_count" : {
+					"description" : "Read event logs limited by count.",
+					"parameters" : ["count"],
+					"exempt" : ["*"],
+					"authenticate" : false
+				},
+				"summary" : {
+					"description" : "Return log summary.",
+					"parameters" : [],
 					"exempt" : ["*"],
 					"authenticate" : false
 				}

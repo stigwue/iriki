@@ -29,6 +29,12 @@ define('IRIKI_SESSION_SHORT', 7 * 24 * 60 * 60);
 //'remember me', last 3 months
 define('IRIKI_SESSION_LONG', 3 * 30 * 24 * 60 * 60);
 
+
+/*For path configurations, absolute paths are preferred to relative paths.
+*One could still use relative paths, knowing that they are relative to index.php
+*(tests would then be have to be run from the same path e.g engine/vendor/bin/phpunit --bootstrap engine/tests/bootstrap.php engine/tests/iriki/).
+*/
+
 //config file for this app
 define('IRIKI_CONFIG', 'apps/kronos/app.json');
 

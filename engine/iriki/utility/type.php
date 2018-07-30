@@ -13,9 +13,9 @@ class type
   * Checks to see if provided variable is of a certain type.
   *
   *
-  * @param object Variable value to check
-  * @param string Type name to compare
-  * @returns array Status of type match
+  * @param value Variable value to check
+  * @param type Type name to compare
+  * @return Status of type match
   * @throw
   */
   public static function is_type($value, $type)
@@ -129,9 +129,9 @@ class type
   * Convert provided variable to the desired type.
   * Do make sure an is_type test already returns true.
   *
-  * @param object Variable value to check
-  * @param string Type name to compare
-  * @returns object Desired type
+  * @param value Variable value to check
+  * @param type Type name to convert to
+  * @return Desired object of type
   * @throw
   */
   public static function ctype($value, $type)

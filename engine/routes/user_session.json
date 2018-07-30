@@ -30,8 +30,8 @@
 					"parameters" : ["user_id"]
 				},
 				"read_anonymized" : {
-					"description" : "Return anonymized user_sessions for statistical purposes.",
-					"parameters" : [],
+					"description" : "Return anonymized user_sessions limited by count for statistical purposes.",
+					"parameters" : ["count"],
 					"exempt" : ["*"],
 					"authenticate" : false
 				}

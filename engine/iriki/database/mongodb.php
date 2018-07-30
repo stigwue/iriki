@@ -9,8 +9,7 @@ require_once(__DIR__ . '/database.php');
 require_once(__DIR__ . '/../response.php');
 
 /**
-* Iriki database engine.
-* This is the mongodb instance.
+* Iriki Mongo database engine.
 *
 */
 class mongodb extends database
@@ -20,14 +19,12 @@ class mongodb extends database
     * Any property/column with this name is an id.
     * Parent model ids are also built with this.
     *
-    * @var {string}
     */
 	const ID_FIELD = '_id';
 
 	/**
     * Associative array of database parameters.
     *
-    * @var {Array}
     */
     private static $_key_values;
 
@@ -36,7 +33,6 @@ class mongodb extends database
     * This is shared across all instances of this class.
     * So handle carefully.
     *
-    * @var {Object}
     */
 	private static $__instance = null;
 
@@ -44,7 +40,7 @@ class mongodb extends database
     * Gets the database class.
     *
     *
-    * @returns string Database class
+    * @return Database class
     * @throw
     */
 	public static function getClass()
@@ -56,7 +52,7 @@ class mongodb extends database
     * Gets the internal database instance.
     *
     *
-    * @returns {Object} Mongo intance
+    * @return Mongo intance
     */
 	public static function getInstance()
 	{
@@ -66,14 +62,14 @@ class mongodb extends database
     /**
     * Initialize the database instance using supplied configuration
     *
-    * @param {Array} $config_values Database configuration values
-    * @returns {boolean} True or false value.
+    * @param config_values Database configuration values
+    * @return True or false value.
     * @throw
     */
 	public static function doInitialise($config_values)
 	{
 		//we have supplied the db's properties in config
-		//the engine name 
+		//the engine name
 		//and app name
 
 		//the trick is to see if config values are null
@@ -115,7 +111,7 @@ class mongodb extends database
 	/**
     * Destroy the database instance
     *
-    * @returns {boolean} True or false value.
+    * @return True or false value.
     * @throw
     */
 	public static function doDestroy()
@@ -129,8 +125,8 @@ class mongodb extends database
 	/**
     * Checker for valid Mongo IDs.
     *
-    * @param {string} The id to check.
-    * @returns {boolean} True or false
+    * @param id The id to check.
+    * @return True or false
     */
 	public static function isMongoId($id){
 		return is_string($id) && strlen($id) == 24 && ctype_xdigit($id);
@@ -142,9 +138,9 @@ class mongodb extends database
     * calling function can
     * return response::error('User session token invalid or expired.');
     *
-    * @param {string} Session token.
-    * @param {integer} Timestamp to use for expiry checks
-    * @returns {boolean} True or false
+    * @param user_session_token Session token.
+    * @param timestamp Timestamp to use for expiry checks
+    * @return True or false
     */
     private static function checkSessionToken($user_session_token, $timestamp)
 	{
@@ -165,7 +161,7 @@ class mongodb extends database
 			//cursor should hold only one session object
 			foreach ($cursor as $user_session)
 			{
-				//is it authenticated? 
+				//is it authenticated?
 				if ($user_session['authenticated'] == false) {
 					return false;
 				}
@@ -197,7 +193,7 @@ class mongodb extends database
 					//too stringent, ignore for now
 					//$ip = $_SERVER['SERVER_ADDR'];
 					//if ($ip == $user_session['ip'])
-					
+
 					return true;
 				}
 			}
@@ -211,9 +207,9 @@ class mongodb extends database
     * Convert IDs supplied as strings to MongoIDs
     * Invalid IDs will be added to missing parameters
     *
-    * @param {array} Parameters: final, missing and ids.
-    * @param {array} Parameter values
-    * @returns {Array} Corrected query array
+    * @param parameters Parameters: final, missing and ids.
+    * @param key_values Parameter values
+    * @return Corrected query array
     */
 	public static function enforceIds(&$parameters, $key_values)
 	{
@@ -256,8 +252,8 @@ class mongodb extends database
     * Because MongoIDs are complex variables (an array like '$id' => 'string representation'),
     * we need to pull out only the string value.
     *
-    * @param {array} Associative array of key and values
-    * @returns {Array} Corrected array
+    * @param key_values Associative array of key and values
+    * @return Corrected array
     */
 	public static function deenforceIds($key_values)
 	{
@@ -284,8 +280,8 @@ class mongodb extends database
 	/**
     * Database create action.
     *
-    * @param {request} Request on which action is performed
-    * @returns {Array} One of three options: null, an array with message (true or false) and data values or an array with code (some error code) and message (string description)
+    * @param request Request on which action is performed
+    * @return One of three options: null, an array with message (true or false) and data values or an array with code (some error code) and message (string description)
     */
 	public static function doCreate($request)
 	{
@@ -342,9 +338,9 @@ class mongodb extends database
 	/**
     * Database read action.
     *
-    * @param {request} Request on which action is performed
-    * @param {array} Array to control read action e.g sort, limit etc
-    * @returns {Array} One of three options: null, an array of data values or an array with code (some error code) and message (string description)
+    * @param request Request on which action is performed
+    * @param meta Array to control read action e.g sort, limit etc
+    * @return One of three options: null, an array of data values or an array with code (some error code) and message (string description)
     */
 	public static function doRead($request, $meta)
 	{
@@ -428,8 +424,8 @@ class mongodb extends database
 	/**
     * Database update action.
     *
-    * @param {request} Request on which action is performed
-    * @returns {Array} One of three options: null, a success flag or an array with code (some error code) and message (string description)
+    * @param request Request on which action is performed
+    * @return One of three options: null, a success flag or an array with code (some error code) and message (string description)
     */
 	public static function doUpdate($request)
 	{
@@ -490,8 +486,8 @@ class mongodb extends database
 	/**
     * Database delete action.
     *
-    * @param {request} Request on which action is performed
-    * @returns {Array} One of three options: null, a success flag or an array with code (some error code) and message (string description)
+    * @param request Request on which action is performed
+    * @return One of three options: null, a success flag or an array with code (some error code) and message (string description)
     */
 	public static function doDelete($request)
 	{
@@ -513,7 +509,7 @@ class mongodb extends database
 					);
 				}
 			}
-			
+
 			$collection = $request->getModel();
 			$persist = Self::$__instance->$collection;
 

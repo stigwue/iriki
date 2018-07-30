@@ -69,7 +69,7 @@ class log extends \iriki\engine\request
         return $request->read($request, $wrap);
     }
 
-    public function read_index($request, $wrap = true)
+    public function read_count($request, $wrap = true)
     {
         $data = $request->getData();
 
@@ -83,11 +83,63 @@ class log extends \iriki\engine\request
         ));
 
         $request->setMeta([
-        	'limit' => $data['index'],
+        	'limit' => $data['count'],
         	'sort' => array('created' => -1)
         ]);
 
         return $request->read($request, $wrap);
+    }
+
+    public function summary($request, $wrap = true)
+    {
+        $request->setData([]);
+
+        //get count
+        $request->setParameterStatus(array(
+          'final' => array(),
+          'missing' => array(),
+          'extra' => array(),
+          'ids' => array()
+        ));
+
+        $request->setMeta([
+            'count' => true
+        ]);
+
+        $count = $request->read($request, false);
+
+        //get latest
+        $request->setParameterStatus(array(
+          'final' => array(),
+          'missing' => array(),
+          'extra' => array(),
+          'ids' => array()
+        ));
+
+        $request->setMeta([
+            'sort' => array('created' => -1),
+            'limit' => 1
+        ]);
+
+        $latest_log = $request->read($request, false);
+        $stamp = 0;
+
+        //approximate with happrox
+        $obj = new \Happrox();
+        \Happrox::setDurationBase($obj, time(NULL));
+
+        if (count($latest_log) != 0)
+        {
+            $stamp = time(NULL) - $latest_log[0]['created'];
+        }
+
+        return \iriki\engine\response::data(
+            [
+                'entries' => \Happrox::number($obj, $count),
+                'latest' => \Happrox::duration($obj, $stamp)
+            ],
+            $wrap
+        );
     }
 }
 
