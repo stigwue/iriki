@@ -303,6 +303,12 @@ class user_session extends \iriki\engine\request
 				'extra' => array(),
 				'ids' => array('user_id')
 			));
+
+			//sort by pings and created
+	        $request->setMeta([
+	        	'sort' => array('ping' => -1)
+	        ]);
+
 			return $request->read($request, $wrap);
 		}
 	}

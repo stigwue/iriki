@@ -384,32 +384,41 @@ class mongodb extends database
 				);
 			}
 
-			$cursor = $persist->find($query);
+			$count = (isset($meta['count']) ? $meta['count'] : false);
 
-			$sort = (isset($meta['sort']) ? $meta['sort'] : array());
-			$limit = (isset($meta['limit']) ? $meta['limit'] : 0);
-
-			if (count($sort) != 0)
+			if ($count)
 			{
-				$cursor->sort($sort);
+				return $persist->count($query);
 			}
-
-			if ($limit != 0)
+			else
 			{
-				$cursor->limit($limit);
+				$cursor = $persist->find($query);
+
+				$sort = (isset($meta['sort']) ? $meta['sort'] : array());
+				$limit = (isset($meta['limit']) ? $meta['limit'] : 0);
+
+				if (count($sort) != 0)
+				{
+					$cursor->sort($sort);
+				}
+
+				if ($limit != 0)
+				{
+					$cursor->limit($limit);
+				}
+
+				$status = array();
+
+				//loop through cursor
+				$list = array();
+				foreach ($cursor as $object)
+				{
+					$list[] = Self::deenforceIds($object);
+				}
+				$status = $list;
+
+				return $status;
 			}
-
-			$status = array();
-
-			//loop through cursor
-			$list = array();
-			foreach ($cursor as $object)
-			{
-				$list[] = Self::deenforceIds($object);
-			}
-			$status = $list;
-
-			return $status;
 		}
 	}
 

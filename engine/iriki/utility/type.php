@@ -180,6 +180,48 @@ class type
     }
   }
 
+  /**
+  * Generate a desired type for testing and such.
+  *
+  * @param type Type name to generate
+  * @param options Options for configuring generation.
+  * @return Desired object of type
+  * @throw
+  */
+  public static function gen_type($type, $options)
+  {
+    switch ($type)
+    {
+      case 'number':
+        //php random
+        $gte = (isset($options['gte']) ? $options['gte'] : 0);
+        $lt = (isset($options['lt']) ? $options['lt'] : null);
+      break;
+
+      case 'email':
+        //valid or invalid
+      break;
+
+      case 'string':
+        //length
+      break;
+      
+      case 'boolean':
+        //random true and false
+        $pool = array(true, false);
+        return $pool[ array_rand($pool) ];
+      break;
+
+      case 'key':
+        //not sure
+      break;
+
+      default:
+        return null;
+      break;
+    }
+  }
+
 }
 
 ?>

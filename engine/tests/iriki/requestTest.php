@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki_engine_tests;
+namespace iriki_tests\engine;
 
 require_once(__DIR__ . '/../../iriki/response.php');
 require_once(__DIR__ . '/../../iriki/request.php');

@@ -26,6 +26,12 @@
 					"parameters" : ["count"],
 					"exempt" : ["*"],
 					"authenticate" : false
+				},
+				"summary" : {
+					"description" : "Return log summary.",
+					"parameters" : [],
+					"exempt" : ["*"],
+					"authenticate" : false
 				}
 			}
 		}
