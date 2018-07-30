@@ -387,6 +387,7 @@ class mongodb extends database
 
 			$cursor = $persist->find($query);
 
+			$count = (isset($meta['count']) ? $meta['count'] : false);
 			$sort = (isset($meta['sort']) ? $meta['sort'] : array());
 			$limit = (isset($meta['limit']) ? $meta['limit'] : 0);
 
@@ -400,14 +401,14 @@ class mongodb extends database
 				$cursor->limit($limit);
 			}
 
-			$status = array();
-
-			if (count($cursor) == 0)
+			if ($count)
 			{
-				$status = array();
+				return $cursor->count();
 			}
 			else
 			{
+				$status = array();
+				
 				//loop through cursor
 				$list = array();
 				foreach ($cursor as $object)
@@ -415,9 +416,9 @@ class mongodb extends database
 					$list[] = Self::deenforceIds($object);
 				}
 				$status = $list;
-			}
 
-			return $status;
+				return $status;
+			}
 		}
 	}
 
@@ -509,7 +510,7 @@ class mongodb extends database
 					);
 				}
 			}
-
+			
 			$collection = $request->getModel();
 			$persist = Self::$__instance->$collection;
 
