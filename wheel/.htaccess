@@ -1,0 +1,27 @@
+# -FrontPage-
+
+IndexIgnore .htaccess */.??* *~ *# */HEADER* */README* */_vti*
+
+<Limit GET POST>
+order deny,allow
+deny from all
+allow from all
+</Limit>
+<Limit PUT DELETE>
+order deny,allow
+deny from all
+</Limit>
+
+Options -MultiViews -Indexes
+
+RewriteEngine on
+
+#move http to https
+#enable this before you upload to server
+#RewriteCond %{HTTPS} !^on$
+#RewriteRule (.*) https://url/$1 [R,L]
+
+#RewriteRule ^wheel index.php [L]
+
+#url not found
+#ErrorDocument 404 404.php
