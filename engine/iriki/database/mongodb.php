@@ -392,19 +392,30 @@ class mongodb extends database
 			}
 			else
 			{
-				$cursor = $persist->find($query);
+				$query_options = array();
 
 				$sort = (isset($meta['sort']) ? $meta['sort'] : array());
 				$limit = (isset($meta['limit']) ? $meta['limit'] : 0);
 
 				if (count($sort) != 0)
 				{
-					$cursor->sort($sort);
+					$query_options['sort'] = $sort;
 				}
 
 				if ($limit != 0)
 				{
-					$cursor->limit($limit);
+					$query_options['limit'] = $limit;
+				}
+
+				$cursor = null;
+
+				if (count($query_options) != 0)
+				{
+					$cursor = $persist->find($query, $query_options);
+				}
+				else
+				{
+					$cursor = $persist->find($query);
 				}
 
 				$status = array();
