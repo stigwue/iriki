@@ -404,7 +404,7 @@ class mongodb extends database
 
 				if ($limit != 0)
 				{
-					$query_options['limit'] = $limit;
+					$query_options['limit'] = (int) $limit;
 				}
 
 				$cursor = null;
