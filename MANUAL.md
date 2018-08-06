@@ -16,6 +16,8 @@ Then copy _config.default.php_ to _config.php_ to use the default configurations
 
 The app can be generated using the Iriki _scarf_ tool or created manually if you know what you're doing.
 
+Please note that Iriki requires the Apache webserver with mod_rewrite module (with .htaccess) enabled.
+
 ## Tests
 
 ```

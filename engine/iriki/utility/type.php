@@ -204,6 +204,7 @@ class type
 
       case 'string':
         //length
+        $length = (isset($options['length']) ? $options['length'] : 7);
       break;
       
       case 'boolean':

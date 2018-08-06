@@ -8,22 +8,20 @@ Source code is at [stigwue/iriki](https://github.com/stigwue/iriki).
 
 ## Why Iriki
 
-Most PHP frameworks come with views, routing and a way to describe models and persist them.
-
-Iriki thinks of apps as independent UIs consuming an API and as such handles the API solely.
-
-Iriki uses language agnostic (JSON) configuration to handle models and routing.
+Most PHP frameworks come with views, routing and a way to describe models and persist them. Iriki thinks of apps as independent UIs consuming an API and as such handles the API solely. Iriki uses language agnostic (JSON) configuration to handle models and routing.
 
 ## Features
 
-* Automatic URL routing to appropriate models.
+* Automatic URL routing to models.
 
 * Request and response logging.
 
 * User and user groups with authentication.
 
-* Configuration key-value dictionary.
+* Key-value dictionary for storing configuration.
 
 * Email delivery (using Mailgun).
 
 * File uploads.
+
+* Model dependency visual (dependency wheel).

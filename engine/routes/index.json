@@ -18,6 +18,11 @@
 					"parameters" : [],
 					"exempt" : ["*"]
 				},
+				"count" : {
+					"description" : "Returns the count of the model.",
+					"parameters" : [],
+					"exempt" : ["*"]
+				},
 				"update" : {
 					"description" : "Updates a model instance by supplying new properties and the id of the model to update.",
 					"parameters" : []
@@ -33,14 +38,14 @@
 					"model" : "user_session",
 					"action" : "validate"
 				},
+				"group_add" : {
+					"model" : "user_access",
+					"action" : "create"
+				},
 				"init" : {
 					"model" : "app",
 					"action" : "create"
 				}
-			},
-			"synonym" : {
-				"group" : "user_group",
-				"session" : "user_session"
 			},
 			"routes" : [
 				"app",
