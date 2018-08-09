@@ -20,6 +20,11 @@
 					"parameters" : ["title"],
 					"authenticate" : false
 				},
+				"exists_then" : {
+					"description" : "Check if a user group exists. Will return ID as data if found (message).",
+					"parameters" : ["title"],
+					"authenticate" : false
+				},
 				"read_by_title" : {
 					"description" : "Read a user group by its (unique) title.",
 					"parameters" : ["title"]

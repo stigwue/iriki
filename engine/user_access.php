@@ -32,18 +32,14 @@ class user_access extends \iriki\engine\request
 			
 			$data = $request->read($request, false);
 
-			if (count($data) != 0)
-			{
-				return \iriki\engine\response::information(true, $wrap);
-			}
-			else {
-				return \iriki\engine\response::information(false, $wrap);
-			}
+			return \iriki\engine\response::information((count($data) != 0), $wrap);
 		}
 	}
 
 	public function user_in_group_title($request, $wrap = true)
 	{
+		//rewrite, now there is a better cross model function
+		
     	if (!is_null($request))
 		{
 			$orig_data = $request->getData();

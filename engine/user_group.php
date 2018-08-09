@@ -70,6 +70,23 @@ class user_group extends \iriki\engine\request
 		}
 	}
 
+	public function exists_then($request, $wrap = true)
+	{
+    	if (!is_null($request))
+		{
+      		$request->setParameterStatus(array(
+				'final' => array('title'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array()
+			));
+			
+			$data = $request->read($request, false);
+
+			return \iriki\engine\response::information((count($data) != 0), $wrap, ((count($data) != 0) ? $data[0]['_id'] : null));
+		}
+	}
+
 	public function read_by_title($request, $wrap = true)
 	{
     	if (!is_null($request))
