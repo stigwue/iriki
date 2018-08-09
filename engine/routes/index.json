@@ -21,7 +21,8 @@
 				"count" : {
 					"description" : "Returns the count of the model.",
 					"parameters" : [],
-					"exempt" : ["*"]
+					"exempt" : ["*"],
+					"authenticate" : false
 				},
 				"update" : {
 					"description" : "Updates a model instance by supplying new properties and the id of the model to update.",

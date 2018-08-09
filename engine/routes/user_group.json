@@ -9,6 +9,12 @@
 					"exempt" : ["_id"],
 					"authenticate" : false
 				},
+				"create_many" : {
+					"description" : "Create several user groups.",
+					"parameters" : [],
+					"exempt" : ["_id"],
+					"authenticate" : false
+				},
 				"exists" : {
 					"description" : "Check if a user group exists.",
 					"parameters" : ["title"],
