@@ -88,7 +88,7 @@ class route
     }
 
     /**
-    * Given a model action, build a profile that defines availability, filling out aliases and synonyms.
+    * Given a model action, build a profile that defines availability, filling out aliases.
     * @param app Application configuration already initialised.
     * @param request_details Request details.
     * @return Status of matched model action. See especially code and message properties.
@@ -169,10 +169,8 @@ class route
         $engine_routes = $app['routes']['engine'];
         $app_routes = $app['routes']['app'];
 
-        //check if the supplied model is an alias/synonym
-        //aliases are of two types:
-        // 1. alias e.g api/alias/action => api/model/action
-        // 2. synonyms e.g api/synonym/action => api/model/action
+        //check if the supplied model is an alias e.g
+        //api/alias/the_alias => api/model/action
         if ($request_details['data']['model'] == 'alias')
         {
             $alias = array(
@@ -230,7 +228,7 @@ class route
         }
         else
         {
-            //where is the model defined? engine or app? or is it a synonym?
+            //where is the model defined? engine or app?
             $route = array(
                 'model' => $request_details['data']['model'], 
                 'action' => $request_details['data']['action'],
@@ -270,48 +268,11 @@ class route
             else
             {
                 //model not found in app or engine
-                //could it be a synonym?
 
-                $synonym_defined = array(
-                    'in_app' => isset($existing['routes']['app']['synonym'][$route['model']]),
-                    'in_engine' => isset($existing['routes']['engine']['synonym'][$route['model']])
-                );
+                $model_profile['code'] = response::ERROR;
+                $model_profile['message'] = 'Model \'' . $route['model'] . '\' is not defined.';
 
-                if ($synonym_defined['in_app'] OR $synonym_defined['in_engine'])
-                {
-                    if ($synonym_defined['in_app'])
-                    {
-                        $route['model'] = $existing['routes']['app']['synonym'][$route['model']];
-
-                        $route['details'] = $existing['models']['app'][$route['model']];
-                        $route['default'] = $existing['routes']['app']['default'];
-                    }
-                    elseif ($synonym_defined['in_engine'])
-                    {
-                        $route['model'] = $existing['routes']['engine']['synonym'][$route['model']];
-                        
-                        $route['details'] = $existing['models']['engine'][$route['model']];
-                        $route['default'] = $existing['routes']['engine']['default'];
-                    }
-
-                    $model_profile['str'] = $route['model'];
-                    //$model_profile[str_full'] = null;
-                    $model_profile['defined'] = true; 
-                    //$model_profile['exists'] = false;
-                    $model_profile['details'] = $route['details'];
-                    $model_profile['app_defined'] = $model_is_defined['in_app'];
-                    $model_profile['action'] = $route['action']; 
-                    $model_profile['default'] = $route['default'];
-
-                    $model_profile = Self::buildActionProfile($existing, $model_profile);
-                }
-                else
-                {
-                    $model_profile['code'] = response::ERROR;
-                    $model_profile['message'] = 'Model \'' . $route['model'] . '\' is not defined.';
-
-                    return $model_profile;
-                }
+                return $model_profile;
             }
         }
 

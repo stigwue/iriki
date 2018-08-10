@@ -4,6 +4,7 @@
         "phpunit/phpunit": "^5.0",
         "ircmaxell/random-lib": "^1.2",
         "stigwue/is-mail": "^0.22.0",
+        "stigwue/naija-pikin": "^0.3.0",
         "stigwue/happrox": "^0.1.0"
     },
     "require-dev": {

@@ -93,7 +93,7 @@ class type
         }
         else
         {
-          if (is_bool($value)) return $value;
+          if (is_bool($value)) return true;
 
           if (strtolower($value) == 'true' OR strtolower($value) == 'false')
           {
@@ -176,6 +176,95 @@ class type
 
       default:
         return $value;
+      break;
+    }
+  }
+
+  /**
+  * Generate a desired type for testing and such.
+  *
+  * @param type Type name to generate
+  * @param options Options for configuring generation.
+  * @return Desired object of type
+  * @throw
+  */
+  public static function gen_type($type, $options)
+  {
+    switch ($type)
+    {
+      case 'number':
+        //php random
+        $gte = (isset($options['gte']) ? $options['gte'] : 0);
+        $lte = (isset($options['lte']) ? $options['lte'] : null);
+
+        $no = rand($gte, $lte);
+
+        return $no;
+      break;
+
+      case 'email':
+        //known providers or unknown
+        $known = (isset($options['known']) ? $options['known'] : false);
+
+        $email = '';
+
+        if ($known == true)
+        {
+          $known_hosts = ['gmail.com', 'yahoo.com', 'live.com', 'icloud.com'];
+
+          $np = new \NaijaPikin(__DIR__ . '/../../vendor/stigwue/naija-pikin/dictionary.json');
+
+          $email = $np->getNoun(true) . '@' . $known_hosts[array_rand($known_hosts)];
+        }
+        else
+        {
+
+          $np = new \NaijaPikin(__DIR__ . '/../../vendor/stigwue/naija-pikin/dictionary.json');
+
+          $email = $np->getNoun(true) . '@' . $np->getNoun(true);
+        }
+
+        return $email;
+      break;
+
+      case 'string':
+        //length
+        $length = (isset($options['length']) ? $options['length'] : 7);
+        //no space
+        $space = (isset($options['space']) ? $options['space'] : true);
+
+        $np = new \NaijaPikin(__DIR__ . '/../../vendor/stigwue/naija-pikin/dictionary.json');
+
+        $string = '';
+
+        while (strlen($string) <= $length)
+        {
+          $string .= $np->getName(true);
+          //drop spaces if need be
+          if ($space == true)
+          {
+            $string = str_replace(' ', '_', $string);
+          }
+        }
+
+        //truncate to exact length
+        $string = substr($string, 0, $length);
+
+        return $string;
+      break;
+      
+      case 'boolean':
+        //random true and false
+        $pool = array(true, false);
+        return $pool[array_rand($pool)];
+      break;
+
+      case 'key':
+        //not sure
+      break;
+
+      default:
+        return null;
       break;
     }
   }

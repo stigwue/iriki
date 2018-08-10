@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki_engine_tests;
+namespace iriki_tests\engine\database\mongodb;
 
 class nullTest extends \PHPUnit\Framework\TestCase
 {

@@ -427,7 +427,6 @@ class request
     *
     * @param object Request object
     * @param boolean Wrap results with descriptors
-    * @param array Data sort descriptor
     * @returns object Response object or data
     * @throw
     */
@@ -457,7 +456,6 @@ class request
           $wrap);
       }
 
-      //check sort metadata
       $meta = $request->getMeta();
       
       $result = $db::doRead($request, $meta);
@@ -473,7 +471,6 @@ class request
     *
     * @param object Request object
     * @param boolean Wrap results with descriptors
-    * @param array Data sort descriptor
     * @returns object Response object or data
     * @throw
     */
@@ -501,13 +498,54 @@ class request
 
       $request->setData(array());
 
-      //check sort metadata
       $meta = $request->getMeta();
-      $sort = (isset($meta['sort']) ? $meta['sort'] : array());
 
       //read should also pick up any "hasmany" models up to x recursivity
 
-      $result = $db::doRead($request, $sort);
+      $result = $db::doRead($request, $meta);
+
+      $final_result = Self::catchError($result, 'data', $wrap, $log_object);
+
+      return $final_result;
+    }
+
+    /**
+    * Perform a 'count' action on a request
+    *
+    * @param object Request object
+    * @param boolean Wrap results with descriptors
+    * @returns object Response object or data
+    * @throw
+    */
+    public function count($request, $wrap = true)
+    {
+      $db = Self::$_db_instance;
+
+      $log_object = Self::log($request, time(NULL));
+
+      $parameter_status = $request->getParameterStatus();
+
+      //replace with modified
+      $request->setParameterStatus($parameter_status);
+
+      $extra_parameters = count($parameter_status['extra']);
+
+      if ($extra_parameters != 0)
+      {
+        Self::log(null, time(NULL), $log_object, response::ERROR);
+        
+        return response::error(
+          response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
+          $wrap);
+      }
+
+      $request->setData(array());
+
+      $meta = $request->setMeta([
+        'count' => true
+      ]);
+
+      $result = $db::doRead($request, $meta);
 
       $final_result = Self::catchError($result, 'data', $wrap, $log_object);
 

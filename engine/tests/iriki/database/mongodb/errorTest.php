@@ -1,6 +1,6 @@
 <?php
 
-namespace iriki_engine_tests;
+namespace iriki_tests\engine\database\mongodb;
 
 class errorTest extends \PHPUnit\Framework\TestCase
 {
@@ -77,7 +77,7 @@ class errorTest extends \PHPUnit\Framework\TestCase
                 'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongo have to be saved as mongoids
+                //these, especially for mongodb have to be saved as mongoids
                 'ids' => array()
             )
         );
@@ -156,7 +156,7 @@ class errorTest extends \PHPUnit\Framework\TestCase
                 'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongo have to be saved as mongoids
+                //these, especially for mongodb have to be saved as mongoids
                 'ids' => array()
             )
         );
@@ -231,7 +231,7 @@ class errorTest extends \PHPUnit\Framework\TestCase
                 'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongo have to be saved as mongoids
+                //these, especially for mongodb have to be saved as mongoids
                 'ids' => array()
             )
         );
@@ -306,7 +306,7 @@ class errorTest extends \PHPUnit\Framework\TestCase
                 'missing' => array('property'),
                 //extra properties that should not have been supplied
                 'extra' => array(),
-                //these, especially for mongo have to be saved as mongoids
+                //these, especially for mongodb have to be saved as mongoids
                 'ids' => array()
             )
         );

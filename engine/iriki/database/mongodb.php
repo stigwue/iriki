@@ -9,7 +9,7 @@ require_once(__DIR__ . '/database.php');
 require_once(__DIR__ . '/../response.php');
 
 /**
-* Iriki Mongo database engine.
+* Iriki MongoDB database engine.
 *
 */
 class mongodb extends database
@@ -510,7 +510,7 @@ class mongodb extends database
 					);
 				}
 			}
-			
+
 			$collection = $request->getModel();
 			$persist = Self::$__instance->$collection;
 

@@ -15,9 +15,9 @@ Source code is at [stigwue/iriki](https://github.com/stigwue/iriki).
 
 * Specify HTTP request method per request, handle PUT and DELETE methods.
 
-* Add user and user_group authentication to existing everyone authentication (anybody: authenticate=false, everyone: authenticate=true, user: user_authenticate=true, group: group_authenticate=true).
+* Optional parameters with a default value?
 
-* Check model synonyms, do they work in model and route properties and parameters (for belongs to and co)?
+* Add user and user_group authentication to existing everyone authentication (anybody: authenticate=false, everyone: authenticate=true, user: user_authenticate=true, group: group_authenticate=true).
 
 * Add 'scarf', an app for automating common Iriki tasks.
 

@@ -53,6 +53,84 @@ class typeTest extends \PHPUnit\Framework\TestCase
     }
 
     //convert
+
+    //generate
+
+    public function test_gen_number()
+    {
+        $type = 'number';
+        $options = [
+            'gte' => 2012,
+            'lte' => 2019
+        ];
+
+        $gen = \iriki\engine\type::gen_type($type, $options);
+
+
+        $this->assertEquals(true, 
+            \iriki\engine\type::is_type($gen, $type) AND 
+            $gen >= 2012 AND $gen <= 2019
+        );
+    }
+
+    
+    public function test_gen_email_known()
+    {
+        $type = 'email';
+        $options = [
+            'known' => true
+        ];
+
+        $gen = \iriki\engine\type::gen_type($type, $options);
+
+        $this->assertEquals(true, 
+            \iriki\engine\type::is_type($gen, $type)
+        );
+    }
+
+    
+    public function test_gen_email_not_known()
+    {
+        $type = 'email';
+        $options = [
+            'known' => false
+        ];
+
+        $gen = \iriki\engine\type::gen_type($type, $options);
+
+        $this->assertEquals(true, 
+            \iriki\engine\type::is_type($gen, $type)
+        );
+    }
+
+    
+    public function test_gen_string()
+    {
+        $type = 'string';
+        $options = [
+            'length' => 18
+        ];
+
+        $gen = \iriki\engine\type::gen_type($type, $options);
+
+        $this->assertEquals(true, 
+            \iriki\engine\type::is_type($gen, $type) AND 
+            strlen($gen) == 18
+        );
+    }
+
+    public function test_gen_boolean()
+    {
+        $type = 'boolean';
+        $options = null;
+
+        $gen = \iriki\engine\type::gen_type($type, $options);
+
+        $this->assertEquals(true, 
+            \iriki\engine\type::is_type($gen, $type)
+        );
+    }
+
 }
 
 ?>

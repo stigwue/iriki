@@ -14,6 +14,8 @@ composer install
 
 Then copy _config.default.php_ to _config.php_ to use the default configurations for your installation. Note that paths in _config.php_ should be absolute or relative to _index.php_. Those in the app configuration _app.json_ should be absolute. 
 
+Please note that Iriki requires the Apache webserver with mod_rewrite module (with .htaccess) enabled.
+
 ## Tests
 
 ```
