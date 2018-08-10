@@ -306,7 +306,7 @@ class user_session extends \iriki\engine\request
 
 			//sort by pings and created
 	        $request->setMeta([
-	        	'sort' => array('ping' => -1)
+	        	'sort' => array('pinged' => -1)
 	        ]);
 
 			return $request->read($request, $wrap);

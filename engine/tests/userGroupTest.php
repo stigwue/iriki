@@ -120,7 +120,7 @@ class userGroupTest extends \PHPUnit\Framework\TestCase
         );
 	}
 
-     public function test_delete_success($id)
+    /*public function test_delete_success($id)
 	{
         $request = array(
             'code' => 200,
@@ -130,7 +130,7 @@ class userGroupTest extends \PHPUnit\Framework\TestCase
                 'action' => 'delete',
                 'url_parameters' => array(),
                 'params' => array(
-            		'title' => $id
+            		'_id' => $id
                 )
             )
         );
@@ -149,7 +149,7 @@ class userGroupTest extends \PHPUnit\Framework\TestCase
             (($status['code'] == 200) AND
             ($status['message'] == true))
         );
-	}
+	}*/
 }
 
 ?>
