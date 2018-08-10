@@ -94,9 +94,7 @@ class mongodb extends database
 				isset(Self::$_key_values['db'])
 			)
 			{
-			    //(new MongoDB\Client)->test->users
-				//$mongo_client = new \MongoDB\Client(Self::$_key_values['server']);
-				$mongo_db = Self::$_key_values['db'];
+			    $mongo_db = Self::$_key_values['db'];
 
 				Self::$__instance = (new \MongoDB\Client)->$mongo_db;
 
