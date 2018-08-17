@@ -21,6 +21,7 @@ class mongodb extends database
     *
     */
 	const ID_FIELD = '_id';
+	const PORT = 27017;
 
 	/**
     * Associative array of database parameters.
@@ -57,6 +58,45 @@ class mongodb extends database
 	public static function getInstance()
 	{
 		return Self::$__instance;
+	}
+
+	public static function buildConnString($properties)
+	{
+		//two modes of access exist, default and custom
+		//default: server (mongodb://server:port) and db alone supplied
+		//custom: port, user & password suppled additionally
+
+		$conn_string = '';
+
+		if (substr($properties['server'], 0, strlen('mongodb://')) == 'mongodb://')
+		{
+			//use supplied string
+			$conn_string = $properties['server'];
+		}
+		else
+		{
+			//custom build string
+
+			//is port supplied? no? then server has all we need
+			//is user, password supplied? then use supplied or default port
+
+			$port = (isset($properties['port']) ? $properties['port'] : Self::PORT);
+
+			
+			// mongodb://${user}:${pwd}@server:port
+			if (isset($properties['user']) AND isset($properties['password']))
+			{
+				//authentication needed
+				$conn_string = 'mongodb://' . $properties['user'] . ':' . $properties['password'] . '@' . $properties['server'] . ':' . $port;
+			}
+			else
+			{
+				//no authentication needed
+				$conn_string = 'mongodb://' . $properties['server'] . ':' . $port;
+			}
+		}
+
+		return $conn_string;
 	}
 
     /**
@@ -96,7 +136,7 @@ class mongodb extends database
 			{
 			    $mongo_db = Self::$_key_values['db'];
 
-				Self::$__instance = (new \MongoDB\Client)->$mongo_db;
+				Self::$__instance = (new \MongoDB\Client(Self::buildConnString(Self::$_key_values)))->$mongo_db;
 
 				return Self::$__instance;
 			}

@@ -21,6 +21,7 @@ class mongo extends database
     *
     */
 	const ID_FIELD = '_id';
+	const PORT = 27017;
 
 	/**
     * Associative array of database parameters.
@@ -59,6 +60,45 @@ class mongo extends database
 		return Self::$__instance;
 	}
 
+	public static function buildConnString($properties)
+	{
+		//two modes of access exist, default and custom
+		//default: server (mongodb://server:port) and db alone supplied
+		//custom: port, user & password suppled additionally
+
+		$conn_string = '';
+
+		if (substr($properties['server'], 0, strlen('mongodb://')) == 'mongodb://')
+		{
+			//use supplied string
+			$conn_string = $properties['server'];
+		}
+		else
+		{
+			//custom build string
+
+			//is port supplied? no? then server has all we need
+			//is user, password supplied? then use supplied or default port
+
+			$port = (isset($properties['port']) ? $properties['port'] : Self::PORT);
+
+			
+			// mongodb://${user}:${pwd}@server:port
+			if (isset($properties['user']) AND isset($properties['password']))
+			{
+				//authentication needed
+				$conn_string = 'mongodb://' . $properties['user'] . ':' . $properties['password'] . '@' . $properties['server'] . ':' . $port;
+			}
+			else
+			{
+				//no authentication needed
+				$conn_string = 'mongodb://' . $properties['server'] . ':' . $port;
+			}
+		}
+
+		return $conn_string;
+	}
+
     /**
     * Initialize the database instance using supplied configuration
     *
@@ -90,11 +130,14 @@ class mongo extends database
 				class_exists(Self::$_key_values['type']) AND
 				//class must be this one
 				Self::$_key_values['type'] == '\\' . Self::getClass() AND
+				//server must be specified
 				isset(Self::$_key_values['server']) AND
+				//database too
 				isset(Self::$_key_values['db'])
 			)
 			{
-				$mongo_client = new \MongoClient(Self::$_key_values['server']);
+				$mongo_client = new \MongoClient(Self::buildConnString(Self::$_key_values));
+				
 				$mongo_db = Self::$_key_values['db'];
 
 				Self::$__instance = $mongo_client->$mongo_db;
@@ -424,6 +467,7 @@ class mongo extends database
 
 	/**
     * Database update action.
+    * The object to be updated is filtered solely by _id, limiting update to a single one
     *
     * @param request Request on which action is performed
     * @return One of three options: null, a success flag or an array with code (some error code) and message (string description)
