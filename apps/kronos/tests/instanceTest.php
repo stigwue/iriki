@@ -31,7 +31,7 @@ class instanceTest extends \PHPUnit\Framework\TestCase
                 'action' => 'create',
                 'url_parameters' => array(),
                 'params' => array(
-                    'name' => 'A noun'
+                    'name' => 'Some noun'
                 )
             )
         );
@@ -65,7 +65,7 @@ class instanceTest extends \PHPUnit\Framework\TestCase
                 'action' => 'create',
                 'url_parameters' => array(),
                 'params' => array(
-                    'name' => 'A verb'
+                    'name' => 'Some verb'
                 )
             )
         );
@@ -167,7 +167,7 @@ class instanceTest extends \PHPUnit\Framework\TestCase
                 'action' => 'create',
                 'url_parameters' => array(),
                 'params' => array(
-                    'name' => 'A collection of the four: noun, verb, adjective and adverb'
+                    'name' => 'Some collection of the four: noun, verb, adjective and adverb'
                 )
             )
         );

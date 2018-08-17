@@ -50,17 +50,14 @@ class instance extends \iriki\engine\request
 			}
 			else
 			{
-				//to expand this collection, for this instance:
-				//type will be the item type
-				//parent will be the collection_item _id
-				//value is its value
-
-				//but, from supplied parameters
-				//type is collection
-				//parent is the collection _id and
-				//value will be a key-value dictionary:
-				//key: collection_item _id
-				//value: value for collection_item
+				/*
+				an instance will have a type, parent and value.
+				for this instance, type is 'collection',
+				parent is the collection _id
+				while value is a key-value dictionary of collection_item
+				_ids and values (the collection_item referenced
+				via _id will have the type and model(id))
+				*/
 
 				$collection_id = $parameters['parent'];
 				$items = $parameters['value'];
@@ -89,7 +86,11 @@ class instance extends \iriki\engine\request
 					$request->getTestMode() //test mode
 		        );
 
-		        if ($status['code'] == 200)
+		        if ($status['code'] != 200)
+		        {
+        			return \iriki\engine\response::error('Failed to read model records.');
+		        }
+		        else
 		        {
 		        	$items_found = $status['data'];
 
@@ -156,10 +157,6 @@ class instance extends \iriki\engine\request
 		        		return \iriki\engine\response::data($instance_ids, $wrap);
 		        	}
 		        }
-		        else
-		        {
-        			return \iriki\engine\response::error('Failed to read model records.');
-		        }
 			}
 		}
 	}
@@ -200,6 +197,18 @@ class instance extends \iriki\engine\request
 				//manage results
 			}
 		}
+	}
+
+	public function read_all($request, $wrap = true)
+	{
+		/*$request->setParameterStatus([
+			'final' => array(),
+			'missing' => array(),
+			'extra' => array(),
+			'ids' => array()
+		]);*/
+
+		return $request->read($request, $wrap);
 	}
 }
 
