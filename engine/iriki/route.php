@@ -16,22 +16,21 @@ class route
 
     /**
     * Parse the HTTP request details before matching existing models.
-    *
+    * Note that all HTTP method parameters will be returned for later filtering.
     *
     * @param base_url Optional base url if framework isn't run from server root/home. Default is ''.
-    * @return An associative array of request details: url (properties include path, parts, parameters and the query), HTTP method and params supplied or an error response.
+    * @return An associative array of request details: url (properties include path, parts, parameters and the query) and parameters ('params' with HTTP method keys and a dictionary of parameters supplied) or an error response.
     * @throw
     */
     public static function parseRequest($base_url = '')
     {
         //get the details of the request
-        $request_details = \iriki\engine\url::getRequestDetails(null, null, $base_url);
+        $request_details = \iriki\engine\url::getRequestDetails(null, $base_url);
 
         //check the details
         /*
         url [path, parts, parameters, query],
-        method,
-        params
+        params: array of [method, data]
         */
 
         $url_parts = (isset($request_details['url']['parts'])) ? $request_details['url']['parts'] : null;
@@ -90,7 +89,7 @@ class route
     /**
     * Given a model action, build a profile that defines availability, filling out aliases.
     * @param app Application configuration already initialised.
-    * @param request_details Request details.
+    * @param request_details Request details. This is only passed in so determine if an error occurred in the parseRequest stage.
     * @return Status of matched model action. See especially code and message properties.
     * @throw
     */
@@ -357,7 +356,6 @@ class route
             //is that of the actual class method
             $model_profile['action_exists'] = method_exists($model_profile['str_full'], $model_profile['action']);
         }
-
         return $model_profile;
     }
 
@@ -382,7 +380,11 @@ class route
         }
 
         //model class exists
-        if ($model_status['exists'])
+        if (!$model_status['exists'])
+        {
+            return response::error($model_status['str_full'] . ' does not exist.');
+        }
+        else
         {
             //fill in action details
             if ($model_status['app_defined'])
@@ -406,7 +408,11 @@ class route
             if ($model_status['action_defined'] OR $model_status['action_default'])
             {
                 //action exists?
-                if ($model_status['action_exists'])
+                if (!$model_status['action_exists'])
+                {
+                    return response::error('Action \'' . $model_status['action'] . '\' of ' . $model_status['str_full'] . ' does not exist.');
+                }
+                else
                 {
                     //parameter check
                     //on fail, describe action
@@ -425,7 +431,11 @@ class route
                     //note that extra parameters could be ids signifying belongsto relationships
                     //so we have to remove checking it from route
                     //to the request
-                    if ($missing_parameters == 0)
+                    if ($missing_parameters != 0)
+                    {
+                        return response::error(response::showMissing($parameter_status['missing'], 'parameter', 'missing or of wrong type'));
+                    }
+                    else
                     {
                         //check for auth
 
@@ -468,7 +478,11 @@ class route
                         }
 
                         //persistence
-                        if (isset($app['database']['type']))
+                        if (!isset($app['database']['type']))
+                        {
+                            return response::error('Database type definition missing.');
+                        }
+                        else
                         {
                             $db_class = new $app['database']['type'];
                             $db_handle = $db_class::doInitialise($app['database']);
@@ -504,29 +518,13 @@ class route
                                 return $model_instance->$action($request);
                             }
                         }
-                        else
-                        {
-                            return response::error('Database type definition missing.');
-                        }
                     }
-                    else
-                    {
-                        return response::error(response::showMissing($parameter_status['missing'], 'parameter', 'missing or of wrong type'));
-                    }
-                }
-                else
-                {
-                    return response::error('Action \'' . $model_status['action'] . '\' of ' . $model_status['str_full'] . ' does not exist.');
                 }
             }
             else
             {
                 return response::error('No valid action specified.');
             }
-        }
-        else
-        {
-            return response::error($model_status['str_full'] . ' does not exist.');
         }
     }
 

@@ -6,11 +6,13 @@
 				"path" : {
 					"description" : "Get the upload path for specified timestamp (making the directory if it doesn't exist).",
 					"parameters" : ["timestamp"],
+					"method" : "GET",
 					"authenticate" : false
 				},
 				"upload" : {
 					"description" : "Uploads a file.",
 					"parameters" : ["title", "file", "tag", "overwrite"],
+					"method" : "POST",
 					"authenticate" : false
 				}
 			}
