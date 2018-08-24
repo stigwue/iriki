@@ -93,12 +93,11 @@ class url
     *
     *
     * @param uri URI supplied or deduced.
-    * @param method HTTP request method supplied or deduced.
     * @param base_url Optional base url if framework isn't run from server root/home. Default is ''.
     * @return Request details for use.
     * @throw
     */
-    public static function getRequestDetails($uri = null, $method = null, $base_url = '')
+    public static function getRequestDetails($uri = null, $base_url = '')
     {
         if (is_null($uri))
         {
@@ -117,60 +116,39 @@ class url
             $uri = substr($uri, strlen($base_url));
         }
 
-        if (is_null($method))
-        {
-            $method = $_SERVER['REQUEST_METHOD'];
-        }
-
         $status = array(
             'url' => Self::parseUrl($uri),
-            'method' => $method,
-            'params' => null
+            'params' => array() /*[ 'method' => ['key1' => 'value1', 'key1' => 'value1']]*/
         );
 
-        //parameters
-        $params = array();
         //parameters are of http methods which correspond to CRUD
         //CRUD => POST, GET, PUT, DELETE
-        switch ($method) {
-            case 'POST':
-                $status['method'] = 'POST';
-                $params = $_POST;
-                $status['params'] = $params;
-            break;
+        //we do not know which this route uses so we query all
+        //we also save the request's method incase we need to use 'ANY'
 
-            case 'GET':
-                $status['method'] = 'GET';
-                $status['params'] = (isset($status['url']['query'])) ? Self::parseGetParams($status['url']['query']) : null;
-            break;
+        $status['params']['ANY'] = $_SERVER['REQUEST_METHOD'];
 
-            case 'PUT':
-                $status['method'] = 'PUT';
-                //parse_str(file_get_contents('php://input'), $params);
-                $status['params'] = $params;
-            break;
+        $status['params']['POST'] = $_POST;
 
-            case 'DELETE':
-                $status['method'] = 'DELETE';
-                //parse_str(file_get_contents('php://input'), $params);
-                $status['params'] = $params;
-            break;
+        $status['params']['GET'] = (isset($status['url']['query'])) ? Self::parseGetParams($status['url']['query']) : array();
 
-            default: 
-                //$status['method'] = 'POST';
-                $params = $_REQUEST;
-                $status['params'] = $params;
-            break;
-        }
+        $status['params']['PUT'] = array(); //parse_str(file_get_contents('php://input'), $data);
+
+        $status['params']['DELETE'] = array(); //parse_str(file_get_contents('php://input'), $data);
+        
+        $status['params']['REQUEST'] = $_REQUEST;
 
         //files may have been sent too, look for them and add them
         //parameters with the same name as files will be replaced
         if (!empty($_FILES))
         {
+            $params = array();
             foreach ($_FILES as $file_param => $file_details)
             {
-                $status['params'][$file_param] = $file_details;
+                $params[$file_param] = $file_details;
             }
+            $status['params']['FILE'] = $params;
+            
         }
 
         return $status;

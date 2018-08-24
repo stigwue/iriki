@@ -14,7 +14,12 @@
 					"url_parameters" : ["_id"]
 				},
 				"read_all" : {
-					"description" : "Returns the properties of the matching model.",
+					"description" : "Returns all instances of the model.",
+					"parameters" : [],
+					"exempt" : ["*"]
+				},
+				"read_all_dictionary" : {
+					"description" : "Returns all instances of the model, as a key-object dictionary.",
 					"parameters" : [],
 					"exempt" : ["*"]
 				},
