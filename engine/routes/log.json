@@ -30,6 +30,7 @@
 				"summary" : {
 					"description" : "Return log summary.",
 					"parameters" : [],
+					"method" : "ANY",
 					"exempt" : ["*"],
 					"authenticate" : false
 				}

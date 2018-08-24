@@ -360,9 +360,9 @@ class request
     *
     * Note that there's a recursivity variable to limit relationship checks
     *
-    * @param object Request object
-    * @param boolean Wrap results with descriptors
-    * @returns object Response object or data
+    * @param request Request object
+    * @param wrap Wrap results with descriptors
+    * @return Response object or data
     * @throw
     */
     public function create($request, $wrap = true)
@@ -425,9 +425,9 @@ class request
     /**
     * Perform a read action on a request
     *
-    * @param object Request object
-    * @param boolean Wrap results with descriptors
-    * @returns object Response object or data
+    * @param request Request object
+    * @param wrap Wrap results with descriptors
+    * @return Response object or data
     * @throw
     */
     public function read($request, $wrap = true)
@@ -469,9 +469,9 @@ class request
     /**
     * Perform a 'read all' action on a request
     *
-    * @param object Request object
-    * @param boolean Wrap results with descriptors
-    * @returns object Response object or data
+    * @param request Request object
+    * @param wrap Wrap results with descriptors
+    * @return Response object or data
     * @throw
     */
     public function read_all($request, $wrap = true)
@@ -505,6 +505,65 @@ class request
       $result = $db::doRead($request, $meta);
 
       $final_result = Self::catchError($result, 'data', $wrap, $log_object);
+
+      return $final_result;
+    }
+
+    /**
+    * Perform a 'read all' action on a request, returning a dictionary.
+    *
+    * @param request Request object
+    * @param wrap Wrap results with descriptors
+    * @return Response object or data dictionary
+    * @throw
+    */
+    public function read_all_dictionary($request, $wrap = true)
+    {
+      $db = Self::$_db_instance;
+
+      $log_object = Self::log($request, time(NULL));
+
+      $parameter_status = $request->getParameterStatus();
+
+      //replace with modified
+      $request->setParameterStatus($parameter_status);
+
+      $extra_parameters = count($parameter_status['extra']);
+
+      if ($extra_parameters != 0)
+      {
+        Self::log(null, time(NULL), $log_object, response::ERROR);
+        
+        return response::error(
+          response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
+          $wrap);
+      }
+
+      $request->setData(array());
+
+      $meta = $request->getMeta();
+
+      //read should also pick up any "hasmany" models up to x recursivity
+
+      $result = $db::doRead($request, $meta);
+
+      //convert to dictionary
+      $dictionary = array();
+      foreach ($result as $single_result)
+      {
+        $key_property = '_id';
+
+        if (isset($single_result[$key_property]))
+        {
+          $dictionary[$single_result[$key_property]] = $single_result;
+        }
+        else
+        {
+          //ignore
+        }
+      }
+
+      $final_result = Self::catchError($dictionary, 'data', $wrap, $log_object);
 
       return $final_result;
     }

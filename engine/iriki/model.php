@@ -11,7 +11,7 @@ class model
     /**
     * Get a model's action details.
     * These checks the presence of all possible parameters, using default values if absent.
-    *
+    * Note that addition of new Iriki parameters have to be recognized here.
     *
     * @param model Chosen model name
     * @param model_status Previously filled model status to edit.
@@ -36,9 +36,21 @@ class model
                 'description' => (isset($_route_action[$model_status['action']]['description']) ? $_route_action[$model_status['action']]['description'] : ''),
                 //action 
                 'parameters' => (isset($_route_action[$model_status['action']]['parameters']) ? $_route_action[$model_status['action']]['parameters'] : array()),
+                //method, will default to 'ANY'
+                //a GET to a POST route will not fail, it just won't read the right parameters
+                //or should it?
+                'method' => (isset($_route_action[$model_status['action']]['method']) ? $_route_action[$model_status['action']]['method'] : 'ANY'),
+                //url parameter decides how parameters in the url are parsed
+                //these parameters take precedence over GET and POST ones
                 'url_parameters' => (isset($_route_action[$model_status['action']]['url_parameters']) ? $_route_action[$model_status['action']]['url_parameters'] : array()),
+                //exempt value of ['*'] will mean all properties are
                 'exempt' => (isset($_route_action[$model_status['action']]['exempt']) ? $_route_action[$model_status['action']]['exempt'] : array()),
-                'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? type::ctype($_route_action[$model_status['action']]['authenticate'], 'boolean') : true)
+                //should this route need authentication? default is true
+                'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? type::ctype($_route_action[$model_status['action']]['authenticate'], 'boolean') : true),
+                //user authentication needed? default is false, if true, a user_id parameter must be included, which must own the session token provided
+                'user_authenticate' => (isset($_route_action[$model_status['action']]['user_authenticate']) ? type::ctype($_route_action[$model_status['action']]['user_authenticate'], 'boolean') : false),
+                //user group authentication? default is false, if true, the user of the supplied session token must be part of the user_group title provided
+                'user_group_authenticate' => (isset($_route_action[$model_status['action']]['user_group_authenticate']) ? type::ctype($_route_action[$model_status['action']]['user_group_authenticate'], 'boolean') : false)
             );
 
             $model_status['action_defined'] = true;
@@ -50,9 +62,12 @@ class model
             $model_status['action_details'] = array(
                 'description' => (isset($model_status['default'][$model_status['action']]['description']) ? $model_status['default'][$model_status['action']]['description'] : ''),
                 'parameters' => (isset($model_status['default'][$model_status['action']]['parameters']) ? $model_status['default'][$model_status['action']]['parameters'] : array()),
+                'method' => (isset($model_status['default'][$model_status['action']]['method']) ? $model_status['default'][$model_status['action']]['method'] : 'ANY'),
                 'url_parameters' => (isset($_route_action[$model_status['action']]['url_parameters']) ? $_route_action[$model_status['action']]['url_parameters'] : array()),
                 'exempt' => (isset($model_status['default'][$model_status['action']]['exempt']) ? $model_status['default'][$model_status['action']]['exempt'] : array()),
-                'authenticate' => (isset($model_status['default'][$model_status['action']]['authenticate']) ? type::ctype($model_status['default'][$model_status['action']]['authenticate'], 'boolean') : true)
+                'authenticate' => (isset($model_status['default'][$model_status['action']]['authenticate']) ? type::ctype($model_status['default'][$model_status['action']]['authenticate'], 'boolean') : true),
+                'user_authenticate' => (isset($model_status['default'][$model_status['action']]['user_authenticate']) ? type::ctype($model_status['default'][$model_status['action']]['user_authenticate'], 'boolean') : false),
+                'user_group_authenticate' => (isset($model_status['default'][$model_status['action']]['user_group_authenticate']) ? type::ctype($model_status['default'][$model_status['action']]['user_group_authenticate'], 'boolean') : false)
             );
 
             $model_status['action_defined'] = true;
@@ -69,7 +84,7 @@ class model
     *
     * @param details Model property details
     * @param filter Route filters: parameters and exempt
-    * @return Properties: final, missing, extra and ids
+    * @return Properties: final, missing, extra and ids. Also a flag, explicit_def, defining if parameters were defined explicitly or hinted at.
     * @throw
     */
     public static function doExpandProperty($details, $filter)
@@ -132,15 +147,43 @@ class model
     * Note that a parameter failing a type check is 'missing'
     *
     *
-    * @param details Model property details
-    * @param sent Key-value parameters sent via request. Note that they can be edited
-    * @param sent_url Array of url parameters
+    * @param details Model property details.
+    * @param sent Array of methods and their key-value parameters sent via request. Note that this can be edited withing this function. Also note that users might fill sent directly instead of let it be filled by the url parser.
+    * @param sent_url Array of url parameters.
     * @param filter Route filters: parameters and exempt
     * @return Properties: final, missing, extra and ids
     * @throw
     */
     public static function doPropertyMatch($details, &$sent, $sent_url, $filter)
     {
+      if (isset($sent['ANY']) AND isset($sent[$sent['ANY']]))
+      {
+        //$sent was filled by the url parser
+        $request_method = $filter['method'];
+
+        if (strtoupper($request_method) == 'ANY')
+        {
+          //replacement for ANY is the server reported request method
+          $request_method = $sent['ANY'];
+        }
+
+        //add files to selected method's parameters
+        if (isset($sent['FILE']))
+        {
+          foreach ($sent['FILE'] as $key => $value)
+          {
+            $sent[$request_method][$key] = $value;
+          }
+        }
+
+        $sent = $sent[$request_method];
+      }
+      else
+      {
+        //$sent was filled directly with data
+        //proceed
+      }
+
       //parameters work thus:
       //empty valid => all parameters valid except 'exempt'
       //non-empty valid => listed parameters except 'exempt'
@@ -150,7 +193,7 @@ class model
       $property_details = Self::doExpandProperty($details, $filter);
       $valid_properties = $property_details['valid_properties'];
 
-      $url_properties = isset($filter['url_parameters']) ? $filter['url_parameters'] : array();      
+      $url_properties = isset($filter['url_parameters']) ? $filter['url_parameters'] : array();
 
       //build sent properties
       $sent_properties = array_keys($sent);
