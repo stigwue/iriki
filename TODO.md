@@ -11,9 +11,11 @@ Source code is at [stigwue/iriki](https://github.com/stigwue/iriki).
 
 * 100% self-documentation using Doxygen parsable comments.
 
-* Specify HTTP request method per request, handle PUT and DELETE methods (?).
+* Handle PUT and DELETE methods (?).
 
 * Add user and user_group authentication to existing everyone authentication (anybody: authenticate=false, everyone: authenticate=true, user: user_authenticate=true, group: group_authenticate=true).
+
+* Add One Time Password (OTP) model. Also used for 2FA.
 
 * Add 'scarf', an app for automating common Iriki tasks.
 
