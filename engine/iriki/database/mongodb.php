@@ -301,8 +301,8 @@ class mongodb extends database
 		foreach ($key_values as $key => $value)
 		{
 			if (
-				$key == Self::ID_FIELD OR //somehow check that value is MongoDB\BSON\ObjectId
-				isset($value->{'$id'})
+				$key == Self::ID_FIELD OR
+				Self::isMongoId((string) $value)
 			)
 			{
 				$pretty[$key] = (string) $value;
