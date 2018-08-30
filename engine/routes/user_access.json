@@ -15,6 +15,11 @@
 					"description" : "Checks to see if a user (specified by username) is in a specific group (identified by group title).",
 					"parameters" : ["username", "title"]
 				},
+				"user_in_any_group_title" : {
+					"description" : "Checks to see if a user (specified by username) is in any of specified groups.",
+					"method" : "POST",
+					"parameters" : ["username", "title_array"]
+				},
 				"remove_user" : {
 					"description" : "Removes a user from a specific group.",
 					"parameters" : ["user_id", "user_group_id"]
