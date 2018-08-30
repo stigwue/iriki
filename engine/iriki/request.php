@@ -510,7 +510,7 @@ class request
     }
 
     /**
-    * Perform a 'read all' action on a request, returning a dictionary.
+    * Perform a 'read all' action on a request, returning a dictionary of _id -> objects.
     *
     * @param request Request object
     * @param wrap Wrap results with descriptors

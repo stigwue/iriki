@@ -438,6 +438,8 @@ class route
                     else
                     {
                         //check for auth
+                        //$valid_user_groups = array();
+                        //$valid_user_groups_not = array();
 
                         //user_session_token is null or already supplied
 
@@ -446,8 +448,10 @@ class route
 
                         if (function_exists('getallheaders'))
                         {
-                            //this will replace already supplied token with the one in header, so check to see that no one has been supplied
+                            //this might replace already supplied token with the one in header
+                            //if one has been supplied, do not use header's
                             $request_headers = getallheaders();
+                            
                             if (isset($request_headers[Self::authorization]) AND is_null($user_session_token) == true)
                             {
                                 $user_session_token = $request_headers[Self::authorization];
