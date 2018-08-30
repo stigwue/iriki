@@ -20,6 +20,68 @@ class auth extends \iriki\engine\request
 		return $data;
 	}
 
+	private static function spawn($data, $request, $wrap)
+	{
+		//update parameter status
+		$request->setParameterStatus([
+			'final' => array('key', 'ttl', 'status', 'tag', 'user_id'),
+			'extra' => array(),
+			'missing' => array(),
+			'ids' => array('user_id')
+		]);
+
+		$request->setData($data);
+
+		//creates by default, return an _id, reduce roundtrip by providing the key instead
+		$status = $request->create($request);
+
+		if ($status['code'] == 200 AND $status['message'] == true)
+		{
+			//read
+			$req = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'auth',
+                'action' => 'read',
+                'url_parameters' => array(),
+                'params' => array(
+                	'_id' => $status['data']
+                )
+            )
+	        );
+
+	        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $req);
+
+	        $state = \iriki\engine\route::matchRequestToModel(
+	            $GLOBALS['APP'],
+	            $model_profile,
+	            $req,
+	            $request->getTestMode(),
+	            $request->getSession()
+	        );
+
+	        if ($state['code'] == 200)
+	        {
+	        	$found = $state['data'];
+	        	if (count($found) != 0)
+	        	{
+	        		$found = $found[0];
+	        		return \iriki\engine\response::data($found['key'], $wrap);
+	        	}
+	        	else
+	        	{
+	        		//just return good old _id
+	        		return \iriki\engine\response::data($status['data'], $wrap);
+	        	}
+	        }
+	    }
+	    else
+	    {
+      		return \iriki\engine\response::error('Failed to initiate auth key.', $wrap);
+	    }
+	}
+
 	public function initiate($request, $wrap = true)
 	{
 	    if (!is_null($request))
@@ -40,64 +102,23 @@ class auth extends \iriki\engine\request
 			}
 			//drop key_type
 			unset($data['key_type']);
-			//update parameter status
-			$request->setParameterStatus([
-				'final' => array('key', 'ttl', 'status', 'tag', 'user_id'),
-				'extra' => array(),
-				'missing' => array(),
-				'ids' => array('user_id')
-			]);
 
-			$request->setData($data);
 
-			//creates by default, return an _id, reduce roundtrip by providing the key instead
-			$status = $request->create($request);
+			return Self::spawn($data, $request, $wrap);
+	    }
+	    else
+	    {
+	      return \iriki\engine\response::error('Null request.', $wrap);
+	    }
+	}
 
-			if ($status['code'] == 200 AND $status['message'] == true)
-			{
-				//read
-				$req = array(
-	            'code' => 200,
-	            'message' => '',
-	            'data' => array(
-	                'model' => 'auth',
-	                'action' => 'read',
-	                'url_parameters' => array(),
-	                'params' => array(
-	                	'_id' => $status['data']
-	                )
-	            )
-		        );
+	public function initiate_using_key($request, $wrap = true)
+	{
+	    if (!is_null($request))
+	    {
+			$data = $request->getData();
 
-		        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $req);
-
-		        $state = \iriki\engine\route::matchRequestToModel(
-		            $GLOBALS['APP'],
-		            $model_profile,
-		            $req,
-		            $request->getTestMode(),
-		            $request->getSession()
-		        );
-
-		        if ($state['code'] == 200)
-		        {
-		        	$found = $state['data'];
-		        	if (count($found) != 0)
-		        	{
-		        		$found = $found[0];
-		        		return \iriki\engine\response::data($found['key'], $wrap);
-		        	}
-		        	else
-		        	{
-		        		//just return good old _id
-		        		return \iriki\engine\response::data($status['data'], $wrap);
-		        	}
-		        }
-		    }
-		    else
-		    {
-	      		return \iriki\engine\response::error('Failed to initiate auth key.', $wrap);
-		    }
+			return Self::spawn($data, $request, $wrap);
 	    }
 	    else
 	    {

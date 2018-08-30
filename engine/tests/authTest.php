@@ -19,10 +19,10 @@ class authTest extends \PHPUnit\Framework\TestCase
 	public function test_initiate_success($status)
     {
         $details = array(
+            'key_type' => 'long',
             'ttl' => IRIKI_SESSION_SHORT + (1 * 24 * 60 * 60),
             'status' => true,
             'tag' => 'some_tag',
-            'key_type' => 'long',
             'user_id' => '5ae6bb830f6d2fea120041b6'
         );
 
@@ -32,6 +32,45 @@ class authTest extends \PHPUnit\Framework\TestCase
             'data' => array(
                 'model' => 'auth',
                 'action' => 'initiate',
+                'url_parameters' => array(),
+                'params' => $details
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true
+        );
+
+        $this->assertEquals(200, $status['code']);
+
+        $details['key'] = $status['data'];
+        return $details;
+    }
+
+    /**
+     * @depends test_class_exist
+     */
+    public function txst_initiate_using_key_success($status)
+    {
+        $details = array(
+            'key' => 'speak_friend_and_enter',
+            'ttl' => IRIKI_SESSION_SHORT + (1 * 24 * 60 * 60),
+            'status' => true,
+            'tag' => 'some_tag',
+            'user_id' => '5ae6bb830f6d2fea120041b6'
+        );
+
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'auth',
+                'action' => 'initiate_using_key',
                 'url_parameters' => array(),
                 'params' => $details
             )
@@ -67,7 +106,7 @@ class authTest extends \PHPUnit\Framework\TestCase
                 'url_parameters' => array(),
                 'params' => array(
                     'key' => $details['key'],
-                    'remember' => true
+                    'remember' => false
                 )
             )
         );
@@ -90,7 +129,7 @@ class authTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_initiate_success
      */
-    public function test_revoke_success($details)
+    public function txst_revoke_success($details)
     {
         $request = array(
             'code' => 200,
@@ -146,8 +185,6 @@ class authTest extends \PHPUnit\Framework\TestCase
             $request,
             true
         );
-
-        var_dump($status);
 
         $this->assertEquals(true,
             ($status['code'] == 400)
