@@ -8,8 +8,26 @@
 					"parameters" : [],
 					"exempt" : ["_id", "started", "pinged", "token", "ip"]
 				},
+				"read_by_token" : {
+					"description" : "Read a session by providing its token.",
+					"parameters" : ["token"]
+				},
+				"read_by_user" : {
+					"description" : "Read a user's authenticated sessions by providing its ID.",
+					"parameters" : ["user_id"]
+				},
+				"read_by_ip" : {
+					"description" : "Read an IP's sessions.",
+					"parameters" : ["ip"]
+				},
+				"read_anonymized" : {
+					"description" : "Return anonymized user_sessions limited by count for statistical purposes.",
+					"parameters" : ["count"],
+					"exempt" : ["*"],
+					"authenticate" : false
+				},
 				"validate" : {
-					"description" : "Validate a session, returns expired or not.",
+					"description" : "Validate a session, returns invalidated, expired or not. Note that expiry is measured from 'started'.",
 					"parameters" : ["token"],
 					"authenticate" : "false"
 				},
@@ -21,19 +39,18 @@
 					"description" : "Invalidate a session, it will no longer be honoured.",
 					"parameters" : ["token"]
 				},
-				"read_by_token" : {
-					"description" : "Read a session by providing its token.",
-					"parameters" : ["token"]
-				},
-				"read_by_user" : {
-					"description" : "Read a user's authenticated sessions by providing its ID.",
+				"invalidate_by_user" : {
+					"description" : "Invalidate a user's sessions.",
 					"parameters" : ["user_id"]
 				},
-				"read_anonymized" : {
-					"description" : "Return anonymized user_sessions limited by count for statistical purposes.",
-					"parameters" : ["count"],
-					"exempt" : ["*"],
-					"authenticate" : false
+				"invalidate_by_ip" : {
+					"description" : "Invalidate all sessions of an IP.",
+					"parameters" : ["ip"]
+				},
+				"invalidate_all" : {
+					"description" : "Invalidate all sessions. Handle carefully. Will log you out too.",
+					"parameters" : [],
+					"exempt" : ["*"]
 				}
 			}
 		}

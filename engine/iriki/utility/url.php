@@ -2,12 +2,16 @@
 
 namespace iriki\engine;
 
+use GuzzleHttp\Client;
+
 /**
 * Iriki URI/URL utility.
 *
 */
 class url
 {
+    private static $_http_client = null;
+
     /**
     * Parses url to pull out models, action and queries.
     *
@@ -152,6 +156,64 @@ class url
         }
 
         return $status;
+    }
+
+    public static function makeRequest($url, $params = array(), $method = "POST", $headers = array())
+    {
+        $request = array();
+        $response = null;
+
+        $method = strtolower($method);
+
+        $params_key = '';
+
+        switch ($method)
+        {
+            case 'post':
+                $params_key = 'form_params';
+            break;
+
+            /*
+            case 'put':
+            break;
+
+            case 'delete':
+            break;
+            */
+
+            default: //GET
+                $params_key = 'query';
+            break;
+        }
+
+
+        try
+        {
+            Self::$_http_client = new Client();
+
+            $response = Self::$_http_client->request(
+                $method,
+                $url,
+                [
+                    $params_key => $params,
+                    'headers' => $headers
+                    //'auth'
+                ]
+            );
+        }
+        catch (Exception $e)
+        {
+            $response = null;
+        }
+
+        if (is_null($response))
+        {
+            return '{}';
+        }
+        else
+        {
+            return (string) $response->getBody();;
+        }
     }
 }
 

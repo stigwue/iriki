@@ -21,6 +21,11 @@ class mongodb extends database
     *
     */
 	const ID_FIELD = '_id';
+	
+	/**
+    * Default connection port.
+    *
+    */
 	const PORT = 27017;
 
 	/**
@@ -60,6 +65,13 @@ class mongodb extends database
 		return Self::$__instance;
 	}
 
+	/**
+    * Build the connection string, taking into account server and authentication details
+    *
+    * @param properties Database configuration values
+    * @return Connection string.
+    * @throw
+    */
 	public static function buildConnString($properties)
 	{
 		//two modes of access exist, default and custom

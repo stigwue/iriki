@@ -2,21 +2,36 @@
 
 namespace iriki_tests;
 
-class userAccessTest extends \PHPUnit\Framework\TestCase
+class authTest extends \PHPUnit\Framework\TestCase
 {
-    public function test_create_user_success()
+    public function test_class_exist()
+    {
+        $status = class_exists('\iriki\auth');
+
+        $this->assertEquals(true, $status);
+
+        return $status;
+    }
+
+    /**
+     * @depends test_class_exist
+     */
+	public function test_initiate_success($status)
     {
         $details = array(
-            'username' => 'user',
-            'hash' => 'password'
+            'key_type' => 'long',
+            'ttl' => IRIKI_SESSION_SHORT + (1 * 24 * 60 * 60),
+            'status' => true,
+            'tag' => 'some_tag',
+            'user_id' => '5ae6bb830f6d2fea120041b6'
         );
 
         $request = array(
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'user',
-                'action' => 'create',
+                'model' => 'auth',
+                'action' => 'initiate',
                 'url_parameters' => array(),
                 'params' => $details
             )
@@ -28,33 +43,36 @@ class userAccessTest extends \PHPUnit\Framework\TestCase
             $GLOBALS['APP'],
             $model_profile,
             $request,
-            true //test mode, ignore authentication
+            true
         );
 
         $this->assertEquals(200, $status['code']);
 
-        $details['user_id'] = $status['data'];
-
+        $details['key'] = $status['data'];
         return $details;
     }
 
     /**
-     * @depends test_create_user_success
+     * @depends test_class_exist
      */
-    public function test_create_user_group_success($details)
+    public function txst_initiate_using_key_success($status)
     {
-        $details['user_group'] = 'user group';
+        $details = array(
+            'key' => 'speak_friend_and_enter',
+            'ttl' => IRIKI_SESSION_SHORT + (1 * 24 * 60 * 60),
+            'status' => true,
+            'tag' => 'some_tag',
+            'user_id' => '5ae6bb830f6d2fea120041b6'
+        );
 
         $request = array(
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'user_group',
-                'action' => 'create',
+                'model' => 'auth',
+                'action' => 'initiate_using_key',
                 'url_parameters' => array(),
-                'params' => array(
-                    'title' => $details['user_group']
-                )
+                'params' => $details
             )
         );
 
@@ -64,33 +82,31 @@ class userAccessTest extends \PHPUnit\Framework\TestCase
             $GLOBALS['APP'],
             $model_profile,
             $request,
-            true //test mode, ignore authentication
+            true
         );
-
 
         $this->assertEquals(200, $status['code']);
 
-        $details['user_group_id'] = $status['data'];
-
+        $details['key'] = $status['data'];
         return $details;
     }
 
-
-	/**
-     * @depends test_create_user_group_success
+    /**
+     * @depends test_initiate_success
      */
-    public function test_create_success($details)
+    public function test_get_token_success($details)
     {
+        //should return a valid token as revoke not yet called
         $request = array(
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'user_access',
-                'action' => 'create',
+                'model' => 'auth',
+                'action' => 'get_token',
                 'url_parameters' => array(),
                 'params' => array(
-                    'user_id' => $details['user_id'],
-                    'user_group_id' => $details['user_group_id']
+                    'key' => $details['key'],
+                    'remember' => false
                 )
             )
         );
@@ -101,26 +117,62 @@ class userAccessTest extends \PHPUnit\Framework\TestCase
             $GLOBALS['APP'],
             $model_profile,
             $request,
-            true //test mode, ignore authentication
+            true
+        );
+
+        $this->assertEquals(true,
+            ($status['code'] == 200) AND
+            (count($status['data']) == 1)
+        );
+    }
+
+    /**
+     * @depends test_initiate_success
+     */
+    public function txst_revoke_success($details)
+    {
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'auth',
+                'action' => 'revoke',
+                'url_parameters' => array(),
+                'params' => array(
+                    'key' => $details['key']
+                )
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true
         );
 
         $this->assertEquals(200, $status['code']);
-
-        $details['user_access_id'] = $status['data'];
     }
 
-    public function test_create_alias_success()
+    //get_token, should be invalid
+    /**
+     * @depends test_initiate_success
+     */
+    public function test_get_token_fail($details)
     {
+        //should return a valid token as revoke not yet called
         $request = array(
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'alias',
-                'action' => 'group_add',
+                'model' => 'auth',
+                'action' => 'get_token',
                 'url_parameters' => array(),
                 'params' => array(
-                    'user_id' => '5b66012b0f6d2f82890041bb',
-                    'user_group_id' => '5b66012b0f6d2f82890041bd'
+                    'key' => $details['key'],
+                    'remember' => true
                 )
             )
         );
@@ -131,25 +183,59 @@ class userAccessTest extends \PHPUnit\Framework\TestCase
             $GLOBALS['APP'],
             $model_profile,
             $request,
-            true //test mode, ignore authentication
+            true
+        );
+
+        $this->assertEquals(true,
+            ($status['code'] == 400)
+        );
+    }
+
+    /**
+     * @depends test_initiate_success
+     */
+    public function test_extend_success($details)
+    {
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'auth',
+                'action' => 'extend',
+                'url_parameters' => array(),
+                'params' => array(
+                    'key' => $details['key'],
+                    'ttl_extend_by' => 5 * 60 //5 minutes
+                )
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true
         );
 
         $this->assertEquals(200, $status['code']);
     }
 
-
-    public function test_user_in_group_success()
+    /**
+     * @depends test_initiate_success
+     */
+    public function test_read_by_key_success($details)
     {
         $request = array(
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'user_access',
-                'action' => 'user_in_group',
+                'model' => 'auth',
+                'action' => 'read_by_key',
                 'url_parameters' => array(),
                 'params' => array(
-                    'user_id' => '5b66012b0f6d2f82890041bb',
-                    'user_group_id' => '5b66012b0f6d2f82890041bd'
+                    'key' => $details['key']
                 )
             )
         );
@@ -160,30 +246,29 @@ class userAccessTest extends \PHPUnit\Framework\TestCase
             $GLOBALS['APP'],
             $model_profile,
             $request,
-            true //test mode, ignore authentication
+            true
         );
 
         $this->assertEquals(true,
             ($status['code'] == 200) AND
-            ($status['message'] == true)
+            (count($status['data']) == 1)
         );
     }
 
     /**
-     * @depends test_create_user_group_success
+     * @depends test_initiate_success
      */
-    public function test_user_in_group_title_success($details)
+    public function test_read_by_user_success($details)
     {
         $request = array(
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'user_access',
-                'action' => 'user_in_group_title',
+                'model' => 'auth',
+                'action' => 'read_by_user',
                 'url_parameters' => array(),
                 'params' => array(
-                    'username' => $details['username'],
-                    'title' => $details['user_group']
+                    'user_id' => $details['user_id']
                 )
             )
         );
@@ -194,32 +279,29 @@ class userAccessTest extends \PHPUnit\Framework\TestCase
             $GLOBALS['APP'],
             $model_profile,
             $request,
-            true //test mode, ignore authentication
+            true
         );
 
         $this->assertEquals(true,
             ($status['code'] == 200) AND
-            ($status['message'] == true)
+            (count($status['data']) == 1)
         );
     }
 
     /**
-     * @depends test_create_user_group_success
+     * @depends test_initiate_success
      */
-    public function test_user_in_any_group_success($details)
+    public function test_read_by_tag_success($details)
     {
         $request = array(
             'code' => 200,
             'message' => '',
             'data' => array(
-                'model' => 'user_access',
-                'action' => 'user_in_any_group',
+                'model' => 'auth',
+                'action' => 'read_by_tag',
                 'url_parameters' => array(),
                 'params' => array(
-                    'user_id' => $details['user_id'],
-                    'user_group_id_array' => [
-                        $details['user_group_id']
-                    ]
+                    'tag' => $details['tag']
                 )
             )
         );
@@ -230,48 +312,12 @@ class userAccessTest extends \PHPUnit\Framework\TestCase
             $GLOBALS['APP'],
             $model_profile,
             $request,
-            true //test mode, ignore authentication
+            true
         );
 
         $this->assertEquals(true,
             ($status['code'] == 200) AND
-            ($status['message'] == true)
-        );
-    }
-
-    /**
-     * @depends test_create_user_group_success
-     */
-    public function test_user_in_any_group_title_success($details)
-    {
-        $request = array(
-            'code' => 200,
-            'message' => '',
-            'data' => array(
-                'model' => 'user_access',
-                'action' => 'user_in_any_group_title',
-                'url_parameters' => array(),
-                'params' => array(
-                    'username' => $details['username'],
-                    'title_array' => [
-                        $details['user_group']
-                    ]
-                )
-            )
-        );
-
-        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
-
-        $status = \iriki\engine\route::matchRequestToModel(
-            $GLOBALS['APP'],
-            $model_profile,
-            $request,
-            true //test mode, ignore authentication
-        );
-
-        $this->assertEquals(true,
-            ($status['code'] == 200) AND
-            ($status['message'] == true)
+            (count($status['data']) == 1)
         );
     }
 }

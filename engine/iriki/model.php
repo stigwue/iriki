@@ -49,8 +49,10 @@ class model
                 'authenticate' => (isset($_route_action[$model_status['action']]['authenticate']) ? type::ctype($_route_action[$model_status['action']]['authenticate'], 'boolean') : true),
                 //user authentication needed? default is false, if true, a user_id parameter must be included, which must own the session token provided
                 'user_authenticate' => (isset($_route_action[$model_status['action']]['user_authenticate']) ? type::ctype($_route_action[$model_status['action']]['user_authenticate'], 'boolean') : false),
-                //user group authentication? default is false, if true, the user of the supplied session token must be part of the user_group title provided
-                'user_group_authenticate' => (isset($_route_action[$model_status['action']]['user_group_authenticate']) ? type::ctype($_route_action[$model_status['action']]['user_group_authenticate'], 'boolean') : false)
+                //user group titles user must be part of to be authenticated. part of any will suffice
+                'user_group_authenticate' => (isset($_route_action[$model_status['action']]['user_group_authenticate']) ? $_route_action[$model_status['action']]['user_group_authenticate'] : array()),
+                //user group titles user must not be part of to be authenticated. part of any will suffice
+                'user_group_authenticate_not' => (isset($_route_action[$model_status['action']]['user_group_authenticate_not']) ? $_route_action[$model_status['action']]['user_group_authenticate_not'] : array())
             );
 
             $model_status['action_defined'] = true;
@@ -67,7 +69,8 @@ class model
                 'exempt' => (isset($model_status['default'][$model_status['action']]['exempt']) ? $model_status['default'][$model_status['action']]['exempt'] : array()),
                 'authenticate' => (isset($model_status['default'][$model_status['action']]['authenticate']) ? type::ctype($model_status['default'][$model_status['action']]['authenticate'], 'boolean') : true),
                 'user_authenticate' => (isset($model_status['default'][$model_status['action']]['user_authenticate']) ? type::ctype($model_status['default'][$model_status['action']]['user_authenticate'], 'boolean') : false),
-                'user_group_authenticate' => (isset($model_status['default'][$model_status['action']]['user_group_authenticate']) ? type::ctype($model_status['default'][$model_status['action']]['user_group_authenticate'], 'boolean') : false)
+                'user_group_authenticate' => (isset($model_status['default'][$model_status['action']]['user_group_authenticate']) ? $model_status['default'][$model_status['action']]['user_group_authenticate'] : array()),
+                'user_group_authenticate_not' => (isset($model_status['default'][$model_status['action']]['user_group_authenticate_not']) ? $model_status['default'][$model_status['action']]['user_group_authenticate_not'] : array())
             );
 
             $model_status['action_defined'] = true;
