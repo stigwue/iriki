@@ -3,6 +3,15 @@
 	{
 		"routes" : {
 			"app" : {
+				"create" : {
+					"description" : "Create a new noun.",
+					"parameters" : ["name"],
+					"url_parameters" : ["name"],
+					"authenticate" : true,
+					"user_authenticate" : true,
+					"user_group_authenticate" : [],
+					"user_group_authenticate_not" : []
+				},
 				"config" : {
 					"description" : "Returns an app's configuration.",
 					"parameters" : [],

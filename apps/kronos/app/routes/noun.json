@@ -6,8 +6,7 @@
 				"create" : {
 					"description" : "Create a new noun.",
 					"parameters" : ["name"],
-					"url_parameters" : ["name"],
-					"authenticate" : false
+					"url_parameters" : ["name"]
 				}
 			}
 		}

@@ -229,6 +229,32 @@ class request
     }
 
     /**
+    * Add to the request data dictionary. This might replace an existing parameter.
+    *
+    * @param parameter Request parameter.
+    * @return Request data.
+    * @throw
+    */
+    public function addToData($parameter, $value)
+    {
+      $this->_data[$parameter] = $value;
+      return $this->_data;
+    }
+
+    /**
+    * Remove from the request data dictionary.
+    *
+    * @param parameter Request parameter.
+    * @return Request data.
+    * @throw
+    */
+    public function removeFromData($parameter)
+    {
+      unset($this->_data[$parameter]);
+      return $this->_data;
+    }
+
+    /**
     * Gets the request metadata.
     *
     * @return Request metadata.
@@ -284,11 +310,14 @@ class request
      * @param default_response Response type to use if all goes well (data, information or error)
      * @param wrap Flag to perform a response wrap or not.
      * @param log_object Request log object for continuity in loggin response.
-     * @return Final result
+     * @return Array of an error encountered flag and final result.
      */
     public static function catchError($result, $default_response, $wrap, $log_object)
     {
-      $new_result = $result;
+      $new_result = array(
+        'error' => false,
+        'result' => $result
+      );
       
       //if code and message are set,
       //most probably we are looking at an error
@@ -301,7 +330,8 @@ class request
           case response::AUTH:
             Self::log(null, time(NULL), $log_object, response::AUTH);
 
-            $new_result = \iriki\engine\response::buildFor('auth', 'User session token invalid or expired.', $wrap);
+            $new_result['error'] = true;
+            $new_result['result'] = \iriki\engine\response::buildFor('auth', 'User session token invalid or expired.', $wrap);
           break;
 
           //expecting a particular parameter which is missing
@@ -311,12 +341,14 @@ class request
 
             if ($result['message'] == 'missing_parameter')
             {
-              $new_result = \iriki\engine\response::buildFor('error', 'Parameter missing or of wrong type.', $wrap);
+              $new_result['error'] = true;
+              $new_result['result'] = \iriki\engine\response::buildFor('error', 'Parameter missing or of wrong type.', $wrap);
             }
             else
             {
               //some other error
-              $new_result = \iriki\engine\response::buildFor('error', 'Some other error occurred.', $wrap);
+              $new_result['error'] = true;
+              $new_result['result'] = \iriki\engine\response::buildFor('error', 'Some other error occurred.', $wrap);
             }
           break;
 
@@ -324,7 +356,8 @@ class request
             //nothing was caught?
             Self::log(null, time(NULL), $log_object, \iriki\engine\response::responseToCode($default_response));
 
-            $new_result = \iriki\engine\response::buildFor($default_response, $result, $wrap);
+            $new_result['error'] = false;
+            $new_result['result'] = \iriki\engine\response::buildFor($default_response, $result, $wrap);
           break;
         }
       }
@@ -335,7 +368,8 @@ class request
         Self::log(null, time(NULL), $log_object, \iriki\engine\response::responseToCode($default_response));
 
         //no errors
-        $new_result = \iriki\engine\response::buildFor($default_response, $result, $wrap);
+        $new_result['error'] = false;
+        $new_result['result'] = \iriki\engine\response::buildFor($default_response, $result, $wrap);
       }
 
       return $new_result;
@@ -419,7 +453,7 @@ class request
       //intercept errors so as to display them accordingly
       $final_result = Self::catchError($result, 'information', $wrap, $log_object);
 
-      return $final_result;
+      return $final_result['result'];
     }
 
     /**
@@ -463,7 +497,7 @@ class request
       //intercept errors so as to display them accordingly
       $final_result = Self::catchError($result, 'data', $wrap, $log_object);
 
-      return $final_result;
+      return $final_result['result'];
     }
 
     /**
@@ -506,11 +540,11 @@ class request
 
       $final_result = Self::catchError($result, 'data', $wrap, $log_object);
 
-      return $final_result;
+      return $final_result['result'];
     }
 
     /**
-    * Perform a 'read all' action on a request, returning a dictionary.
+    * Perform a 'read all' action on a request, returning a dictionary of _id -> objects.
     *
     * @param request Request object
     * @param wrap Wrap results with descriptors
@@ -547,25 +581,35 @@ class request
 
       $result = $db::doRead($request, $meta);
 
-      //convert to dictionary
-      $dictionary = array();
-      foreach ($result as $single_result)
+      //tricky bit here, we need to know if any errors where intercepted
+      //before we attempt dictionary formatting
+      //else empty dictionaries will be returned instead of the error message
+      $final_result = Self::catchError($result, 'data', $wrap, $log_object);
+
+      if ($final_result['error'] == true)
       {
-        $key_property = '_id';
-
-        if (isset($single_result[$key_property]))
-        {
-          $dictionary[$single_result[$key_property]] = $single_result;
-        }
-        else
-        {
-          //ignore
-        }
+        return $final_result['result'];
       }
+      else
+      {
+        //convert to dictionary
+        $dictionary = array();
+        foreach ($result as $single_result)
+        {
+          $key_property = '_id';
 
-      $final_result = Self::catchError($dictionary, 'data', $wrap, $log_object);
+          if (isset($single_result[$key_property]))
+          {
+            $dictionary[$single_result[$key_property]] = $single_result;
+          }
+          else
+          {
+            //ignore
+          }
+        }
 
-      return $final_result;
+        return \iriki\engine\response::data($dictionary, $wrap);
+      }
     }
 
     /**
@@ -608,7 +652,7 @@ class request
 
       $final_result = Self::catchError($result, 'data', $wrap, $log_object);
 
-      return $final_result;
+      return $final_result['result'];
     }
 
     /**
@@ -668,7 +712,7 @@ class request
 
       $final_result = Self::catchError($result, 'information', $wrap, $log_object);
 
-      return $final_result;
+      return $final_result['result'];
     }
 
     /**
@@ -709,7 +753,7 @@ class request
       
       $final_result = Self::catchError($result, 'information', $wrap, $log_object);
 
-      return $final_result;
+      return $final_result['result'];
     }
 
     /**

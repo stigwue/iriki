@@ -62,7 +62,8 @@
 				"user_session",
 				"user_group",
 				"user_access",
-				"upload"
+				"upload",
+				"auth"
 			]
 		}
 	}
