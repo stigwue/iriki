@@ -15,6 +15,18 @@ class route
     const authorization = 'user_session_token';
 
     /**
+    * String constant, header parameter holding authenticated user groups.
+    *
+    */
+    const user_group_authenticate = 'user_group_authenticate';
+
+    /**
+    * String constant, header parameter holding user groups to not authenticate.
+    *
+    */
+    const user_group_authenticate_not = 'user_group_authenticate_not';
+
+    /**
     * Parse the HTTP request details before matching existing models.
     * Note that all HTTP method parameters will be returned for later filtering.
     *
@@ -438,10 +450,9 @@ class route
                     else
                     {
                         //check for auth
-                        //$valid_user_groups = array();
-                        //$valid_user_groups_not = array();
-
                         //user_session_token is null or already supplied
+                        $valid_user_groups = array();
+                        $valid_user_groups_not = array();
 
                         //get headers, please note that this function might not be available
                         //for instance, via the CLI
@@ -456,6 +467,16 @@ class route
                             {
                                 $user_session_token = $request_headers[Self::authorization];
                             }
+
+                            if (isset($request_headers[Self::user_group_authenticate]))
+                            {
+                                $valid_user_groups = $request_headers[Self::user_group_authenticate];
+                            }
+
+                            if (isset($request_headers[Self::user_group_authenticate_not]))
+                            {
+                                $valid_not_user_groups = $request_headers[Self::user_group_authenticate_not];
+                            }
                         }
 
                         if ($test_mode)
@@ -464,7 +485,7 @@ class route
                         }
                         else
                         {
-                            //check for authentication
+                            //check for user authentication
                             if ($model_status['action_details']['authenticate'] == true)
                             {
                                 //authentication required, was token found?
@@ -474,6 +495,8 @@ class route
                                     return response::error('User session token missing.');
                                 }
                             }
+                            //group authentication
+                            //group not authentication
                             else
                             {
                                 //authentication isn't required, ignore it

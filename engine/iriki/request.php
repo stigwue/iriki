@@ -229,6 +229,32 @@ class request
     }
 
     /**
+    * Add to the request data dictionary. This might replace an existing parameter.
+    *
+    * @param parameter Request parameter.
+    * @return Request data.
+    * @throw
+    */
+    public function addToData($parameter, $value)
+    {
+      $this->_data[$parameter] = $value;
+      return $this->_data;
+    }
+
+    /**
+    * Remove from the request data dictionary.
+    *
+    * @param parameter Request parameter.
+    * @return Request data.
+    * @throw
+    */
+    public function removeFromData($parameter)
+    {
+      unset($this->_data[$parameter]);
+      return $this->_data;
+    }
+
+    /**
     * Gets the request metadata.
     *
     * @return Request metadata.
