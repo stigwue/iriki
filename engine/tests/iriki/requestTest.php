@@ -23,8 +23,8 @@ class requestTest extends \PHPUnit\Framework\TestCase
 		);
 
 		$this->assertEquals(true,
-			(isset($result['code']) AND $result['code'] == \iriki\engine\response::OK AND
-			isset($result['message']) AND isset($result['data']))
+			(isset($result['result']['code']) AND $result['result']['code'] == \iriki\engine\response::OK AND
+			isset($result['result']['message']) AND isset($result['result']['data']))
 		);
 	}
 
@@ -42,7 +42,7 @@ class requestTest extends \PHPUnit\Framework\TestCase
 
 		$this->assertEquals(
 			'Funke! Some error occurred!!',
-			$result
+			$result['result']
 		);
 	}
 
@@ -60,7 +60,7 @@ class requestTest extends \PHPUnit\Framework\TestCase
 
 		$this->assertEquals(true,
 			(
-				isset($result['data']) AND is_array($result['data'])
+				isset($result['result']['data']) AND is_array($result['result']['data'])
 			)
 		);
 	}
