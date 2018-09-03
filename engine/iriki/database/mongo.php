@@ -121,7 +121,7 @@ class mongo extends database
 	public static function doInitialise($config_values)
 	{
 		//we have supplied the db's properties in config
-		//the engine name 
+		//the engine name
 		//and app name
 
 		//the trick is to see if config values are null
@@ -216,7 +216,7 @@ class mongo extends database
 			//cursor should hold only one session object
 			foreach ($cursor as $user_session)
 			{
-				//is it authenticated? 
+				//is it authenticated?
 				if ($user_session['authenticated'] == false) {
 					return false;
 				}
@@ -248,7 +248,7 @@ class mongo extends database
 					//too stringent, ignore for now
 					//$ip = $_SERVER['SERVER_ADDR'];
 					//if ($ip == $user_session['ip'])
-					
+
 					return true;
 				}
 			}
