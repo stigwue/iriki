@@ -15,6 +15,12 @@ class route
     const authorization = 'user_session_token';
 
     /**
+    * String constant, header parameter holding authenticated user.
+    *
+    */
+    const user_authenticate = 'user_authenticate';
+
+    /**
     * String constant, header parameter holding authenticated user groups.
     *
     */
@@ -451,6 +457,7 @@ class route
                     {
                         //check for auth
                         //user_session_token is null or already supplied
+                        $valid_user = null;
                         $valid_user_groups = array();
                         $valid_user_groups_not = array();
 
@@ -468,6 +475,11 @@ class route
                                 $user_session_token = $request_headers[Self::authorization];
                             }
 
+                            if (isset($request_headers[Self::user_authenticate]))
+                            {
+                                $valid_user = $request_headers[Self::user_authenticate];
+                            }
+
                             if (isset($request_headers[Self::user_group_authenticate]))
                             {
                                 $valid_user_groups = $request_headers[Self::user_group_authenticate];
@@ -475,7 +487,7 @@ class route
 
                             if (isset($request_headers[Self::user_group_authenticate_not]))
                             {
-                                $valid_not_user_groups = $request_headers[Self::user_group_authenticate_not];
+                                $valid_user_groups_not = $request_headers[Self::user_group_authenticate_not];
                             }
                         }
 
@@ -485,6 +497,14 @@ class route
                         }
                         else
                         {
+                            /*
+                            Authentication logic is two step:
+                            1. If a specific authentication is set, see if the necessary variable was provided.
+                            2. If the variable is provided, test it.
+                            */
+
+                            //This is the first step. The second is done just before the action.
+
                             //check for user authentication
                             if ($model_status['action_details']['authenticate'] == true)
                             {
@@ -494,9 +514,40 @@ class route
                                     //no, token wasn't found
                                     return response::error('User session token missing.');
                                 }
+
+                                //user auth
+                                if ($model_status['action_details']['user_authenticate'] == true)
+                                {
+                                    if (is_null($valid_user))
+                                    {
+                                        //no user groups supplied
+                                        return response::error('User to authenticate missing.');
+                                    }
+                                }
+
+                                /*
+                                group auth logic:
+                                */
+
+                                //group authentication
+                                if (count($model_status['action_details']['user_group_authenticate']) != 0)
+                                {
+                                    if (count($valid_user_groups) == 0)
+                                    {
+                                        //no user groups supplied
+                                        return response::error('User groups to authenticate missing.');
+                                    }
+                                }
+                                //group not authentication
+                                if (count($model_status['action_details']['user_group_authenticate_not']) != 0)
+                                {
+                                    if (count($valid_user_groups_not) == 0)
+                                    {
+                                        //no user groups supplied
+                                        return response::error('User groups to not authenticate missing.');
+                                    }
+                                }
                             }
-                            //group authentication
-                            //group not authentication
                             else
                             {
                                 //authentication isn't required, ignore it
