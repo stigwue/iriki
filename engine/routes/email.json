@@ -5,6 +5,7 @@
 			"email" : {
 				"send" : {
 					"description" : "Send an email via mailgun.",
+					"method" : "POST",
 					"parameters" : [],
 					"exempt" : ["_id", "status"],
 					"authenticate" : false

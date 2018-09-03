@@ -123,6 +123,7 @@ class log extends \iriki\engine\request
 
         $latest_log = $request->read($request, false);
         $stamp = 0;
+        $model_count = 0;
 
         //approximate with happrox
         $obj = new \Happrox();
@@ -133,10 +134,39 @@ class log extends \iriki\engine\request
             $stamp = time(NULL) - $latest_log[0]['created'];
         }
 
+        //read model count
+        $req = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'app',
+                'action' => 'models',
+                'url_parameters' => array(),
+                'params' => array()
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $req);
+
+        //handle the request: match a route to a model and its action
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $req,
+            $request->getTestMode(), //test mode
+            $request->getSession()
+        );
+
+        if ($status['code'] == 200)
+        {
+            $model_count = count($status['data']);
+        }
+
         return \iriki\engine\response::data(
             [
                 'entries' => \Happrox::number($obj, $count),
-                'latest' => \Happrox::duration($obj, $stamp)
+                'latest' => \Happrox::duration($obj, $stamp),
+                'models' => \Happrox::number($obj, $model_count)
             ],
             $wrap
         );

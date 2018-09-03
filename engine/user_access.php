@@ -162,6 +162,58 @@ class user_access extends \iriki\engine\request
 		}
 	}
 
+	public function user_in_any_group($request, $wrap = true)
+	{
+		//for each supplied id, check membership
+
+		//for each, do a user_in_group, return on first occurence to save time
+
+		$orig_data = $request->getData();
+		$group_ids_to_check = $orig_data['user_group_id_array'];
+		//this user's id
+		$user_id = $orig_data['user_id'];
+
+        //loop throug groups, stop once one membership is found
+        foreach ($group_ids_to_check as $user_group_id)
+        {
+        	$req = array(
+	            'code' => 200,
+	            'message' => '',
+	            'data' => array(
+	                'model' => 'user_access',
+	                'action' => 'user_in_group',
+	                'url_parameters' => array(),
+	                'params' => array(
+	                	'user_id' => $user_id,
+	                	'user_group_id' => $user_group_id
+	                )
+	            )
+	        );
+
+	        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $req);
+
+	        $usr_gr_state = \iriki\engine\route::matchRequestToModel(
+	            $GLOBALS['APP'],
+	            $model_profile,
+	            $req,
+	            $request->getTestMode(),
+	            $request->getSession()
+	        );
+
+	        if ($usr_gr_state['code'] == 200)
+	        {
+	        	if ($usr_gr_state['message'] == true)
+	        	{
+	        		//we found membership in this group
+	        		return \iriki\engine\response::information(true, $wrap, $user_group_id);
+	        	}
+	        }
+        }
+
+        //we searched in all groups, found no membership
+		return \iriki\engine\response::information(false, $wrap);
+	}
+
 	public function user_in_any_group_title($request, $wrap = true)
 	{
 		//read this user's details to get _id
@@ -263,7 +315,7 @@ class user_access extends \iriki\engine\request
 
 			        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $req);
 
-			        $usr_gr_state = \iriki\engine\route::matchRequestToModel(
+			        $usr_ac_state = \iriki\engine\route::matchRequestToModel(
 			            $GLOBALS['APP'],
 			            $model_profile,
 			            $req,
@@ -271,9 +323,9 @@ class user_access extends \iriki\engine\request
 			            $request->getSession()
 			        );
 
-			        if ($status['code'] == 200)
+			        if ($usr_ac_state['code'] == 200)
 			        {
-			        	if ($status['message'] == true)
+			        	if ($usr_ac_state['message'] == true)
 			        	{
 			        		//we found membership in this group
 			        		return \iriki\engine\response::information(true, $wrap, $user_group_id);

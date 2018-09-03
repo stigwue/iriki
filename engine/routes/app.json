@@ -4,9 +4,9 @@
 		"routes" : {
 			"app" : {
 				"create" : {
-					"description" : "Create a new noun.",
-					"parameters" : ["name"],
-					"url_parameters" : ["name"],
+					"description" : "Create a new app.",
+					"parameters" : [],
+					"exempt" : ["_id"],
 					"authenticate" : true,
 					"user_authenticate" : true,
 					"user_group_authenticate" : [],
