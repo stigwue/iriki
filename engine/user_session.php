@@ -44,7 +44,7 @@ class user_session extends \iriki\engine\request
 			$request->setData($data);
 			$request->setParameterStatus($parameters);
 
-			return $request->create($request);
+			return $request->create($request, $wrap);
 	    }
 	    else
 	    {
