@@ -75,7 +75,7 @@ class request
     /**
     * Sets the test mode
     *
-    * @param test_mode Test mode value
+    * @param test_mode Test mode boolean value
     * @return Test mode
     * @throw
     */

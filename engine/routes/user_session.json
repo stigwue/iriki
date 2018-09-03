@@ -4,7 +4,7 @@
 		"routes" : {
 			"user_session" : {
 				"initiate" : {
-					"description" : "Initiate (create) a session, returns a token.",
+					"description" : "Initiate (create) a session, returns the created session ID.",
 					"parameters" : [],
 					"exempt" : ["_id", "started", "pinged", "token", "ip"]
 				},

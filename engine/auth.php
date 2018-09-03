@@ -338,7 +338,7 @@ class auth extends \iriki\engine\request
 			            $GLOBALS['APP'],
 			            $model_profile,
 			            $req,
-			            $request->getTestMode(),
+			            true, //force test mode as the parent request is un-authenticated
 			            $request->getSession()
 			        );
 
