@@ -25,6 +25,9 @@ $status = \iriki\engine\route::matchRequestToModel(
 	$APP,
 	$model_profile,
 	$request_details
+	//test mode: boolean. Can disable all authentication
+	//user_session_token, to ignore those supplied via header
+	//auth_details: user_authorized, API key?
 );
 
 //return status

@@ -193,7 +193,7 @@ class mongodb extends database
     * @param timestamp Timestamp to use for expiry checks
     * @return True or false
     */
-    private static function checkSessionToken($user_session_token, $timestamp)
+    private static function checkSessionToken($user_session_token, $timestamp, $auth_details, $orig_request)
 	{
 		//read session details from db
 		$persist = Self::$__instance->user_session;
@@ -220,10 +220,7 @@ class mongodb extends database
 				//does its user still exist?
 				//err, beyond our scope, ignore
 
-				//is it to be remembered?
-				//ignore for now
-
-				//has it expired?
+				//has it expired? depends on if it is to be remembered
 				$expire_stamp = $user_session['pinged'];
 				if ($user_session['remember'] == true)
 				{
@@ -245,28 +242,108 @@ class mongodb extends database
 					//$ip = $_SERVER['SERVER_ADDR'];
 					//if ($ip == $user_session['ip'])
 
+					//perform other checks
+					//note that we are not specific on why auth failed
+
+					//1. if user_authenticate is true, is provided session token that of the user?
+					if ($auth_details['user'] == true)
+					{
+						if ($auth_details['user_authorized'] != $user_session['user_id'])
+						{
+							return false;
+						}
+					}
+
+					//2. if group to authenticate isn't empty, is the supplied user of the group(s)?
+					if (count($auth_details['group']) != 0)
+					{
+						//run user_access/user_in_any_group_special
+						$request = array(
+				            'code' => 200,
+				            'message' => '',
+				            'data' => array(
+				                'model' => 'user_access',
+				                'action' => 'user_in_any_group_special',
+				                'url_parameters' => array(),
+				                'params' => array(
+				                    'user_id' => $user_session['user_id'],
+				                    'title_array' => [
+				                        $auth_details['group']
+				                    ]
+				                )
+				            )
+				        );
+
+				        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+				        $status = \iriki\engine\route::matchRequestToModel(
+				            $GLOBALS['APP'],
+				            $model_profile,
+				            $request,
+				            $orig_request->getTestMode()
+				        );
+
+						if ($status['code'] == 200)
+						{
+							if($status['message'] != true)
+							{
+								return false;
+							}
+						}
+						else
+						{
+							return false;
+						}
+					}
+
+					//3. if group to NOT authenticate isn't empty,... 
+					if (count($auth_details['group_not']) != 0)
+					{
+						//run user_access/user_in_any_group_special
+						$request = array(
+				            'code' => 200,
+				            'message' => '',
+				            'data' => array(
+				                'model' => 'user_access',
+				                'action' => 'user_in_any_group_special',
+				                'url_parameters' => array(),
+				                'params' => array(
+				                    'user_id' => $user_session['user_id'],
+				                    'title_array' => [
+				                        $auth_details['group_not']
+				                    ]
+				                )
+				            )
+				        );
+
+				        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+				        $status = \iriki\engine\route::matchRequestToModel(
+				            $GLOBALS['APP'],
+				            $model_profile,
+				            $request,
+				            $orig_request->getTestMode()
+				        );
+
+						if ($status['code'] == 200)
+						{
+							if($status['message'] == true)
+							{
+								return false;
+							}
+						}
+						else
+						{
+							return false;
+						}
+					}
+
 					return true;
 				}
 			}
 		}
 
 		//token not found
-		return false;
-	}
-
-
-    /**
-    * Check database if the user supplied session token belongs to the specified user.
-    * Returns true if all is well or false otherwise so that
-    * calling function can
-    * return response::error('User not authenticated.');
-    *
-    * @param user_to_auth User to authenticate.
-    * @param session_obj Session object from provided session token step.
-    * @return True or false
-    */
-    private static function checkUserToken($user_to_auth, $session_obj)
-	{
 		return false;
 	}
 
@@ -378,7 +455,7 @@ class mongodb extends database
 		{
 			if (!is_null($request->getSession()))
 			{
-				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL));
+				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL), $request->getAuthentication(), $request);
 
 				if (!$authenticated)
 				{
@@ -435,7 +512,7 @@ class mongodb extends database
 		{
 			if (!is_null($request->getSession()))
 			{
-				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL));
+				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL), $request->getAuthentication(), $request);
 
 				if (!$authenticated)
 				{
@@ -533,7 +610,7 @@ class mongodb extends database
 		{
 			if (!is_null($request->getSession()))
 			{
-				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL));
+				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL), $request->getAuthentication(), $request);
 
 				if (!$authenticated)
 				{
@@ -595,7 +672,7 @@ class mongodb extends database
 		{
 			if (!is_null($request->getSession()))
 			{
-				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL));
+				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL), $request->getAuthentication(), $request);
 
 				if (!$authenticated)
 				{

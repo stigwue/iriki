@@ -214,6 +214,94 @@ class user_access extends \iriki\engine\request
 		return \iriki\engine\response::information(false, $wrap);
 	}
 
+	public function user_in_any_group_special($request, $wrap = true)
+	{
+		//user's _id already supplied
+		//read all groups in a dictionary
+
+		//for each, do a user_in_group, return on first occurence to save time
+
+		$orig_data = $request->getData();
+		$groups_to_check = $orig_data['title_array'];
+		//this user's id
+		$user_id = $orig_data['user_id'];
+
+        //read all groups. Yeah, all of them.
+        $req = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'user_group',
+                'action' => 'read_all_dictionary',
+                'url_parameters' => array(),
+                'params' => array()
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $req);
+
+        $usr_gr_state = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $req,
+            $request->getTestMode(),
+            $request->getSession()
+        );
+
+        if ($usr_gr_state['code'] != 200)
+        {
+    		return \iriki\engine\response::error('Error occured while looking for user groups. Try again.', $wrap);
+        }
+        else
+    	{
+        	if (count($usr_gr_state['data']) == 0)
+	        {
+	        	return \iriki\engine\response::error('User groups not found.', $wrap);
+	        }
+
+	        //loop throug groups, stop once one membership is found
+	        foreach ($usr_gr_state['data'] as $user_group_id => $user_group)
+	        {
+	        	$req = array(
+		            'code' => 200,
+		            'message' => '',
+		            'data' => array(
+		                'model' => 'user_access',
+		                'action' => 'user_in_group',
+		                'url_parameters' => array(),
+		                'params' => array(
+		                	'user_id' => $user_id,
+		                	'user_group_id' => $user_group_id
+		                )
+		            )
+		        );
+
+		        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $req);
+
+		        $usr_ac_state = \iriki\engine\route::matchRequestToModel(
+		            $GLOBALS['APP'],
+		            $model_profile,
+		            $req,
+		            $request->getTestMode(),
+		            $request->getSession()
+		        );
+
+		        if ($usr_ac_state['code'] == 200)
+		        {
+		        	if ($usr_ac_state['message'] == true)
+		        	{
+		        		//we found membership in this group
+		        		return \iriki\engine\response::information(true, $wrap, $user_group_id);
+		        	}
+		        }
+	        }
+
+
+	        //we searched in all groups, found no membership
+    		return \iriki\engine\response::information(false, $wrap);
+	    }
+	}
+
 	public function user_in_any_group_title($request, $wrap = true)
 	{
 		//read this user's details to get _id

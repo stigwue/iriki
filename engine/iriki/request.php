@@ -370,7 +370,7 @@ class request
      * @param default_response Response type to use if all goes well (data, information or error)
      * @param wrap Flag to perform a response wrap or not.
      * @param log_object Request log object for continuity in loggin response.
-     * @param do_log Perform request logging or not.
+     * @param do_log Perform request logging or not. Might make it false by default?
      * @return Array of an error encountered flag and final result.
      */
     public static function catchError($result, $default_response, $wrap, $log_object, $do_log)
