@@ -17,6 +17,17 @@
 					"parameters" : [],
 					"exempt" : ["*"]
 				},
+				"read_all_dictionary" : {
+					"description" : "Returns all instances of the model, as a key-object dictionary.",
+					"parameters" : [],
+					"exempt" : ["*"]
+				},
+				"count" : {
+					"description" : "Returns the count of the model.",
+					"parameters" : [],
+					"exempt" : ["*"],
+					"authenticate" : false
+				},
 				"update" : {
 					"description" : "Updates a model instance by supplying new properties and the id of the model to update.",
 					"parameters" : []

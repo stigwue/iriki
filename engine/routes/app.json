@@ -8,9 +8,9 @@
 					"parameters" : [],
 					"exempt" : ["_id"],
 					"authenticate" : true,
-					"user_authenticate" : true,
-					"user_group_authenticate" : [],
-					"user_group_authenticate_not" : []
+					"test_user_authenticate" : true,
+					"test_user_group_authenticate" : ["admin"],
+					"test_user_group_authenticate_not" : ["banned"]
 				},
 				"config" : {
 					"description" : "Returns an app's configuration.",

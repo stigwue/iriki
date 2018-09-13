@@ -16,12 +16,17 @@
 					"parameters" : ["username", "title"]
 				},
 				"user_in_any_group" : {
-					"description" : "Checks to see if a user (specified by _id) is in any of specified groups.",
+					"description" : "Checks to see if a user (specified by _id) is in any of specified groups (specificed by an array of ids).",
 					"method" : "POST",
 					"parameters" : ["user_id", "user_group_id_array"]
 				},
+				"user_in_any_group_special" : {
+					"description" : "Checks to see if a user (specified by _id) is in any of specified groups (specificed by an array of titles).",
+					"method" : "POST",
+					"parameters" : ["user_id", "title_array"]
+				},
 				"user_in_any_group_title" : {
-					"description" : "Checks to see if a user (specified by username) is in any of specified groups.",
+					"description" : "Checks to see if a user (specified by username) is in any of specified groups (specificed by an array of titles).",
 					"method" : "POST",
 					"parameters" : ["username", "title_array"]
 				},

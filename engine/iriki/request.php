@@ -31,6 +31,12 @@ class request
     private $_session_token;
 
     /**
+    * Authentication state: user, group and group-not.
+    *
+    */
+    private $_authentication;
+
+    /**
     * Model and action status, see definition in route::matchUrl
     *
     */
@@ -60,6 +66,12 @@ class request
     *
     */
     private $_tag;
+
+    /**
+    * Perform logging? Boolean value.
+    *
+    */
+    private $_log = true;
 
     /**
     * Gets the test mode value
@@ -107,6 +119,30 @@ class request
     {
       $this->_session_token = $session_token;
       return $this->_session_token;
+    }
+
+    /**
+    * Gets the authentication state
+    *
+    * @return Authentication state
+    * @throw
+    */
+    public function getAuthentication()
+    {
+      return $this->_authentication;
+    }
+
+    /**
+    * Sets the authentication state
+    *
+    * @param authentication Authentication state: array of user (boolean), group (array) and group_not (array) keys.
+    * @return Authentication state
+    * @throw
+    */
+    public function setAuthentication($authentication)
+    {
+      $this->_authentication = $authentication;
+      return $this->_authentication;
     }
 
     /**
@@ -303,6 +339,30 @@ class request
     }
 
     /**
+    * Gets the request log flag.
+    *
+    * @return Request log flag.
+    * @throw
+    */
+    public function getLog()
+    {
+      return $this->_log;
+    }
+
+    /**
+    * Sets the request log flag.
+    *
+    * @param log Request log flag.
+    * @return Request log flag.
+    * @throw
+    */
+    public function setLog($log)
+    {
+      $this->_log = $log;
+      return $this->_log;
+    }
+
+    /**
      * Intercepts authentication or some other last minute errors reported.
      * Note that code is only set if an error occurs (code is then an error code) or wrapping is specified.
      *
@@ -310,15 +370,16 @@ class request
      * @param default_response Response type to use if all goes well (data, information or error)
      * @param wrap Flag to perform a response wrap or not.
      * @param log_object Request log object for continuity in loggin response.
+     * @param do_log Perform request logging or not. Might make it false by default?
      * @return Array of an error encountered flag and final result.
      */
-    public static function catchError($result, $default_response, $wrap, $log_object)
+    public static function catchError($result, $default_response, $wrap, $log_object, $do_log)
     {
       $new_result = array(
         'error' => false,
         'result' => $result
       );
-      
+
       //if code and message are set,
       //most probably we are looking at an error
       if (isset($result['code']) && isset($result['message']))
@@ -328,7 +389,7 @@ class request
         {
           //authentication failed
           case response::AUTH:
-            Self::log(null, time(NULL), $log_object, response::AUTH);
+            if ($do_log) Self::log(null, time(NULL), $log_object, response::AUTH);
 
             $new_result['error'] = true;
             $new_result['result'] = \iriki\engine\response::buildFor('auth', 'User session token invalid or expired.', $wrap);
@@ -337,7 +398,7 @@ class request
           //expecting a particular parameter which is missing
           //especially ids of parent models
           case response::ERROR:
-            Self::log(null, time(NULL), $log_object, response::ERROR);
+            if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
 
             if ($result['message'] == 'missing_parameter')
             {
@@ -354,7 +415,7 @@ class request
 
           default:
             //nothing was caught?
-            Self::log(null, time(NULL), $log_object, \iriki\engine\response::responseToCode($default_response));
+            if ($do_log) Self::log(null, time(NULL), $log_object, \iriki\engine\response::responseToCode($default_response));
 
             $new_result['error'] = false;
             $new_result['result'] = \iriki\engine\response::buildFor($default_response, $result, $wrap);
@@ -365,7 +426,7 @@ class request
       //else, we should wrap with the appropriate response markers
       else
       {
-        Self::log(null, time(NULL), $log_object, \iriki\engine\response::responseToCode($default_response));
+        if ($do_log) Self::log(null, time(NULL), $log_object, \iriki\engine\response::responseToCode($default_response));
 
         //no errors
         $new_result['error'] = false;
@@ -402,7 +463,9 @@ class request
     public function create($request, $wrap = true)
     {
       $db = Self::$_db_instance;
-      $log_object = Self::log($request, time(NULL));
+      $do_log = $request->getLog();
+      $log_object = null;
+      if ($do_log) $log_object = Self::log($request, time(NULL));
 
       //unique
       $matching = model::doParameterUniqueCheck($request);
@@ -410,11 +473,11 @@ class request
       {
           $result = array();
 
-          Self::log(null, time(NULL), $log_object, response::ERROR);
+          if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
 
           if (!$wrap) return $result;
           else return response::error(
-            response::showMissing($matching, 'parameter', 'mismatched'),
+            response::showMissing($matching, 'parameter', 'of wrong type (or type check could not be performed)'),
             $wrap);
       }
 
@@ -431,7 +494,7 @@ class request
       {
         if ($missing_parameters != 0)
         {
-            Self::log(null, time(NULL), $log_object, response::ERROR);
+            if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
 
             return response::error(
               response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
@@ -439,7 +502,7 @@ class request
         }
         if ($extra_parameters != 0)
         {
-          Self::log(null, time(NULL), $log_object, response::ERROR);
+          if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
 
           return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
@@ -451,7 +514,7 @@ class request
       $result = $db::doCreate($request);
 
       //intercept errors so as to display them accordingly
-      $final_result = Self::catchError($result, 'information', $wrap, $log_object);
+      $final_result = Self::catchError($result, 'information', $wrap, $log_object, $do_log);
 
       return $final_result['result'];
     }
@@ -467,8 +530,9 @@ class request
     public function read($request, $wrap = true)
     {
       $db = Self::$_db_instance;
-
-      $log_object = Self::log($request, time(NULL));
+      $do_log = $request->getLog();
+      $log_object = null;
+      if ($do_log) $log_object = Self::log($request, time(NULL));
 
       //unique
       //belongsto
@@ -483,7 +547,7 @@ class request
 
       if ($extra_parameters != 0)
       {
-        Self::log(null, time(NULL), $log_object, response::ERROR);
+        if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
         
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -495,7 +559,7 @@ class request
       $result = $db::doRead($request, $meta);
 
       //intercept errors so as to display them accordingly
-      $final_result = Self::catchError($result, 'data', $wrap, $log_object);
+      $final_result = Self::catchError($result, 'data', $wrap, $log_object, $do_log);
 
       return $final_result['result'];
     }
@@ -510,9 +574,9 @@ class request
     */
     public function read_all($request, $wrap = true)
     {
-      $db = Self::$_db_instance;
-
-      $log_object = Self::log($request, time(NULL));
+      $db = Self::$_db_instance;$do_log = $request->getLog();
+      $log_object = null;
+      if ($do_log) $log_object = Self::log($request, time(NULL));
 
       $parameter_status = $request->getParameterStatus();
 
@@ -523,7 +587,7 @@ class request
 
       if ($extra_parameters != 0)
       {
-        Self::log(null, time(NULL), $log_object, response::ERROR);
+        if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
         
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -538,7 +602,7 @@ class request
 
       $result = $db::doRead($request, $meta);
 
-      $final_result = Self::catchError($result, 'data', $wrap, $log_object);
+      $final_result = Self::catchError($result, 'data', $wrap, $log_object, $do_log);
 
       return $final_result['result'];
     }
@@ -554,8 +618,9 @@ class request
     public function read_all_dictionary($request, $wrap = true)
     {
       $db = Self::$_db_instance;
-
-      $log_object = Self::log($request, time(NULL));
+      $do_log = $request->getLog();
+      $log_object = null;
+      if ($do_log) $log_object = Self::log($request, time(NULL));
 
       $parameter_status = $request->getParameterStatus();
 
@@ -566,7 +631,7 @@ class request
 
       if ($extra_parameters != 0)
       {
-        Self::log(null, time(NULL), $log_object, response::ERROR);
+        if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
         
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -584,7 +649,7 @@ class request
       //tricky bit here, we need to know if any errors where intercepted
       //before we attempt dictionary formatting
       //else empty dictionaries will be returned instead of the error message
-      $final_result = Self::catchError($result, 'data', $wrap, $log_object);
+      $final_result = Self::catchError($result, 'data', $wrap, $log_object, $do_log);
 
       if ($final_result['error'] == true)
       {
@@ -623,8 +688,9 @@ class request
     public function count($request, $wrap = true)
     {
       $db = Self::$_db_instance;
-
-      $log_object = Self::log($request, time(NULL));
+      $do_log = $request->getLog();
+      $log_object = null;
+      if ($do_log) $log_object = Self::log($request, time(NULL));
 
       $parameter_status = $request->getParameterStatus();
 
@@ -635,7 +701,7 @@ class request
 
       if ($extra_parameters != 0)
       {
-        Self::log(null, time(NULL), $log_object, response::ERROR);
+        if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
         
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -650,7 +716,7 @@ class request
 
       $result = $db::doRead($request, $meta);
 
-      $final_result = Self::catchError($result, 'data', $wrap, $log_object);
+      $final_result = Self::catchError($result, 'data', $wrap, $log_object, $do_log);
 
       return $final_result['result'];
     }
@@ -666,8 +732,9 @@ class request
     public function update($request, $wrap = true)
     {
       $db = Self::$_db_instance;
-
-      $log_object = Self::log($request, time(NULL));
+      $do_log = $request->getLog();
+      $log_object = null;
+      if ($do_log) $log_object = Self::log($request, time(NULL));
 
       //unique
       //belongsto: only if request has no explicitly defined parameters (stored in tag)
@@ -689,7 +756,7 @@ class request
         {
           if ($missing_parameters != 0)
           {
-            Self::log(null, time(NULL), $log_object, response::ERROR);
+            if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
 
             return response::error(
               response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
@@ -697,7 +764,7 @@ class request
           }
           if ($extra_parameters != 0)
           {
-            Self::log(null, time(NULL), $log_object, response::ERROR);
+            if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
 
             return response::error(
             response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -710,7 +777,7 @@ class request
 
       $result = $db::doUpdate($request);
 
-      $final_result = Self::catchError($result, 'information', $wrap, $log_object);
+      $final_result = Self::catchError($result, 'information', $wrap, $log_object, $do_log);
 
       return $final_result['result'];
     }
@@ -726,8 +793,9 @@ class request
     public function delete($request, $wrap = true)
     {
       $db = Self::$_db_instance;
-
-      $log_object = Self::log($request, time(NULL));
+      $do_log = $request->getLog();
+      $log_object = null;
+      if ($do_log) $log_object = Self::log($request, time(NULL));
 
       //unique
       //belongsto
@@ -742,7 +810,7 @@ class request
 
       if ($extra_parameters != 0)
       {
-        Self::log(null, time(NULL), $log_object, response::ERROR);
+        if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
 
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -751,7 +819,7 @@ class request
 
       $result = $db::doDelete($request);
       
-      $final_result = Self::catchError($result, 'information', $wrap, $log_object);
+      $final_result = Self::catchError($result, 'information', $wrap, $log_object, $do_log);
 
       return $final_result['result'];
     }
@@ -831,16 +899,19 @@ class request
         $GLOBALS['APP']
       );
 
-      $log_object = array(
-        '_id' => $status['data'],
-        'model' => $request_details['data']['params']['model'],
-        'action' => $request_details['data']['params']['action'],
-        'timestamp' => $timestamp,
-        'parent' => $request_details['data']['params']['parent'],
-        'tag' => $tag
-      );
+      if ($status['code'] == 200)
+      {
+        $log_object = array(
+          '_id' => $status['data'],
+          'model' => $request_details['data']['params']['model'],
+          'action' => $request_details['data']['params']['action'],
+          'timestamp' => $timestamp,
+          'parent' => $request_details['data']['params']['parent'],
+          'tag' => $tag
+        );
 
-      return $log_object;
+        return $log_object;
+      }
     }
 }
 
