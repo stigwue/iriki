@@ -349,6 +349,13 @@ class model
       				'ids' => $initial_request->getParameterStatus()['ids']
       			));
 
+            //do not log this request, makes for cleaner logs
+            $new_request->setLog(false);
+
+            //we would have allowed a read whatever the authentication
+            //but someone can use brute force to discover some details
+            //$new_request->setTestMode(true);
+
             $found = $new_request->read($new_request, false);
 
             //revert to original here

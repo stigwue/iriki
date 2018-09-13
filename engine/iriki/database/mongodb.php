@@ -21,6 +21,11 @@ class mongodb extends database
     *
     */
 	const ID_FIELD = '_id';
+	
+	/**
+    * Default connection port.
+    *
+    */
 	const PORT = 27017;
 
 	/**
@@ -60,6 +65,13 @@ class mongodb extends database
 		return Self::$__instance;
 	}
 
+	/**
+    * Build the connection string, taking into account server and authentication details
+    *
+    * @param properties Database configuration values
+    * @return Connection string.
+    * @throw
+    */
 	public static function buildConnString($properties)
 	{
 		//two modes of access exist, default and custom
@@ -242,6 +254,22 @@ class mongodb extends database
 		return false;
 	}
 
+
+    /**
+    * Check database if the user supplied session token belongs to the specified user.
+    * Returns true if all is well or false otherwise so that
+    * calling function can
+    * return response::error('User not authenticated.');
+    *
+    * @param user_to_auth User to authenticate.
+    * @param session_obj Session object from provided session token step.
+    * @return True or false
+    */
+    private static function checkUserToken($user_to_auth, $session_obj)
+	{
+		return false;
+	}
+
 	/**
     * Convert IDs supplied as strings to MongoIDs
     * Invalid IDs will be added to missing parameters
@@ -314,6 +342,24 @@ class mongodb extends database
 		}
 
 		return $pretty;
+	}
+
+	/**
+    * Reduce complex MongoIDs to string.
+    *
+    * @param id MongoDB BSON object
+    * @return String representation
+    */
+	public static function deenforceId($id)
+	{
+		if (Self::isMongoId((string) $id))
+		{
+			return (string) $id;
+		}
+		else
+		{
+			return $id;
+		}
 	}
 
 	/**

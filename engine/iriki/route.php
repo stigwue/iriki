@@ -15,22 +15,10 @@ class route
     const authorization = 'user_session_token';
 
     /**
-    * String constant, header parameter holding authenticated user.
+    * String constant, header parameter holding user authorized's id.
     *
     */
-    const user_authenticate = 'user_authenticate';
-
-    /**
-    * String constant, header parameter holding authenticated user groups.
-    *
-    */
-    const user_group_authenticate = 'user_group_authenticate';
-
-    /**
-    * String constant, header parameter holding user groups to not authenticate.
-    *
-    */
-    const user_group_authenticate_not = 'user_group_authenticate_not';
+    const user_authorized = 'user_authorized';
 
     /**
     * Parse the HTTP request details before matching existing models.
@@ -385,10 +373,12 @@ class route
     * @param request_details Details of the HTTP request.
     * @param test_mode Test mode to disable authentication needs. Use very sparingly. Default is false.
     * @param user_session_token For cases where setting headers isn't possible, add user session token here.
+    * @param auth_details Authentication parameters for when headers aren't useful. E.g authorized user's id.
     * @return Status of matched model action.
     * @throw
     */
-    public static function matchRequestToModel($app = null, $model_status, $request_details, $test_mode = false, $user_session_token = null
+    //public static function matchRequestToModel($app = null, $model_status, $request_details, $test_mode = false, $user_session_token = null
+    public static function matchRequestToModel($app = null, $model_status, $request_details, $test_mode = false, $user_session_token = null, $auth_details = array()
     )
     {
         //model_status may contain an error message
@@ -456,10 +446,10 @@ class route
                     else
                     {
                         //check for auth
-                        //user_session_token is null or already supplied
-                        $valid_user = null;
-                        $valid_user_groups = array();
-                        $valid_user_groups_not = array();
+                        //user_session_token is null, already supplied directly to this function or in the header
+
+                        //the valid user (its id) is supplied via a header or directly
+                        $user_authorized = null;
 
                         //get headers, please note that this function might not be available
                         //for instance, via the CLI
@@ -475,19 +465,9 @@ class route
                                 $user_session_token = $request_headers[Self::authorization];
                             }
 
-                            if (isset($request_headers[Self::user_authenticate]))
+                            if (isset($request_headers[Self::user_authorized]) AND isset($auth_details[Self::user_authorized]) != true)
                             {
-                                $valid_user = $request_headers[Self::user_authenticate];
-                            }
-
-                            if (isset($request_headers[Self::user_group_authenticate]))
-                            {
-                                $valid_user_groups = $request_headers[Self::user_group_authenticate];
-                            }
-
-                            if (isset($request_headers[Self::user_group_authenticate_not]))
-                            {
-                                $valid_user_groups_not = $request_headers[Self::user_group_authenticate_not];
+                                $user_authorized = $request_headers[Self::user_authorized];
                             }
                         }
 
@@ -500,10 +480,10 @@ class route
                             /*
                             Authentication logic is two step:
                             1. If a specific authentication is set, see if the necessary variable was provided.
-                            2. If the variable is provided, test it.
+                            2. If the variable is provided, test it much later in the persist (db) action.
                             */
 
-                            //This is the first step. The second is done just before the action.
+                            //This is the first step.
 
                             //check for user authentication
                             if ($model_status['action_details']['authenticate'] == true)
@@ -512,45 +492,23 @@ class route
                                 if (is_null($user_session_token))
                                 {
                                     //no, token wasn't found
-                                    return response::error('User session token missing.');
+                                    return response::auth('User session token missing.');
                                 }
 
-                                //user auth
                                 if ($model_status['action_details']['user_authenticate'] == true)
                                 {
-                                    if (is_null($valid_user))
+                                    //authorized user required, was it found?
+                                    if (is_null($user_authorized))
                                     {
-                                        //no user groups supplied
-                                        return response::error('User to authenticate missing.');
-                                    }
-                                }
-
-                                /*
-                                group auth logic:
-                                */
-
-                                //group authentication
-                                if (count($model_status['action_details']['user_group_authenticate']) != 0)
-                                {
-                                    if (count($valid_user_groups) == 0)
-                                    {
-                                        //no user groups supplied
-                                        return response::error('User groups to authenticate missing.');
-                                    }
-                                }
-                                //group not authentication
-                                if (count($model_status['action_details']['user_group_authenticate_not']) != 0)
-                                {
-                                    if (count($valid_user_groups_not) == 0)
-                                    {
-                                        //no user groups supplied
-                                        return response::error('User groups to not authenticate missing.');
+                                        //no, wasn't found
+                                        return response::auth('Authorized user missing.');
                                     }
                                 }
                             }
                             else
                             {
                                 //authentication isn't required, ignore it
+                                //please leave this here, yes, it is important
                                 $user_session_token = null;
                             }
                         }
@@ -578,8 +536,17 @@ class route
                                 $request = new request();
                                 //test mode
                                 $request->setTestMode($test_mode);
+
                                 //session
                                 $request->setSession($user_session_token);
+                                //user, group and group not auth
+                                $request->setAuthentication([
+                                    'user' => $model_status['action_details']['user_authenticate'],
+                                    'user_authorized' => $user_authorized,
+                                    'group' => $model_status['action_details']['user_group_authenticate'],
+                                    'group_not' => $model_status['action_details']['user_group_authenticate_not']
+                                ]);
+
                                 //db_instance
                                 $request->setDBInstance($db_class);
                                 //model status
@@ -588,7 +555,9 @@ class route
                                 $request->setParameterStatus($parameter_status);
                                 //data
                                 $request->setData($params);
-                                //meta
+                                //meta: set already
+                                //logging
+                                $request->setLog(true);
                                 //parameters explicitly defined?
                                 $request->setTag($parameter_status['explicit_def']);
 

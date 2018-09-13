@@ -201,6 +201,14 @@ class url
                 ]
             );
         }
+        catch (\GuzzleHttp\Exception\ClientException $e)
+        {
+            $response = null;
+        }
+        catch (\GuzzleHttp\Exception\ConnectException $e)
+        {
+            $response = null;
+        }
         catch (Exception $e)
         {
             $response = null;

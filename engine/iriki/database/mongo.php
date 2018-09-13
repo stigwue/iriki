@@ -21,6 +21,11 @@ class mongo extends database
     *
     */
 	const ID_FIELD = '_id';
+	
+	/**
+    * Default connection port.
+    *
+    */
 	const PORT = 27017;
 
 	/**
@@ -60,6 +65,13 @@ class mongo extends database
 		return Self::$__instance;
 	}
 
+	/**
+    * Build the connection string, taking into account server and authentication details
+    *
+    * @param properties Database configuration values
+    * @return Connection string.
+    * @throw
+    */
 	public static function buildConnString($properties)
 	{
 		//two modes of access exist, default and custom
@@ -109,7 +121,7 @@ class mongo extends database
 	public static function doInitialise($config_values)
 	{
 		//we have supplied the db's properties in config
-		//the engine name 
+		//the engine name
 		//and app name
 
 		//the trick is to see if config values are null
@@ -182,10 +194,11 @@ class mongo extends database
     * return response::error('User session token invalid or expired.');
     *
     * @param user_session_token Session token.
-    * @param timestamp Timestamp to use for expiry checks
+    * @param timestamp Timestamp to use for expiry checks.
+    * @param $session_obj Found session object with details for further checks.
     * @return True or false
     */
-    private static function checkSessionToken($user_session_token, $timestamp)
+    private static function checkSessionToken($user_session_token, $timestamp, &$session_obj)
 	{
 		//read session details from db
 		$persist = Self::$__instance->user_session;
@@ -204,7 +217,13 @@ class mongo extends database
 			//cursor should hold only one session object
 			foreach ($cursor as $user_session)
 			{
-				//is it authenticated? 
+				$user_session['_id'] = Self::deenforceId($user_session['_id']);
+				$user_session['user_id'] = Self::deenforceId($user_session['user_id']);
+					
+				$session_obj = $user_session;
+
+
+				//is it authenticated?
 				if ($user_session['authenticated'] == false) {
 					return false;
 				}
@@ -212,10 +231,7 @@ class mongo extends database
 				//does its user still exist?
 				//err, beyond our scope, ignore
 
-				//is it to be remembered?
-				//ignore for now
-
-				//has it expired?
+				//has it expired? depends on if it is to be remembered
 				$expire_stamp = $user_session['pinged'];
 				if ($user_session['remember'] == true)
 				{
@@ -236,7 +252,7 @@ class mongo extends database
 					//too stringent, ignore for now
 					//$ip = $_SERVER['SERVER_ADDR'];
 					//if ($ip == $user_session['ip'])
-					
+
 					return true;
 				}
 			}
@@ -318,6 +334,24 @@ class mongo extends database
 		}
 
 		return $pretty;
+	}
+
+	/**
+    * Reduce complex MongoIDs to string.
+    *
+    * @param id MongoDB BSON object
+    * @return String representation
+    */
+	public static function deenforceId($id)
+	{
+		if (isset($id->{'$id'}))
+		{
+			return $id->{'$id'};
+		}
+		else
+		{
+			return $id;
+		}
 	}
 
 	/**
