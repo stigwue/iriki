@@ -261,6 +261,17 @@ class type
 
       case 'key':
         //not sure
+      /*
+        ObjectId("5b2acc203 63ab88 b477 e8c65")
+        function ObjectIdDetails (id) {
+            return {
+                seconds: parseInt(id.slice(0, 8), 16),
+                machineIdentifier: parseInt(id.slice(8, 14), 16),
+                processId: parseInt(id.slice(14, 18), 16),
+                counter: parseInt(id.slice(18, 24), 16)
+            };
+        }
+      */
       break;
 
       default:

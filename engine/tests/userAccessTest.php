@@ -242,6 +242,42 @@ class userAccessTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_create_user_group_success
      */
+    public function test_user_in_any_group_special_success($details)
+    {
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'user_access',
+                'action' => 'user_in_any_group_special',
+                'url_parameters' => array(),
+                'params' => array(
+                    'user_id' => $details['user_id'],
+                    'title_array' => [
+                        $details['user_group']
+                    ]
+                )
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true //test mode, ignore authentication
+        );
+
+        $this->assertEquals(true,
+            ($status['code'] == 200) AND
+            ($status['message'] == true)
+        );
+    }
+
+    /**
+     * @depends test_create_user_group_success
+     */
     public function test_user_in_any_group_title_success($details)
     {
         $request = array(

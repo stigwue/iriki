@@ -19,7 +19,10 @@ class requestTest extends \PHPUnit\Framework\TestCase
 			'data',
 			//wrap
 			true,
-			null
+			//log object
+			null,
+			//perform log?
+			false
 		);
 
 		$this->assertEquals(true,
@@ -37,7 +40,10 @@ class requestTest extends \PHPUnit\Framework\TestCase
 			'information',
 			//wrap
 			false,
-			null
+			//log object
+			null,
+			//perform log?
+			false
 		);
 
 		$this->assertEquals(
@@ -55,7 +61,10 @@ class requestTest extends \PHPUnit\Framework\TestCase
 			'data',
 			//wrap
 			true,
-			null
+			//log object
+			null,
+			//perform log?
+			false
 		);
 
 		$this->assertEquals(true,
