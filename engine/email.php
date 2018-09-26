@@ -97,6 +97,7 @@ class email extends \iriki\engine\request
 	        $id = $request_status['data'];
 
 	        $result = null;
+	        $status = false;
 
 
             //send email, really
@@ -105,14 +106,20 @@ class email extends \iriki\engine\request
 	            $result = $mgClient->sendMessage($domain,
 	                $mail_options
 	            );
+
+
+		        //interprete result
+	            $status = $result->http_response_code == 200;
             }
+            catch (\GuzzleHttp\Exception\ClientException $e)
+	        {
+	        }
+	        catch (\GuzzleHttp\Exception\ConnectException $e)
+	        {
+	        }
             catch (Exception $e) {
 
             }
-
-
-	        //interprete result
-            $status = $result->http_response_code == 200;
 
 
             if ($status)
