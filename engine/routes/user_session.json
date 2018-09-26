@@ -8,6 +8,12 @@
 					"parameters" : [],
 					"exempt" : ["_id", "started", "pinged", "token", "ip"]
 				},
+				"read" : {
+					"description" : "Returns the properties of the user_session having the supplied ID.",
+					"parameters" : ["_id"],
+					"url_parameters" : ["_id"],
+					"authenticate" : false
+				},
 				"read_by_token" : {
 					"description" : "Read a session by providing its token.",
 					"parameters" : ["token"]
