@@ -51,6 +51,64 @@ class collection_item extends \iriki\engine\request
 		}
 	}
 
+	public function add_many($request, $wrap = true)
+	{
+		$parameters = $request->getData();
+
+		$types = $parameters['type'];
+		$models = $parameters['model'];
+
+		if (
+			(count($types) == count($models)) AND
+			(count($types) != 0)
+		)
+		{
+			$collection_id = $parameters['collection_id'];
+
+			$item_ids = array();
+
+			foreach ($types as $index => $type)
+			{
+				$req = array(
+		            'code' => 200,
+		            'message' => '',
+		            'data' => array(
+		                'model' => 'collection_item',
+		                'action' => 'add',
+		                'url_parameters' => array(),
+		                'params' => array(
+		            		'collection_id' => $collection_id,
+		            		'type' => $type,
+		            		'model' => $models[$index]
+		                )
+		            )
+		        );
+
+		        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $req);
+
+		        //handle the request: match a route to a model and its action
+		        $status = \iriki\engine\route::matchRequestToModel(
+		        	$GLOBALS['APP'],
+		        	$model_profile,
+		        	$req,
+					$request->getTestMode() //test mode
+		        );
+
+		        if ($status['code'] == 200)
+		        {
+		        	$item_ids[] = $status['data'];
+		        }
+			}
+
+	        return \iriki\engine\response::data($item_ids, $wrap);
+		}
+		else
+		{
+			return \iriki\engine\response::error('Parameter arrays do not match or are empty.', $wrap);
+		}
+		
+	}
+
 	public function read_by_collection($request, $wrap = true)
 	{
 		$request->setParameterStatus([

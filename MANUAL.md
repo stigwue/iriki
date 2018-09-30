@@ -12,7 +12,13 @@ The engine is the framework. Vendor provided third-party code needs to be instal
 composer install
 ```
 
-Then copy _config.default.php_ to _config.php_ to use the default configurations for your installation. Note that paths in _config.php_ should be absolute or relative to _index.php_. Those in the app configuration _app.json_ should be absolute. 
+Then copy _config.default.php_ to _config.php_ to use the default configurations for your installation.
+
+```
+cp config.default.php config.php
+```
+
+Note that you will not go wrong if you use absolute paths everywhere. If relative paths are desired, restrict them to paths to _config.php_, making them relative to _index.php_.
 
 The app can be generated using the Iriki _scarf_ tool or created manually if you know what you're doing.
 

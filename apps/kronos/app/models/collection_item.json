@@ -15,7 +15,7 @@
 						"type" : "string"
 					},
 					"model" :  {
-						"description" : "Internal ID of the object in the collection",
+						"description" : "Internal ID of the object in the collection.",
 						"type" : "key"
 					}
 				},

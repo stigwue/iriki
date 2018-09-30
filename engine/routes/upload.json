@@ -9,6 +9,13 @@
 					"method" : "GET",
 					"authenticate" : false
 				},
+				"http_base" : {
+					"description" : "Get the http base path for accessing uploads.",
+					"parameters" : [],
+					"exempt" : ["*"],
+					"method" : "GET",
+					"authenticate" : false
+				},
 				"upload" : {
 					"description" : "Uploads a file.",
 					"parameters" : ["title", "file", "tag", "overwrite"],

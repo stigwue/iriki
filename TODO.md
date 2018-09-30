@@ -13,8 +13,6 @@ Source code is at [stigwue/iriki](https://github.com/stigwue/iriki).
 
 * Handle PUT and DELETE methods (?).
 
-* Add user and user_group authentication, making authentication levels: anyone, everyone, one, group.
-
 * Add 'scarf', an app for automating common Iriki tasks.
 
 * Build in inter-operability with other Iriki apps (app.json should hold an array of apps, callable via config/code)?
