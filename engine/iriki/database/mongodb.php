@@ -206,7 +206,7 @@ class mongodb extends database
 		$cursor = $persist->find($query);
 
 
-		if (count($cursor) != 0)
+		if ($persist->count($query) != 0)
 		{
 			//loop through cursor
 			//cursor should hold only one session object
