@@ -360,7 +360,10 @@ class model
 
             //revert to original here
             $request = $initial_request;
-            if (count($found) != 0) $existing[] = $property;
+            if (is_array($found))
+            {
+              if (count($found) != 0) $existing[] = $property;
+            }
           }
         }
       }
