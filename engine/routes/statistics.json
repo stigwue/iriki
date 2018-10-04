@@ -1,0 +1,23 @@
+{
+	"iriki":
+	{
+		"routes" : {
+			"statistics" : {
+                "create" : {
+                    "description" : "Create a statistic entry.",
+                    "parameters" : [],
+                    "exempt" : ["*"],
+					"authenticate" : false
+                },
+                "read_by_code" : {
+                    "description" : "Read a statistic by its identifying code.",
+                    "parameters" : ["code"]
+                },
+                "read_by_code_delta" : {
+                    "description" : "Read a statistic by its identifying code. Return changes only.",
+                    "parameters" : ["code"]
+                }
+			}
+		}
+	}
+}

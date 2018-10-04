@@ -65,7 +65,7 @@ class model
                 'description' => (isset($model_status['default'][$model_status['action']]['description']) ? $model_status['default'][$model_status['action']]['description'] : ''),
                 'parameters' => (isset($model_status['default'][$model_status['action']]['parameters']) ? $model_status['default'][$model_status['action']]['parameters'] : array()),
                 'method' => (isset($model_status['default'][$model_status['action']]['method']) ? $model_status['default'][$model_status['action']]['method'] : 'ANY'),
-                'url_parameters' => (isset($_route_action[$model_status['action']]['url_parameters']) ? $_route_action[$model_status['action']]['url_parameters'] : array()),
+                'url_parameters' => (isset($model_status['default'][$model_status['action']]['url_parameters']) ? $model_status['default'][$model_status['action']]['url_parameters'] : array()),
                 'exempt' => (isset($model_status['default'][$model_status['action']]['exempt']) ? $model_status['default'][$model_status['action']]['exempt'] : array()),
                 'authenticate' => (isset($model_status['default'][$model_status['action']]['authenticate']) ? type::ctype($model_status['default'][$model_status['action']]['authenticate'], 'boolean') : true),
                 'user_authenticate' => (isset($model_status['default'][$model_status['action']]['user_authenticate']) ? type::ctype($model_status['default'][$model_status['action']]['user_authenticate'], 'boolean') : false),
@@ -216,7 +216,7 @@ class model
           {
             //if already sent, will be replaced
             //else added anew
-            $sent[$url_property] = $sent_url[$url_property];
+            $sent[$url_property] = $sent_url[$url_index];
           }
           $url_index += 1;
         }
@@ -360,7 +360,10 @@ class model
 
             //revert to original here
             $request = $initial_request;
-            if (count($found) != 0) $existing[] = $property;
+            if (is_array($found))
+            {
+              if (count($found) != 0) $existing[] = $property;
+            }
           }
         }
       }

@@ -77,6 +77,24 @@ class upload extends \iriki\engine\request
         }
     }
 
+    public function http_base($request, $wrap = true)
+    {
+        $base_path = Self::get_upload_http();
+            
+        if (!is_null($base_path))
+        {
+            {
+                //upload_dir not set in constants
+                return \iriki\engine\response::information($base_path, $wrap);
+            }
+        }
+        else
+        {
+            //timestamp is not a number
+            return \iriki\engine\response::error('Upload_http constant not set.', $wrap);
+        }
+    }
+
     public function upload($request, $wrap = true)
     {
         $data = $request->getData();

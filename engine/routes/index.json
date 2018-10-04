@@ -63,7 +63,8 @@
 				"user_group",
 				"user_access",
 				"upload",
-				"auth"
+				"auth",
+				"statistics"
 			]
 		}
 	}
