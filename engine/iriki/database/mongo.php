@@ -212,146 +212,143 @@ class mongo extends database
 		$cursor = $persist->find($query);
 
 
-		if (count($cursor) != 0)
+		//loop through cursor
+		//cursor should hold only one session object
+		foreach ($cursor as $user_session)
 		{
-			//loop through cursor
-			//cursor should hold only one session object
-			foreach ($cursor as $user_session)
+			$user_session['_id'] = Self::deenforceId($user_session['_id']);
+			$user_session['user_id'] = Self::deenforceId($user_session['user_id']);
+
+			$user_id = $user_session['user_id'];
+
+
+			//is it authenticated?
+			if ($user_session['authenticated'] == false) {
+				return false;
+			}
+
+			//does its user still exist?
+			//err, beyond our scope, ignore
+
+			//has it expired? depends on if it is to be remembered
+			$expire_stamp = $user_session['pinged'];
+			if ($user_session['remember'] == true)
 			{
-				$user_session['_id'] = Self::deenforceId($user_session['_id']);
-				$user_session['user_id'] = Self::deenforceId($user_session['user_id']);
+				$expire_stamp = $user_session['pinged'] + IRIKI_SESSION_LONG;
+			}
+			else
+			{
+				$expire_stamp = $user_session['pinged'] + IRIKI_SESSION_SHORT;
+			}
+			if ($timestamp >= $expire_stamp)
+			{
+				//expired
+				return false;
+			}
+			else
+			{
+				//IP check?
+				//too stringent, ignore for now
+				//$ip = $_SERVER['SERVER_ADDR'];
+				//if ($ip == $user_session['ip'])
 
-				$user_id = $user_session['user_id'];
+				//perform other checks
+				//note that we are not specific on why auth failed
 
-
-				//is it authenticated?
-				if ($user_session['authenticated'] == false) {
-					return false;
-				}
-
-				//does its user still exist?
-				//err, beyond our scope, ignore
-
-				//has it expired? depends on if it is to be remembered
-				$expire_stamp = $user_session['pinged'];
-				if ($user_session['remember'] == true)
+				//1. if user_authenticate is true, is provided session token that of the user?
+				if ($auth_details['user'] == true)
 				{
-					$expire_stamp = $user_session['pinged'] + IRIKI_SESSION_LONG;
-				}
-				else
-				{
-					$expire_stamp = $user_session['pinged'] + IRIKI_SESSION_SHORT;
-				}
-				if ($timestamp >= $expire_stamp)
-				{
-					//expired
-					return false;
-				}
-				else
-				{
-					//IP check?
-					//too stringent, ignore for now
-					//$ip = $_SERVER['SERVER_ADDR'];
-					//if ($ip == $user_session['ip'])
-
-					//perform other checks
-					//note that we are not specific on why auth failed
-
-					//1. if user_authenticate is true, is provided session token that of the user?
-					if ($auth_details['user'] == true)
+					if ($auth_details['user_authorized'] != $user_session['user_id'])
 					{
-						if ($auth_details['user_authorized'] != $user_session['user_id'])
+						return false;
+					}
+				}
+
+				//2. if group to authenticate isn't empty, is the supplied user of the group(s)?
+				if (count($auth_details['group']) != 0)
+				{
+					//run user_access/user_in_any_group_special
+					$request = array(
+			            'code' => 200,
+			            'message' => '',
+			            'data' => array(
+			                'model' => 'user_access',
+			                'action' => 'user_in_any_group_special',
+			                'url_parameters' => array(),
+			                'params' => array(
+			                    'user_id' => $user_session['user_id'],
+			                    'title_array' => [
+			                        $auth_details['group']
+			                    ]
+			                )
+			            )
+			        );
+
+			        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+			        $status = \iriki\engine\route::matchRequestToModel(
+			            $GLOBALS['APP'],
+			            $model_profile,
+			            $request,
+			            $orig_request->getTestMode()
+			        );
+
+					if ($status['code'] == 200)
+					{
+						if($status['message'] != true)
 						{
 							return false;
 						}
 					}
-
-					//2. if group to authenticate isn't empty, is the supplied user of the group(s)?
-					if (count($auth_details['group']) != 0)
+					else
 					{
-						//run user_access/user_in_any_group_special
-						$request = array(
-				            'code' => 200,
-				            'message' => '',
-				            'data' => array(
-				                'model' => 'user_access',
-				                'action' => 'user_in_any_group_special',
-				                'url_parameters' => array(),
-				                'params' => array(
-				                    'user_id' => $user_session['user_id'],
-				                    'title_array' => [
-				                        $auth_details['group']
-				                    ]
-				                )
-				            )
-				        );
-
-				        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
-
-				        $status = \iriki\engine\route::matchRequestToModel(
-				            $GLOBALS['APP'],
-				            $model_profile,
-				            $request,
-				            $orig_request->getTestMode()
-				        );
-
-						if ($status['code'] == 200)
-						{
-							if($status['message'] != true)
-							{
-								return false;
-							}
-						}
-						else
-						{
-							return false;
-						}
+						return false;
 					}
-
-					//3. if group to NOT authenticate isn't empty,... 
-					if (count($auth_details['group_not']) != 0)
-					{
-						//run user_access/user_in_any_group_special
-						$request = array(
-				            'code' => 200,
-				            'message' => '',
-				            'data' => array(
-				                'model' => 'user_access',
-				                'action' => 'user_in_any_group_special',
-				                'url_parameters' => array(),
-				                'params' => array(
-				                    'user_id' => $user_session['user_id'],
-				                    'title_array' => [
-				                        $auth_details['group_not']
-				                    ]
-				                )
-				            )
-				        );
-
-				        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
-
-				        $status = \iriki\engine\route::matchRequestToModel(
-				            $GLOBALS['APP'],
-				            $model_profile,
-				            $request,
-				            $orig_request->getTestMode()
-				        );
-
-						if ($status['code'] == 200)
-						{
-							if($status['message'] == true)
-							{
-								return false;
-							}
-						}
-						else
-						{
-							return false;
-						}
-					}
-
-					return true;
 				}
+
+				//3. if group to NOT authenticate isn't empty,... 
+				if (count($auth_details['group_not']) != 0)
+				{
+					//run user_access/user_in_any_group_special
+					$request = array(
+			            'code' => 200,
+			            'message' => '',
+			            'data' => array(
+			                'model' => 'user_access',
+			                'action' => 'user_in_any_group_special',
+			                'url_parameters' => array(),
+			                'params' => array(
+			                    'user_id' => $user_session['user_id'],
+			                    'title_array' => [
+			                        $auth_details['group_not']
+			                    ]
+			                )
+			            )
+			        );
+
+			        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+			        $status = \iriki\engine\route::matchRequestToModel(
+			            $GLOBALS['APP'],
+			            $model_profile,
+			            $request,
+			            $orig_request->getTestMode()
+			        );
+
+					if ($status['code'] == 200)
+					{
+						if($status['message'] == true)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+
+				return true;
 			}
 		}
 

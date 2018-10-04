@@ -1,0 +1,37 @@
+{
+	"iriki":
+	{
+		"models" : {
+			"statistics" : {
+				"description" : "A statistics entry, periodic entry is the best way to use it.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"code" :  {
+						"description" : "Code, differentiating stat type.",
+						"type" : "string"
+					},
+					"timestamp" :  {
+						"description" : "Timestamp.",
+						"type" : "string"
+					},
+					"label" :  {
+						"description" : "Pipe separated string or single value. Bear in mind, these could be used as labels in graphs.",
+						"type" : "string"
+					},
+					"value" :  {
+						"description" : "Comma separated string or single value.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : []
+				}
+			}
+		}
+	}
+}
