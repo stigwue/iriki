@@ -87,6 +87,39 @@ class statisticsTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_create_success
      */
+    public function test_read_by_code_range_success($details)
+    {
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'statistics',
+                'action' => 'read_by_code_range',
+                'url_parameters' => array(),
+                'params' => array(
+                    'code' => $details['code'],
+                    'from_timestamp' => 0,
+                    'to_timestamp' => time(NULL) + 1
+                )
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        //handle the request: match a route to a model and its action
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true //test mode
+        );
+
+        $this->assertEquals(true, count($status['data']) == 1);
+    }
+
+    /**
+     * @depends test_create_success
+     */
     public function test_read_by_code_delta_success($details)
     {
         $request = array(
@@ -114,7 +147,44 @@ class statisticsTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(true, (
                 count($status['data']) == 1 AND
-                $status['data'][0]['value'] = '0|0'
+                $status['data'][0]['value'] == '0,0'
+            )
+        );
+    }
+
+    /**
+     * @depends test_create_success
+     */
+    public function test_read_by_code_delta_range_success($details)
+    {
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'statistics',
+                'action' => 'read_by_code_delta_range',
+                'url_parameters' => array(),
+                'params' => array(
+                    'code' => $details['code'],
+                    'from_timestamp' => 0,
+                    'to_timestamp' => time(NULL) + 1
+                )
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        //handle the request: match a route to a model and its action
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true //test mode
+        );
+
+        $this->assertEquals(true, (
+                count($status['data']) == 1 AND
+                $status['data'][0]['value'] == '0,0'
             )
         );
     }
