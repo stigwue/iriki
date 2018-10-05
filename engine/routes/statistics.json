@@ -13,9 +13,17 @@
                     "description" : "Read a statistic by its identifying code.",
                     "parameters" : ["code"]
                 },
+                "read_by_code_range" : {
+                    "description" : "Read a statistic by its identifying code over defined timestamp range.",
+                    "parameters" : ["code", "from_timestamp", "to_timestamp"]
+                },
                 "read_by_code_delta" : {
                     "description" : "Read a statistic by its identifying code. Return changes only.",
                     "parameters" : ["code"]
+                },
+                "read_by_code_delta_range" : {
+                    "description" : "Read a statistic by its identifying code. Return changes only over defined timestamp range.",
+                    "parameters" : ["code", "from_timestamp", "to_timestamp"]
                 }
 			}
 		}

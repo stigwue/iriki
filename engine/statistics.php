@@ -26,45 +26,8 @@ class statistics extends \iriki\engine\request
     	}
     }
 
-    public function create($request, $wrap = true)
+    private static function delta($stats)
     {
-        $request->setParameterStatus([
-            'final' => array('code', 'timestamp', 'label', 'value'),
-            'extra' => array(),
-            'missing' => array(),
-            'ids' => array()
-        ]);
-
-        return $request->create($request, $wrap);
-    }
-
-    public function read_by_code($request, $wrap = true)
-    {
-        $request->setParameterStatus([
-            'final' => array('code'),
-            'extra' => array(),
-            'missing' => array(),
-            'ids' => array()
-        ]);
-
-        $request->setMeta(['sort' => array('created' => +1)]);
-
-        return $request->read($request, $wrap);
-    }
-
-    public function read_by_code_delta($request, $wrap = true)
-    {
-        $request->setParameterStatus([
-            'final' => array('code'),
-            'extra' => array(),
-            'missing' => array(),
-            'ids' => array()
-        ]);
-
-        $request->setMeta(['sort' => array('created' => +1)]);
-
-        $stats = $request->read($request, false);
-
         //reduce to changes
         //this assumes that the changes are single valued or comma seperated
         $deltas = array();
@@ -101,6 +64,107 @@ class statistics extends \iriki\engine\request
                 'value' => $delta
             );
         }
+
+        return $deltas;
+    }
+
+    public function create($request, $wrap = true)
+    {
+        $request->setParameterStatus([
+            'final' => array('code', 'timestamp', 'label', 'value'),
+            'extra' => array(),
+            'missing' => array(),
+            'ids' => array()
+        ]);
+
+        return $request->create($request, $wrap);
+    }
+
+    public function read_by_code($request, $wrap = true)
+    {
+        $request->setParameterStatus([
+            'final' => array('code'),
+            'extra' => array(),
+            'missing' => array(),
+            'ids' => array()
+        ]);
+
+        $request->setMeta(['sort' => array('created' => +1)]);
+
+        return $request->read($request, $wrap);
+    }
+
+    public function read_by_code_range($request, $wrap = true)
+    {
+        $data = $request->getData();
+
+        $new_data = array(
+            'code' => $data['code'],
+            'created' => array(
+                '$gte' => $data['from_timestamp'],
+                '$lte' => $data['to_timestamp']
+            )
+        );
+
+        $request->setData($new_data);
+
+        $request->setParameterStatus([
+            'final' => array('code', 'created'),
+            'extra' => array(),
+            'missing' => array(),
+            'ids' => array()
+        ]);
+
+        $request->setMeta(['sort' => array('created' => +1)]);
+
+        return $request->read($request, $wrap);
+    }
+
+    public function read_by_code_delta($request, $wrap = true)
+    {
+        $request->setParameterStatus([
+            'final' => array('code'),
+            'extra' => array(),
+            'missing' => array(),
+            'ids' => array()
+        ]);
+
+        $request->setMeta(['sort' => array('created' => +1)]);
+
+        $stats = $request->read($request, false);
+
+        $deltas = Self::delta($stats);
+
+        return \iriki\engine\response::data($deltas, $wrap);
+
+    }
+
+    public function read_by_code_delta_range($request, $wrap = true)
+    {
+        $data = $request->getData();
+
+        $new_data = array(
+            'code' => $data['code'],
+            'created' => array(
+                '$gte' => $data['from_timestamp'],
+                '$lte' => $data['to_timestamp']
+            )
+        );
+
+        $request->setData($new_data);
+
+        $request->setParameterStatus([
+            'final' => array('code', 'created'),
+            'extra' => array(),
+            'missing' => array(),
+            'ids' => array()
+        ]);
+
+        $request->setMeta(['sort' => array('created' => +1)]);
+
+        $stats = $request->read($request, false);
+
+        $deltas = Self::delta($stats);
 
         return \iriki\engine\response::data($deltas, $wrap);
 
