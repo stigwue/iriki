@@ -439,15 +439,9 @@ class user_access extends \iriki\engine\request
 				'ids' => array('user_id', 'user_group_id')
 			));
 			
-			$status = $request->delete($request, false);
+			$status = $request->delete($request, true); //false);
 
-			if ($status)
-			{
-				return \iriki\engine\response::information(true, $wrap);
-			}
-			else {
-				return \iriki\engine\response::information(false, $wrap);
-			}
+			return $status;
 		}
 	}
 }
