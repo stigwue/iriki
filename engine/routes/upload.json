@@ -21,6 +21,12 @@
 					"parameters" : ["title", "file", "tag", "overwrite"],
 					"method" : "POST",
 					"authenticate" : false
+				},
+				"read_by_tag_dictionary" : {
+					"description" : "Read all files of a tag. Return as dictionary",
+					"parameters" : ["tag"],
+					"method" : "POST",
+					"authenticate" : false
 				}
 			}
 		}
