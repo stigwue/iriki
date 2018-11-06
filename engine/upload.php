@@ -194,5 +194,28 @@ class upload extends \iriki\engine\request
         }
     }
 
+    public function read_by_tag_dictionary($request, $wrap = true)
+    {
+        if (!is_null($request))
+        {
+            $request->setParameterStatus(array(
+                'final' => array('tag'),
+                'missing' => array(),
+                'extra' => array(),
+                'ids' => array()
+            ));
+
+            $uploads = $request->read($request, false);
+
+            $dictionary = \iriki\engine\parser::dictify($uploads, '_id', true);
+
+            return \iriki\engine\response::data($dictionary, $wrap);
+        }
+        else
+        {
+            return \iriki\engine\response::error('Request not initialised.');
+        }
+    }
+
 }
 ?>

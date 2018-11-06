@@ -24,6 +24,12 @@
 					"parameters" : [],
 					"exempt" : ["*"],
 					"authenticate" : false
+				},
+				"read_key_dictionary" : {
+					"description" : "Read all existing config.",
+					"parameters" : [],
+					"exempt" : ["*"],
+					"authenticate" : false
 				}
 			}
 		}

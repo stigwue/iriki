@@ -37,6 +37,22 @@ class config extends \iriki\engine\request
 
 		return $request->read($request, $wrap);
 	}
+
+	public function read_key_dictionary($request, $wrap = true)
+	{
+		$request->setParameterStatus([
+			'final' => array(),
+			'missing' => array(),
+			'extra' => array(),
+			'ids' => array()
+		]);
+
+		$configs = $request->read($request, false);
+
+		$dict = \iriki\engine\parser::dictify($configs, 'key', true);
+
+		return \iriki\engine\response::data($dict, $wrap);
+	}
 }
 
 ?>
