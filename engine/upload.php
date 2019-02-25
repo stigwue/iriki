@@ -84,7 +84,6 @@ class upload extends \iriki\engine\request
         if (!is_null($base_path))
         {
             {
-                //upload_dir not set in constants
                 return \iriki\engine\response::information($base_path, $wrap);
             }
         }
@@ -191,6 +190,29 @@ class upload extends \iriki\engine\request
             {
                 return \iriki\engine\response::error('Some error occurred while preparing upload path.', $wrap);
             }
+        }
+    }
+
+    public function read_by_tag_dictionary($request, $wrap = true)
+    {
+        if (!is_null($request))
+        {
+            $request->setParameterStatus(array(
+                'final' => array('tag'),
+                'missing' => array(),
+                'extra' => array(),
+                'ids' => array()
+            ));
+
+            $uploads = $request->read($request, false);
+
+            $dictionary = \iriki\engine\parser::dictify($uploads, '_id', true);
+
+            return \iriki\engine\response::data($dictionary, $wrap);
+        }
+        else
+        {
+            return \iriki\engine\response::error('Request not initialised.');
         }
     }
 

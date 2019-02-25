@@ -69,6 +69,162 @@ class log extends \iriki\engine\request
         return $request->read($request, $wrap);
     }
 
+    public function read_filter($request, $wrap = true)
+    {
+        $data = $request->getData();
+
+        $params = array(
+            'created' => array(
+                '$gte' => (int) $data['from_timestamp']
+            )
+        );
+
+        if ($data['model'] !== '*')
+        {
+            $params['model'] = $data['model'];
+        }
+        if ($data['action'] !== '*')
+        {
+            $params['action'] = $data['action'];
+        }
+        if ($data['tag'] !== '*')
+        {
+            $params['tag'] = (int) $data['tag'];
+        }
+
+        //filter
+        $request->setData($params);
+
+        $request->setParameterStatus(array(
+          'final' => array_keys($params),
+          'missing' => array(),
+          'extra' => array(),
+          'ids' => array()
+        ));
+
+        $request->setMeta([
+            'sort' => array('created' => -1)
+        ]);
+
+        $logs = $request->read($request, false);
+
+        if (\iriki\engine\type::ctype($data['statify'], 'boolean') == true)
+        {
+            //parse logs into stat format
+            $count = count($logs);
+
+            if ($count != 0)
+            {
+                $code = $data['code'];
+                $period = \iriki\engine\type::ctype($data['period'], 'number');
+
+                $next_stamp = $logs[$count - 1]['created'] + $period;
+
+                $response = array();
+
+                $stat_array = array(
+                    'all' => 0,
+                    'request' => 0,
+                    'ok' => 0,
+                    'error' => 0,
+                    'auth' => 0,
+                    'other' => 0
+                );
+
+                $left_over = false;
+
+                //var_dump($next_stamp, $count);
+
+                for ($i = $count-1; $i >= 0; --$i)
+                {
+                    $log = $logs[$i];
+
+                    //check to reset timestamp
+                    if ($log['created'] <= $next_stamp)
+                    {
+                        //group them into the period
+                        //requests, 200, 400, 401 and other
+                        //parse them for counting
+                        $stat_array['all'] += 1;
+
+                        if ($log['parent'] == '')
+                        {
+                            $stat_array['request'] += 1;
+                        }
+                        else if (\iriki\engine\type::ctype($log['tag'], 'number') == \iriki\engine\response::OK)
+                        {
+                            $stat_array['ok'] += 1;
+                        }
+                        else if (\iriki\engine\type::ctype($log['tag'], 'number') == \iriki\engine\response::ERROR)
+                        {
+                            $stat_array['error'] += 1;
+                        }
+                        else if (\iriki\engine\type::ctype($log['tag'], 'number') == \iriki\engine\response::AUTH)
+                        {
+                            $stat_array['auth'] += 1;
+                        }
+                        else
+                        {
+                            $stat_array['other'] += 1;
+                        }
+
+                        $left_over = true;
+                    }
+                    else
+                    {
+
+                        $single_response = array(
+                            'code' => $code,
+                            'timestamp' => date('g:ia, jS M Y', $next_stamp),
+                            'label' => "Requests|OK Response|Error Response|Authentication error Response|Other Response",
+                            'value' => $stat_array['request'] . ',' . $stat_array['ok'] . ',' . $stat_array['error'] . ',' . $stat_array['auth'] . ',' . $stat_array['other']
+                        );
+
+                        $response[] = $single_response;
+
+                        $next_stamp = $next_stamp + $period;
+
+                        //var_dump($next_stamp);
+
+                        //add current sum to $response, start another
+                        $stat_array = array(
+                            'all' => 0,
+                            'request' => 0,
+                            'ok' => 0,
+                            'error' => 0,
+                            'auth' => 0,
+                            'other' => 0
+                        );
+
+                        $left_over = false;
+                    }
+                }
+
+                if ($left_over)
+                {
+                    $single_response = array(
+                        'code' => $code,
+                        'timestamp' => date('g:ia, jS M Y', $next_stamp),
+                        'label' => "Requests|OK Response|Error Response|Authentication error Response|Other Response",
+                        'value' => $stat_array['request'] . ',' . $stat_array['ok'] . ',' . $stat_array['error'] . ',' . $stat_array['auth'] . ',' . $stat_array['other']
+                    );
+
+                    $response[] = $single_response;
+                }
+
+                return \iriki\engine\response::data($response, $wrap);
+            }
+            else
+            {
+                return \iriki\engine\response::data(array(), $wrap);
+            }
+        }
+        else
+        {
+            return \iriki\engine\response::data($logs, $wrap);
+        }
+    }
+
     public function read_count($request, $wrap = true)
     {
         $data = $request->getData();
