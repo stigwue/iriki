@@ -39,7 +39,7 @@ class app extends \iriki\engine\request
 		{
 			$result['list'][] = $engine_model;
 		}
-
+		
 		//merge the two model spaces
 		$all_models = array_merge($models['app'], $models['engine']);
 
@@ -103,27 +103,45 @@ class app extends \iriki\engine\request
 		);
 
 		
-		//expand custom route parameters
+		//expand custom route parameters. note that we would also include default routes if not overridden
 		//get the models
 		$models = $app['models'];
 		//merge them
 		$all_models = array_merge($models['app'], $models['engine']);
+		
 		//loop through existing routes
 		foreach ($all_routes as $model => $route_details)
 		{
 			if (is_null($route_details)) continue;
 			$expanded_routes = array();
 			$model_details = $all_models[$model];
+
 			//for each models routes....
 			foreach ($route_details as $route => $details)
 			{
 				$deets = \iriki\engine\model::doExpandProperty($model_details, $details);
+
 				$parameters = $deets['valid_properties'];
+
 				$details['parameters'] = array_values($parameters);
 
 				$expanded_routes[$route] = $details;
 			}
 			$result['custom'][$model] = $expanded_routes;
+
+			//check also default routes to see if expanded
+			foreach ($defaults as $route => $details)
+			{
+				if (!isset($route_details[$route]))
+				{
+					$deets_default = \iriki\engine\model::doExpandProperty($model_details, $details);
+
+					$parameters = $deets_default['valid_properties'];
+
+					$result['custom'][$model][$route] = $details;
+					$result['custom'][$model][$route]['parameters'] = array_values($parameters);
+				}
+			}
 		}
 
         return \iriki\engine\response::data($result, $wrap);
