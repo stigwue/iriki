@@ -26,3 +26,5 @@ Source code is at [stigwue/iriki](https://github.com/stigwue/iriki).
 * Better/standard error description?
 
 * Add other NoSQL db support?
+
+* Use pretty urls to hide path structure of uploads, save access stats

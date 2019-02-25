@@ -333,7 +333,7 @@ class user_session extends \iriki\engine\request
 			//get the session details first
 			$sessions_found = $request->read($request, false);
 
-			if (count($sessions_found) == 0)
+			if (!is_array($sessions_found) || count($sessions_found) == 0)
 			{
 				//this session wasn't found, return error?
 
@@ -365,6 +365,15 @@ class user_session extends \iriki\engine\request
 	{
 		if (!is_null($request))
 		{
+			$data = $request->getData();
+			
+    		$request->setParameterStatus(array(
+				'final' => array('user_id'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array('user_id')
+			));
+
 			//get the session details first
 			$sessions_found = $request->read($request, false);
 
@@ -383,7 +392,7 @@ class user_session extends \iriki\engine\request
 					{
 						$session['authenticated'] = false;
 
-						$request->setData($data);
+						$request->setData($session);
 
 						$request->setParameterStatus(
 							array(
@@ -395,7 +404,7 @@ class user_session extends \iriki\engine\request
 						);
 
 						$state = $request->update($request, $wrap);
-						$result[$data['token']] = $state;
+						$result[$session['token']] = $state;
 					}
 				}
 
@@ -408,6 +417,14 @@ class user_session extends \iriki\engine\request
 	{
 		if (!is_null($request))
 		{
+			$data = $request->getData();
+			
+    		$request->setParameterStatus(array(
+				'final' => array('user_id'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array('user_id')
+			));
 
 			//get the session details first
 			$sessions_found = $request->read($request, false);
@@ -427,7 +444,7 @@ class user_session extends \iriki\engine\request
 					{
 						$session['authenticated'] = false;
 
-						$request->setData($data);
+						$request->setData($session);
 
 						$request->setParameterStatus(
 							array(
@@ -439,7 +456,7 @@ class user_session extends \iriki\engine\request
 						);
 
 						$state = $request->update($request, $wrap);
-						$result[$data['token']] = $state;
+						$result[$session['token']] = $state;
 					}
 				}
 
@@ -481,7 +498,7 @@ class user_session extends \iriki\engine\request
 				{
 					$session['authenticated'] = false;
 
-					$request->setData($data);
+					$request->setData($session);
 
 					$request->setParameterStatus(
 						array(
@@ -493,7 +510,7 @@ class user_session extends \iriki\engine\request
 					);
 
 					$state = $request->update($request, $wrap);
-					$result[$data['token']] = $state;
+					$result[$session['token']] = $state;
 				}
 
 				return \iriki\engine\response::data($result, $wrap);

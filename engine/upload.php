@@ -84,7 +84,6 @@ class upload extends \iriki\engine\request
         if (!is_null($base_path))
         {
             {
-                //upload_dir not set in constants
                 return \iriki\engine\response::information($base_path, $wrap);
             }
         }
