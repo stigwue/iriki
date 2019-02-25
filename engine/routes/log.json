@@ -27,6 +27,12 @@
 					"method" : "ANY",
 					"authenticate" : false
 				},
+				"read_filter_count" : {
+					"description" : "Filter a log collection. '*' in a parameter will return any. Statify (boolean) will return in statistic format using code at period (seconds) intervals.",
+					"parameters" : ["count", "model", "action", "tag", "statify", "code", "period"],
+					"method" : "ANY",
+					"authenticate" : false
+				},
 				"read_count" : {
 					"description" : "Read event logs limited by count.",
 					"parameters" : ["count"],
