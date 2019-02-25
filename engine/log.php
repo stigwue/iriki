@@ -19,7 +19,7 @@ class log extends \iriki\engine\request
 		-action
 	*/
 
-    private static function statify($logs, $code, $wrap, $model = '*', $action = '*', $tag = '', $period = 24*60*60)
+    private static function statify($logs, $code, $wrap, $model = '*', $action = '*', $tag = '', $period = 86400)
     {
         //parse logs into stat format
         $count = count($logs);
