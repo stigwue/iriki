@@ -55,13 +55,13 @@ class authTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_class_exist
      */
-    public function txst_initiate_using_key_success($status)
+    public function test_initiate_using_key_success($status)
     {
         $details = array(
             'key' => 'speak_friend_and_enter',
             'ttl' => IRIKI_SESSION_SHORT + (1 * 24 * 60 * 60),
             'status' => true,
-            'tag' => 'some_tag',
+            'tag' => 'some_other_tag',
             'user_id' => '5ae6bb830f6d2fea120041b6'
         );
 
@@ -89,6 +89,75 @@ class authTest extends \PHPUnit\Framework\TestCase
 
         $details['key'] = $status['data'];
         return $details;
+    }
+
+    /**
+     * @depends test_class_exist
+     */
+    public function test_initiate_open_success($status)
+    {
+        $details = array(
+            'key_type' => 'short',
+            'ttl' => IRIKI_SESSION_SHORT + (1 * 24 * 60 * 60),
+            'tag' => 'some_other_other_tag',
+            'user_id' => '5ae6bb830f6d2fea120041b6'
+        );
+
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'auth',
+                'action' => 'initiate_open',
+                'url_parameters' => array(),
+                'params' => $details
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true
+        );
+
+        $this->assertEquals(200, $status['code']);
+
+        $details['key'] = $status['data'];
+        return $details;
+    }
+
+    /**
+     * @depends test_initiate_open_success
+     */
+    public function test_update_open_success($details)
+    {
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'auth',
+                'action' => 'update_open',
+                'url_parameters' => array(),
+                'params' => array(
+                    'key' => $details['key'],
+                    'status' => true,
+                )
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true
+        );
+
+        $this->assertEquals(200, $status['code']);
     }
 
     /**
@@ -258,7 +327,7 @@ class authTest extends \PHPUnit\Framework\TestCase
     /**
      * @depends test_initiate_success
      */
-    public function test_read_by_user_success($details)
+    public function txst_read_by_user_success($details)
     {
         $request = array(
             'code' => 200,

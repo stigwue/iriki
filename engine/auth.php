@@ -126,6 +126,85 @@ class auth extends \iriki\engine\request
 	    }
 	}
 
+	public function initiate_open($request, $wrap = true)
+	{
+		if (!is_null($request))
+	    {
+			$data = $request->getData();
+
+			//generate keys
+			$keys = Self::generate();
+
+			//add key to data to write
+			if (strtolower($data['key_type']) == 'short')
+			{
+				$data['key'] = $keys['key_short'];
+			}
+			else
+			{
+				$data['key'] = $keys['key_long'];
+			}
+
+			//drop key_type
+			unset($data['key_type']);
+
+			//add status
+			$data['status'] = false;
+
+
+			return Self::spawn($data, $request, $wrap);
+	    }
+	    else
+	    {
+	      return \iriki\engine\response::error('Null request.', $wrap);
+	    }
+	}
+
+	public function update_open($request, $wrap = true)
+	{
+	    if (!is_null($request))
+		{
+			$data = $request->getData();
+
+			$request->setData(['key' => $data['key']]);
+
+			$request->setParameterStatus(array(
+				'final' => array('key'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array()
+			));
+
+			$auth_obj = $request->read($request, false);
+
+			if (is_array($auth_obj) AND count($auth_obj) == 1)
+			{
+				$auth_data = $auth_obj[0];
+				$request->setData([
+					'_id' => $auth_data['_id'],
+					'status' => $data['status']
+				]);
+
+				$request->setParameterStatus(array(
+					'final' => array('_id', 'status'),
+					'missing' => array(),
+					'extra' => array(),
+					'ids' => array()
+				));
+
+				return $request->update($request, $wrap);
+			}
+			else
+			{
+				return \iriki\engine\response::error('Key not found.', $wrap);
+			}
+		}
+	    else
+	    {
+	      return \iriki\engine\response::error('Null request.', $wrap);
+	    }
+	}
+
 	public function revoke($request, $wrap = true)
 	{
 		if (!is_null($request))
