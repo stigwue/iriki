@@ -101,8 +101,8 @@ class statistics extends \iriki\engine\request
         $new_data = array(
             'code' => $data['code'],
             'created' => array(
-                '$gte' => $data['from_timestamp'],
-                '$lte' => $data['to_timestamp']
+                '$gte' => (int) $data['from_timestamp'],
+                '$lte' => (int) $data['to_timestamp']
             )
         );
 
@@ -146,8 +146,8 @@ class statistics extends \iriki\engine\request
         $new_data = array(
             'code' => $data['code'],
             'created' => array(
-                '$gte' => $data['from_timestamp'],
-                '$lte' => $data['to_timestamp']
+                '$gte' => (int) $data['from_timestamp'],
+                '$lte' => (int) $data['to_timestamp']
             )
         );
 
