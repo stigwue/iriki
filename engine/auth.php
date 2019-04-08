@@ -57,8 +57,7 @@ class auth extends \iriki\engine\request
 	            $GLOBALS['APP'],
 	            $model_profile,
 	            $req,
-	            $request->getTestMode(),
-	            $request->getSession()
+	            true
 	        );
 
 	        if ($state['code'] == 200)
@@ -74,6 +73,10 @@ class auth extends \iriki\engine\request
 	        		//just return good old _id
 	        		return \iriki\engine\response::data($status['data'], $wrap);
 	        	}
+	        }
+	        else
+	        {
+	        	return \iriki\engine\response::error('Failure to finding auth key.', $wrap);
 	        }
 	    }
 	    else
