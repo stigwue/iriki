@@ -274,14 +274,14 @@ class user extends \iriki\engine\request
 
 
 				$change_request = clone $request;
-			  	$data = $single_result;
 
-			  	//change some properties
-			  	$data['hash'] = $new_hash;
-			  	$change_request->setData($data);
+			  	$change_request->setData([
+			  		'_id' => $single_result['_id'],
+			  		'hash' => $new_hash
+			  	]);
 				$change_request->setParameterStatus(
 					array(
-						'final' => array('_id', 'username', 'hash', 'created'),
+						'final' => array('_id', 'hash'),
 						'missing' => array(),
 						'extra' => array(),
 						'ids' => array('_id')
