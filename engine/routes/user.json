@@ -33,6 +33,10 @@
 					"description" : "Reset the user password.",
 					"parameters" : ["username"]
 				},
+				"update_auth" : {
+					"description" : "Update the user password. Hash is plaintext",
+					"parameters" : ["_id", "hash"]
+				},
 				"delete" : {
 					"description" : "Returns the properties of the matching model.",
 					"parameters" : ["_id"],

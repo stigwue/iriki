@@ -246,58 +246,96 @@ class user extends \iriki\engine\request
 	{
 		if (!is_null($request))
 		{
-			$new_request = clone $request;
-		  	$data = $new_request->getData();
+			$params = $request->getData();
 
-		  	$new_request->setData(
-				array(
-					'username' => $data['username']
-				)
-			);
-			$new_request->setParameterStatus(array(
-				'final' => array('username'),
-				'missing' => array(),
-				'extra' => array(),
-				'ids' => array()
-			));
+			$request1 = array(
+	            'code' => 200,
+	            'message' => '',
+	            'data' => array(
+	                'model' => 'user',
+	                'action' => 'read_by_username',
+	                'url_parameters' => array(),
+	                'params' => array(
+	                    'username' => $params['username']
+	                )
+	            )
+	        );
 
-			//read by username solely
-			$result = $new_request->read($new_request, false);
+	        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request1);
 
-			if (count($result) != 0)
-			{
-				//user found
-				$single_result = $result[0];
-				//skip verification, reset it
-				$new_password = Self::generate();
-				$new_hash = password_hash($new_password, PASSWORD_BCRYPT);
+	        $status1 = \iriki\engine\route::matchRequestToModel(
+	            $GLOBALS['APP'],
+	            $model_profile,
+	            $request1,
+	            true
+	        );
 
+	        if ($status1['code'] == 200 AND is_array($status1['data']))
+	        {
+	        	if (count($status1['data']) == 1)
+	        	{
+	        		$user = $status1['data'][0];
 
-				$change_request = clone $request;
+	        		//skip verification, reset it
+					$new_password = Self::generate();
 
-			  	$change_request->setData([
-			  		'_id' => $single_result['_id'],
-			  		'hash' => $new_hash
-			  	]);
-				$change_request->setParameterStatus(
-					array(
-						'final' => array('_id', 'hash'),
-						'missing' => array(),
-						'extra' => array(),
-						'ids' => array('_id')
-					)
-				);
+					$request2 = array(
+			            'code' => 200,
+			            'message' => '',
+			            'data' => array(
+			                'model' => 'user',
+			                'action' => 'update_auth',
+			                'url_parameters' => array(),
+			                'params' => array(
+			                    '_id' => $user['_id'],
+			                    'hash' => $new_password
+			                )
+			            )
+			        );
 
-				//save new auth
-				if ($change_request->update($change_request, false))
-				{
-					return \iriki\engine\response::information($new_password, $wrap);
-				}
-			}
+			        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request2);
 
-			return \iriki\engine\response::error('Authentication reset failed.', $wrap);
+			        $status2 = \iriki\engine\route::matchRequestToModel(
+			            $GLOBALS['APP'],
+			            $model_profile,
+			            $request2,
+			            true
+			        );
+
+					//save new auth
+					if ($status2['code'] == 200 AND $status2['message'] == true)
+					{
+						return \iriki\engine\response::information($new_password, $wrap);
+					}
+	        	}
+	        }
+	        return \iriki\engine\response::error('Authentication reset failed.', $wrap);
 		}
 	}
+
+	public function update_auth($request, $wrap = true)
+	{
+	    if (!is_null($request))
+		{
+			$params = $request->getData();
+
+			$new_hash = password_hash($params['hash'], PASSWORD_BCRYPT);
+
+			$request->setData([
+				'_id' => $params['_id'],
+				'hash' => $new_hash
+			]);
+    		
+    		$request->setParameterStatus(array(
+				'final' => array('_id', 'hash'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array('_id')
+			));
+
+			return $request->update($request, $wrap);
+		}
+	}				
 
 	public function delete($request, $wrap = true)
 	{
