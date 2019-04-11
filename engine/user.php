@@ -267,7 +267,8 @@ class user extends \iriki\engine\request
 	            $GLOBALS['APP'],
 	            $model_profile,
 	            $request1,
-	            true
+	            $request->getTestMode(),
+	            $request->getSession()
 	        );
 
 	        if ($status1['code'] == 200 AND is_array($status1['data']))
@@ -299,7 +300,8 @@ class user extends \iriki\engine\request
 			            $GLOBALS['APP'],
 			            $model_profile,
 			            $request2,
-			            true
+			            $request->getTestMode(),
+			            $request->getSession()
 			        );
 
 					//save new auth
@@ -307,9 +309,20 @@ class user extends \iriki\engine\request
 					{
 						return \iriki\engine\response::information($new_password, $wrap);
 					}
+					else
+					{
+						return \iriki\engine\response::error('Error setting new password.', $wrap);
+					}
+	        	}
+	        	else
+	        	{
+	        		return \iriki\engine\response::error('User not found.', $wrap);
 	        	}
 	        }
-	        return \iriki\engine\response::error('Authentication reset failed.', $wrap);
+	        else
+	        {
+	        	return \iriki\engine\response::error('Error looking up user.', $wrap);
+	        }
 		}
 	}
 
