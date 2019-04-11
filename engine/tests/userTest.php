@@ -238,6 +238,44 @@ class userTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+
+
+    /**
+     * @depends test_signup_success
+     */
+    public function test_update_auth_success($user)
+    {
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'user',
+                'action' => 'update_auth',
+                'url_parameters' => array(),
+                'params' => array(
+                    '_id' => $user['_id'],
+                    'hash' => $user['hash']
+                )
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true
+        );
+
+        $this->assertEquals(true,
+            (
+                $status['code'] == 200 AND
+                $status['message'] == true
+            )
+        );
+    }
+
     /**
      * @depends test_signup_success
      */
