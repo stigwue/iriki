@@ -24,6 +24,10 @@
                 "read_by_code_delta_range" : {
                     "description" : "Read a statistic by its identifying code. Return changes only over defined timestamp range.",
                     "parameters" : ["code", "from_timestamp", "to_timestamp"]
+                },
+                "delete_by_code" : {
+                    "description" : "Delete statistics by its identifying code.",
+                    "parameters" : ["code"]
                 }
 			}
 		}

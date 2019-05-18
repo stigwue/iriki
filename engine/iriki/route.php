@@ -369,7 +369,7 @@ class route
     * Matches the request to a route, performing a model action.
     *
     * @param app Application configuration already initialised.
-    * @param model_profile Matched model profile.
+    * @param model_status Matched model profile.
     * @param request_details Details of the HTTP request.
     * @param test_mode Test mode to disable authentication needs. Use very sparingly. Default is false.
     * @param user_session_token For cases where setting headers isn't possible, add user session token here.

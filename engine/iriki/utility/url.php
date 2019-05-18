@@ -158,9 +158,8 @@ class url
         return $status;
     }
 
-    public static function makeRequest($url, $params = array(), $method = "POST", $headers = array())
+    public static function makeRequest($url, $params = array(), $method = "POST", $headers = array(), $json = false)
     {
-        $request = array();
         $response = null;
 
         $method = strtolower($method);
@@ -185,6 +184,8 @@ class url
                 $params_key = 'query';
             break;
         }
+
+        if ($json) $params_key = 'json';
 
 
         try

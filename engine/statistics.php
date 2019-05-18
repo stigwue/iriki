@@ -169,6 +169,18 @@ class statistics extends \iriki\engine\request
         return \iriki\engine\response::data($deltas, $wrap);
 
     }
+
+    public function delete_by_code($request, $wrap = true)
+    {
+        $request->setParameterStatus([
+            'final' => array('code'),
+            'extra' => array(),
+            'missing' => array(),
+            'ids' => array()
+        ]);
+
+        return $request->delete($request, $wrap);
+    }
 }
 
 ?>
