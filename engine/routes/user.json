@@ -34,7 +34,7 @@
 					"parameters" : ["username"]
 				},
 				"update_auth" : {
-					"description" : "Update the user password. Hash is plaintext",
+					"description" : "Update the user password. Hash is plaintext.",
 					"parameters" : ["_id", "hash"]
 				},
 				"delete" : {

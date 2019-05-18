@@ -188,6 +188,40 @@ class statisticsTest extends \PHPUnit\Framework\TestCase
             )
         );
     }
+
+    /**
+     * @depends test_create_success
+     */
+    public function test_delete_by_code_success($details)
+    {
+        $request = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'statistics',
+                'action' => 'delete_by_code',
+                'url_parameters' => array(),
+                'params' => array(
+                    'code' => $details['code']
+                )
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $request);
+
+        //handle the request: match a route to a model and its action
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $request,
+            true //test mode
+        );
+
+        $this->assertEquals(true,
+            ($status['code'] == 200 AND
+            $status['message'] == true)
+        );
+    }
 }
 
 ?>
