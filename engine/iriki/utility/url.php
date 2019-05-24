@@ -202,11 +202,24 @@ class url
                 ]
             );
         }
+        catch (\GuzzleHttp\Exception\RequestException $e)
+        {
+            $response = null;
+
+        }
+        catch (\GuzzleHttp\Exception\ConnectException $e)
+        {
+            $response = null;
+        }
         catch (\GuzzleHttp\Exception\ClientException $e)
         {
             $response = null;
         }
-        catch (\GuzzleHttp\Exception\ConnectException $e)
+        catch (\GuzzleHttp\Exception\ServerException $e)
+        {
+            $response = null;
+        }
+        catch (\GuzzleHttp\Exception\TooManyRedirectsException $e)
         {
             $response = null;
         }
@@ -221,7 +234,7 @@ class url
         }
         else
         {
-            return (string) $response->getBody();;
+            return (string) $response->getBody();
         }
     }
 }
