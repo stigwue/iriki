@@ -99,7 +99,7 @@ class statisticsTest extends \PHPUnit\Framework\TestCase
                 'params' => array(
                     'code' => $details['code'],
                     'from_timestamp' => 0,
-                    'to_timestamp' => time(NULL) + 1
+                    'to_timestamp' => time() + 1
                 )
             )
         );
@@ -167,7 +167,7 @@ class statisticsTest extends \PHPUnit\Framework\TestCase
                 'params' => array(
                     'code' => $details['code'],
                     'from_timestamp' => 0,
-                    'to_timestamp' => time(NULL) + 1
+                    'to_timestamp' => time() + 1
                 )
             )
         );

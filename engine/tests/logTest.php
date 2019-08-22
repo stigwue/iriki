@@ -25,7 +25,7 @@ class logTest extends \PHPUnit\Framework\TestCase
                 'params' => array(
                     'model' => 'log',
                     'action' => 'request',
-                    'timestamp' => time(NULL),
+                    'timestamp' => time(),
                     'parent' => '',
                     'tag' => ''
                 )
@@ -61,7 +61,7 @@ class logTest extends \PHPUnit\Framework\TestCase
                 'params' => array(
                     'model' => 'log',
                     'action' => 'request',
-                    'timestamp' => time(NULL),
+                    'timestamp' => time(),
                     'parent' => $id,
                     'tag' => '200'
                 )

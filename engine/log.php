@@ -333,11 +333,11 @@ class log extends \iriki\engine\request
 
         //approximate with happrox
         $obj = new \Happrox();
-        \Happrox::setDurationBase($obj, time(NULL));
+        \Happrox::setDurationBase($obj, time());
 
         if (count($latest_log) != 0)
         {
-            $stamp = time(NULL) - $latest_log[0]['created'];
+            $stamp = time() - $latest_log[0]['created'];
         }
 
         //read model count
