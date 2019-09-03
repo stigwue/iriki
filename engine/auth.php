@@ -368,7 +368,7 @@ class auth extends \iriki\engine\request
 				$key = $found[0];
 
 				//fail if revoked or expired when not a perpetual key
-				if ($key['status'] != true OR ($key['ttl'] != 0 AND time(NULL) >= $key['created'] + $key['ttl']))
+				if ($key['status'] != true OR ($key['ttl'] != 0 AND time() >= $key['created'] + $key['ttl']))
 				{
 					return \iriki\engine\response::error('Authentication key revoked or expired.', $wrap);
 				}

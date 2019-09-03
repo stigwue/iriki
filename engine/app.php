@@ -54,11 +54,22 @@ class app extends \iriki\engine\request
             foreach ($all_models as $_model_name => $_model_two)
             {
                 //inner loop for 'belongsto' check
-                if (in_array($current_model, $_model_two['relationships']['belongsto'], true))
+                if (is_null($_model_two['relationships']['belongsto']))
                 {
-                    $matrix_row[] = 1;
+                	if (in_array($current_model, array(), true))
+	                {
+	                    $matrix_row[] = 1;
+	                }
+                	else $matrix_row[] = 0;
                 }
-                else $matrix_row[] = 0;
+                else
+                {
+                	if (in_array($current_model, $_model_two['relationships']['belongsto'], true))
+	                {
+	                    $matrix_row[] = 1;
+	                }
+                	else $matrix_row[] = 0;
+                }
             }
             $result['matrix'][] = $matrix_row;
         }

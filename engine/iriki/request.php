@@ -389,7 +389,7 @@ class request
         {
           //authentication failed
           case response::AUTH:
-            if ($do_log) Self::log(null, time(NULL), $log_object, response::AUTH);
+            if ($do_log) Self::log(null, time(), $log_object, response::AUTH);
 
             $new_result['error'] = true;
             $new_result['result'] = \iriki\engine\response::buildFor('auth', 'User session token invalid or expired.', $wrap);
@@ -398,7 +398,7 @@ class request
           //expecting a particular parameter which is missing
           //especially ids of parent models
           case response::ERROR:
-            if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+            if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
 
             if ($result['message'] == 'missing_parameter')
             {
@@ -415,7 +415,7 @@ class request
 
           default:
             //nothing was caught?
-            if ($do_log) Self::log(null, time(NULL), $log_object, \iriki\engine\response::responseToCode($default_response));
+            if ($do_log) Self::log(null, time(), $log_object, \iriki\engine\response::responseToCode($default_response));
 
             $new_result['error'] = false;
             $new_result['result'] = \iriki\engine\response::buildFor($default_response, $result, $wrap);
@@ -426,7 +426,7 @@ class request
       //else, we should wrap with the appropriate response markers
       else
       {
-        if ($do_log) Self::log(null, time(NULL), $log_object, \iriki\engine\response::responseToCode($default_response));
+        if ($do_log) Self::log(null, time(), $log_object, \iriki\engine\response::responseToCode($default_response));
 
         //no errors
         $new_result['error'] = false;
@@ -465,7 +465,7 @@ class request
       $db = Self::$_db_instance;
       $do_log = $request->getLog();
       $log_object = null;
-      if ($do_log) $log_object = Self::log($request, time(NULL));
+      if ($do_log) $log_object = Self::log($request, time());
 
       //unique
       $matching = model::doParameterUniqueCheck($request);
@@ -473,7 +473,7 @@ class request
       {
           $result = array();
 
-          if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+          if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
 
           if (!$wrap) return $result;
           else return response::error(
@@ -494,7 +494,7 @@ class request
       {
         if ($missing_parameters != 0)
         {
-            if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+            if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
 
             return response::error(
               response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
@@ -502,7 +502,7 @@ class request
         }
         if ($extra_parameters != 0)
         {
-          if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+          if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
 
           return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'), $wrap);
@@ -532,7 +532,7 @@ class request
       $db = Self::$_db_instance;
       $do_log = $request->getLog();
       $log_object = null;
-      if ($do_log) $log_object = Self::log($request, time(NULL));
+      if ($do_log) $log_object = Self::log($request, time());
 
       //unique
       //belongsto
@@ -547,7 +547,7 @@ class request
 
       if ($extra_parameters != 0)
       {
-        if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+        if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
         
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -576,7 +576,7 @@ class request
     {
       $db = Self::$_db_instance;$do_log = $request->getLog();
       $log_object = null;
-      if ($do_log) $log_object = Self::log($request, time(NULL));
+      if ($do_log) $log_object = Self::log($request, time());
 
       $parameter_status = $request->getParameterStatus();
 
@@ -587,7 +587,7 @@ class request
 
       if ($extra_parameters != 0)
       {
-        if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+        if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
         
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -620,7 +620,7 @@ class request
       $db = Self::$_db_instance;
       $do_log = $request->getLog();
       $log_object = null;
-      if ($do_log) $log_object = Self::log($request, time(NULL));
+      if ($do_log) $log_object = Self::log($request, time());
 
       $parameter_status = $request->getParameterStatus();
 
@@ -631,7 +631,7 @@ class request
 
       if ($extra_parameters != 0)
       {
-        if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+        if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
         
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -690,7 +690,7 @@ class request
       $db = Self::$_db_instance;
       $do_log = $request->getLog();
       $log_object = null;
-      if ($do_log) $log_object = Self::log($request, time(NULL));
+      if ($do_log) $log_object = Self::log($request, time());
 
       $parameter_status = $request->getParameterStatus();
 
@@ -701,7 +701,7 @@ class request
 
       if ($extra_parameters != 0)
       {
-        if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+        if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
         
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -734,7 +734,7 @@ class request
       $db = Self::$_db_instance;
       $do_log = $request->getLog();
       $log_object = null;
-      if ($do_log) $log_object = Self::log($request, time(NULL));
+      if ($do_log) $log_object = Self::log($request, time());
 
       //unique
       //belongsto: only if request has no explicitly defined parameters (stored in tag)
@@ -756,7 +756,7 @@ class request
         {
           if ($missing_parameters != 0)
           {
-            if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+            if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
 
             return response::error(
               response::showMissing($parameter_status['missing'], 'relationship parameter', 'missing'),
@@ -764,7 +764,7 @@ class request
           }
           if ($extra_parameters != 0)
           {
-            if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+            if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
 
             return response::error(
             response::showMissing($parameter_status['extra'], 'parameter', 'extra'),
@@ -795,7 +795,7 @@ class request
       $db = Self::$_db_instance;
       $do_log = $request->getLog();
       $log_object = null;
-      if ($do_log) $log_object = Self::log($request, time(NULL));
+      if ($do_log) $log_object = Self::log($request, time());
 
       //unique
       //belongsto
@@ -810,7 +810,7 @@ class request
 
       if ($extra_parameters != 0)
       {
-        if ($do_log) Self::log(null, time(NULL), $log_object, response::ERROR);
+        if ($do_log) Self::log(null, time(), $log_object, response::ERROR);
 
         return response::error(
           response::showMissing($parameter_status['extra'], 'parameter', 'extra'),

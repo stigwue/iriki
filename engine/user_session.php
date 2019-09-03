@@ -19,9 +19,9 @@ class user_session extends \iriki\engine\request
 		//get ip address
 		$data['ip'] = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0');
 
-		$data['started'] = time(NULL);
+		$data['started'] = time();
 
-		$data['pinged'] = time(NULL);
+		$data['pinged'] = time();
 
 		return $data;
 	}
@@ -242,7 +242,7 @@ class user_session extends \iriki\engine\request
 					);
 
 					//expiry check
-					$stamp_expired = time(NULL);
+					$stamp_expired = time();
 					if ($token['remember'] == 'true')
 					{
 						//specified duration after started
@@ -253,9 +253,18 @@ class user_session extends \iriki\engine\request
 						//specified duration after started
 						$stamp_expired = ((int)$token['started']) + IRIKI_SESSION_SHORT;
 					}
+
+					//ip check
+					//note that token.ip holds an ip address (or 0.0.0.0 if one wasn't found)
+					//now, we can check current validator's ip using (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0')
+					//but I fear that this might fail for connections whose IP change frequently
+					//by short DHCP leases
+					//$ip_check = $token['ip'] == (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0'));
+
 					$authenticated = (
 						$authenticated &&
-						$stamp_expired > time(NULL)
+						$stamp_expired > time()
+						//&& $ip_check
 					);
 
 					if ($authenticated)
@@ -308,7 +317,7 @@ class user_session extends \iriki\engine\request
 				$session = $sessions_found[0];
 				//invalidate
 				$data = $session;
-				$data['pinged'] = time(NULL);
+				$data['pinged'] = time();
 
 				$request->setData($data);
 				$request->setParameterStatus(

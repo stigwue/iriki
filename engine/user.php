@@ -8,7 +8,7 @@ class user extends \iriki\engine\request
 
 	private static function generate()
 	{
-		$seed = time(NULL);
+		$seed = time();
 
 		$data = array();
 

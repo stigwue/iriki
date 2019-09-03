@@ -111,7 +111,7 @@ class upload extends \iriki\engine\request
             $new_request = new upload(); //$request;
             //set new request timestamp
             $new_request->setData([
-                'timestamp' => time(NULL)
+                'timestamp' => time()
             ]);
             $new_request->setParameterStatus(array(
                 'final' => array('timestamp'),
@@ -136,6 +136,10 @@ class upload extends \iriki\engine\request
                 {
                     $title = $data['file']['name'];
                 }
+
+                //still insert some random number to title
+                $title = \iriki\engine\generator::getSample() . $title;
+
 
                 $destination_path = $upload_dir . $title;
                 $file_path = $path['message']['relative'] . $title;
