@@ -451,7 +451,7 @@ class nosql_mongo extends database
 		else
 		{
 			//disable temporarily until read works
-			/*if (!is_null($request->getSession()))
+			if (!is_null($request->getSession()))
 			{
 				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL), $request->getAuthentication(), $request);
 
@@ -462,7 +462,7 @@ class nosql_mongo extends database
 						'message' => 'unauthorized'
 					);
 				}
-			}*/
+			}
 
 			$handle = Self::$__instance;
 			$namespace = Self::$_key_values['db'] . '.' . $request->getModel();
@@ -513,7 +513,7 @@ class nosql_mongo extends database
 		}
 		else
 		{
-			/*if (!is_null($request->getSession()))
+			if (!is_null($request->getSession()))
 			{
 				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL), $request->getAuthentication(), $request);
 
@@ -529,7 +529,7 @@ class nosql_mongo extends database
 						'message' => 'unauthorized'
 					);
 				}
-			}*/
+			}
 
 			$handle = Self::$__instance;
 			$namespace = Self::$_key_values['db'] . '.' . $request->getModel();
@@ -548,30 +548,49 @@ class nosql_mongo extends database
 				);
 			}
 
-			/*$count = (isset($meta['count']) ? $meta['count'] : false);
+			$filter = array();
+
+			$count = (isset($meta['count']) ? $meta['count'] : false);
 
 			if ($count)
 			{
-				return $persist->count($query);
-			}
-			else*/
-			{
-				/*$query_options = array();
+				$ops = null;
 
+				if (count($query) == 0)
+				{
+					$ops = new \MongoDB\Driver\Command([
+				    	'count' => $request->getModel()
+				    ]);
+				}
+				else
+				{
+					$ops = new \MongoDB\Driver\Command([
+				    	'count' => $request->getModel(),
+				    	'query' => $query
+				    ]);
+				}
+
+			    $cursor = $handle->executeCommand(Self::$_key_values['db'], $ops);
+
+			    //print($Result->toArray());Array ( [0] => stdClass Object ( [n] => 228598 [ok] => 1 ) 
+			    return ($cursor->toArray()[0]->n);
+			}
+			else
+			{
 				$sort = (isset($meta['sort']) ? $meta['sort'] : array());
 				$limit = (isset($meta['limit']) ? $meta['limit'] : 0);
 
 				if (count($sort) != 0)
 				{
-					$query_options['sort'] = $sort;
+					$filter['sort'] = $sort;
 				}
 
 				if ($limit != 0)
 				{
-					$query_options['limit'] = (int) $limit;
+					$filter['limit'] = (int) $limit;
 				}
 
-				$cursor = null;
+				/*$cursor = null;
 
 				if (count($query_options) != 0)
 				{
@@ -587,12 +606,9 @@ class nosql_mongo extends database
 					'sort' => ['x' => -1],
 				];*/
 
-				$ops = new \MongoDB\Driver\Query($query, array());
+				$ops = new \MongoDB\Driver\Query($query, $filter);
 
 				$cursor = $handle->executeQuery($namespace, $ops);
-
-
-
 				
 				$status = array();
 
@@ -623,7 +639,7 @@ class nosql_mongo extends database
 		}
 		else
 		{
-			/*if (!is_null($request->getSession()))
+			if (!is_null($request->getSession()))
 			{
 				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL), $request->getAuthentication(), $request);
 
@@ -634,7 +650,7 @@ class nosql_mongo extends database
 						'message' => 'unauthorized'
 					);
 				}
-			}*/
+			}
 
 			$handle = Self::$__instance;
 			$namespace = Self::$_key_values['db'] . '.' . $request->getModel();
@@ -688,7 +704,7 @@ class nosql_mongo extends database
 		}
 		else
 		{
-			/*if (!is_null($request->getSession()))
+			if (!is_null($request->getSession()))
 			{
 				$authenticated = Self::checkSessionToken($request->getSession(), time(NULL), $request->getAuthentication(), $request);
 
@@ -699,7 +715,7 @@ class nosql_mongo extends database
 						'message' => 'unauthorized'
 					);
 				}
-			}*/
+			}
 
 			$handle = Self::$__instance;
 			$namespace = Self::$_key_values['db'] . '.' . $request->getModel();
