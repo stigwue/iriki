@@ -196,20 +196,30 @@ class nosql_mongo extends database
     private static function checkSessionToken($user_session_token, $timestamp, $auth_details, $orig_request)
 	{
 		//read session details from db
-		$persist = Self::$__instance->user_session;
+		//this is basically a read from user_session
+		$handle = Self::$__instance;
+		$namespace = Self::$_key_values['db'] . '.' . 'user_session';
 
 		//build query (key => value array)
 		$query = array(
 			'token' => $user_session_token
 		);
+		
+		$filter = array();
 
-		$cursor = $persist->find($query);
+		//no ids so skip enforceIds
 
+		//do a read
+		$ops = new \MongoDB\Driver\Query($query, $filter);
+
+		$cursor = $handle->executeQuery($namespace, $ops);
 
 		//loop through cursor
 		//cursor should hold only one session object
-		foreach ($cursor as $user_session)
+		foreach ($cursor as $object)
 		{
+			$user_session = Self::deenforceIds($object);
+			
 			//is it authenticated?
 			if ($user_session['authenticated'] == false) {
 				return false;
@@ -589,22 +599,6 @@ class nosql_mongo extends database
 				{
 					$filter['limit'] = (int) $limit;
 				}
-
-				/*$cursor = null;
-
-				if (count($query_options) != 0)
-				{
-					$cursor = $persist->find($query, $query_options);
-				}
-				else
-				{
-					$cursor = $persist->find($query);
-				}*/
-				
-				/*$options = [
-					'projection' => ['_id' => 0],
-					'sort' => ['x' => -1],
-				];*/
 
 				$ops = new \MongoDB\Driver\Query($query, $filter);
 
