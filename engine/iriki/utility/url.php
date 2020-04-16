@@ -57,7 +57,12 @@ class url
             if ($count > 2) $parameters[] = $part;
         }
 
-        return compact('path', 'parts', 'parameters', 'query');
+        return compact(
+            'path', //model/action/and/all/words/after
+            'parts', //array of model/action/and/all/words/after
+            'parameters', //array of all/words/after
+            'query' //?other_key=value_pairs
+        );
     }
 
     /**
@@ -168,18 +173,22 @@ class url
 
         switch ($method)
         {
+            //create: post
             case 'post':
                 $params_key = 'form_params';
             break;
 
             /*
+            //update: put
             case 'put':
             break;
 
+            //delete: delete
             case 'delete':
             break;
             */
 
+            //read
             default: //GET
                 $params_key = 'query';
             break;

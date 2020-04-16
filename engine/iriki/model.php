@@ -96,7 +96,14 @@ class model
 
       $valid_properties = $filter['parameters'];
 
-      $exempt_properties = (isset($filter['exempt']) ? $filter['exempt'] : null);
+
+      $exempt_properties = null;
+      $exempt_properties_count = 0;
+      if (isset($filter['exempt']))
+      {
+        $exempt_properties = $filter['exempt'];
+        $exempt_properties_count = count($exempt_properties);
+      }
 
       $explicit_def = true;
 
@@ -114,7 +121,6 @@ class model
       //check exempt properties
       //because of the way this is written, do not exempt
       //parent_id properties, it'll break
-      $exempt_properties_count = count($exempt_properties);
       if ($exempt_properties_count == 0)
       {
           //there's no exempt list, carry on

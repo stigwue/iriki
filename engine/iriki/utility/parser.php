@@ -39,6 +39,37 @@ class parser
 
         return $dict;
     }
+
+    public static function paginate($list, $limit, $page)
+    {
+        $response = array(
+            'page' => (int) $page,
+            'total' => 0,
+            'limit' => (int) $limit,
+            'data' => array()
+        );
+
+        $list_count = count($list);
+
+        $total_pages = ceil($list_count / $limit);
+
+        $response['total'] = $total_pages;
+
+        if ($page <= $total_pages)
+        {
+            $index_end = $limit * $page;
+            $index_begin = ($index_end - $limit) + 1;
+
+            if ($index_end > $list_count)
+            {
+                $index_end = $list_count;
+            }
+
+            $response['data'] = array_slice($list, $index_begin - 1, $index_end - $index_begin + 1);
+        }
+
+        return $response;
+    }
 }
 
 ?>

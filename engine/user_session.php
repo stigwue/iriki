@@ -48,7 +48,8 @@ class user_session extends \iriki\engine\request
 	    }
 	    else
 	    {
-	      //fail gracefully some way?
+		  //fail gracefully some way?
+		  return \iriki\engine\response::error('Some error occurred.', $wrap);
 	    }
 	}
 
