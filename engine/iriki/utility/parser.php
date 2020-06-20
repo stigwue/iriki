@@ -43,10 +43,11 @@ class parser
     public static function paginate($list, $limit, $page)
     {
         $response = array(
-            'page' => (int) $page,
-            'total' => 0,
-            'limit' => (int) $limit,
-            'data' => array()
+            'page' => (int) $page, //current page
+            'total' => 0, //total pages
+            'limit' => (int) $limit, //items per page
+            'count' => count($list), //total items
+            'data' => array() //page data
         );
 
         $list_count = count($list);
