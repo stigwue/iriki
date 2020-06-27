@@ -434,6 +434,64 @@ class auth extends \iriki\engine\request
 	    }
 	}
 
+	public function get_token_full($request, $wrap = true)
+	{
+	    $params = $request->getData();
+
+	    $req = array(
+            'code' => 200,
+            'message' => '',
+            'data' => array(
+                'model' => 'auth',
+                'action' => 'get_token',
+                'url_parameters' => array(),
+                'params' => $params
+            )
+        );
+
+        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $req);
+
+        $status = \iriki\engine\route::matchRequestToModel(
+            $GLOBALS['APP'],
+            $model_profile,
+            $req,
+            $request->getTestMode(),
+            $request->getSession()
+        );
+
+        if ($status['code'] == 200 AND $status['message'] == true)
+        {
+        	$token_id = $status['data'];
+
+        	$req = array(
+	            'code' => 200,
+	            'message' => '',
+	            'data' => array(
+	                'model' => 'user_session',
+	                'action' => 'read',
+	                'url_parameters' => array(),
+	                'params' => array(
+	                	'_id' => $token_id
+	                )
+	            )
+	        );
+
+	        $model_profile = \iriki\engine\route::buildModelProfile($GLOBALS['APP'], $req);
+
+	        $status = \iriki\engine\route::matchRequestToModel(
+	            $GLOBALS['APP'],
+	            $model_profile,
+	            $req,
+	            $request->getTestMode(),
+	            $request->getSession()
+	        );
+
+	        return $status;
+        }
+
+        return $status;
+	}
+
 	public function read_by_user($request, $wrap = true)
 	{
 	    if (!is_null($request))
