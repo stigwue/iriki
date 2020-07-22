@@ -29,6 +29,10 @@
 					"parameters" : ["username", "hash_old", "hash_new"],
 					"authenticate" : "false"
 				},
+				"change_id_auth" : {
+					"description" : "Change the user password.",
+					"parameters" : ["_id", "hash_old", "hash_new"]
+				},
 				"reset_auth" : {
 					"description" : "Reset the user password.",
 					"parameters" : ["username"]

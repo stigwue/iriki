@@ -242,6 +242,67 @@ class user extends \iriki\engine\request
 		}
 	}
 
+	public function change_id_auth($request, $wrap = true)
+	{
+		if (!is_null($request))
+		{
+			$new_request = clone $request;
+		  	$data = $new_request->getData();
+
+		  	$new_request->setData(
+				array(
+					'_id' => $data['_id']
+				)
+			);
+			$new_request->setParameterStatus(array(
+				'final' => array('_id'),
+				'missing' => array(),
+				'extra' => array(),
+				'ids' => array('_id')
+			));
+
+			//read by username solely
+			$result = $new_request->read($new_request, false);
+
+			if (count($result) != 0)
+			{
+				//user found
+				$single_result = $result[0];
+				$hash = $single_result['hash'];
+				$authenticated = (password_verify($data['hash_old'], $hash) !== FALSE);
+
+				if ($authenticated)
+				{
+					$new_hash = password_hash($data['hash_new'], PASSWORD_BCRYPT);
+
+					$change_request = clone $request;
+				  	$data = $single_result;
+
+				  	//change some properties
+				  	$data['hash'] = $new_hash;
+				  	$change_request->setData($data);
+					$change_request->setParameterStatus(
+						array(
+							'final' => array('_id', 'username', 'hash', 'created'),
+							'missing' => array(),
+							'extra' => array(),
+							'ids' => array('_id')
+						)
+					);
+
+					//save new auth
+					return $change_request->update($change_request, $wrap);
+				}
+				else
+				{
+					//authentication failed
+				}
+			}
+
+			return \iriki\engine\response::error('Authentication change failed.', $wrap);
+		}
+	}
+
 	public function reset_auth($request, $wrap = true)
 	{
 		if (!is_null($request))
