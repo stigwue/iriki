@@ -117,7 +117,7 @@ class email extends \iriki\engine\request
 	        catch (\GuzzleHttp\Exception\ConnectException $e)
 	        {
 	        }
-            catch (Exception $e) {
+            catch (\Exception $e) {
 
             }
 

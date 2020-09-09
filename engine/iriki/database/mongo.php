@@ -58,7 +58,7 @@ class mongo extends database
     * Gets the internal database instance.
     *
     *
-    * @return Mongo intance
+    * @return Mongo instance
     */
 	public static function getInstance()
 	{
@@ -183,7 +183,8 @@ class mongo extends database
     * @param id The id to check.
     * @return True or false
     */
-	public static function isMongoId($id){
+	public static function isMongoId($id)
+	{
 		return is_string($id) && strlen($id) == 24 && ctype_xdigit($id);
 	}
 

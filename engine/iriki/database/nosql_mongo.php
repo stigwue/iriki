@@ -377,6 +377,27 @@ class nosql_mongo extends database
 					//$key is an id, enforce
 					$query[$key] = new \MongoDB\BSON\ObjectId($key_values[$key]);
 				}
+				else if (is_array($key_values[$key]))
+				{
+					//convert each one
+					$list = array();
+					foreach ($key_values[$key] as $ix => $single)
+					{
+						if (is_array($single))
+						{
+							foreach ($single as $s)
+							{
+								$list[$ix][] = new \MongoDB\BSON\ObjectId($s);
+							}
+						}
+						else
+						{
+							$list[$ix] = new \MongoDB\BSON\ObjectId($single);
+						}
+					}
+
+					$query[$key] = $list;
+				}
 				else
 				{
 					//this parameter's value is:
