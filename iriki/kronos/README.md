@@ -1,4 +1,0 @@
-
-# Kronos
-
-Chronological chronicler.
