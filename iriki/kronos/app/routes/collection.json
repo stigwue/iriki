@@ -1,0 +1,15 @@
+{
+	"kronos":
+	{
+		"routes" : {
+			"collection" : {
+				"create" : {
+					"description" : "Create a new collection.",
+					"parameters" : ["name"],
+					"url_parameters" : ["name"],
+					"authenticate" : false
+				}
+			}
+		}
+	}
+}

@@ -3,6 +3,11 @@
 	{
 		"routes" : {
 			"upload" : {
+				"read_all_of" : {
+					"description" : "Read all of provided IDs.",
+					"parameters" : ["_ids"],
+					"method" : "POST"
+				},
 				"path" : {
 					"description" : "Get the upload path for specified timestamp (making the directory if it doesn't exist).",
 					"parameters" : ["timestamp"],

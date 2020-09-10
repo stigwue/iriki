@@ -1,0 +1,14 @@
+{
+	"kronos":
+	{
+		"routes" : {
+			"verb" : {
+				"create" : {
+					"description" : "Create a new verb.",
+					"parameters" : ["name"],
+					"url_parameters" : ["name"]
+				}
+			}
+		}
+	}
+}

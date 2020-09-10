@@ -1,0 +1,25 @@
+{
+	"kronos":
+	{
+		"models" : {
+			"collection" : {
+				"description" : "A group of models. For instance a collection of adjectives describing a noun. Musn't be of the same type.",
+				"properties" : {
+					"_id" : {
+						"description" : "Internal unique ID.",
+						"type" : "key",
+						"unique" : true
+					},
+					"name" :  {
+						"description" : "Name.",
+						"type" : "string"
+					}
+				},
+				"relationships" : {
+					"belongsto" : [],
+					"hasmany" : ["collection_item"]
+				}
+			}
+		}
+	}
+}

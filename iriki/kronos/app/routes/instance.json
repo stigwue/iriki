@@ -1,0 +1,36 @@
+{
+	"kronos":
+	{
+		"routes" : {
+			"instance" : {
+				"create" : {
+					"description" : "Create a new instance. Setting recursion to a non-zero value will, for collections, perform recursively.",
+					"parameters" : ["type", "parent", "value", "recursion"],
+					"exempt" : ["_id"]
+				},
+				"read" : {
+					"description" : "Returns an instance. Setting recursion to a non-zero value will, for collections, perform recursively.",
+					"parameters" : ["_id", "recursion"]
+				},
+				"read_all" : {
+					"description" : "Returns all instances. Will not recurse.",
+					"parameters" : [],
+					"exempt" : ["*"]
+				},
+				"update" : {
+					"description" : "Updates an instance. Setting recursion to a non-zero value will, for collections, perform recursively. Recursion for collections are recommended.",
+					"parameters" : ["_id", "type", "parent", "value", "recursion"]
+				},
+				"delete" : {
+					"description" : "Delete an instance. Setting recursion to a non-zero value will, for collections, perform recursively. Recursion for collections are recommended.",
+					"parameters" : ["_id", "recursion"]
+				},
+				"read_by_parent" : {
+					"description" : "Read an instance by type and parent. Setting recursion to a non-zero value will, for collections, perform recursively.",
+					"parameters" : ["type", "parent", "recursion"],
+					"authenticate" : false
+				}
+			}
+		}
+	}
+}

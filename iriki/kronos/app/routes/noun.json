@@ -1,0 +1,15 @@
+{
+	"kronos":
+	{
+		"routes" : {
+			"noun" : {
+				"create" : {
+					"description" : "Create a new noun.",
+					"parameters" : ["name"],
+					"url_parameters" : ["name"],
+					"authenticate" : false
+				}
+			}
+		}
+	}
+}

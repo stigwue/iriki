@@ -36,6 +36,26 @@ class upload extends \iriki\engine\request
     {
         return (isset($GLOBALS['APP']['config']['constants']['upload_http']) ? $GLOBALS['APP']['config']['constants']['upload_http'] : null);
     }
+    
+    public function read_all_of($request, $wrap = true)
+    {
+        $params = $request->getData();
+
+        $request->setParameterStatus([
+            'final' => array('_id'),
+            'missing' => array(),
+            'extra' => array(),
+            'ids' => array('_id')
+        ]);
+
+        $request->setData([
+            '_id' => array(
+                '$in' => $params['_ids']
+            )
+        ]);
+
+        return $request->read($request, $wrap);
+    }
 
     public function path($request, $wrap = true)
     {
