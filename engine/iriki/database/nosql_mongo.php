@@ -387,7 +387,13 @@ class nosql_mongo extends database
 						{
 							foreach ($single as $s)
 							{
-								$list[$ix][] = new \MongoDB\BSON\ObjectId($s);
+								try
+								{
+									$list[$ix][] = new \MongoDB\BSON\ObjectId($s);	
+								}
+								catch (\Exception $e) {
+									
+								}
 							}
 						}
 						else
